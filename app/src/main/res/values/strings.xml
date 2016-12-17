@@ -94,4 +94,12 @@
     <string name="setting">Settings</string>
     <string name="cancel">Cancel</string>
 
+    <!-- Nav_header_main -->
+    <string name="imageView_description">Placeholder text for image view description </string>
+    
+    <!-- Titles -->
+    <string name="title_activity_registration">Registration</string>
+    <string name="title_activity_upload_notes">Upload notes</string>
+    <string name="title_activity_upload_campus">Upload campus</string>
+    
 </resources>
