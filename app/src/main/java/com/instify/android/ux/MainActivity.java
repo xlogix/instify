@@ -46,12 +46,12 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.instify.android.R;
-import com.instify.android.fragments.FragmentCampus;
-import com.instify.android.fragments.FragmentERP;
-import com.instify.android.fragments.FragmentNotes;
-import com.instify.android.fragments.FragmentTimeTable;
-import com.instify.android.fragments.FragmentTrending;
-import com.instify.android.fragments.FragmentUniversityNews;
+import com.instify.android.ux.fragments.CampNewsFragment;
+import com.instify.android.ux.fragments.ERPFragment;
+import com.instify.android.ux.fragments.NotesFragment;
+import com.instify.android.ux.fragments.TimeTableFragment;
+import com.instify.android.ux.fragments.TrendingFragment;
+import com.instify.android.ux.fragments.UnivNewsFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -182,10 +182,10 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         if (mFirebaseUser != null) {
             // User is signed in
             Log.d(TAG, "onAuthStateChanged:signed_in:" + mFirebaseUser.getUid());
-            Toast.makeText(com.instify.android.activity.MainActivity.this, "Welcome " + mFirebaseUser.getDisplayName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Welcome " + mFirebaseUser.getDisplayName(), Toast.LENGTH_SHORT).show();
         } else {
             // User is signed out
-            Toast.makeText(com.instify.android.activity.MainActivity.this, "Signed Out", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Signed Out", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "onAuthStateChanged:signed_out");
         }
 /*
@@ -381,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 */
     private void selectImage() {
         final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Remove Picture", "Cancel"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(com.instify.android.activity.MainActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Profile Photo");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -467,7 +467,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         getSharedPreferences("userData", MODE_PRIVATE).edit().clear().apply();
         signOut();
         // After logout redirect user to Login Activity
-        Intent i = new Intent(this, ActivityIntro.class);
+        Intent i = new Intent(this, IntroActivity.class);
         // Closing all the Activities
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         // Add new Flag to start new Activity
@@ -479,12 +479,12 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new FragmentTimeTable(), "Time Table");
-        adapter.addFrag(new FragmentTrending(), "What's Trending");
-        adapter.addFrag(new FragmentCampus(), "Campus News");
-        adapter.addFrag(new FragmentUniversityNews(), "University News");
-        adapter.addFrag(new FragmentNotes(), "Notes");
-        adapter.addFrag(new FragmentERP(), "ERP");
+        adapter.addFrag(new TimeTableFragment(), "Time Table");
+        adapter.addFrag(new TrendingFragment(), "What's Trending");
+        adapter.addFrag(new CampNewsFragment(), "Campus News");
+        adapter.addFrag(new UnivNewsFragment(), "University News");
+        adapter.addFrag(new NotesFragment(), "Notes");
+        adapter.addFrag(new ERPFragment(), "ERP");
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(1);
     }

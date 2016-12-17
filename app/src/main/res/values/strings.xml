@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Instify</string>
 
+    <string name="title_activity_first_launch_tut">FirstLaunchTut</string>
+    <string name="title_activity_registration">Register Yourself</string>
+    <string name="title_activity_upload_notes">Post a new Note</string>
+    <string name="title_activity_upload_campus">Post a new Update</string>
+
     <!--DrawerLayout Starts-->
     <string name="nav_time_table">Time Table</string>
     <string name="nav_campus_news">Campus News</string>
@@ -40,7 +45,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="no_network_connection_toast">No network connection found</string>
 
-    <!--ActivityAuth-->
+    <!-- ActivityAuth -->
     <string name="hint_name">Full Name</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
@@ -53,7 +58,7 @@
     <string name="imageView_edit">Change Default Image</string>
     <string name="erp_in_browser">Open ERP website in browser</string>
 
-    <!--Fragment Trending-->
+    <!-- Fragment Trending (Firebase Chat) -->
     <string name="msg_edit_box">Type a Message</string>
     <string name="msg_send">Send</string>
     <string name="welcome_msg">Welcome!</string>
