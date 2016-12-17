@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "299280645644",
+    "firebase_url": "https://instify-62dda.firebaseio.com",
+    "project_id": "instify-62dda",
+    "storage_bucket": "instify-62dda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299280645644:android:9bda299cf07ad9eb",
+        "android_client_info": {
+          "package_name": "com.instify.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "299280645644-ij8edjgmapm8dq3gnq7d37ad8vvubgtc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.instify.android",
+            "certificate_hash": "1B0D9C3B64871AD5D726A156E9EBF0DE84AB43EC"
+          }
+        },
+        {
+          "client_id": "299280645644-g5ob8prtti1odqvfr79030e7lua233ko.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIiL_3S932Qw3khLHXMLr0GhX90lpHTUA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "299280645644-g5ob8prtti1odqvfr79030e7lua233ko.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

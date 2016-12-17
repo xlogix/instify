@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_timetable"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/nav_time_table" />
+        <item
+            android:id="@+id/nav_campus"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/nav_campus_news" />
+        <item
+            android:id="@+id/nav_univ_news"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/nav_univ_news" />
+        <item
+            android:id="@+id/nav_notes"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/nav_notes" />
+        <item
+            android:id="@+id/nav_erp"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/nav_erp" />
+    </group>
+
+
+    <item android:title="@string/nav_section_1">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/nav_share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/nav_help_feedback" />
+            <item
+                android:id="@+id/about"
+                android:icon="@android:drawable/ic_dialog_info"
+                android:title="About" />
+        </menu>
+    </item>
+
+</menu>
