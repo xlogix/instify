@@ -90,16 +90,4 @@
         <item name="android:textAllCaps">true</item>
         <item name="android:gravity">center</item>
     </style>
-
-    <!-- -->
-    <style name="emptyLayoutText">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/textPrimary</item>
-        <item name="android:textStyle">normal</item>
-    </style>
-
-    <style name="PhotoGridLayout">
-        <item name="android:drawSelectorOnTop">true</item>
-        <item name="android:listSelector">@drawable/photogrid_list_selector</item>
-    </style>
 </resources>

@@ -28,7 +28,7 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.instify.android.R;
-import com.instify.android.fragments.FragmentTrending;
+import com.instify.android.ux.fragments.TrendingFragment;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -61,7 +61,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param messageBody FCM message body received.
      */
     private void sendNotification(String messageBody) {
-        Intent intent = new Intent(this, FragmentTrending.class);
+        Intent intent = new Intent(this, TrendingFragment.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
