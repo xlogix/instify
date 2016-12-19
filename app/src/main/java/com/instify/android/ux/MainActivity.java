@@ -62,6 +62,7 @@ import java.util.List;
 import java.util.UUID;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
 /**
@@ -70,7 +71,9 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
+    /* Play Services Request required to check if Google Services are installed or not */
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private static final int RC_SETTINGS_SCREEN = 125;
     private static final int RC_TAKE_PICTURE = 101;
     private static final int GALLERY = 1;
     private static final int RC_CAMERA_PERM = 123;
@@ -116,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         // Drawer Layout
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawerLayout, toolbar, R.string.content_description_open_navigation_drawer, R.string.content_description_close_navigation_drawer);
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -178,7 +181,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             imageView.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
         }
 
-
         if (mFirebaseUser != null) {
             // User is signed in
             Log.d(TAG, "onAuthStateChanged:signed_in:" + mFirebaseUser.getUid());
@@ -233,7 +235,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
      * it doesn't, display a dialog that allows users to download the APK from
      * the Google Play Store or enable it in the device's system settings.
      */
-
     private boolean checkPlayServices() {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
@@ -250,6 +251,13 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         return true;
     }
 
+    private boolean isDeviceOnline() {
+        ConnectivityManager connMgr =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
+
     /*    @Override
         public void onBackPressed() {
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -261,17 +269,11 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
     */
 
-    private boolean isDeviceOnline() {
-        ConnectivityManager connMgr =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
-    }
-
+    // EasyPermissions Default Classes [START]
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // Forward results to EasyPermissions
+        // EasyPermissions handles the request result.
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
@@ -286,12 +288,19 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         // Some permissions have been denied
         Log.d(TAG, "onPermissionsDenied:" + requestCode + ":" + perms.size());
 
-        // (Optional) Check whether the user denied permissions and checked NEVER ASK AGAIN.
+        // (Optional) Check whether the user denied any permissions and checked "NEVER ASK AGAIN."
         // This will display a dialog directing them to enable the permission in app settings.
-        EasyPermissions.checkDeniedPermissionsNeverAskAgain(this,
-                getString(R.string.rationale_ask_again),
-                R.string.setting, R.string.cancel, perms);
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog.Builder(this, getString(R.string.rationale_ask_again))
+                    .setTitle(getString(R.string.title_settings_dialog))
+                    .setPositiveButton(getString(R.string.setting))
+                    .setNegativeButton(getString(R.string.cancel), null /* click listener */)
+                    .setRequestCode(RC_SETTINGS_SCREEN)
+                    .build()
+                    .show();
+        }
     }
+    // EasyPermission Default Classes [END]
 
     @TargetApi(Build.VERSION_CODES.M)
     @AfterPermissionGranted(RC_CAMERA_PERM)
@@ -311,8 +320,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     RC_CAMERA_PERM, Manifest.permission.CAMERA);
         }
     }
-
-// Ad-Mob Starts (Rest is on OnCreate Method)
 
     @TargetApi(Build.VERSION_CODES.M)
     @AfterPermissionGranted(RC_GALLERY_PERM)

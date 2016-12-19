@@ -22,11 +22,7 @@ import java.util.List;
 
 /**
  * Created by Abhish3k on 21/02/2016.
- */
-
-/**
- * Created by Raquib-ul-Alam Kanak on 1/3/2014.
- * Website: http://alamkanak.github.io
+ * Implemented from http://alamkanak.github.io. Thanks :)
  */
 
 public class TimeTableFragment extends Fragment implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {

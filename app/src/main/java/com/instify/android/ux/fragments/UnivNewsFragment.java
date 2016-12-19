@@ -26,14 +26,14 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.instify.android.R;
-import com.instify.android.helpers.InitializeVolley;
+import com.instify.android.helpers.MyApplication;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class UnivNewsFragment extends Fragment {
-    private static final String endpoint_final = "http://srm-news-bot.herokuapp.com";
+    private static final String endpoint_final = "http://arjun-apis.herokuapp.com/srm-news-api/";
     String[] titles = new String[15];
     String[] snips = new String[15];
     String[] links = new String[15];
@@ -114,7 +114,7 @@ public class UnivNewsFragment extends Fragment {
         int socketTimeout = 10000;  //10 seconds - change to what you want
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         req.setRetryPolicy(policy);
-        InitializeVolley.getInstance().addToRequestQueue(req);
+        MyApplication.getInstance().addToRequestQueue(req);
 
         // Adding request to request queue             Important : (Roll Back)
         //InitializeVolley.getInstance().addToRequestQueue(req);

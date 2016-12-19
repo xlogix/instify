@@ -35,14 +35,22 @@
     <string name="The_entries_must_match">The entries must match</string>
     <string name="Content_is_empty">Content is empty.</string>
 
-    <!-- Main activity related -->
+    <!-- Content description strings -->
+    <string name="content_description_open_navigation_drawer">Open navigation drawer</string>
+    <string name="content_description_close_navigation_drawer">Close navigation drawer</string>
+    <string name="content_description_submenu">Populate submenu</string>
+    <string name="content_description_move_right">Move righ</string>
+    <string name="content_description_move_left">Move left</string>
+    <string name="content_description_background">Background</string>
+    <string name="content_description_back_arrow">Back arrow</string>
+    <string name="content_description_intro_screen">Intro screen</string>
+
+    <!-- Main Activity Related -->
     <string name="Another_click_for_leaving_app">Another click for leaving app</string>
     <string name="All_categories">All categories</string>
     <string name="menu_action_search">Search</string>
     <string name="Type_your_query">Type your wish</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="no_network_connection_toast">No network connection found</string>
 
     <!-- ActivityAuth -->
@@ -88,14 +96,16 @@
     <string name="about_description">This application is developed by Android team of Project Club. Add more...</string>
 
     <!--EasyPermissions-->
+    <string name="title_settings_dialog">Permissions Required</string>
     <string name="rationale_camera">This app needs access to your camera so you can take pictures.</string>
     <string name="rationale_location_contacts">This app needs access to your location and contacts to know where and who you are.</string>
     <string name="rationale_ask_again">This app may not work correctly without the requested permissions. Open the app settings screen to modify app permissions.</string>
     <string name="setting">Settings</string>
     <string name="cancel">Cancel</string>
+    <string name="settings_dialog_canceled">Settings dialog canceled</string>
+    <string name="returned_from_app_settings_to_activity">Returned from app settings to MainActivity</string>
 
     <!-- Nav_header_main -->
     <string name="imageView_description">Placeholder text for image view description </string>
-    
 
 </resources>

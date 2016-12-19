@@ -1,12 +1,15 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_gravity="center"
-    android:background="@android:color/background_light"
-    android:gravity="center"
-    android:orientation="vertical"
-    tools:context=".activity.SplashActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ux.SplashActivity">
+
+    <ImageView
+        android:id="@+id/splash_intro_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/splash_screen"
+        android:contentDescription="@string/content_description_intro_screen" />
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
@@ -16,9 +19,11 @@
          android:fitsSystemWindows. -->
 
     <ImageView
-        android:id="@+id/splash"
+        android:id="@+id/splash_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/logo" />
-</LinearLayout>
+</RelativeLayout>

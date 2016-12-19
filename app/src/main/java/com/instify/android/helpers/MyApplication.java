@@ -11,9 +11,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 public class MyApplication extends Application {
+    public static final String PACKAGE_NAME = MyApplication.class.getPackage().getName();
+    public static final String TAG = MyApplication.class.getSimpleName();
+    public static String APP_VERSION = "0.0.0";
+    public static String ANDROID_ID = "0000000000000000";
 
-    public static final String TAG = MyApplication.class
-            .getSimpleName();
     private static MyApplication mInstance;
     private RequestQueue mRequestQueue;
 
