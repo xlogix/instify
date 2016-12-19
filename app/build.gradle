@@ -41,6 +41,7 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:10.0.1'
     compile 'com.google.firebase:firebase-appindexing:10.0.1'
     compile 'com.google.firebase:firebase-core:10.0.1'
+    compile 'com.google.firebase:firebase-config:10.0.1'
     compile 'com.google.firebase:firebase-database:10.0.1'
     compile 'com.google.firebase:firebase-storage:10.0.1'
     // for App Invites and Dynamic Links

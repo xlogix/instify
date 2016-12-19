@@ -32,6 +32,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.instify.android.R;
 import com.instify.android.chat.MessagePreferences;
 import com.instify.android.chat.ModelMessage;
@@ -97,7 +99,7 @@ public class TrendingFragment extends Fragment {
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFirebaseAdapter = new FirebaseRecyclerAdapter<ModelMessage, MessageViewHolder>(
                 ModelMessage.class,
-                R.layout.item_message,
+                R.layout.chat_item_message,
                 MessageViewHolder.class,
                 mFirebaseDatabaseReference.child(MESSAGES_CHILD)) {
 
@@ -275,6 +277,8 @@ public class TrendingFragment extends Fragment {
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
+
+    /** Another class to display the chat items in the UI */
 
     // Messages view holder
     public static class MessageViewHolder extends RecyclerView.ViewHolder {

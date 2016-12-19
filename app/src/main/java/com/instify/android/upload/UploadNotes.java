@@ -47,6 +47,7 @@ public class UploadNotes extends AppCompatActivity implements View.OnClickListen
             "Value Added Courses"};
     static final String[] Chapters = new String[]{"Chapter 1", "Chapter 2", "Chapter 3", "Chapter 4", "Chapter 5", "Chapter 6", "Chapter 7",
             "Chapter 8", "Chapter 9", "Chapter 10"};
+
     private static final String TAG = "Storage";
     private static final int RC_TAKE_PICTURE = 101;
     private static final int GALLERY = 102;
@@ -64,7 +65,7 @@ public class UploadNotes extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload_notes);
+        setContentView(R.layout.upload_notes);
 
         // Spinner 1
         final Spinner spinnerSubjects = (Spinner) findViewById(R.id.spinner_subjects);

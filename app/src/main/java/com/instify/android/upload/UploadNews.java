@@ -12,7 +12,7 @@ public class UploadNews extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload_news);
+        setContentView(R.layout.upload_news);
 
         /*TextView textView = (TextView) findViewById(R.id.news_description);
         String listString = "";
