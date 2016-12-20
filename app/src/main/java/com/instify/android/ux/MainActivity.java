@@ -33,9 +33,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -82,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     private static Bitmap rotateImage = null;
     public FloatingActionButton fab;
     private DrawerLayout drawerLayout;
-    private ViewPager viewPager;
+    private ViewPager mViewPager;
     private ImageView imageView;
     private Uri mCaptureUri = null;
 
@@ -92,6 +94,15 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     //Ad View
     /* private AdView mAdView;
     private InterstitialAd mInterstitialAd; */
+    /**
+     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * fragments for each of the sections. We use a
+     * {@link FragmentPagerAdapter} derivative, which will keep every
+     * loaded fragment in memory. If this becomes too memory intensive, it
+     * may be best to switch to a
+     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
+    private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private static int getOrientation(Context context, Uri photoUri) {
         /* it's on the external media. */
@@ -127,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         //hideFloatingActionButton();
 
         // [START] Initialize Navigation Drawer and Profile Picture
-
         NavigationView navView = (NavigationView) findViewById(R.id.navigation_view);
         if (navView != null) {
             setupDrawerContent(navView);
@@ -142,13 +152,13 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     .into(imageView);
         }
 
-        // ViewPager
-        viewPager = (ViewPager) findViewById(R.id.tab_viewpager);
-        if (viewPager != null) {
-            setupViewPager(viewPager);
-        }
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.setupWithViewPager(viewPager);
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
 
         //Listeners
         changer.setOnClickListener(new View.OnClickListener() {
@@ -156,21 +166,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             @Override
             public void onClick(View v) {
                 selectImage();
-            }
-        });
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            // Gonna work on three more functions
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
             }
         });
 
@@ -222,11 +217,12 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     @Override
     protected void onResume() {
         super.onResume();
+        // Ensures that user didn't un-install Google Play Services required for Firebase related tasks.
         checkPlayServices();
         if (isDeviceOnline()) {
-            Snackbar.make(viewPager, "Device Online", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mViewPager, "Device Online", Snackbar.LENGTH_SHORT).show();
         } else {
-            Snackbar.make(viewPager, "Device Offline. Functionality may be limited", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mViewPager, "Device Offline. Functionality may be limited", Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -484,18 +480,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         finish();
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new TimeTableFragment(), "Time Table");
-        adapter.addFrag(new TrendingFragment(), "What's Trending");
-        adapter.addFrag(new CampNewsFragment(), "Campus News");
-        adapter.addFrag(new UnivNewsFragment(), "University News");
-        adapter.addFrag(new NotesFragment(), "Notes");
-        adapter.addFrag(new ERPFragment(), "ERP");
-        viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(1);
-    }
-
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -503,23 +487,23 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 //menuItem.setChecked(true);
                 switch (menuItem.getItemId()) {
                     case R.id.nav_timetable:
-                        viewPager.setCurrentItem(0);
+                        mViewPager.setCurrentItem(0);
                         break;
 
                     case R.id.nav_campus:
-                        viewPager.setCurrentItem(2);
+                        mViewPager.setCurrentItem(2);
                         break;
 
                     case R.id.nav_univ_news:
-                        viewPager.setCurrentItem(3);
+                        mViewPager.setCurrentItem(3);
                         break;
 
                     case R.id.nav_notes:
-                        viewPager.setCurrentItem(4);
+                        mViewPager.setCurrentItem(4);
                         break;
 
                     case R.id.nav_erp:
-                        viewPager.setCurrentItem(5);
+                        mViewPager.setCurrentItem(5);
                         break;
                     case R.id.nav_share:
                         //Intent share = new Intent();
@@ -579,33 +563,79 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         return super.onOptionsItemSelected(item);
     }
 
-    static class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+    /**
+     * A placeholder fragment containing a simple view.
+     */
+    public static class PlaceholderFragment extends Fragment {
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        private static final String ARG_SECTION_NUMBER = "section_number";
 
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
+        public PlaceholderFragment() {
+        }
+
+        /**
+         * Returns a new instance of this fragment for the given section
+         * number.
+         */
+        public static PlaceholderFragment newInstance(int sectionNumber) {
+            PlaceholderFragment fragment = new PlaceholderFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_trending, container, false);
+            return rootView;
+        }
+    }
+
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
-            return mFragmentList.get(position);
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a PlaceholderFragment (defined as a static inner class below).
+            return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
         public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFrag(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
+            // Show 3 total pages.
+            return 6;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+            switch (position) {
+                case 0:
+                    return "Time Table";
+                case 1:
+                    return "What's Trending";
+                case 2:
+                    return "Campus News";
+                case 3:
+                    return "University News";
+                case 4:
+                    return "Notes";
+                case 5:
+                    return "ERP";
+            }
+            return null;
         }
-
     }
 }

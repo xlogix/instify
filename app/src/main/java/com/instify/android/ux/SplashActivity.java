@@ -66,7 +66,7 @@ public class SplashActivity extends Activity {
                     getSharedPreferences("userData", MODE_PRIVATE).edit().putBoolean("IsFirstRun", false).apply();
                     finish();
                 } else if (mFirebaseUser == null) {
-                    Intent i = new Intent(SplashActivity.this, RegistrationActivity.class);
+                    Intent i = new Intent(SplashActivity.this, MainActivity.class);
                     Timber.d("Pass to auth activity");
                     startActivity(i);
                     finish();

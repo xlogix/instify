@@ -39,6 +39,7 @@
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="instify" />
             </intent-filter>
         </activity>
 
