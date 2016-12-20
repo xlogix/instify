@@ -65,7 +65,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
-    /* Play Services Request required to check if Google Services are installed or not */
+    /* Play Services Request required to check if Google Services is installed or not */
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final int RC_SETTINGS_SCREEN = 125;
     private static final int RC_TAKE_PICTURE = 101;

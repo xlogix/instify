@@ -33,10 +33,12 @@ android {
         debug {
             minifyEnabled false
             shrinkResources false
+            versionNameSuffix '-DEBUG'
         }
         release {
             minifyEnabled true
             shrinkResources true
+            //signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
