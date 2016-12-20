@@ -203,6 +203,17 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
     }
 
+    /*    @Override
+        public void onBackPressed() {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                super.onBackPressed();
+            }
+        }
+    */
+
     /**
      * Check the device to make sure it has the Google Play Services APK. If
      * it doesn't, display a dialog that allows users to download the APK from
@@ -223,17 +234,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
         return true;
     }
-
-    /*    @Override
-        public void onBackPressed() {
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawer(GravityCompat.START);
-            } else {
-                super.onBackPressed();
-            }
-        }
-    */
 
     private boolean isDeviceOnline() {
         ConnectivityManager connMgr =

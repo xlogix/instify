@@ -1,5 +1,4 @@
 <resources>
-
     <!-- App theme for pre-lollipop devices -->
     <style name="MaterialTheme" parent="MaterialThemeSupportBase" />
 
