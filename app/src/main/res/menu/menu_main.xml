@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ux.MainActivity">
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_action_search_24dp"
+        android:orderInCategory="10"
+        android:title="@string/menu_action_search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView" />
+
+    <item
+        android:id="@+id/action_wish_list"
+        android:icon="@drawable/favorite"
+        android:orderInCategory="100"
+        android:title="@string/menu_action_favorites"
+        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="1000"
         android:title="@string/menu_main_settings"
         app:showAsAction="never" />
+
     <item
         android:id="@+id/action_Logout"
-        android:orderInCategory="100"
+        android:orderInCategory="10000"
         android:title="@string/menu_main_logout"
         app:showAsAction="never" />
 </menu>

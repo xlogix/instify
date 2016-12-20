@@ -49,8 +49,8 @@
     <string name="Another_click_for_leaving_app">Another click for leaving app</string>
     <string name="All_categories">All categories</string>
     <string name="menu_action_search">Search</string>
-    <string name="Type_your_query">Type your wish</string>
-
+    <string name="Type_your_query">Type your query</string>
+    <string name="menu_action_favorites">Favorites</string>
     <string name="no_network_connection_toast">No network connection found</string>
 
     <!-- ActivityAuth -->
