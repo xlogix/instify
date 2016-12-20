@@ -69,6 +69,15 @@ public class TrendingFragment extends Fragment {
     private EditText mMessageEditText;
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
 
+    public TrendingFragment(){}
+
+    public static TrendingFragment newInstance(){
+        TrendingFragment frag = new TrendingFragment();
+        Bundle args = new Bundle();
+        frag.setArguments(args);
+        return frag;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_trending, container, false);

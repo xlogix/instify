@@ -40,6 +40,15 @@ public class UnivNewsFragment extends Fragment {
     private SimpleStringRecyclerViewAdapter mAdapter;
     private JsonObjectRequest req;
 
+    public UnivNewsFragment(){}
+
+    public static UnivNewsFragment newInstance(){
+        UnivNewsFragment frag = new UnivNewsFragment();
+        Bundle args = new Bundle();
+        frag.setArguments(args);
+        return frag;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RecyclerView recyclerView;

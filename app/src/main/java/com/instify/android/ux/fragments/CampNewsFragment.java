@@ -23,6 +23,15 @@ import com.instify.android.ux.adapters.CampNewsAdapter;
 
 public class CampNewsFragment extends Fragment {
 
+    public CampNewsFragment(){}
+
+    public static CampNewsFragment newInstance(){
+        CampNewsFragment frag = new CampNewsFragment();
+        Bundle args = new Bundle();
+        frag.setArguments(args);
+        return frag;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_campus_news, container, false);

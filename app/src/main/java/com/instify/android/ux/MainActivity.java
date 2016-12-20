@@ -47,6 +47,13 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.instify.android.R;
+import com.instify.android.ux.fragments.CampNewsFragment;
+import com.instify.android.ux.fragments.ERPFragment;
+import com.instify.android.ux.fragments.NotesFragment;
+import com.instify.android.ux.fragments.TimeTableFragment;
+import com.instify.android.ux.fragments.TrendingFragment;
+import com.instify.android.ux.fragments.UnivNewsFragment;
+import com.instify.android.ux.fragments.planeTestFrag;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -530,6 +537,14 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
+            switch(position){
+                case 0: return TimeTableFragment.newInstance();
+                case 1: return TrendingFragment.newInstance();
+                case 2: return CampNewsFragment.newInstance();
+                case 3: return UnivNewsFragment.newInstance();
+                case 4: return NotesFragment.newInstance();
+                case 5: return ERPFragment.newInstance();
+            }
             return PlaceholderFragment.newInstance(position + 1);
         }
 

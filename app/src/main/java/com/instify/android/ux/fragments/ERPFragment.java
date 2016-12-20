@@ -27,6 +27,15 @@ public class ERPFragment extends Fragment {
     //webView.loadUrl("http://evarsity.srmuniv.ac.in/srmswi/usermanager/youLogin.jsp");
     //}*/
 
+    public ERPFragment(){}
+
+    public static ERPFragment newInstance(){
+        ERPFragment frag = new ERPFragment();
+        Bundle args = new Bundle();
+        frag.setArguments(args);
+        return frag;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment

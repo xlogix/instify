@@ -92,6 +92,8 @@ public class RegistrationActivity extends AppCompatActivity {
     }
     // [END on_start_add_listener]
 
+
+
     // [START on_stop_remove_listener]
     @Override
     public void onStop() {

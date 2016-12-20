@@ -24,6 +24,15 @@ public class NotesFragment extends Fragment {
 
     RecyclerView recyclerView;
 
+    public NotesFragment() {}
+
+    public static NotesFragment newInstance(){
+        NotesFragment frag = new NotesFragment();
+        Bundle args = new Bundle();
+        frag.setArguments(args);
+        return frag;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_notes, container, false);

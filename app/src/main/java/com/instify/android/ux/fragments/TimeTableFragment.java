@@ -28,6 +28,15 @@ import java.util.List;
 public class TimeTableFragment extends Fragment implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
     private WeekView mWeekView;
 
+    public TimeTableFragment() {}
+
+    public static TimeTableFragment newInstance(){
+        TimeTableFragment frag = new TimeTableFragment();
+        Bundle args = new Bundle();
+        frag.setArguments(args);
+        return frag;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
