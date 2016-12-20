@@ -20,7 +20,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.instify.android.R;
@@ -40,9 +42,10 @@ public class UnivNewsFragment extends Fragment {
     private SimpleStringRecyclerViewAdapter mAdapter;
     private JsonObjectRequest req;
 
-    public UnivNewsFragment(){}
+    public UnivNewsFragment() {
+    }
 
-    public static UnivNewsFragment newInstance(){
+    public static UnivNewsFragment newInstance() {
         UnivNewsFragment frag = new UnivNewsFragment();
         Bundle args = new Bundle();
         frag.setArguments(args);
@@ -118,13 +121,13 @@ public class UnivNewsFragment extends Fragment {
             }
         });
 
-        /*int socketTimeout = 10000;  //10 seconds - change to what you want
+        int socketTimeout = 10000;  //10 seconds - change to what you want
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         req.setRetryPolicy(policy);
-        MyApplication.getInstance().addToRequestQueue(req); */
+        MyApplication.getInstance().addToRequestQueue(req);
 
         // Adding request to request queue             Important : (Roll Back)
-        MyApplication.getInstance().addToRequestQueue(req);
+        //MyApplication.getInstance().addToRequestQueue(req);
     }
 
     public static class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
