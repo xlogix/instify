@@ -83,9 +83,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     private FirebaseAuth mAuth;
     private FirebaseUser mFirebaseUser;
 
-    //Ad View
-    /* private AdView mAdView;
-    private InterstitialAd mInterstitialAd; */
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -220,13 +217,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         return true;
     }
 
-    private boolean isDeviceOnline() {
-        ConnectivityManager connMgr =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
-    }
-
     /*    @Override
         public void onBackPressed() {
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -237,6 +227,13 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             }
         }
     */
+
+    private boolean isDeviceOnline() {
+        ConnectivityManager connMgr =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
 
     // EasyPermissions Default Classes [START]
     @Override
@@ -251,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         // Some permissions have been granted
         Log.d(TAG, "onPermissionsGranted:" + requestCode + ":" + perms.size());
     }
+    // EasyPermission Default Classes [END]
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
@@ -269,7 +267,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     .show();
         }
     }
-    // EasyPermission Default Classes [END]
 
     @TargetApi(Build.VERSION_CODES.M)
     @AfterPermissionGranted(RC_CAMERA_PERM)
