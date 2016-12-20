@@ -20,7 +20,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -48,18 +47,11 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.instify.android.R;
-import com.instify.android.ux.fragments.CampNewsFragment;
-import com.instify.android.ux.fragments.ERPFragment;
-import com.instify.android.ux.fragments.NotesFragment;
-import com.instify.android.ux.fragments.TimeTableFragment;
-import com.instify.android.ux.fragments.TrendingFragment;
-import com.instify.android.ux.fragments.UnivNewsFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -185,25 +177,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             Toast.makeText(MainActivity.this, "Signed Out", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "onAuthStateChanged:signed_out");
         }
-/*
-        // Ad-View
-        mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-        // Create an InterstitialAd object. This same object can be re-used whenever you want to
-        // show an interstitial.
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen));
-
-        // [START create_interstitial_ad_listener]
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                requestNewInterstitial();
-            }
-        });
-        // [END create_interstitial_ad_listener]
-*/
     }
 
     public void showFloatingActionButton() {
@@ -332,56 +305,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
     }
 
-    /**
-     * Load a new interstitial ad asynchronously.
-     */
-// [START request_new_interstitial]
-/*    private void requestNewInterstitial() {
-        AdRequest adRequest = new AdRequest.Builder()
-                .build();
-        mInterstitialAd.loadAd(adRequest);
-    }
-    // [END request_new_interstitial]
-
-    // [START add_lifecycle_methods]
-
-    /**
-     * Called when leaving the activity
-     */
-/*    @Override
-    public void onPause() {
-        if (mAdView != null) {
-            mAdView.pause();
-        }
-        super.onPause();
-    }
-
-    /**
-     * Called when returning to the activity
-     */
-/*    @Override
-    public void onResume() {
-        super.onResume();
-        if (mAdView != null) {
-            mAdView.resume();
-        }
-        if (!mInterstitialAd.isLoaded()) {
-            requestNewInterstitial();
-        }
-    }
-
-    /**
-     * Called before the activity is destroyed
-     */
-/*    @Override
-    public void onDestroy() {
-        if (mAdView != null) {
-            mAdView.destroy();
-        }
-        super.onDestroy();
-    }
-    // [END add_lifecycle_methods]
-*/
     private void selectImage() {
         final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Remove Picture", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -513,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                             Intent share = new Intent(Intent.ACTION_VIEW);
                             share.setData(Uri.parse("market://details?id=com.google.android.gms"));
                             startActivity(share);
-                        } catch (Exception e) { //Google Play is not installed
+                        } catch (Exception e) { // Google Play is not installed
                             Intent intent = new Intent(Intent.ACTION_VIEW);
                             intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms"));
                             startActivity(intent);
@@ -615,7 +538,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
             return 6;
         }
 
