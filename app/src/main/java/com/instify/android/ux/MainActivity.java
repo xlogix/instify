@@ -433,9 +433,11 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                         mViewPager.setCurrentItem(5);
                         break;
                     case R.id.nav_share:
-                        //Intent share = new Intent();
-                        //share.setAction(Intent.ACTION_SEND);
-                        //share.putExtra(Intent.EXTRA_TEXT, "Thanks for Sharing!");
+                        /* Intent share = new Intent();
+                        share.setAction(Intent.ACTION_SEND);
+                        share.putExtra(Intent.EXTRA_TEXT, "Thanks for Sharing!");
+                        share.setType("text/plain");
+                        startActivity(share); */
                         try {
                             Intent share = new Intent(Intent.ACTION_VIEW);
                             share.setData(Uri.parse("market://details?id=com.google.android.gms"));
@@ -445,8 +447,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                             intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms"));
                             startActivity(intent);
                         }
-                        //share.setType("text/plain");
-                        //startActivity(share);
                         break;
                     case R.id.nav_send:
                         break;
