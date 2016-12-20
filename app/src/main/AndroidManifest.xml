@@ -20,25 +20,25 @@
         android:required="false" />
 
     <application
-        android:name="helpers.MyApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/MaterialTheme">
 
         <activity
-            android:name="com.instify.android.ux.SplashActivity"
+            android:name=".ux.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="instify" />
             </intent-filter>
         </activity>
 
@@ -63,21 +63,20 @@
             android:label="@string/title_activity_upload_campus" />
 
 
-        <service android:name="com.instify.android.helpers.MyFirebaseMessagingService">
+        <service android:name=".helpers.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <service android:name="com.instify.android.helpers.MyFirebaseInstanceIDService">
+        <service android:name=".helpers.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
         <service
-            android:name="com.instify.android.helpers.MyDownloadService"
+            android:name=".helpers.MyDownloadService"
             android:exported="false" />
-
     </application>
 </manifest>

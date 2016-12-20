@@ -1,21 +1,20 @@
 package com.instify.android.helpers;
 
 import android.app.Application;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+
 public class MyApplication extends Application {
+
     public static final String PACKAGE_NAME = MyApplication.class.getPackage().getName();
-    public static final String TAG = MyApplication.class.getSimpleName();
+    public static final String TAG = MyApplication.class
+            .getSimpleName();
     public static String APP_VERSION = "0.0.0";
     public static String ANDROID_ID = "0000000000000000";
-
     private static MyApplication mInstance;
     private RequestQueue mRequestQueue;
 
@@ -51,22 +50,5 @@ public class MyApplication extends Application {
         if (mRequestQueue != null) {
             mRequestQueue.cancelAll(tag);
         }
-    }
-
-    /**
-     * Method check, if internet is available.
-     *
-     * @return true if internet is available. Else otherwise.
-     */
-    public boolean isDataConnected() {
-        ConnectivityManager connectMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectMan.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
-    }
-
-    public boolean isWiFiConnection() {
-        ConnectivityManager connectMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectMan.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI;
     }
 }

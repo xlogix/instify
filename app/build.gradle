@@ -8,6 +8,19 @@ android {
         javaMaxHeapSize "3g"
     }
 
+    /*signingConfigs {
+        release {
+            try {
+                storeFile file("android-key.jks")
+                storePassword KEYSTORE_PASSWORD
+                keyAlias KEYSTORE_ALIAS
+                keyPassword KEY_PASSWORD
+            } catch (ex) {
+                throw new InvalidUserDataException("You should define KEYSTORE_PASSWORD, KEYSTORE_ALIAS and KEY_PASSWORD in gradle.properties." + ex)
+            }
+        }
+    }*/
+
     defaultConfig {
         applicationId "com.instify.android"
         minSdkVersion 16
