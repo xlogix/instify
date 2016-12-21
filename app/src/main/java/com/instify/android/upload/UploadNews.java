@@ -23,6 +23,8 @@ import java.sql.Timestamp;
 
 public class UploadNews extends AppCompatActivity {
 
+    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference campusNewsRef;
     private EditText newsTitle, newsDescription;
     private Button submitNews;
 
@@ -37,13 +39,12 @@ public class UploadNews extends AppCompatActivity {
         submitNews = (Button) findViewById(R.id.post);
 
         // Firebase objects //
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference campusNewsRef = dbRef.child("CampusNews");
+        campusNewsRef = dbRef.child("CampusNews");
 
         submitNews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (validateForm()){
+                if (validateForm()) {
                     // TODO: Use a relevant key for the news in the database, attach user details.
 
                     CampusNewsData data = new CampusNewsData(newsTitle, newsDescription);
@@ -66,22 +67,22 @@ public class UploadNews extends AppCompatActivity {
         });
     }
 
-        private boolean validateForm() {
-            if (!newsTitle.getText().toString().equals("") &&
-                    !newsDescription.getText().toString().equals("")){
-                return true;
-            }
-            return false;
+    private boolean validateForm() {
+        if (!newsTitle.getText().toString().equals("") &&
+                !newsDescription.getText().toString().equals("")) {
+            return true;
         }
+        return false;
+    }
 
 }
 
 
-class CampusNewsData{
+class CampusNewsData {
 
     public String title, description;
 
-    CampusNewsData(TextView t, TextView d){
+    CampusNewsData(TextView t, TextView d) {
         this.title = t.getText().toString();
         this.description = d.getText().toString();
     }
