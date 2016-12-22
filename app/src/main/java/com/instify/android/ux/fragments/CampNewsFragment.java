@@ -13,6 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.instify.android.R;
 import com.instify.android.upload.UploadNews;
 import com.instify.android.ux.adapters.CampNewsAdapter;
@@ -32,12 +38,61 @@ public class CampNewsFragment extends Fragment {
         return frag;
     }
 
+    RecyclerView recyclerView;
+
+    // Firebase definitions //
+    DatabaseReference dbRef, campusRef;
+    FirebaseRecyclerAdapter<CampusNewsData, CampusViewHolder> fAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_campus_news, container, false);
         //((ActivityMain) getActivity()).showFloatingActionButton();
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_campus_news);
-        setupRecyclerView(recyclerView);
+
+        // Recycler view set up //
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_campus_news);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+
+        // Firebase database setup //
+        dbRef = FirebaseDatabase.getInstance().getReference();
+        campusRef = dbRef.child("CampusNews");
+        fAdapter = new FirebaseRecyclerAdapter<CampusNewsData, CampusViewHolder>(
+                CampusNewsData.class, R.layout.card_view_campus, CampusViewHolder.class, campusRef) {
+            @Override
+            protected void populateViewHolder(final CampusViewHolder viewHolder, CampusNewsData model, int position) {
+                campusRef.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        CampusNewsData recivedData = dataSnapshot.getValue(CampusNewsData.class);
+                        viewHolder.campusTitle.setText(recivedData.title);
+                        viewHolder.campusDescription.setText(recivedData.description);
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        };
+
+        recyclerView.setAdapter(fAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -51,57 +106,24 @@ public class CampNewsFragment extends Fragment {
         return rootView;
     }
 
-    private void setupRecyclerView(RecyclerView recyclerView) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(), CampNewsAdapter.data));
+    private static class CampusViewHolder extends RecyclerView.ViewHolder{
+            TextView campusTitle, campusDescription;
+        public CampusViewHolder(View v){
+            super(v);
+            campusTitle = (TextView) v.findViewById(R.id.campusTitle);
+            campusDescription = (TextView) v.findViewById(R.id.campusDescription);
+        }
     }
 
-    public static class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
-        private String[] mValues;
-        private Context mContext;
+}
 
-        public SimpleStringRecyclerViewAdapter(Context context, String[] items) {
-            mContext = context;
-            mValues = items;
-        }
 
-        public String getValueAt(int position) {
-            return mValues[position];
-        }
+class CampusNewsData {
 
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    //.inflate(R.layout.recycle_list, parent, false);
-                    .inflate(android.R.layout.simple_list_item_1, parent, false);
-            return new ViewHolder(view);
-        }
+    public String title, description;
 
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, final int position) {
-            holder.mTextView.setText(mValues[position]);
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Snackbar.make(v, getValueAt(position), Snackbar.LENGTH_SHORT).show();
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mValues.length;
-        }
-
-        public static class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mTextView;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mTextView = (TextView) view.findViewById(android.R.id.text1);
-            }
-        }
+    CampusNewsData(TextView t, TextView d) {
+        this.title = t.getText().toString();
+        this.description = d.getText().toString();
     }
 }
