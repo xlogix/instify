@@ -64,7 +64,7 @@ public class CampNewsFragment extends Fragment {
                 campusRef.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        CampusNewsData recivedData = dataSnapshot.getValue(CampusNewsData.class);
+                        CampusNewsData recivedData = new CampusNewsData(dataSnapshot.getValue(CampusNewsData.class));
                         viewHolder.campusTitle.setText(recivedData.title);
                         viewHolder.campusDescription.setText(recivedData.description);
                     }
@@ -121,6 +121,13 @@ public class CampNewsFragment extends Fragment {
 class CampusNewsData {
 
     public String title, description;
+
+    CampusNewsData(){}
+
+    CampusNewsData(CampusNewsData snap){
+        this.title = snap.title;
+        this.description = snap.description;
+    }
 
     CampusNewsData(TextView t, TextView d) {
         this.title = t.getText().toString();

@@ -40,7 +40,7 @@ public class SplashActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         layoutContent = findViewById(R.id.splash_content);
-        layoutIntroScreen = findViewById(R.id.splash_intro_screen);
+//        layoutIntroScreen = findViewById(R.id.splash_intro_screen);
 
         // Obtain the FirebaseAnalytics, Auth instances
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);

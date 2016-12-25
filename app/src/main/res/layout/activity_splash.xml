@@ -4,12 +4,7 @@
     android:layout_height="match_parent"
     tools:context=".ux.SplashActivity">
 
-    <ImageView
-        android:id="@+id/splash_intro_screen"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/splash_screen"
-        android:contentDescription="@string/content_description_intro_screen" />
+
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
