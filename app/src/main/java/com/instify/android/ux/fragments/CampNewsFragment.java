@@ -61,34 +61,8 @@ public class CampNewsFragment extends Fragment {
                 CampusNewsData.class, R.layout.card_view_campus, CampusViewHolder.class, campusRef) {
             @Override
             protected void populateViewHolder(final CampusViewHolder viewHolder, CampusNewsData model, int position) {
-                campusRef.addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        CampusNewsData recivedData = new CampusNewsData(dataSnapshot.getValue(CampusNewsData.class));
-                        viewHolder.campusTitle.setText(recivedData.title);
-                        viewHolder.campusDescription.setText(recivedData.description);
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                viewHolder.campusTitle.setText(model.title);
+                viewHolder.campusDescription.setText(model.description);
             }
         };
 
