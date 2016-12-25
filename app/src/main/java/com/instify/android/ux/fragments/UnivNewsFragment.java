@@ -103,6 +103,7 @@ public class UnivNewsFragment extends Fragment {
                                 titles[j] = newsItem.getString("title");
                                 snips[j] = newsItem.getString("snip");
                                 links[j] = newsItem.getString("link");
+                                mAdapter.notifyDataSetChanged();
                             }
                             // UI
                             swipeRefreshLayout.setRefreshing(false);
@@ -121,7 +122,7 @@ public class UnivNewsFragment extends Fragment {
             }
         });
 
-        int socketTimeout = 10000;  //10 seconds - change to what you want
+        int socketTimeout = 10000;  // 10 seconds - change to what you want
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         req.setRetryPolicy(policy);
         MyApplication.getInstance().addToRequestQueue(req);
