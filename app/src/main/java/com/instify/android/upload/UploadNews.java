@@ -60,6 +60,9 @@ public class UploadNews extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Toast.makeText(UploadNews.this, "News announced!", Toast.LENGTH_SHORT).show();
+                                    newsTitle.setText("");
+                                    newsDescription.setText("");
+                                    finish();
                                 }
                             });
                 }
