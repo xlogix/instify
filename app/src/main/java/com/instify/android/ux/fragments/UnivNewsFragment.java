@@ -40,6 +40,7 @@ public class UnivNewsFragment extends Fragment {
     private String TAG = UnivNewsFragment.class.getSimpleName();
     private SwipeRefreshLayout swipeRefreshLayout;
     private SimpleStringRecyclerViewAdapter mAdapter;
+    private RecyclerView recyclerView;
     private JsonObjectRequest req;
 
     public UnivNewsFragment() {
@@ -54,7 +55,7 @@ public class UnivNewsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RecyclerView recyclerView;
+
 
         View rootView = inflater.inflate(R.layout.fragment_university_news, container, false);
         //((ActivityMain) getActivity()).showFloatingActionButton();
@@ -62,10 +63,16 @@ public class UnivNewsFragment extends Fragment {
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setColorSchemeResources(R.color.red500, R.color.black, R.color.google_blue_900);
 
-        mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), titles, snips, links);
+
+        // Setting up recycle view
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
+
 
         // Calling another function which has the details
-        setupRecyclerView(recyclerView);
+//        setupRecyclerView(recyclerView);
 
         // Make it look like something is happening
         swipeRefreshLayout.setRefreshing(true);
@@ -84,11 +91,11 @@ public class UnivNewsFragment extends Fragment {
         return rootView;
     }
 
-    private void setupRecyclerView(RecyclerView recyclerView) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
-    }
+//    private void setupRecyclerView(RecyclerView recyclerView) {
+//        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+//        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        recyclerView.setAdapter(mAdapter);
+//    }
 
     public void makeJSONRequest() {
         req = new JsonObjectRequest(endpoint_final, null,
@@ -98,12 +105,15 @@ public class UnivNewsFragment extends Fragment {
                         Log.d(TAG, response.toString());
                         try {
                             JSONArray newsItems = response.getJSONArray("newsItems");
-                            for (int j = 0; j < newsItems.length(); j++) {
-                                JSONObject newsItem = newsItems.getJSONObject(j);
-                                titles[j] = newsItem.getString("title");
-                                snips[j] = newsItem.getString("snip");
-                                links[j] = newsItem.getString("link");
-                            }
+                            mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), newsItems);
+                            recyclerView.setAdapter(mAdapter);
+//                            for (int j = 0; j < newsItems.length(); j++) {
+//                                JSONObject newsItem = newsItems.getJSONObject(j);
+//                                titles[j] = newsItem.getString("title");
+//                                snips[j] = newsItem.getString("snip");
+//                                links[j] = newsItem.getString("link");
+//                            }
+
                             // UI
                             swipeRefreshLayout.setRefreshing(false);
                         } catch (JSONException e) {
@@ -130,24 +140,27 @@ public class UnivNewsFragment extends Fragment {
     }
 
     public static class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
-        private String[] mTitles, mSnips, mLinks;
+//        private String[] mTitles, mSnips, mLinks;
         private Context mContext;
+        private JSONArray newsArray;
 
         // Constructor
-        private SimpleStringRecyclerViewAdapter(Context context, String[] Titles, String[] Snips, String[] Links) {
+        private SimpleStringRecyclerViewAdapter(Context context, JSONArray newsArray) {
             mContext = context;
-            mTitles = Titles;
-            mSnips = Snips;
-            mLinks = Links;
+            this.newsArray = newsArray;
+
+//            mTitles = Titles;
+//            mSnips = Snips;
+//            mLinks = Links;
         }
 
-        private String getTitleAt(int position) {
-            return mTitles[position];
-        }
-
-        private String getSnipAt(int position) {
-            return mSnips[position];
-        }
+//        private String getTitleAt(int position) {
+//            return mTitles[position];
+//        }
+//
+//        private String getSnipAt(int position) {
+//            return mSnips[position];
+//        }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -158,14 +171,24 @@ public class UnivNewsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            holder.mTextViewTitle.setText(getTitleAt(position));
-            holder.mTextViewSnip.setText(getSnipAt(position));
+            try {
+                holder.mTextViewTitle.setText(newsArray.getJSONObject(position).getString("title"));
+                holder.mTextViewSnip.setText(newsArray.getJSONObject(position).getString("snip"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //startScan();
                     Context context = v.getContext();
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mLinks[holder.getAdapterPosition()]));
+                    Intent intent = null;
+                    try {
+                        intent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse(newsArray.getJSONObject(position).getString("link")));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     context.startActivity(intent);
                 }
             });
@@ -173,7 +196,7 @@ public class UnivNewsFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return mTitles.length;
+            return newsArray.length();
         }
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
