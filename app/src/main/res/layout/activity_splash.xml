@@ -4,8 +4,6 @@
     android:layout_height="match_parent"
     tools:context=".ux.SplashActivity">
 
-
-
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
@@ -17,8 +15,7 @@
         android:id="@+id/splash_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/logo" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/background" />
 </RelativeLayout>

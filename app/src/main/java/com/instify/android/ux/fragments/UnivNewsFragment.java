@@ -103,7 +103,6 @@ public class UnivNewsFragment extends Fragment {
                                 titles[j] = newsItem.getString("title");
                                 snips[j] = newsItem.getString("snip");
                                 links[j] = newsItem.getString("link");
-                                mAdapter.notifyDataSetChanged();
                             }
                             // UI
                             swipeRefreshLayout.setRefreshing(false);
@@ -112,7 +111,6 @@ public class UnivNewsFragment extends Fragment {
                             Toast.makeText(getContext(), "JSON Parsing error", Toast.LENGTH_LONG).show();
                         }
                         mAdapter.notifyDataSetChanged();
-
                     }
                 }, new Response.ErrorListener() {
             @Override
