@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.instify.android.R;
+import com.instify.android.helpers.CampusNewsData;
 
 import java.sql.Timestamp;
 
@@ -26,7 +28,9 @@ public class UploadNews extends AppCompatActivity {
     DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference campusNewsRef;
     private EditText newsTitle, newsDescription;
+    private RadioGroup newsLevelRadio;
     private Button submitNews;
+    private int selectedLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,7 @@ public class UploadNews extends AppCompatActivity {
         // UI elements //
         newsTitle = (EditText) findViewById(R.id.news_title);
         newsDescription = (EditText) findViewById(R.id.news_description);
+        newsLevelRadio = (RadioGroup) findViewById(R.id.campusUploadRadioGroup);
         submitNews = (Button) findViewById(R.id.post);
 
         // Firebase objects //
@@ -46,7 +51,7 @@ public class UploadNews extends AppCompatActivity {
             public void onClick(View view) {
                 if (validateForm()) {
                     // TODO: Use a relevant key for the news in the database, attach user details.
-
+                    selectedLevel = newsLevelRadio.getCheckedRadioButtonId();
                     CampusNewsData data = new CampusNewsData(newsTitle, newsDescription);
                     Timestamp tStamp = new Timestamp(System.currentTimeMillis());
                     campusNewsRef.child("" + tStamp.getTime()).setValue(data)
@@ -78,15 +83,4 @@ public class UploadNews extends AppCompatActivity {
         return false;
     }
 
-}
-
-
-class CampusNewsData {
-
-    public String title, description;
-
-    CampusNewsData(TextView t, TextView d) {
-        this.title = t.getText().toString();
-        this.description = d.getText().toString();
-    }
 }

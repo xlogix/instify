@@ -15,6 +15,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.instify.android.R;
+import com.instify.android.helpers.CampusNewsData;
 import com.instify.android.upload.UploadNews;
 
 /**
@@ -84,22 +85,4 @@ public class CampNewsFragment extends Fragment {
         }
     }
 
-}
-
-class CampusNewsData {
-
-    public String title, description;
-
-    CampusNewsData() {
-    }
-
-    CampusNewsData(CampusNewsData snap) {
-        this.title = snap.title;
-        this.description = snap.description;
-    }
-
-    CampusNewsData(TextView t, TextView d) {
-        this.title = t.getText().toString();
-        this.description = d.getText().toString();
-    }
 }

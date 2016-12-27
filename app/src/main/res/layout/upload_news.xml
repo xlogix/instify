@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/post_announcement_text"
@@ -11,6 +12,7 @@
         android:layout_centerHorizontal="true"
         android:padding="20dp"
         android:text="Post an Announcement"
+        android:textColor="@color/colorPrimary"
         android:textAllCaps="true"
         android:textSize="24sp" />
 
@@ -21,7 +23,6 @@
         android:layout_below="@+id/post_announcement_text"
         android:layout_marginBottom="10dp"
         android:hint="Title"
-        android:textColor="@color/colorPrimary"
         android:padding="10dp"
         android:maxLines="1" />
 
@@ -35,12 +36,50 @@
         android:hint="Description"
         android:padding="10dp" />
 
+    <TextView
+        android:id="@+id/CampusUploadRadioTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="24sp"
+        android:text="Choose level"
+        android:textColor="@color/colorPrimary"
+        android:layout_below="@+id/news_description"/>
+
+    <RadioGroup
+        android:id="@+id/campusUploadRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/CampusUploadRadioTitle">
+
+        <RadioButton
+            android:id="@+id/campusUploadUniv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="University"/>
+
+        <RadioButton
+            android:id="@+id/campusUploadDept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Department"/>
+
+        <RadioButton
+            android:id="@+id/campusUploadClass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Class"/>
+
+    </RadioGroup>
+
     <Button
         android:id="@+id/post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/news_description"
+        android:layout_below="@+id/campusUploadRadioGroup"
         android:layout_centerHorizontal="true"
+        android:background="@color/colorPrimaryLight"
         android:text="Post" />
 
 </RelativeLayout>
