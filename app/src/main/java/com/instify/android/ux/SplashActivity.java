@@ -57,7 +57,7 @@ public class SplashActivity extends Activity {
              */
             public void run() {
                 Boolean isFirstRun = getSharedPreferences("userData", MODE_PRIVATE).getBoolean("IsFirstRun", true);
-                //String ifRegistered = getSharedPreferences("userData", MODE_PRIVATE).getString("CurrentUser", null);
+                // String ifRegistered = getSharedPreferences("userData", MODE_PRIVATE).getString("CurrentUser", null);
 
                 // This method will be executed once the timer is over
                 if (isFirstRun) {
@@ -66,7 +66,7 @@ public class SplashActivity extends Activity {
                     getSharedPreferences("userData", MODE_PRIVATE).edit().putBoolean("IsFirstRun", false).apply();
                     finish();
                 } else if (mFirebaseUser == null) {
-                    Intent i = new Intent(SplashActivity.this, MainActivity.class);
+                    Intent i = new Intent(SplashActivity.this, LoginActivity.class);
                     Timber.d("Pass to auth activity");
                     startActivity(i);
                     finish();

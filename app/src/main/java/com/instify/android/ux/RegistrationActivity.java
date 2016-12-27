@@ -3,9 +3,11 @@ package com.instify.android.ux;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -24,55 +26,37 @@ import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
 import com.instify.android.helpers.UserInfo;
 
+import timber.log.Timber;
+
 /**
- * Created by Abhish3k on 12/16/2016.  // Redid Auth using Realtime Database
+ * Created by Abhish3k on 12/16/2016.  // Redid Auth using Realtime Database on 12/22/2016
  */
 
-public class RegistrationActivity extends AppCompatActivity {
+public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = RegistrationActivity.class.getSimpleName();
+    @VisibleForTesting
     public ProgressDialog mProgressDialog;
-    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+    // [END declare_database]
     UserInfo userInfoObj;
-    private TextView txtDetails;
-    private EditText mNameField, mEmailField, mPasswordField, mRegNoField, mSectionField;
-    private Button btnSave;
-    private DatabaseReference mFirebaseDatabase;
+    // [START declare_database]
     private FirebaseDatabase mFirebaseInstance;
     // [END declare_auth]
-    private String userId;
+    private DatabaseReference mFirebaseDatabase = mFirebaseInstance.getReference();
     // [END declare_auth_listener]
     // [START declare_auth]
     private FirebaseAuth mAuth;
     // [START declare_auth_listener]
-    private FirebaseAuth.AuthStateListener mAuthListener;
-
-    public void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.Loading));
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        mProgressDialog.show();
-    }
-
-    public void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
-    }
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private String userId;
+    private TextView txtDetails;
+    private EditText mNameField, mEmailField, mPasswordField, mRegNoField, mSectionField;
+    private Button btnRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_auth);
-
-        // Displaying toolbar icon
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+        setContentView(R.layout.activity_register);
 
         // Views
         txtDetails = (TextView) findViewById(R.id.txt_user);
@@ -81,30 +65,53 @@ public class RegistrationActivity extends AppCompatActivity {
         mEmailField = (EditText) findViewById(R.id.field_email);
         mPasswordField = (EditText) findViewById(R.id.field_password);
         mSectionField = (EditText) findViewById(R.id.field_section);
-        btnSave = (Button) findViewById(R.id.btn_save);
+        btnRegister = (Button) findViewById(R.id.btn_register);
+
+        // Buttons
+        findViewById(R.id.btn_register).setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        registerUser(mEmailField.getText().toString(), mPasswordField.getText().toString(), mNameField.getText().toString(),
+                mRegNoField.getText().toString(), mSectionField.getText().toString());
     }
 
     // [START on_start_add_listener]
     @Override
     public void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
+        mAuth.addAuthStateListener(mAuthStateListener);
     }
     // [END on_start_add_listener]
-
-
 
     // [START on_stop_remove_listener]
     @Override
     public void onStop() {
         super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
+        if (mAuthStateListener != null) {
+            mAuth.removeAuthStateListener(mAuthStateListener);
         }
     }
     // [END on_stop_remove_listener]
 
+    // [START on_stop_remove_listener]
+    @Override
+    public void onPause() {
+        super.onPause();
+        mAuth.removeAuthStateListener(mAuthStateListener);
+    }
+    // [END on_stop_remove_listener]
+
     void registerUser(String emailText, String passwordText, String name, String regNo, String section) {
+
+        Timber.d(TAG, "Registration:");
+        if (!validateForm()) {
+            return;
+        }
+
+        showProgressDialog();
 
         // TODO
         // In real apps this userId should be fetched
@@ -115,6 +122,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         userInfoObj = new UserInfo(regNo, section);
 
+        /* [START] EXTRA CODE*/
         // store app title to 'app_title' node
         mFirebaseInstance.getReference("app_title").setValue("Realtime Database");
 
@@ -137,6 +145,8 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
+        /* [END] EXTRA CODE*/
+
         mAuth.createUserWithEmailAndPassword(emailText, passwordText)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -155,10 +165,9 @@ public class RegistrationActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    dbRef.child("users").child(user.getUid()).setValue(userInfoObj);
-
+                    mFirebaseDatabase.child("users").child(user.getUid()).setValue(userInfoObj);
                     // Checking and waiting till the info has be added //
-                    dbRef.child("users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                    mFirebaseDatabase.child("users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Toast.makeText(RegistrationActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
@@ -172,6 +181,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
             }
         });
+        hideProgressDialog();
     }
 
     private boolean validateForm() {
@@ -194,5 +204,21 @@ public class RegistrationActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.Loading));
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 }

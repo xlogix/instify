@@ -54,7 +54,6 @@ import com.instify.android.ux.fragments.NotesFragment;
 import com.instify.android.ux.fragments.TimeTableFragment;
 import com.instify.android.ux.fragments.TrendingFragment;
 import com.instify.android.ux.fragments.UnivNewsFragment;
-import com.instify.android.ux.fragments.planeTestFrag;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -453,6 +452,20 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                         }
                         break;
                     case R.id.nav_send:
+                        String[] emails = {"abhishekuniyal09@gmail.com"};
+                        String subject = "I want to submit a Feedback";
+                        String message = "Hi, ";
+
+                        Intent email = new Intent(Intent.ACTION_SENDTO);
+                        email.putExtra(Intent.EXTRA_EMAIL, emails);
+                        email.putExtra(Intent.EXTRA_SUBJECT, subject);
+                        email.putExtra(Intent.EXTRA_TEXT, message);
+                        email.setType("*/*");
+                        email.setData(Uri.parse("mailto:"));
+
+                        if (email.resolveActivity(getPackageManager()) != null) {
+                            startActivity(email);
+                        }
                         break;
                 }
                 drawerLayout.closeDrawers();
@@ -541,13 +554,19 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            switch(position){
-                case 0: return TimeTableFragment.newInstance();
-                case 1: return TrendingFragment.newInstance();
-                case 2: return CampNewsFragment.newInstance();
-                case 3: return UnivNewsFragment.newInstance();
-                case 4: return NotesFragment.newInstance();
-                case 5: return ERPFragment.newInstance();
+            switch (position) {
+                case 0:
+                    return TimeTableFragment.newInstance();
+                case 1:
+                    return TrendingFragment.newInstance();
+                case 2:
+                    return CampNewsFragment.newInstance();
+                case 3:
+                    return UnivNewsFragment.newInstance();
+                case 4:
+                    return NotesFragment.newInstance();
+                case 5:
+                    return ERPFragment.newInstance();
             }
             return PlaceholderFragment.newInstance(position + 1);
         }

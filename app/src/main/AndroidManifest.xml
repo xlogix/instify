@@ -54,6 +54,10 @@
             android:label="@string/title_activity_registration" />
 
         <activity
+            android:name=".ux.LoginActivity"
+            android:label="@string/title_activity_login" />
+
+        <activity
             android:name=".ux.MainActivity"
             android:label="@string/app_name" />
 

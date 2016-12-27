@@ -3,6 +3,7 @@
 
     <string name="title_activity_first_launch_tut">FirstLaunchTut</string>
     <string name="title_activity_registration">Register Yourself</string>
+    <string name="title_activity_login">Login Here</string>
     <string name="title_activity_upload_notes">Post a new Note</string>
     <string name="title_activity_upload_campus">Post a new Update</string>
 
@@ -53,14 +54,18 @@
     <string name="menu_action_favorites">Favorites</string>
     <string name="no_network_connection_toast">No network connection found</string>
 
-    <!-- ActivityAuth -->
+    <!-- Registration Activity -->
     <string name="hint_name">Full Name</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_regNo">Registration Number</string>
-    <string name="action_save">Save</string>
+    <string name="action_register">Register</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
+
+    <!--Login Activity -->
+    <string name="auth_failed">Authentication Failed. Try Again.</string>
+    <string name="auth_success">Authentication Successful!</string>
 
     <!--Layouts-->
     <string name="imageView_edit">Change Default Image</string>
