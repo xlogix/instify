@@ -18,16 +18,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="4dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="25sp"
             android:textAllCaps="true"
-            android:textStyle="bold|italic" />
+            android:textColor="@color/google_blue_500"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/univ_news_snip"
-            android:textSize="20sp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
