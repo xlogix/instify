@@ -42,7 +42,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     // [START declare_database]
     private FirebaseDatabase mFirebaseInstance;
     // [END declare_auth]
-    private DatabaseReference mFirebaseDatabase = mFirebaseInstance.getReference();
+    private DatabaseReference mFirebaseDatabase;
     // [END declare_auth_listener]
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -106,6 +106,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
     void registerUser(String emailText, String passwordText, String name, String regNo, String section) {
 
+        mFirebaseDatabase = mFirebaseInstance.getReference();
         Timber.d(TAG, "Registration:");
         if (!validateForm()) {
             return;

@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mPasswordField = (EditText) findViewById(R.id.field_password);
 
         // Buttons
-        findViewById(R.id.email_sign_in_button).setOnClickListener(this);
+        findViewById(R.id.action_login).setOnClickListener(this);
 
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();

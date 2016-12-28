@@ -14,16 +14,17 @@
             android:id="@+id/campusTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="25sp"
             android:textAllCaps="true"
-            android:textStyle="bold|italic"/>
+            android:textColor="@color/colorPrimary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/campusDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
+
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

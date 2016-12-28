@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:padding="4dp"
             android:textAllCaps="true"
-            android:textColor="@color/google_blue_500"
+            android:textColor="@color/colorPrimary"
             android:textSize="22sp"
             android:textStyle="bold" />
 

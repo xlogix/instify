@@ -66,6 +66,7 @@
     <!--Login Activity -->
     <string name="auth_failed">Authentication Failed. Try Again.</string>
     <string name="auth_success">Authentication Successful!</string>
+    <string name="action_sign_in">Login</string>
 
     <!--Layouts-->
     <string name="imageView_edit">Change Default Image</string>
