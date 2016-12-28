@@ -68,7 +68,7 @@
         <activity
             android:name=".ux.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBarTransparent" />
 
         <activity
             android:name=".upload.UploadNotes"
