@@ -63,11 +63,12 @@
         <activity
             android:name=".ux.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name=".ux.MainActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.TransparentStatusBar" />
 
         <activity
             android:name=".upload.UploadNotes"
