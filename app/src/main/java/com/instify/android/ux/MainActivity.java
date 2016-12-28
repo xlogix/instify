@@ -245,14 +245,13 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         return (networkInfo != null && networkInfo.isConnected());
     }
 
-    // EasyPermissions Default Classes [START]
+    // [START] EasyPermissions Default Classes
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         // EasyPermissions handles the request result.
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
-    // EasyPermission Default Classes [END]
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
@@ -277,6 +276,8 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     .show();
         }
     }
+
+    // [END] EasyPermission Default Classes
 
     @TargetApi(Build.VERSION_CODES.M)
     @AfterPermissionGranted(RC_CAMERA_PERM)

@@ -1,12 +1,12 @@
 package com.instify.android.ux;
 
+import android.Manifest;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-import com.github.paolorotolo.appintro.AppIntro;
+import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 import com.instify.android.R;
 
@@ -15,7 +15,7 @@ import com.instify.android.R;
  * status bar and navigation/system bar) with user interaction.
  */
 
-public class IntroActivity extends AppIntro {
+public class IntroActivity extends AppIntro2 {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,16 +25,13 @@ public class IntroActivity extends AppIntro {
         // AppIntro will automatically generate the dots indicator and buttons.
         // Instead of fragments, you can also use our default slide
         // Just set a title, description, background and image. AppIntro will do the rest.
-        addSlide(AppIntroFragment.newInstance("University Updates", "News/Announcements on the website directly pushed to your device", R.drawable.srm_logo, getResources().getColor(R.color.colorAccentDark)));
-        addSlide(AppIntroFragment.newInstance("Campus Buzz", "Always stay updated on Campus Events and News", R.drawable.srm_logo, getResources().getColor(R.color.colorAccentDark)));
-        addSlide(AppIntroFragment.newInstance("ERP", "View all your Marks info in this page. We provide you with statistical data that will help to make difficult choices", R.drawable.srm_logo, getResources().getColor(R.color.colorAccentDark)));
-        addSlide(AppIntroFragment.newInstance("Notes Catalog", "See all your notes in one place", R.drawable.srm_logo, getResources().getColor(R.color.colorAccentDark)));
-        addSlide(AppIntroFragment.newInstance("Time Table", "For the first time, TimeTable will get meaningful", R.drawable.srm_logo, getResources().getColor(R.color.colorAccentDark)));
+        addSlide(AppIntroFragment.newInstance("University Updates", "News/Announcements on the website directly pushed to your device", R.drawable.srm_logo, getResources().getColor(R.color.colorPrimary)));
+        addSlide(AppIntroFragment.newInstance("Campus Buzz", "Always stay updated on Campus Events and News", R.drawable.srm_logo, getResources().getColor(R.color.colorPrimary)));
+        addSlide(AppIntroFragment.newInstance("ERP", "View all your Marks info in this page. We provide you with statistical data that will help to make difficult choices", R.drawable.srm_logo, getResources().getColor(R.color.colorPrimary)));
+        addSlide(AppIntroFragment.newInstance("Notes Catalog", "See all your notes in one place", R.drawable.srm_logo, getResources().getColor(R.color.colorPrimary)));
+        addSlide(AppIntroFragment.newInstance("Time Table", "For the first time, TimeTable will get meaningful", R.drawable.srm_logo, getResources().getColor(R.color.colorPrimary)));
 
-        // OPTIONAL METHODS
-        // Override bar/separator color.
-        setBarColor(Color.parseColor("#3F51B5"));
-        setSeparatorColor(Color.parseColor("#2196F3"));
+        setFadeAnimation();
 
         // Hide Skip/Done button.
         showSkipButton(true);
@@ -43,19 +40,23 @@ public class IntroActivity extends AppIntro {
         // Turn vibration on and set intensity.
         // NOTE: you will probably need to ask VIBRATE permission in Manifest.
         setVibrate(true);
-        setVibrateIntensity(30);
+        setVibrateIntensity(50);
+
+        // This will ask for the camera permission AND the contacts permission on the same slide.
+        // Ensure your slide talks about both so as not to confuse the user.
+        askForPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_CONTACTS}, 2);
     }
 
     @Override
     public void onSkipPressed(Fragment currentFragment) {
-        Intent i = new Intent(IntroActivity.this, RegistrationActivity.class);
+        Intent i = new Intent(IntroActivity.this, LoginActivity.class);
         startActivity(i);
         finish();
     }
 
     @Override
     public void onDonePressed(Fragment currentFragment) {
-        Intent i = new Intent(IntroActivity.this, RegistrationActivity.class);
+        Intent i = new Intent(IntroActivity.this, LoginActivity.class);
         startActivity(i);
         finish();
     }
