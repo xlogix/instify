@@ -121,8 +121,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         Toolbar toolbar = (Toolbar) findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
 
-        checkPlayServices();
-
         // Drawer Layout
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -175,10 +173,18 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             imageView.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
         }
 
+        checkPlayServices();
+
+        // [START initialize_auth]
+        mAuth = FirebaseAuth.getInstance();
+        // [END initialize_auth]
+
+        mFirebaseUser = mAuth.getCurrentUser();
+
         if (mFirebaseUser != null) {
             // User is signed in
             Log.d(TAG, "onAuthStateChanged:signed_in:" + mFirebaseUser.getUid());
-            Toast.makeText(MainActivity.this, "Welcome " + mFirebaseUser.getDisplayName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Welcome " + mFirebaseUser.getUid(), Toast.LENGTH_SHORT).show();
         } else {
             // User is signed out
             Toast.makeText(MainActivity.this, "Signed Out", Toast.LENGTH_SHORT).show();
@@ -188,10 +194,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     public void showFloatingActionButton() {
         fab.show();
-    }
-
-    public void hideFloatingActionButton() {
-        fab.hide();
     }
 
     /*    @Override
@@ -204,6 +206,10 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             }
         }
     */
+
+    public void hideFloatingActionButton() {
+        fab.hide();
+    }
 
     @Override
     protected void onResume() {
@@ -258,6 +264,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         // Some permissions have been granted
         Log.d(TAG, "onPermissionsGranted:" + requestCode + ":" + perms.size());
     }
+    // [END] EasyPermission Default Classes
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
@@ -276,8 +283,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     .show();
         }
     }
-
-    // [END] EasyPermission Default Classes
 
     @TargetApi(Build.VERSION_CODES.M)
     @AfterPermissionGranted(RC_CAMERA_PERM)
