@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.instify.android">
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -55,7 +60,8 @@
 
         <activity
             android:name=".ux.LoginActivity"
-            android:label="@string/title_activity_login" />
+            android:label="@string/title_activity_login"
+            android:theme="@android:style/Theme.NoTitleBar" />
 
         <activity
             android:name=".ux.MainActivity"
@@ -69,6 +75,9 @@
             android:name=".upload.UploadNews"
             android:label="@string/title_activity_upload_campus" />
 
+        <service
+            android:name=".helpers.MyDownloadService"
+            android:exported="false" />
 
         <service android:name=".helpers.MyFirebaseMessagingService">
             <intent-filter>
@@ -82,8 +91,5 @@
             </intent-filter>
         </service>
 
-        <service
-            android:name=".helpers.MyDownloadService"
-            android:exported="false" />
     </application>
 </manifest>

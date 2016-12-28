@@ -194,6 +194,17 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         fab.hide();
     }
 
+    /*    @Override
+        public void onBackPressed() {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                super.onBackPressed();
+            }
+        }
+    */
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -205,17 +216,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             Snackbar.make(mViewPager, "Device Offline. Functionality may be limited", Snackbar.LENGTH_SHORT).show();
         }
     }
-
-    /*    @Override
-        public void onBackPressed() {
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawer(GravityCompat.START);
-            } else {
-                super.onBackPressed();
-            }
-        }
-    */
 
     /**
      * Check the device to make sure it has the Google Play Services APK. If
@@ -252,13 +252,13 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         // EasyPermissions handles the request result.
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
+    // EasyPermission Default Classes [END]
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
         // Some permissions have been granted
         Log.d(TAG, "onPermissionsGranted:" + requestCode + ":" + perms.size());
     }
-    // EasyPermission Default Classes [END]
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
