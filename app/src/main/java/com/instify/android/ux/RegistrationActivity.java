@@ -1,6 +1,7 @@
 package com.instify.android.ux;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
@@ -39,9 +40,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     public ProgressDialog mProgressDialog;
     // [END declare_database]
     UserInfo userInfoObj;
-    // [START declare_database]
-    private FirebaseDatabase mFirebaseInstance;
-    // [END declare_auth]
     private DatabaseReference mFirebaseDatabase;
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -73,6 +71,22 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
+
+        // [START auth_state_listener]
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Timber.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    // User is signed out
+                    Timber.d(TAG, "onAuthStateChanged:signed_out");
+                }
+            }
+        };
+        // [END auth_state_listener]
     }
 
     @Override
@@ -109,7 +123,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
     void registerUser(String emailText, String passwordText, String name, String regNo, String section) {
 
-        mFirebaseDatabase = mFirebaseInstance.getReference();
+        mFirebaseDatabase = FirebaseDatabase.getInstance().getReference();
         Timber.d(TAG, "Registration:");
         if (!validateForm()) {
             return;
@@ -125,31 +139,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         }
 
         userInfoObj = new UserInfo(regNo, section);
-
-        /* [START] EXTRA CODE*/
-        // store app title to 'app_title' node
-        mFirebaseInstance.getReference("app_title").setValue("Realtime Database");
-
-        // app_title change listener
-        mFirebaseInstance.getReference("app_title").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e(TAG, "App title updated");
-
-                String appTitle = dataSnapshot.getValue(String.class);
-
-                // update toolbar title
-                getSupportActionBar().setTitle(appTitle);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.e(TAG, "Failed to read app title value.", error.toException());
-            }
-        });
-
-        /* [END] EXTRA CODE*/
 
         mAuth.createUserWithEmailAndPassword(emailText, passwordText)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
