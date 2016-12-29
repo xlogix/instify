@@ -31,15 +31,15 @@ public class UserInfo {
     public String getDept() {
         switch (this.regno.charAt(8)) {
             case '1':
-                return "civil";
+                return "CIVIL";
             case '2':
-                return "mech";
+                return "MECH";
             case '3':
-                return "cse";
+                return "CSE";
             case '4':
-                return "ece";
+                return "ECE";
             case '8':
-                return "it";
+                return "IT";
             default:
                 return null;
         }

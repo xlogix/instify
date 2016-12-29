@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +25,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
 import com.instify.android.helpers.UserInfo;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import timber.log.Timber;
 
@@ -80,6 +82,9 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 if (user != null) {
                     // User is signed in
                     Timber.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Intent loginToMain = new Intent(RegistrationActivity.this, MainActivity.class);
+                    startActivity(loginToMain);
+                    finish();
                 } else {
                     // User is signed out
                     Timber.d(TAG, "onAuthStateChanged:signed_out");
@@ -128,6 +133,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         if (!validateForm()) {
             return;
         }
+        // Checks
+        isValidEmail(emailText);
 
         showProgressDialog();
 
@@ -192,11 +199,23 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         if (TextUtils.isEmpty(password)) {
             mPasswordField.setError("Required.");
             valid = false;
+        } else if (password.length() < 6) {
+            mPasswordField.setError("At least six characters.");
         } else {
             mPasswordField.setError(null);
         }
 
         return valid;
+    }
+
+    // validating email id
+    private boolean isValidEmail(String email) {
+        String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
     public void showProgressDialog() {

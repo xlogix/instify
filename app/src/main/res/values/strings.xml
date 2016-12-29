@@ -59,7 +59,7 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_regNo">Registration Number</string>
-    <string name="action_register">Register</string>
+    <string name="action_register">Register and Login</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
 
