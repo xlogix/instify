@@ -43,11 +43,12 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     private FirebaseDatabase mFirebaseInstance;
     // [END declare_auth]
     private DatabaseReference mFirebaseDatabase;
-    // [END declare_auth_listener]
     // [START declare_auth]
     private FirebaseAuth mAuth;
+    // [END declare_auth]
     // [START declare_auth_listener]
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    // [END declare_auth_listener]
     private String userId;
     private TextView txtDetails;
     private EditText mNameField, mEmailField, mPasswordField, mRegNoField, mSectionField;
@@ -59,7 +60,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_register);
 
         // Views
-        txtDetails = (TextView) findViewById(R.id.txt_user);
         mNameField = (EditText) findViewById(R.id.field_name);
         mRegNoField = (EditText) findViewById(R.id.field_regNO);
         mEmailField = (EditText) findViewById(R.id.field_email);
@@ -70,6 +70,9 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         // Buttons
         findViewById(R.id.btn_register).setOnClickListener(this);
 
+        // [START initialize_auth]
+        mAuth = FirebaseAuth.getInstance();
+        // [END initialize_auth]
     }
 
     @Override

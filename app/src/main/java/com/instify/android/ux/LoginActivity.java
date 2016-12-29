@@ -71,8 +71,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         populateAutoComplete();
 
         mPasswordField = (EditText) findViewById(R.id.field_password);
+
         // Buttons
         findViewById(R.id.action_login).setOnClickListener(this);
+        findViewById(R.id.action_to_register).setOnClickListener(this);
 
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
@@ -215,7 +217,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        attemptLogin(mEmailField.getText().toString(), mPasswordField.getText().toString());
+        int i = v.getId();
+        if (i == R.id.action_login) {
+            attemptLogin(mEmailField.getText().toString(), mPasswordField.getText().toString());
+        }
+        else if (i == R.id.action_to_register) {
+            Intent loginToRegister = new Intent(LoginActivity.this, RegistrationActivity.class);
+            startActivity(loginToRegister);
+            finish();
+        }
     }
 
     public void showProgressDialog() {

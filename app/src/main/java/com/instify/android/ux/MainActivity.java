@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         return (networkInfo != null && networkInfo.isConnected());
     }
 
-    // [START] EasyPermissions Default Classes
+    // [START] EasyPermissions Default Functions
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         // Some permissions have been granted
         Log.d(TAG, "onPermissionsGranted:" + requestCode + ":" + perms.size());
     }
-    // [END] EasyPermission Default Classes
+    // [END] EasyPermission Default Functions
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {

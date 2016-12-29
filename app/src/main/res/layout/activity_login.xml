@@ -53,6 +53,13 @@
             android:text="@string/action_sign_in"
             android:textSize="16sp" />
 
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/action_to_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/action_sign_up"
+            android:textSize="16sp" />
     </LinearLayout>
-
 </ScrollView>

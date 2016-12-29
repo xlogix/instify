@@ -58,19 +58,15 @@ public class ERPFragment extends Fragment {
         builder.setTitle("Enter your details");
 
         // Set up the input
-        final EditText regNo = new EditText(getActivity());
         final EditText password = new EditText(getActivity());
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        regNo.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        builder.setView(regNo);
         builder.setView(password);
 
         // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mRegNo = regNo.getText().toString();
                 mPassword = password.getText().toString();
             }
         });
