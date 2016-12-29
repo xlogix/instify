@@ -55,7 +55,7 @@ public class ERPFragment extends Fragment {
         ((MainActivity) getActivity()).hideFloatingActionButton();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Enter your details");
+        builder.setTitle("Enter your password");
 
         // Set up the input
         final EditText password = new EditText(getActivity());

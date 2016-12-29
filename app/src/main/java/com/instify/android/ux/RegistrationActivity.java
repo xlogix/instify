@@ -64,7 +64,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         mRegNoField = (EditText) findViewById(R.id.field_regNO);
         mEmailField = (EditText) findViewById(R.id.field_email);
         mPasswordField = (EditText) findViewById(R.id.field_password);
-        mSectionField = (EditText) findViewById(R.id.field_section);
         btnRegister = (Button) findViewById(R.id.btn_register);
 
         // Buttons
