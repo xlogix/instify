@@ -27,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.instify.android.R;
 import com.instify.android.helpers.MyApplication;
+import com.instify.android.ux.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +55,10 @@ public class UnivNewsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_university_news, container, false);
-        //((ActivityMain) getActivity()).showFloatingActionButton();
+
+        // Hide the floating action button
+        ((MainActivity) getActivity()).hideFloatingActionButton();
+
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_university);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setColorSchemeResources(R.color.red500, R.color.black, R.color.google_blue_900);

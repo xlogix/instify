@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.instify.android.R;
+import com.instify.android.ux.MainActivity;
 
 import java.util.Calendar;
 
@@ -33,7 +34,8 @@ public class TimeTableFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_time_table, container, false);
-        //((ActivityMain) getActivity()).showFloatingActionButton();
+        // show the FloatingActionButton
+        ((MainActivity) getActivity()).showFloatingActionButton();
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

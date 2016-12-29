@@ -50,6 +50,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.instify.android.R;
 import com.instify.android.ux.fragments.CampNewsFragment;
 import com.instify.android.ux.fragments.ERPFragment;
+import com.instify.android.ux.fragments.LabzFragment;
 import com.instify.android.ux.fragments.NotesFragment;
 import com.instify.android.ux.fragments.TimeTableFragment;
 import com.instify.android.ux.fragments.TrendingFragment;
@@ -562,41 +563,45 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return TimeTableFragment.newInstance();
+                    return ERPFragment.newInstance();
                 case 1:
                     return TrendingFragment.newInstance();
                 case 2:
                     return CampNewsFragment.newInstance();
                 case 3:
-                    return UnivNewsFragment.newInstance();
+                    return LabzFragment.newInstance();
                 case 4:
-                    return NotesFragment.newInstance();
+                    return TimeTableFragment.newInstance();
                 case 5:
-                    return ERPFragment.newInstance();
+                    return NotesFragment.newInstance();
+                case 6:
+                    return UnivNewsFragment.newInstance();
             }
             return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
         public int getCount() {
-            return 6;
+            return 7;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Time Table";
+                    return "ERP";
                 case 1:
                     return "What's Trending";
                 case 2:
-                    return "Campus News";
+                    return "Campus Portal";
                 case 3:
-                    return "University News";
+                    return "Labz";
                 case 4:
-                    return "Notes";
+                    return "Time Table";
                 case 5:
-                    return "ERP";
+                    return "Notes";
+                case 6:
+                    return "University Portal";
             }
             return null;
         }

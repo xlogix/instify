@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.instify.android.R;
 import com.instify.android.upload.UploadNotes;
+import com.instify.android.ux.MainActivity;
 import com.instify.android.ux.adapters.NotesAdapter;
 
 /**
@@ -36,7 +37,10 @@ public class NotesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_notes, container, false);
-        //((ActivityMain) getActivity()).hideFloatingActionButton();
+
+        // show the FloatingActionButton
+        ((MainActivity) getActivity()).showFloatingActionButton();
+
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_notes);
         setupRecyclerView(recyclerView);
 

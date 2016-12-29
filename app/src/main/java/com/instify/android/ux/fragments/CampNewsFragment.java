@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.instify.android.R;
 import com.instify.android.helpers.CampusNewsData;
 import com.instify.android.upload.UploadNews;
+import com.instify.android.ux.MainActivity;
 
 /**
  * Created by Abhish3k on 2/23/2016.
@@ -42,7 +43,8 @@ public class CampNewsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_campus_news, container, false);
-        //((ActivityMain) getActivity()).showFloatingActionButton();
+        // show the FloatingActionButton
+        ((MainActivity) getActivity()).showFloatingActionButton();
 
         // Recycler view set up //
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_campus_news);

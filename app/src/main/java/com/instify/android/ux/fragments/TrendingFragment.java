@@ -69,9 +69,10 @@ public class TrendingFragment extends Fragment {
     private EditText mMessageEditText;
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
 
-    public TrendingFragment(){}
+    public TrendingFragment() {
+    }
 
-    public static TrendingFragment newInstance(){
+    public static TrendingFragment newInstance() {
         TrendingFragment frag = new TrendingFragment();
         Bundle args = new Bundle();
         frag.setArguments(args);
@@ -287,7 +288,9 @@ public class TrendingFragment extends Fragment {
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
 
-    /** Another class to display the chat items in the UI */
+    /**
+     * Another class to display the chat items in the UI
+     */
 
     // Messages view holder
     public static class MessageViewHolder extends RecyclerView.ViewHolder {

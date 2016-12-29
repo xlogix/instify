@@ -8,15 +8,15 @@ import android.view.ViewGroup;
 
 import com.instify.android.R;
 
-public class planeTestFrag extends Fragment {
+public class LabzFragment extends Fragment {
 
-    public planeTestFrag() {
+    public LabzFragment() {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static planeTestFrag newInstance() {
-        planeTestFrag fragment = new planeTestFrag();
+    public static LabzFragment newInstance() {
+        LabzFragment fragment = new LabzFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -27,6 +27,6 @@ public class planeTestFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_plane_test, container, false);
+        return inflater.inflate(R.layout.fragment_labz, container, false);
     }
 }
