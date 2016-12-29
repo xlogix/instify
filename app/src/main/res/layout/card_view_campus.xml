@@ -23,6 +23,7 @@
             android:id="@+id/campusDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:textSize="18sp" />
 
     </LinearLayout>
