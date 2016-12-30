@@ -19,6 +19,8 @@ import com.instify.android.helpers.CampusNewsData;
 import com.instify.android.upload.UploadNews;
 import com.instify.android.ux.MainActivity;
 
+import org.w3c.dom.Text;
+
 /**
  * Created by Abhish3k on 2/23/2016.
  */
@@ -60,6 +62,7 @@ public class CampNewsFragment extends Fragment {
             protected void populateViewHolder(final CampusViewHolder viewHolder, CampusNewsData model, int position) {
                 viewHolder.campusTitle.setText(model.title);
                 viewHolder.campusDescription.setText(model.description);
+                viewHolder.campusAuthor.setText(model.author);
             }
         };
 
@@ -78,11 +81,12 @@ public class CampNewsFragment extends Fragment {
     }
 
     private static class CampusViewHolder extends RecyclerView.ViewHolder {
-        TextView campusTitle, campusDescription;
+        TextView campusTitle, campusDescription, campusAuthor;
 
         public CampusViewHolder(View v) {
             super(v);
             campusTitle = (TextView) v.findViewById(R.id.campusTitle);
+            campusAuthor = (TextView) v.findViewById(R.id.campusAuthor);
             campusDescription = (TextView) v.findViewById(R.id.campusDescription);
         }
     }

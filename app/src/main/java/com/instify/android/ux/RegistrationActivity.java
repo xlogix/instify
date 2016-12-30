@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,10 +15,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -96,7 +100,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         registerUser(mEmailField.getText().toString(), mPasswordField.getText().toString(), mNameField.getText().toString(),
-                mRegNoField.getText().toString(), mSectionField.getText().toString());
+                mRegNoField.getText().toString(), "B");
     }
 
     // [START on_start_add_listener]
@@ -125,7 +129,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     }
     // [END on_stop_remove_listener]
 
-    void registerUser(String emailText, String passwordText, String name, String regNo, String section) {
+    void registerUser(String emailText, String passwordText, final String name, String regNo, String section) {
 
         mFirebaseDatabase = FirebaseDatabase.getInstance().getReference();
         Timber.d(TAG, "Registration:");
@@ -165,7 +169,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     mFirebaseDatabase.child("users").child(user.getUid()).setValue(userInfoObj);
-                    // Checking and waiting till the info has be added //
+
+                   // Checking and waiting till the info has be added //
                     mFirebaseDatabase.child("users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {

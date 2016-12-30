@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.instify.android.R;
@@ -26,11 +28,13 @@ import java.sql.Timestamp;
 public class UploadNews extends AppCompatActivity {
 
     DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+    FirebaseUser fUser;
     DatabaseReference campusNewsRef;
     private EditText newsTitle, newsDescription;
     private RadioGroup newsLevelRadio;
     private Button submitNews;
     private int selectedLevel;
+    private String currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,18 @@ public class UploadNews extends AppCompatActivity {
         newsDescription = (EditText) findViewById(R.id.news_description);
         newsLevelRadio = (RadioGroup) findViewById(R.id.campusUploadRadioGroup);
         submitNews = (Button) findViewById(R.id.post);
+        selectedLevel = newsLevelRadio.getCheckedRadioButtonId();
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        // Auth details //
+        if(fUser != null){
+            currentUser = fUser.getEmail();
+            Toast.makeText(UploadNews.this, "User : " + currentUser, Toast.LENGTH_SHORT).show();
+        }
+        else{
+            currentUser = "noname";
+            Toast.makeText(UploadNews.this, "NoUser", Toast.LENGTH_SHORT).show();
+        }
 
         // Firebase objects //
         campusNewsRef = dbRef.child("CampusNews");
@@ -52,7 +68,7 @@ public class UploadNews extends AppCompatActivity {
                 if (validateForm()) {
                     // TODO: Use a relevant key for the news in the database, attach user details.
                     selectedLevel = newsLevelRadio.getCheckedRadioButtonId();
-                    CampusNewsData data = new CampusNewsData(newsTitle, newsDescription);
+                    CampusNewsData data = new CampusNewsData(newsTitle, newsDescription, selectedLevel, currentUser);
                     Timestamp tStamp = new Timestamp(System.currentTimeMillis());
                     campusNewsRef.child("" + tStamp.getTime()).setValue(data)
                             .addOnFailureListener(new OnFailureListener() {

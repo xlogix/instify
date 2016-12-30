@@ -1,6 +1,9 @@
 package com.instify.android.helpers;
 
+import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * Created by arjun on 26/12/16.
@@ -8,7 +11,8 @@ import android.widget.TextView;
 
 public class CampusNewsData {
 
-    public String title, description;
+    public String title, description, author;
+    public int level;
 
     public CampusNewsData() {
     }
@@ -16,11 +20,14 @@ public class CampusNewsData {
     public CampusNewsData(CampusNewsData snap) {
         this.title = snap.title;
         this.description = snap.description;
+        this.author = snap.author;
     }
 
-    public CampusNewsData(TextView t, TextView d) {
+    public CampusNewsData(TextView t, TextView d, int level, String user) {
         this.title = t.getText().toString();
         this.description = d.getText().toString();
+        this.author = user;
+        this.level = level;
     }
 
 }
