@@ -12,8 +12,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.NoActionBarTransparent" parent="AppTheme.NoActionBar">
-    </style>
+    <style name="AppTheme.NoActionBarTransparent" parent="AppTheme.NoActionBar"></style>
 
     <style name="AppTheme.AppBarOverlay" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar" />
 

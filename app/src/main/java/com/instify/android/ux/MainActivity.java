@@ -424,6 +424,10 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 //menuItem.setChecked(true);
                 switch (menuItem.getItemId()) {
+                    case R.id.nav_profile:
+                        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                        break;
+                    
                     case R.id.nav_timetable:
                         mViewPager.setCurrentItem(0);
                         break;

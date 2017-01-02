@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
-
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -24,14 +23,13 @@
         android:required="false" />
 
     <application
-        android:name="com.instify.android.helpers.MyApplication"
+        android:name=".helpers.MyApplication"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".ux.SplashActivity"
             android:screenOrientation="portrait"
@@ -41,38 +39,32 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="instify" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ux.IntroActivity"
             android:label="Thanks for downloading!"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".ux.RegistrationActivity"
             android:label="@string/title_activity_registration" />
-
         <activity
             android:name=".ux.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".ux.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBarTransparent" />
-
         <activity
             android:name=".upload.UploadNotes"
             android:label="@string/title_activity_upload_notes" />
-
         <activity
             android:name=".upload.UploadNews"
             android:label="@string/title_activity_upload_campus" />
@@ -80,18 +72,18 @@
         <service
             android:name=".helpers.MyDownloadService"
             android:exported="false" />
-
         <service android:name=".helpers.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service android:name=".helpers.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
+        <activity android:name=".ux.ProfileActivity"></activity>
     </application>
+
 </manifest>
