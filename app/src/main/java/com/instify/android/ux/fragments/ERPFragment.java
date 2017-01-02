@@ -60,7 +60,7 @@ public class ERPFragment extends Fragment {
         // Set up the input
         final EditText password = new EditText(getActivity());
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         builder.setView(password);
 
         // Set up the buttons
@@ -91,12 +91,6 @@ public class ERPFragment extends Fragment {
         // radius of the center hole in percent of maximum radius
         mChart.setHoleRadius(45f);
         mChart.setTransparentCircleRadius(50f);
-
-        Legend l = mChart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-        l.setOrientation(Legend.LegendOrientation.VERTICAL);
-        l.setDrawInside(false);
 
         mChart.setData(generatePieData());
         return rootView;

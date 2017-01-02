@@ -66,6 +66,7 @@ import java.util.UUID;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
+import timber.log.Timber;
 
 /**
  * Created by Abhish3k on 3/1/2016. Main Activity
@@ -218,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         // Ensures that user didn't un-install Google Play Services required for Firebase related tasks.
         checkPlayServices();
         if (isDeviceOnline()) {
-            Snackbar.make(mViewPager, "Device Online", Snackbar.LENGTH_SHORT).show();
+            Timber.d(TAG, "Device is online.");
         } else {
             Snackbar.make(mViewPager, "Device Offline. Functionality may be limited", Snackbar.LENGTH_SHORT).show();
         }
