@@ -8,7 +8,7 @@ public class ModelMessage {
 
     private String id;
     private String text;
-    private String name;
+    private String email;
     private String photoUrl;
 
     public ModelMessage() {
@@ -16,7 +16,7 @@ public class ModelMessage {
 
     public ModelMessage(String text, String name, String photoUrl) {
         this.text = text;
-        this.name = name;
+        this.email = name;
         this.photoUrl = photoUrl;
     }
 
@@ -37,11 +37,11 @@ public class ModelMessage {
     }
 
     public String getName() {
-        return name;
+        return email;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.email = name;
     }
 
     public String getPhotoUrl() {

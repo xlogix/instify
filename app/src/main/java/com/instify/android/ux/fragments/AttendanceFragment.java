@@ -34,13 +34,13 @@ import java.util.ArrayList;
  * Created by Abhish3k on 2/23/2016.
  */
 
-public class ERPFragment extends Fragment implements OnChartGestureListener {
+public class AttendanceFragment extends Fragment implements OnChartGestureListener {
 
-    public ERPFragment() {
+    public AttendanceFragment() {
     }
 
-    public static ERPFragment newInstance() {
-        ERPFragment frag = new ERPFragment();
+    public static AttendanceFragment newInstance() {
+        AttendanceFragment frag = new AttendanceFragment();
         Bundle args = new Bundle();
         frag.setArguments(args);
         return frag;

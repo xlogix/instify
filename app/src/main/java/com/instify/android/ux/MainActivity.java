@@ -49,8 +49,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.instify.android.R;
 import com.instify.android.ux.fragments.CampNewsFragment;
-import com.instify.android.ux.fragments.ERPFragment;
-import com.instify.android.ux.fragments.LabzFragment;
+import com.instify.android.ux.fragments.AttendanceFragment;
 import com.instify.android.ux.fragments.NotesFragment;
 import com.instify.android.ux.fragments.TimeTableFragment;
 import com.instify.android.ux.fragments.TrendingFragment;
@@ -364,16 +363,13 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
     }
 
-    public void signOut() {
-        mAuth.signOut();
-    }
-
     //  Log Out User
     private void logoutUser() {
         // Clearing all data from Shared Preferences
         getSharedPreferences("userData", MODE_PRIVATE).edit().clear().apply();
-        signOut();
-        // After logout redirect user to Login Activity
+        // SignOut from Firebase
+        mAuth.signOut();
+        // After logout redirect user to Intro Activity
         Intent i = new Intent(this, IntroActivity.class);
         // Closing all the Activities
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -414,20 +410,19 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                         break;
 
                     case R.id.nav_campus:
+                        mViewPager.setCurrentItem(1);
+                        break;
+
+                    case R.id.nav_timetable:
                         mViewPager.setCurrentItem(2);
                         break;
 
-
-                    case R.id.nav_timetable:
-                        mViewPager.setCurrentItem(4);
-                        break;
-
                     case R.id.nav_notes:
-                        mViewPager.setCurrentItem(5);
+                        mViewPager.setCurrentItem(3);
                         break;
 
                     case R.id.nav_univ_news:
-                        mViewPager.setCurrentItem(6);
+                        mViewPager.setCurrentItem(4);
                         break;
 
                     case R.id.nav_share:
@@ -512,13 +507,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             fragment.setArguments(args);
             return fragment;
         }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_trending, container, false);
-            return rootView;
-        }
     }
 
     /**
@@ -537,18 +525,14 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return ERPFragment.newInstance();
+                    return AttendanceFragment.newInstance();
                 case 1:
-                    return TrendingFragment.newInstance();
-                case 2:
                     return CampNewsFragment.newInstance();
-                case 3:
-                    return LabzFragment.newInstance();
-                case 4:
+                case 2:
                     return TimeTableFragment.newInstance();
-                case 5:
+                case 3:
                     return NotesFragment.newInstance();
-                case 6:
+                case 4:
                     return UnivNewsFragment.newInstance();
             }
             return PlaceholderFragment.newInstance(position + 1);
@@ -556,25 +540,21 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
         @Override
         public int getCount() {
-            return 7;
+            return 5;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "ERP";
+                    return "Attendance";
                 case 1:
-                    return "What's Trending";
-                case 2:
                     return "Campus Portal";
-                case 3:
-                    return "Labz";
-                case 4:
+                case 2:
                     return "Time Table";
-                case 5:
+                case 3:
                     return "Notes";
-                case 6:
+                case 4:
                     return "University Portal";
             }
             return null;
