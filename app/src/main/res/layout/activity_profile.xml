@@ -24,7 +24,7 @@
 
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/profile_name_et"
+        android:id="@+id/profile_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/profile_title"
@@ -32,6 +32,7 @@
 
 
         <EditText
+            android:id="@+id/profile_name_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Name"/>
@@ -39,14 +40,15 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/profile_section_et"
-        android:layout_below="@+id/profile_name_et"
+        android:id="@+id/profile_section"
+        android:layout_below="@+id/profile_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin">
 
 
         <EditText
+            android:id="@+id/profile_section_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Section"/>
@@ -54,19 +56,39 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/profile_dept_et"
-        android:layout_below="@+id/profile_section_et"
+        android:id="@+id/profile_dept"
+        android:layout_below="@+id/profile_section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin">
 
 
         <EditText
+            android:id="@+id/profile_dept_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Department"/>
 
     </android.support.design.widget.TextInputLayout>
 
+    <Button
+        android:id="@+id/profile_edit_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EDIT"
+        android:visibility="invisible"
+        android:layout_below="@id/profile_dept"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"/>
+
+    <Button
+        android:id="@+id/profile_save_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SAVE"
+        android:visibility="invisible"
+        android:layout_below="@id/profile_dept"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"/>
 
 </RelativeLayout>

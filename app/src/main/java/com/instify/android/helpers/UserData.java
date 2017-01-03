@@ -6,13 +6,15 @@ import java.util.Calendar;
  * Created by Arjun Mahishi on 18-Dec-16.
  */
 
-public class UserInfo {
+public class UserData {
 
     public String regno, section, dept;
     public int year;
-    boolean cr;
+    public boolean cr;
 
-    public UserInfo(String regno, String section) {
+    public UserData() {}
+
+    public UserData(String regno, String section) {
         this.regno = regno.toLowerCase();
         this.section = section.toLowerCase();
         this.year = getYear();
