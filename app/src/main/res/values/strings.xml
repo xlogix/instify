@@ -7,15 +7,19 @@
     <string name="title_activity_upload_notes">Post a new Note</string>
     <string name="title_activity_upload_campus">Post a new Update</string>
 
-    <!--DrawerLayout Starts-->
+    <!--DrawerLayout Strings-->
+    <string name="imageView_edit">Change Default Image</string>
+    <string name="nav_section_1">Calculate GPA</string>
+    <string name="nav_section_2">Navigate</string>
     <string name="nav_time_table">Time Table</string>
     <string name="nav_campus_news">Campus News</string>
     <string name="nav_univ_news">University News</string>
     <string name="nav_notes">Notes</string>
     <string name="nav_erp">ERP</string>
-    <string name="nav_section_1">Communicate</string>
+    <string name="nav_section_3">Communicate</string>
     <string name="nav_share">Share</string>
     <string name="nav_help_feedback">Help &amp; Feedback</string>
+    <string name="nav_about">About</string>
 
     <!--Menu Main-->
     <string name="menu_main_settings">Settings</string>
@@ -69,10 +73,6 @@
     <string name="action_sign_in">Login</string>
     <string name="action_sign_up">New User?</string>
 
-    <!--Layouts-->
-    <string name="imageView_edit">Change Default Image</string>
-    <string name="erp_in_browser">Open ERP website in browser</string>
-
     <!-- Fragment Trending (Firebase Chat) -->
     <string name="msg_edit_box">Type a Message</string>
     <string name="msg_send">Send</string>
@@ -101,7 +101,7 @@
     <string name="about_developer">About Developer</string>
     <string name="about_description">This application is developed by Android team of Project Club. Add more...</string>
 
-    <!--EasyPermissions-->
+    <!--[START] Easy Permissions-->
     <string name="title_settings_dialog">Permissions Required</string>
     <string name="rationale_camera">This app needs access to your camera so you can take pictures.</string>
     <string name="contacts_permission_rationale">"Contacts permissions are needed for providing email
@@ -112,12 +112,9 @@
     <string name="cancel">Cancel</string>
     <string name="settings_dialog_canceled">Settings dialog canceled</string>
     <string name="returned_from_app_settings_to_activity">Returned from app settings to MainActivity</string>
+    <!--[END] Easy Permissions -->
 
     <!-- Nav_header_main -->
     <string name="imageView_description">Placeholder text for image view description </string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_profile">ProfileActivity</string>
 
 </resources>

@@ -418,12 +418,27 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         finish();
     }
 
+    public void intentGPACalculator(Context context, String packageName) {
+        Intent intent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+        if (intent == null) {
+            // Bring user to the market or let them choose an app?
+            intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("market://details?id=" + packageName));
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 //menuItem.setChecked(true);
                 switch (menuItem.getItemId()) {
+                    case R.id.nav_gpa:
+                        intentGPACalculator(MainActivity.this, "com.gupta.ishansh.gcmcalculator");
+                        break;
+
                     case R.id.nav_profile:
                         startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                         break;
@@ -447,6 +462,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     case R.id.nav_erp:
                         mViewPager.setCurrentItem(5);
                         break;
+
                     case R.id.nav_share:
                         /* Intent share = new Intent();
                         share.setAction(Intent.ACTION_SEND);
@@ -463,11 +479,11 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                             startActivity(intent);
                         }
                         break;
+
                     case R.id.nav_send:
                         String[] emails = {"abhishekuniyal09@gmail.com"};
                         String subject = "I want to submit a Feedback";
                         String message = "Hi, ";
-
                         Intent email = new Intent(Intent.ACTION_SENDTO);
                         email.putExtra(Intent.EXTRA_EMAIL, emails);
                         email.putExtra(Intent.EXTRA_SUBJECT, subject);
