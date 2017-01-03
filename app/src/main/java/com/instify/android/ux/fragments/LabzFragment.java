@@ -14,6 +14,7 @@ import android.webkit.WebView;
 
 import com.instify.android.R;
 import com.instify.android.helpers.MyAppWebViewClient;
+import com.instify.android.ux.MainActivity;
 
 public class LabzFragment extends Fragment {
 
@@ -50,6 +51,8 @@ public class LabzFragment extends Fragment {
             mSwipeRefreshLayout.setColorSchemeResources(R.color.red500, R.color.black, R.color.google_blue_500);
             mSwipeRefreshLayout.setRefreshing(true);
         }
+
+        ((MainActivity) getActivity()).hideFloatingActionButton();
 
         // Check whether we're recreating a previously destroyed instance
         if (savedInstanceState != null) {

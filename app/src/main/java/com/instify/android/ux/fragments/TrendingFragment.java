@@ -94,7 +94,7 @@ public class TrendingFragment extends Fragment {
         // Get data
         if (mFirebaseUser != null) {
             try {
-                mUsername = mFirebaseUser.getDisplayName();
+                mUsername = mFirebaseUser.getEmail();
                 mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
             } catch (Exception e) {
                 mUsername = ANONYMOUS;

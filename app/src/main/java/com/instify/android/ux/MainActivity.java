@@ -102,6 +102,28 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Ensures that user didn't un-install Google Play Services required for Firebase related tasks.
+        checkPlayServices();
+        if (isDeviceOnline()) {
+            Timber.d(TAG, "Device is online.");
+        } else {
+            Snackbar.make(mViewPager, "Device Offline. Functionality may be limited", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private static int getOrientation(Context context, Uri photoUri) {
         /* it's on the external media. */
         Cursor cursor = context.getContentResolver().query(photoUri,
@@ -198,31 +220,8 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         fab.show();
     }
 
-    /*    @Override
-        public void onBackPressed() {
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawer(GravityCompat.START);
-            } else {
-                super.onBackPressed();
-            }
-        }
-    */
-
     public void hideFloatingActionButton() {
         fab.hide();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Ensures that user didn't un-install Google Play Services required for Firebase related tasks.
-        checkPlayServices();
-        if (isDeviceOnline()) {
-            Timber.d(TAG, "Device is online.");
-        } else {
-            Snackbar.make(mViewPager, "Device Offline. Functionality may be limited", Snackbar.LENGTH_SHORT).show();
-        }
     }
 
     /**
@@ -251,39 +250,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
-    }
-
-    // [START] EasyPermissions Default Functions
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // EasyPermissions handles the request result.
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> perms) {
-        // Some permissions have been granted
-        Log.d(TAG, "onPermissionsGranted:" + requestCode + ":" + perms.size());
-    }
-    // [END] EasyPermission Default Functions
-
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> perms) {
-        // Some permissions have been denied
-        Log.d(TAG, "onPermissionsDenied:" + requestCode + ":" + perms.size());
-
-        // (Optional) Check whether the user denied any permissions and checked "NEVER ASK AGAIN."
-        // This will display a dialog directing them to enable the permission in app settings.
-        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-            new AppSettingsDialog.Builder(this, getString(R.string.rationale_ask_again))
-                    .setTitle(getString(R.string.title_settings_dialog))
-                    .setPositiveButton(getString(R.string.setting))
-                    .setNegativeButton(getString(R.string.cancel), null /* click listener */)
-                    .setRequestCode(RC_SETTINGS_SCREEN)
-                    .build()
-                    .show();
-        }
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -442,8 +408,8 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     case R.id.nav_profile:
                         startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                         break;
-                    
-                    case R.id.nav_timetable:
+
+                    case R.id.nav_erp:
                         mViewPager.setCurrentItem(0);
                         break;
 
@@ -451,24 +417,20 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                         mViewPager.setCurrentItem(2);
                         break;
 
-                    case R.id.nav_univ_news:
-                        mViewPager.setCurrentItem(3);
-                        break;
 
-                    case R.id.nav_notes:
+                    case R.id.nav_timetable:
                         mViewPager.setCurrentItem(4);
                         break;
 
-                    case R.id.nav_erp:
+                    case R.id.nav_notes:
                         mViewPager.setCurrentItem(5);
                         break;
 
+                    case R.id.nav_univ_news:
+                        mViewPager.setCurrentItem(6);
+                        break;
+
                     case R.id.nav_share:
-                        /* Intent share = new Intent();
-                        share.setAction(Intent.ACTION_SEND);
-                        share.putExtra(Intent.EXTRA_TEXT, "Thanks for Sharing!");
-                        share.setType("text/plain");
-                        startActivity(share); */
                         try {
                             Intent share = new Intent(Intent.ACTION_VIEW);
                             share.setData(Uri.parse("market://details?id=com.google.android.gms"));
@@ -522,15 +484,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         } else if (id == R.id.action_Logout) {
             logoutUser();
             return true;
-        }
-        switch (id) {
-            case android.R.id.home:
-                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                } else {
-                    drawerLayout.openDrawer(GravityCompat.START);
-                }
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -625,6 +578,39 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     return "University Portal";
             }
             return null;
+        }
+    }
+
+    // [START] EasyPermissions Default Functions
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // EasyPermissions handles the request result.
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+        // Some permissions have been granted
+        Log.d(TAG, "onPermissionsGranted:" + requestCode + ":" + perms.size());
+    }
+    // [END] EasyPermission Default Functions
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        // Some permissions have been denied
+        Log.d(TAG, "onPermissionsDenied:" + requestCode + ":" + perms.size());
+
+        // (Optional) Check whether the user denied any permissions and checked "NEVER ASK AGAIN."
+        // This will display a dialog directing them to enable the permission in app settings.
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog.Builder(this, getString(R.string.rationale_ask_again))
+                    .setTitle(getString(R.string.title_settings_dialog))
+                    .setPositiveButton(getString(R.string.setting))
+                    .setNegativeButton(getString(R.string.cancel), null /* click listener */)
+                    .setRequestCode(RC_SETTINGS_SCREEN)
+                    .build()
+                    .show();
         }
     }
 }

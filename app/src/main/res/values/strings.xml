@@ -2,6 +2,7 @@
     <string name="app_name">Instify</string>
 
     <string name="title_activity_first_launch_tut">FirstLaunchTut</string>
+    <string name="title_activity_splash">Made with &#10084; by fnplus</string>
     <string name="title_activity_registration">Register Yourself</string>
     <string name="title_activity_login">Login Here</string>
     <string name="title_activity_upload_notes">Post a new Note</string>
