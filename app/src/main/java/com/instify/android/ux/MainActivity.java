@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         if (mFirebaseUser != null) {
             // User is signed in
             Log.d(TAG, "onAuthStateChanged:signed_in:" + mFirebaseUser.getUid());
-            Toast.makeText(MainActivity.this, "Welcome " + mFirebaseUser.getUid(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Welcome " + mFirebaseUser.getEmail(), Toast.LENGTH_SHORT).show();
         } else {
             // User is signed out
             Toast.makeText(MainActivity.this, "Signed Out", Toast.LENGTH_SHORT).show();
