@@ -8,18 +8,41 @@ import java.util.Calendar;
 
 public class UserData {
 
-    public String regno, section, dept;
+    public String name, regno, section, dept;
     public int year;
     public boolean cr;
 
     public UserData() {}
 
     public UserData(String regno, String section) {
+
+        /*
+        * Constructor for a new user
+        * */
+
+        //TODO : Fetch the name field data
+
+        this.name = "";
         this.regno = regno.toLowerCase();
         this.section = section.toLowerCase();
         this.year = getYear();
         this.dept = getDept();
         this.cr = false;
+    }
+
+    public UserData(String name, String regno, String section, String dept, String year){
+
+        /*
+        * Constructor for updating all the info
+        * */
+
+        this.name = name;
+        this.regno = regno.toLowerCase();
+        this.section = section.toLowerCase();
+        this.year = getDigit(year.charAt(0));
+        this.dept = dept.toLowerCase();
+        this.cr = false;
+
     }
 
     public String getRegno() {
