@@ -47,7 +47,13 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
+import com.instify.android.helpers.UserData;
 import com.instify.android.ux.fragments.CampNewsFragment;
 import com.instify.android.ux.fragments.AttendanceFragment;
 import com.instify.android.ux.fragments.NotesFragment;
@@ -90,6 +96,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     private FirebaseAuth mAuth;
     private FirebaseUser mFirebaseUser;
+    private DatabaseReference dbRef, userRef;
+
+    public UserData userInfoObject;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -208,6 +217,24 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             // User is signed in
             Log.d(TAG, "onAuthStateChanged:signed_in:" + mFirebaseUser.getUid());
             Toast.makeText(MainActivity.this, "Welcome " + mFirebaseUser.getEmail(), Toast.LENGTH_SHORT).show();
+
+            dbRef = FirebaseDatabase.getInstance().getReference();
+            userRef = dbRef.child("users").child(mFirebaseUser.getUid());
+
+            // User object generation for the database - for usage in all fragments
+            userRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    userInfoObject = dataSnapshot.getValue(UserData.class);
+                    Toast.makeText(MainActivity.this, "User data collected!! :)", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
         } else {
             // User is signed out
             Toast.makeText(MainActivity.this, "Signed Out", Toast.LENGTH_SHORT).show();
