@@ -49,15 +49,7 @@ public class UploadNews extends AppCompatActivity {
         selectedLevel = newsLevelRadio.getCheckedRadioButtonId();
         fUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        // Auth details //
-        if(fUser != null){
-            currentUser = fUser.getEmail();
-            Toast.makeText(UploadNews.this, "User : " + currentUser, Toast.LENGTH_SHORT).show();
-        }
-        else{
-            currentUser = "noname";
-            Toast.makeText(UploadNews.this, "NoUser", Toast.LENGTH_SHORT).show();
-        }
+        currentUser = getIntent().getStringExtra("username");
 
         // Firebase objects //
         campusNewsRef = dbRef.child("CampusNews");
@@ -66,7 +58,6 @@ public class UploadNews extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (validateForm()) {
-                    // TODO: Use a relevant key for the news in the database, attach user details.
                     selectedLevel = newsLevelRadio.getCheckedRadioButtonId();
                     CampusNewsData data = new CampusNewsData(newsTitle, newsDescription, selectedLevel, currentUser);
                     Timestamp tStamp = new Timestamp(System.currentTimeMillis());

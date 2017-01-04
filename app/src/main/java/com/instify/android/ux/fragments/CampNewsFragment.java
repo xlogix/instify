@@ -74,6 +74,7 @@ public class CampNewsFragment extends Fragment {
             public void onClick(View view) {
                 // Click action
                 Intent i = new Intent(getActivity(), UploadNews.class);
+                i.putExtra("username", ((MainActivity) getActivity()).userInfoObject.name);
                 startActivity(i);
             }
         });
