@@ -20,7 +20,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     DatabaseReference dbRef, userRef;
     FirebaseUser currentUser;
-    EditText name, sec, dept;
+    EditText name, regno, sec, dept, year;
     Button editBtn, saveBtn;
 
     @Override
@@ -34,22 +34,28 @@ public class ProfileActivity extends AppCompatActivity {
         userRef = dbRef.child("users").child(currentUser.getUid());
 
         name = (EditText) findViewById(R.id.profile_name_et);
+        regno = (EditText) findViewById(R.id.profile_regno_et);
         sec = (EditText) findViewById(R.id.profile_section_et);
         dept = (EditText) findViewById(R.id.profile_dept_et);
+        year = (EditText) findViewById(R.id.profile_year_et);
 
         editBtn = (Button) findViewById(R.id.profile_edit_btn);
         saveBtn = (Button) findViewById(R.id.profile_save_btn);
 
         name.setEnabled(false);
+        regno.setEnabled(false);
         sec.setEnabled(false);
         dept.setEnabled(false);
+        year.setEnabled(false);
 
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 name.setEnabled(true);
+                regno.setEnabled(true);
                 sec.setEnabled(true);
                 dept.setEnabled(true);
+                year.setEnabled(true);
                 editBtn.setVisibility(View.INVISIBLE);
                 saveBtn.setVisibility(View.VISIBLE);
             }
@@ -59,8 +65,10 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 name.setEnabled(false);
+                regno.setEnabled(false);
                 sec.setEnabled(false);
                 dept.setEnabled(false);
+                year.setEnabled(false);
                 editBtn.setVisibility(View.VISIBLE);
                 saveBtn.setVisibility(View.INVISIBLE);
             }
@@ -70,8 +78,10 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 UserData data = dataSnapshot.getValue(UserData.class);
+                regno.setText(data.regno);
                 sec.setText(data.section);
                 dept.setText(data.dept);
+                year.setText(data.year + "");
 
                 editBtn.setVisibility(View.VISIBLE);
             }
