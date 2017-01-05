@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +37,7 @@ public class UploadNews extends AppCompatActivity {
     private Button submitNews;
     private int selectedLevel;
     private String currentUser;
+    private Spinner dept;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +49,20 @@ public class UploadNews extends AppCompatActivity {
         newsDescription = (EditText) findViewById(R.id.news_description);
         newsLevelRadio = (RadioGroup) findViewById(R.id.campusUploadRadioGroup);
         submitNews = (Button) findViewById(R.id.post);
-        selectedLevel = newsLevelRadio.getCheckedRadioButtonId();
-        fUser = FirebaseAuth.getInstance().getCurrentUser();
+        dept = (Spinner) findViewById(R.id.campusUploadDeptSpinner);
 
-        currentUser = getIntent().getStringExtra("username");
+        selectedLevel = newsLevelRadio.getCheckedRadioButtonId();
+
+        // Adapters //
+        ArrayAdapter<CharSequence> deptAdapter = ArrayAdapter
+                .createFromResource(this, R.array.campusUploadDeptArray, R.layout.support_simple_spinner_dropdown_item);
+        deptAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+        dept.setAdapter(deptAdapter);
 
         // Firebase objects //
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
+        currentUser = getIntent().getStringExtra("username");
         campusNewsRef = dbRef.child("CampusNews");
 
         submitNews.setOnClickListener(new View.OnClickListener() {

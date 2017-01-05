@@ -73,11 +73,20 @@
 
     </RadioGroup>
 
+    <Spinner
+        android:id="@+id/campusUploadDeptSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/campusUploadRadioGroup"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
+
+    </Spinner>
+
     <Button
         android:id="@+id/post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/campusUploadRadioGroup"
+        android:layout_below="@+id/campusUploadDeptSpinner"
         android:layout_centerHorizontal="true"
         android:background="@color/colorPrimaryLight"
         android:text="Post" />
