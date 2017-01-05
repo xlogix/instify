@@ -46,6 +46,12 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
         return frag;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((MainActivity) getActivity()).mSharedFab = null; // To avoid keeping/leaking the reference of the FAB
+    }
+
     private String mPassword = "";
     private BarChart mChart;
     private Typeface tf;

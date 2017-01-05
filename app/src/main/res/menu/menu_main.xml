@@ -13,21 +13,9 @@
         app:showAsAction="ifRoom|collapseActionView" />
 
     <item
-        android:id="@+id/action_wish_list"
-        android:icon="@drawable/favorite"
+        android:id="@+id/action_filter"
+        android:icon="@drawable/filter_unselected"
         android:orderInCategory="100"
         android:title="@string/menu_action_favorites"
         app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="1000"
-        android:title="@string/menu_main_settings"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_Logout"
-        android:orderInCategory="10000"
-        android:title="@string/menu_main_logout"
-        app:showAsAction="never" />
 </menu>

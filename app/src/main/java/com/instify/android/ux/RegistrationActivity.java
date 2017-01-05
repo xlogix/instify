@@ -26,6 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
 import com.instify.android.helpers.UserData;
 
+import org.wordpress.emailchecker.EmailChecker;
+
 import timber.log.Timber;
 
 /**
@@ -185,9 +187,13 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         boolean valid = true;
 
         String email = mEmailField.getText().toString();
+        String suggest = (new EmailChecker()).suggestDomainCorrection(email);
+
         if (TextUtils.isEmpty(email)) {
             mEmailField.setError("Required.");
             valid = false;
+        } else if (suggest.compareTo(email) != 0) {
+            Timber.v("FIXME", "did you mean: " + suggest + " ?");
         } else {
             mEmailField.setError(null);
         }

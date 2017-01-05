@@ -5,10 +5,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -127,19 +125,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         } else {
             super.onBackPressed();
         }
-    }
-
-    private static int getOrientation(Context context, Uri photoUri) {
-        /* it's on the external media. */
-        Cursor cursor = context.getContentResolver().query(photoUri,
-                new String[]{MediaStore.Images.ImageColumns.ORIENTATION}, null, null, null);
-
-        if (cursor.getCount() != 1) {
-            return -1;
-        }
-
-        cursor.moveToFirst();
-        return cursor.getInt(0);
     }
 
     @Override
@@ -382,16 +367,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 Image.compress(Bitmap.CompressFormat.PNG, 20, baos);
 
-                if (getOrientation(getApplicationContext(), mImageUri) != 0) {
-                    Matrix matrix = new Matrix();
-                    matrix.postRotate(getOrientation(getApplicationContext(), mImageUri));
-                    if (rotateImage != null)
-                        rotateImage.recycle();
-                    rotateImage = Bitmap.createBitmap(Image, 0, 0, Image.getWidth(), Image.getHeight(), matrix,
-                            true);
-                    imageView.setImageBitmap(rotateImage);
-                } else
-                    imageView.setImageBitmap(Image);
+                imageView.setImageBitmap(Image);
 
                 // Encoding image to string
                 byte[] b = baos.toByteArray();
@@ -445,31 +421,21 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     case R.id.nav_gpa:
                         intentGPACalculator(MainActivity.this, "com.gupta.ishansh.gcmcalculator");
                         break;
-
-                    case R.id.nav_profile:
-                        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-                        break;
-
                     case R.id.nav_erp:
                         mViewPager.setCurrentItem(0);
                         break;
-
                     case R.id.nav_campus:
                         mViewPager.setCurrentItem(1);
                         break;
-
                     case R.id.nav_timetable:
                         mViewPager.setCurrentItem(2);
                         break;
-
                     case R.id.nav_notes:
                         mViewPager.setCurrentItem(3);
                         break;
-
                     case R.id.nav_univ_news:
                         mViewPager.setCurrentItem(4);
                         break;
-
                     case R.id.nav_share:
                         try {
                             Intent share = new Intent(Intent.ACTION_VIEW);
@@ -481,7 +447,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                             startActivity(intent);
                         }
                         break;
-
                     case R.id.nav_send:
                         String[] emails = {"abhishekuniyal09@gmail.com"};
                         String subject = "I want to submit a Feedback";
@@ -496,6 +461,15 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                         if (email.resolveActivity(getPackageManager()) != null) {
                             startActivity(email);
                         }
+                        break;
+                    case R.id.nav_profile:
+                        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                        break;
+                    case R.id.nav_logout:
+                        logoutUser();
+                        break;
+                    case R.id.nav_settings:
+                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                         break;
                 }
                 drawerLayout.closeDrawers();
@@ -518,11 +492,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            setContentView(R.layout.menu_settings);
+        if (id == R.id.action_search) {
             return true;
-        } else if (id == R.id.action_Logout) {
-            logoutUser();
+        } else if (id == R.id.action_filter) {
             return true;
         }
         return super.onOptionsItemSelected(item);

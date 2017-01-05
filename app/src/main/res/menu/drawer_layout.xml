@@ -6,11 +6,6 @@
         android:title="@string/nav_section_1"
         android:icon="@drawable/ic_menu_send"/>
 
-    <item
-        android:id="@+id/nav_profile"
-        android:title="Profile"
-        android:icon="@drawable/face"/>
-
     <item android:title="@string/nav_section_2">
         <menu>
             <item
@@ -51,6 +46,23 @@
                 android:icon="@android:drawable/ic_dialog_info"
                 android:title="@string/nav_about" />
         </menu>
+    </item>
+
+    <item android:title="General">
+        <menu>
+            <item
+                android:id="@+id/nav_profile"
+                android:title="Profile"
+                android:icon="@drawable/ic_attendance"/>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_account_circle_black_36dp"
+                android:title="@string/nav_logout" />
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="@string/nav_settings" />
+            </menu>
     </item>
 
 </menu>
