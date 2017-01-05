@@ -2,7 +2,6 @@ package com.instify.android.ux.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,16 +39,11 @@ public class TimeTableFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_time_table, container, false);
-        // show the FloatingActionButton
-        //((MainActivity) getActivity()).showFloatingActionButton();
 
-        /*FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        /*((MainActivity) getActivity()).mSharedFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Click action
-                //Intent intent = new Intent(getActivity(), UploadNews.class);
-                //startActivity(intent);
                 addCalendarEvent();
             }
         });*/

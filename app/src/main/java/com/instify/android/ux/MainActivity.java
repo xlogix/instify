@@ -181,9 +181,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     case 1:
                         mSharedFab.show();
                         break;
-                    case 2:
-                        mSharedFab.show();
-                        break;
                     case 3:
                         mSharedFab.show();
                         break;

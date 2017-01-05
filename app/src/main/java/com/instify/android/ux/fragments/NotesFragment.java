@@ -3,7 +3,6 @@ package com.instify.android.ux.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.instify.android.R;
-import com.instify.android.upload.UploadNews;
 import com.instify.android.upload.UploadNotes;
 import com.instify.android.ux.MainActivity;
 import com.instify.android.ux.adapters.NotesAdapter;
@@ -26,9 +24,10 @@ public class NotesFragment extends Fragment {
 
     RecyclerView recyclerView;
 
-    public NotesFragment() {}
+    public NotesFragment() {
+    }
 
-    public static NotesFragment newInstance(){
+    public static NotesFragment newInstance() {
         NotesFragment frag = new NotesFragment();
         Bundle args = new Bundle();
         frag.setArguments(args);
@@ -44,9 +43,6 @@ public class NotesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_notes, container, false);
-
-        // show the FloatingActionButton
-        //((MainActivity) getActivity()).showFloatingActionButton();
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_notes);
         setupRecyclerView(recyclerView);
