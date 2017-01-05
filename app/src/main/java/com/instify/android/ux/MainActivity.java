@@ -33,11 +33,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -54,11 +52,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
 import com.instify.android.helpers.UserData;
-import com.instify.android.ux.fragments.CampNewsFragment;
 import com.instify.android.ux.fragments.AttendanceFragment;
+import com.instify.android.ux.fragments.CampNewsFragment;
 import com.instify.android.ux.fragments.NotesFragment;
 import com.instify.android.ux.fragments.TimeTableFragment;
-import com.instify.android.ux.fragments.TrendingFragment;
 import com.instify.android.ux.fragments.UnivNewsFragment;
 
 import java.io.ByteArrayOutputStream;
@@ -88,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     private static final int RC_GALLERY_PERM = 121;
     private static final String TAG = "ActivityMain";
     private static Bitmap rotateImage = null;
-    public FloatingActionButton fab;
+    public FloatingActionButton mSharedFab;
     private DrawerLayout drawerLayout;
     private ViewPager mViewPager;
     private ImageView imageView;
@@ -150,6 +147,8 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mSharedFab = (FloatingActionButton) findViewById(R.id.shared_fab);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
 
@@ -159,9 +158,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 this, drawerLayout, toolbar, R.string.content_description_open_navigation_drawer, R.string.content_description_close_navigation_drawer);
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
-
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        //hideFloatingActionButton();
 
         // [START] Initialize Navigation Drawer and Profile Picture
         NavigationView navView = (NavigationView) findViewById(R.id.navigation_view);
@@ -185,16 +181,48 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        // Set the default tab as Campus Portal
+        mViewPager.setCurrentItem(1);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.setupWithViewPager(mViewPager);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                switch (position) {
+                    case 1:
+                        mSharedFab.show();
+                        break;
+                    case 2:
+                        mSharedFab.show();
+                        break;
+                    case 3:
+                        mSharedFab.show();
+                        break;
+                    default:
+                        mSharedFab.hide();
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        mTabLayout.setupWithViewPager(mViewPager);
 
         //Listeners
         changer.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                selectImage();
+                promptProfileChanger();
             }
         });
 
@@ -240,14 +268,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             Toast.makeText(MainActivity.this, "Signed Out", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "onAuthStateChanged:signed_out");
         }
-    }
-
-    public void showFloatingActionButton() {
-        fab.show();
-    }
-
-    public void hideFloatingActionButton() {
-        fab.hide();
     }
 
     /**
@@ -312,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
     }
 
-    private void selectImage() {
+    private void promptProfileChanger() {
         final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Remove Picture", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Profile Photo");
@@ -320,15 +340,13 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (items[item].equals("Take Photo")) {
+                    // Open Camera
                     cameraTask();
-
                 } else if (items[item].equals("Choose from Gallery")) {
                     galleryTask();
-
                 } else if (items[item].equals("Remove Picture")) {
                     imageView.setImageResource(R.drawable.default_pic);
                     getSharedPreferences("userData", MODE_PRIVATE).edit().putString("PicPath", null).apply();
-
                 } else if (items[item].equals("Cancel")) {
                     dialog.dismiss();
                 }
@@ -346,7 +364,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 Bitmap image = Image;
                 imageView.setImageBitmap(Image);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                image.compress(Bitmap.CompressFormat.PNG, 80, baos);
+                image.compress(Bitmap.CompressFormat.PNG, 20, baos);
 
                 // Encoding image to string
                 byte[] b = baos.toByteArray();
@@ -362,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             try {
                 Image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                Image.compress(Bitmap.CompressFormat.PNG, 80, baos);
+                Image.compress(Bitmap.CompressFormat.PNG, 20, baos);
 
                 if (getOrientation(getApplicationContext(), mImageUri) != 0) {
                     Matrix matrix = new Matrix();
@@ -510,6 +528,8 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         return super.onOptionsItemSelected(item);
     }
 
+    // Tab layout and Fragments
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -520,6 +540,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
+        /**
+         * Default Constructor
+         */
         public PlaceholderFragment() {
         }
 
@@ -542,6 +565,14 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        static final int NUM_TABS = 5;
+
+        static final int TAB_ATTENDANCE = 0;
+        static final int TAB_CAMPUS_NEWS = 1;
+        static final int TAB_TIME_TABLE = 2;
+        static final int TAB_NOTES = 3;
+        static final int TAB_UNIVERSITY_NEWS = 4;
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -551,15 +582,15 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
-                case 0:
+                case TAB_ATTENDANCE:
                     return AttendanceFragment.newInstance();
-                case 1:
+                case TAB_CAMPUS_NEWS:
                     return CampNewsFragment.newInstance();
-                case 2:
+                case TAB_TIME_TABLE:
                     return TimeTableFragment.newInstance();
-                case 3:
+                case TAB_NOTES:
                     return NotesFragment.newInstance();
-                case 4:
+                case TAB_UNIVERSITY_NEWS:
                     return UnivNewsFragment.newInstance();
             }
             return PlaceholderFragment.newInstance(position + 1);
@@ -567,7 +598,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
         @Override
         public int getCount() {
-            return 5;
+            return NUM_TABS;
         }
 
         @Override
@@ -601,7 +632,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         // Some permissions have been granted
         Log.d(TAG, "onPermissionsGranted:" + requestCode + ":" + perms.size());
     }
-    // [END] EasyPermission Default Functions
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
@@ -620,4 +650,5 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     .show();
         }
     }
+    // [END] EasyPermission Default Functions
 }

@@ -35,9 +35,9 @@ public class TimeTableFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_time_table, container, false);
         // show the FloatingActionButton
-        ((MainActivity) getActivity()).showFloatingActionButton();
+        //((MainActivity) getActivity()).showFloatingActionButton();
 
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -46,7 +46,7 @@ public class TimeTableFragment extends Fragment {
                 //startActivity(intent);
                 addCalendarEvent();
             }
-        });
+        });*/
         return rootView;
     }
 

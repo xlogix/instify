@@ -26,9 +26,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
 import com.instify.android.helpers.UserData;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import timber.log.Timber;
 
 /**
@@ -166,7 +163,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 if (user != null) {
                     mFirebaseDatabase.child("users").child(user.getUid()).setValue(userInfoObj);
 
-                   // Checking and waiting till the info has be added //
+                    // Checking and waiting till the info has be added //
                     mFirebaseDatabase.child("users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -210,12 +207,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
     // validating email id
     private boolean isValidEmail(String email) {
-        String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-
-        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
+        return email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     public void showProgressDialog() {

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.instify.android.R;
+import com.instify.android.upload.UploadNews;
 import com.instify.android.upload.UploadNotes;
 import com.instify.android.ux.MainActivity;
 import com.instify.android.ux.adapters.NotesAdapter;
@@ -35,17 +36,22 @@ public class NotesFragment extends Fragment {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((MainActivity) getActivity()).mSharedFab = null; // To avoid keeping/leaking the reference of the FAB
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_notes, container, false);
 
         // show the FloatingActionButton
-        ((MainActivity) getActivity()).showFloatingActionButton();
+        //((MainActivity) getActivity()).showFloatingActionButton();
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_notes);
         setupRecyclerView(recyclerView);
 
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        ((MainActivity) getActivity()).mSharedFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Click action

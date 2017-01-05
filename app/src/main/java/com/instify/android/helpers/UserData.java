@@ -12,7 +12,8 @@ public class UserData {
     public int year;
     public boolean cr;
 
-    public UserData() {}
+    public UserData() {
+    }
 
     public UserData(String regno, String section) {
 
@@ -30,7 +31,7 @@ public class UserData {
         this.cr = false;
     }
 
-    public UserData(String name, String regno, String section, String dept, String year){
+    public UserData(String name, String regno, String section, String dept, String year) {
 
         /*
         * Constructor for updating all the info
@@ -105,5 +106,4 @@ public class UserData {
                 return -1;
         }
     }
-
 }

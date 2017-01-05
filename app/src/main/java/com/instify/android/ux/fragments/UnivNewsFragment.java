@@ -57,7 +57,7 @@ public class UnivNewsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_university_news, container, false);
 
         // Hide the floating action button
-        ((MainActivity) getActivity()).hideFloatingActionButton();
+        //((MainActivity) getActivity()).hideFloatingActionButton();
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_university);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);

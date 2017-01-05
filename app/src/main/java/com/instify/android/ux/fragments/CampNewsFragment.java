@@ -19,8 +19,6 @@ import com.instify.android.helpers.CampusNewsData;
 import com.instify.android.upload.UploadNews;
 import com.instify.android.ux.MainActivity;
 
-import org.w3c.dom.Text;
-
 /**
  * Created by Abhish3k on 2/23/2016.
  */
@@ -28,7 +26,7 @@ import org.w3c.dom.Text;
 public class CampNewsFragment extends Fragment {
 
     RecyclerView recyclerView;
-    // Firebase definitions //
+    // Firebase declarations
     DatabaseReference dbRef, campusRef;
     FirebaseRecyclerAdapter<CampusNewsData, CampusViewHolder> fAdapter;
 
@@ -43,10 +41,14 @@ public class CampNewsFragment extends Fragment {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((MainActivity) getActivity()).mSharedFab = null; // To avoid keeping/leaking the reference of the FAB
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_campus_news, container, false);
-        // show the FloatingActionButton
-        ((MainActivity) getActivity()).showFloatingActionButton();
 
         // Recycler view set up //
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_campus_news);
@@ -66,18 +68,17 @@ public class CampNewsFragment extends Fragment {
             }
         };
 
-        recyclerView.setAdapter(fAdapter);
-
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        ((MainActivity) getActivity()).mSharedFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Click action
                 Intent i = new Intent(getActivity(), UploadNews.class);
                 i.putExtra("username", ((MainActivity) getActivity()).userInfoObject.name);
                 startActivity(i);
             }
         });
+
+        recyclerView.setAdapter(fAdapter);
+
         return rootView;
     }
 
@@ -91,5 +92,4 @@ public class CampNewsFragment extends Fragment {
             campusDescription = (TextView) v.findViewById(R.id.campusDescription);
         }
     }
-
 }
