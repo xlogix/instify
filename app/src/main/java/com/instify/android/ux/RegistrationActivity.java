@@ -143,7 +143,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             userId = mFirebaseDatabase.push().getKey();
         }
 
-        userInfoObj = new UserData(regNo, section);
+        userInfoObj = new UserData(name, regNo, section);
 
         mAuth.createUserWithEmailAndPassword(emailText, passwordText)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

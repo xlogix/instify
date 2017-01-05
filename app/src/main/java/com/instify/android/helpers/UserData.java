@@ -15,7 +15,7 @@ public class UserData {
     public UserData() {
     }
 
-    public UserData(String regno, String section) {
+    public UserData(String name, String regno, String section) {
 
         /*
         * Constructor for a new user
@@ -23,7 +23,7 @@ public class UserData {
 
         //TODO : Fetch the name field data
 
-        this.name = "";
+        this.name = name;
         this.regno = regno.toLowerCase();
         this.section = section.toLowerCase();
         this.year = getYear();
