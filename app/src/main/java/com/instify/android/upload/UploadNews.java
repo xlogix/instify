@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,10 +35,11 @@ public class UploadNews extends AppCompatActivity {
     DatabaseReference campusNewsRef;
     private EditText newsTitle, newsDescription;
     private RadioGroup newsLevelRadio;
+    private RadioButton univRadio, deptRadio, classRadio;
     private Button submitNews;
     private int selectedLevel;
     private String currentUser;
-    private Spinner dept;
+    private Spinner dept, classYear, classSec;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +50,13 @@ public class UploadNews extends AppCompatActivity {
         newsTitle = (EditText) findViewById(R.id.news_title);
         newsDescription = (EditText) findViewById(R.id.news_description);
         newsLevelRadio = (RadioGroup) findViewById(R.id.campusUploadRadioGroup);
+        univRadio = (RadioButton) findViewById(R.id.campusUploadUniv);
+        deptRadio = (RadioButton) findViewById(R.id.campusUploadDept);
+        classRadio = (RadioButton) findViewById(R.id.campusUploadClass);
         submitNews = (Button) findViewById(R.id.post);
         dept = (Spinner) findViewById(R.id.campusUploadDeptSpinner);
+        classYear = (Spinner) findViewById(R.id.campusUploadClassYearSpinner);
+        classSec = (Spinner) findViewById(R.id.campusUploadClassSecSpinner);
 
         selectedLevel = newsLevelRadio.getCheckedRadioButtonId();
 
@@ -58,16 +65,56 @@ public class UploadNews extends AppCompatActivity {
                 .createFromResource(this, R.array.campusUploadDeptArray, R.layout.support_simple_spinner_dropdown_item);
         deptAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
+        ArrayAdapter<CharSequence> classYearAdapter = ArrayAdapter
+                .createFromResource(this, R.array.campusUploadYearArray, R.layout.support_simple_spinner_dropdown_item);
+        classYearAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+        ArrayAdapter<CharSequence> classSecAdapter = ArrayAdapter
+                .createFromResource(this, R.array.campusUploadSecArray, R.layout.support_simple_spinner_dropdown_item);
+        classSecAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        // End Adapters //
+
         dept.setAdapter(deptAdapter);
+        classYear.setAdapter(classYearAdapter);
+        classSec.setAdapter(classSecAdapter);
 
         // Firebase objects //
         fUser = FirebaseAuth.getInstance().getCurrentUser();
         currentUser = getIntent().getStringExtra("username");
         campusNewsRef = dbRef.child("CampusNews");
 
+        newsLevelRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch(i){
+                    case R.id.campusUploadUniv: {
+                        dept.setVisibility(View.INVISIBLE);
+                        classYear.setVisibility(View.INVISIBLE);
+                        classSec.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+
+                    case R.id.campusUploadDept: {
+                        dept.setVisibility(View.VISIBLE);
+                        classYear.setVisibility(View.INVISIBLE);
+                        classSec.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+
+                    case R.id.campusUploadClass: {
+                        dept.setVisibility(View.INVISIBLE);
+                        classYear.setVisibility(View.VISIBLE);
+                        classSec.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+
         submitNews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                // TODO : Send the dept and class meta data also to the database
                 if (validateForm()) {
                     selectedLevel = newsLevelRadio.getCheckedRadioButtonId();
                     CampusNewsData data = new CampusNewsData(newsTitle, newsDescription, selectedLevel, currentUser);

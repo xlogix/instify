@@ -75,10 +75,33 @@
 
     <Spinner
         android:id="@+id/campusUploadDeptSpinner"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         android:layout_below="@+id/campusUploadRadioGroup"
         android:layout_marginTop="@dimen/activity_vertical_margin">
+
+    </Spinner>
+
+    <Spinner
+        android:id="@+id/campusUploadClassYearSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_below="@+id/campusUploadRadioGroup">
+
+    </Spinner>
+
+    <Spinner
+        android:id="@+id/campusUploadClassSecSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_below="@+id/campusUploadRadioGroup"
+        android:layout_toRightOf="@+id/campusUploadClassYearSpinner"
+        android:layout_toEndOf="@+id/campusUploadClassYearSpinner">
 
     </Spinner>
 
@@ -88,6 +111,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/campusUploadDeptSpinner"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:background="@color/colorPrimaryLight"
         android:text="Post" />
 
