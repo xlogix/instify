@@ -478,6 +478,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                             startActivity(email);
                         }
                         break;
+                    case R.id.nav_about:
+                        startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                        break;
                     case R.id.nav_profile:
                         startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                         break;

@@ -84,6 +84,7 @@ dependencies {
 
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.github.paolorotolo:appintro:4.1.0'
+    compile 'com.github.medyo:android-about-page:1.1.1'
 
     testCompile 'junit:junit:4.12'
 }

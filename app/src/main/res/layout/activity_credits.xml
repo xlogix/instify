@@ -3,33 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fdfdfe"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ux.CreditsActivity">
+    android:paddingTop="@dimen/activity_vertical_margin">
 
     <TextView
-        android:id="@+id/abt_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/about_developer"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#bf3951" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/developer"
-        android:layout_marginTop="30dp"
-        android:text="@string/about_description"
-        android:textColor="#bf3951"
-        android:textSize="22dp" />
-
+        android:textSize="24sp"
+        android:text="Hello World! Writing some things..." />
 </RelativeLayout>

@@ -87,11 +87,15 @@
             android:theme="@style/AppTheme.NoActionBarTransparent" />
 
         <activity
-            android:name=".ux.SettingsActivity"
+            android:name=".ux.ProfileActivity"
             android:label="@string/app_name" />
 
         <activity
-            android:name=".ux.ProfileActivity"
+            android:name=".ux.AboutActivity"
+            android:label="@string/app_name" />
+
+        <activity
+            android:name=".ux.SettingsActivity"
             android:label="@string/app_name" />
 
         <activity
