@@ -24,9 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
-import com.instify.android.helpers.UserData;
-
-import org.wordpress.emailchecker.EmailChecker;
+import com.instify.android.models.UserData;
 
 import timber.log.Timber;
 
@@ -131,14 +129,12 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         if (!validateForm()) {
             return;
         }
-        // Checks
-        isValidEmail(emailText);
 
         showProgressDialog();
 
         // TODO
         // In real apps this userId should be fetched
-        // by implementing firebase auth  Also, should we assign department and year just using the registration number?
+        // by implementing firebase auth
         if (TextUtils.isEmpty(userId)) {
             userId = mFirebaseDatabase.push().getKey();
         }
@@ -187,13 +183,12 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         boolean valid = true;
 
         String email = mEmailField.getText().toString();
-        String suggest = (new EmailChecker()).suggestDomainCorrection(email);
 
         if (TextUtils.isEmpty(email)) {
             mEmailField.setError("Required.");
             valid = false;
-        } else if (suggest.compareTo(email) != 0) {
-            Timber.v("FIXME", "did you mean: " + suggest + " ?");
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            mEmailField.setError("Invalid Email Address");
         } else {
             mEmailField.setError(null);
         }
@@ -207,13 +202,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         } else {
             mPasswordField.setError(null);
         }
-
         return valid;
-    }
-
-    // validating email id
-    private boolean isValidEmail(String email) {
-        return email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     public void showProgressDialog() {
@@ -222,7 +211,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             mProgressDialog.setMessage(getString(R.string.Loading));
             mProgressDialog.setIndeterminate(true);
         }
-
         mProgressDialog.show();
     }
 

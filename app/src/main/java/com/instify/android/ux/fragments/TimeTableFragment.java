@@ -40,29 +40,8 @@ public class TimeTableFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_time_table, container, false);
 
-        /*((MainActivity) getActivity()).mSharedFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Click action
-                addCalendarEvent();
-            }
-        });*/
         return rootView;
     }
-
-    public void addCalendarEvent() {
-        Calendar cal = Calendar.getInstance();
-        Intent intent = new Intent(Intent.ACTION_EDIT);
-        intent.setType("vnd.android.cursor.item/event");
-        intent.putExtra("beginTime", cal.getTimeInMillis());
-        intent.putExtra("allDay", true);
-        intent.putExtra("GUESTS_CAN_SEE_GUESTS", true);
-        intent.putExtra("endTime", cal.getTimeInMillis() + 60 * 60 * 1000);
-        intent.putExtra("title", "Test Event");
-        intent.putExtra("description", "This is a sample description");
-        startActivity(intent);
-    }
-
 }
 
 

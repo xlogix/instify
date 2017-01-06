@@ -36,7 +36,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.instify.android.R;
 import com.instify.android.chat.MessagePreferences;
-import com.instify.android.chat.ModelMessage;
+import com.instify.android.models.ChatModelMessage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,7 +62,7 @@ public class TrendingFragment extends Fragment {
     private RecyclerView mMessageRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private FirebaseAnalytics mFirebaseAnalytics;
-    private FirebaseRecyclerAdapter<ModelMessage, MessageViewHolder> mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<ChatModelMessage, MessageViewHolder> mFirebaseAdapter;
     private ProgressBar mProgressBar;
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseUser mFirebaseUser;
@@ -106,14 +106,14 @@ public class TrendingFragment extends Fragment {
         mLinearLayoutManager.setStackFromEnd(true);
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<ModelMessage, MessageViewHolder>(
-                ModelMessage.class,
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<ChatModelMessage, MessageViewHolder>(
+                ChatModelMessage.class,
                 R.layout.chat_item_message,
                 MessageViewHolder.class,
                 mFirebaseDatabaseReference.child(MESSAGES_CHILD)) {
 
             @Override
-            protected void populateViewHolder(MessageViewHolder viewHolder, ModelMessage friendlyMessage, int position) {
+            protected void populateViewHolder(MessageViewHolder viewHolder, ChatModelMessage friendlyMessage, int position) {
                 mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                 viewHolder.messageTextView.setText(friendlyMessage.getText());
                 viewHolder.messengerTextView.setText(friendlyMessage.getName());
@@ -197,7 +197,7 @@ public class TrendingFragment extends Fragment {
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ModelMessage friendlyMessage = new ModelMessage(mMessageEditText.getText().toString(), mUsername,
+                ChatModelMessage friendlyMessage = new ChatModelMessage(mMessageEditText.getText().toString(), mUsername,
                         mPhotoUrl);
                 mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(friendlyMessage);
                 mMessageEditText.setText("");

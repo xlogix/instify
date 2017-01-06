@@ -2,9 +2,12 @@ package com.instify.android.ux;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -49,7 +52,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
-import com.instify.android.helpers.UserData;
+import com.instify.android.models.UserData;
 import com.instify.android.ux.fragments.AttendanceFragment;
 import com.instify.android.ux.fragments.CampNewsFragment;
 import com.instify.android.ux.fragments.NotesFragment;
@@ -60,6 +63,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -82,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     private static final int RC_CAMERA_PERM = 123;
     private static final int RC_GALLERY_PERM = 121;
     private static final String TAG = "ActivityMain";
-    private static Bitmap rotateImage = null;
     public FloatingActionButton mSharedFab;
     private DrawerLayout drawerLayout;
     private ViewPager mViewPager;
@@ -152,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         View headerView = navView.inflateHeaderView(R.layout.nav_header_main);
         imageView = (ImageView) headerView.findViewById(R.id.profile);
         ImageButton changer = (ImageButton) headerView.findViewById(R.id.profile_changer);
-        // Set image from Google account
+        // Set image from Firebase account
         if (mFirebaseUser != null) {
             Glide.with(this)
                     .load(mCaptureUri)
@@ -286,10 +289,26 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         if (EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA)) {
             // Have permission, do the thing!
             Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
             // Choose file storage location
             File file = new File(Environment.getExternalStorageDirectory(), UUID.randomUUID().toString() + ".jpg");
             takePicture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
             mCaptureUri = Uri.fromFile(file);
+
+            // Camera
+            final List<Intent> cameraIntents = new ArrayList<Intent>();
+            final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            final PackageManager packageManager = getPackageManager();
+            final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
+            for (ResolveInfo res : listCam) {
+                final String packageName = res.activityInfo.packageName;
+                final Intent intent = new Intent(captureIntent);
+                intent.setComponent(new ComponentName(packageName, res.activityInfo.name));
+                intent.setPackage(packageName);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, mCaptureUri);
+                cameraIntents.add(intent);
+            }
+
             startActivityForResult(takePicture, RC_TAKE_PICTURE);
 
         } else {

@@ -84,8 +84,6 @@ dependencies {
 
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.github.paolorotolo:appintro:4.1.0'
-    // use the latest 0.x version
-    compile 'org.wordpress:emailchecker:0.2'
 
     testCompile 'junit:junit:4.12'
 }

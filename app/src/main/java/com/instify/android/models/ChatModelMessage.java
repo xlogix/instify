@@ -1,20 +1,20 @@
-package com.instify.android.chat;
+package com.instify.android.models;
 
 /**
  * Created by Abhish3k on 7/2/2016. // Using Firebase Database
  */
 
-public class ModelMessage {
+public class ChatModelMessage {
 
     private String id;
     private String text;
     private String email;
     private String photoUrl;
 
-    public ModelMessage() {
+    public ChatModelMessage() {
     }
 
-    public ModelMessage(String text, String name, String photoUrl) {
+    public ChatModelMessage(String text, String name, String photoUrl) {
         this.text = text;
         this.email = name;
         this.photoUrl = photoUrl;

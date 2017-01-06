@@ -1,4 +1,4 @@
-package com.instify.android.helpers;
+package com.instify.android.models;
 
 import android.widget.TextView;
 

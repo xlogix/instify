@@ -18,7 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
-import com.instify.android.helpers.UserData;
+import com.instify.android.models.UserData;
 
 public class ProfileActivity extends AppCompatActivity {
 
