@@ -69,25 +69,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
-
-        // [START auth_state_listener]
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Timber.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    Intent loginToMain = new Intent(RegistrationActivity.this, MainActivity.class);
-                    startActivity(loginToMain);
-                    finish();
-                } else {
-                    // User is signed out
-                    Timber.d(TAG, "onAuthStateChanged:signed_out");
-                }
-            }
-        };
-        // [END auth_state_listener]
     }
 
     @Override
@@ -154,7 +135,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                     }
                 });
 
-        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+        // [START auth_state_listener]
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -173,10 +155,22 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                             Toast.makeText(RegistrationActivity.this, "Registration Failed!", Toast.LENGTH_SHORT).show();
                         }
                     });
+
+                    hideProgressDialog();
+
+                    // User is signed in
+                    Timber.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Intent loginToMain = new Intent(RegistrationActivity.this, MainActivity.class);
+                    loginToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    loginToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(loginToMain);
+                } else {
+                    // User is signed out
+                    Timber.d(TAG, "onAuthStateChanged:signed_out");
                 }
             }
-        });
-        hideProgressDialog();
+        };
+        // [END auth_state_listener]
     }
 
     private boolean validateForm() {

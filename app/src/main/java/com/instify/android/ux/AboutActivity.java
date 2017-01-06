@@ -23,7 +23,7 @@ public class AboutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_credits);
+        setContentView(R.layout.activity_about);
 
         Element adsElement = new Element();
         adsElement.setTitle("Advertise with us");
