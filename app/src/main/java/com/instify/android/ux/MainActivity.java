@@ -36,7 +36,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -53,6 +52,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
+import com.instify.android.listeners.OnSingleClickListener;
 import com.instify.android.models.UserData;
 import com.instify.android.ux.fragments.AttendanceFragment;
 import com.instify.android.ux.fragments.CampNewsFragment;
@@ -240,10 +240,15 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     }
 
     public void setupHeaderView() {
-        imageView = (ImageView) headerView.findViewById(R.id.profile);
-        ImageButton changer = (ImageButton) headerView.findViewById(R.id.profile_changer);
+        imageView = (ImageView) headerView.findViewById(R.id.profile_user_photo);
+        imageView.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View view) {
+                promptProfileChanger();
+            }
+        });
 
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+        /*UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(mFirebaseUser.getEmail())
                 .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
                 .build();
@@ -257,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                             Toast.makeText(MainActivity.this, "Successfully updated", Toast.LENGTH_SHORT).show();
                         }
                     }
-                });
+                });*/
     }
 
     /**
@@ -286,6 +291,29 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
+    }
+
+    private void promptProfileChanger() {
+        final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Remove Picture", "Cancel"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Profile Photo");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("Take Photo")) {
+                    // Open Camera
+                    cameraTask();
+                } else if (items[item].equals("Choose from Gallery")) {
+                    galleryTask();
+                } else if (items[item].equals("Remove Picture")) {
+                    imageView.setImageResource(R.drawable.default_pic);
+                    getSharedPreferences("userData", MODE_PRIVATE).edit().putString("PicPath", null).apply();
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -336,29 +364,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             EasyPermissions.requestPermissions(this, getString(R.string.rationale_storage),
                     RC_GALLERY_PERM, Manifest.permission.READ_EXTERNAL_STORAGE);
         }
-    }
-
-    private void promptProfileChanger() {
-        final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Remove Picture", "Cancel"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle("Profile Photo");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("Take Photo")) {
-                    // Open Camera
-                    cameraTask();
-                } else if (items[item].equals("Choose from Gallery")) {
-                    galleryTask();
-                } else if (items[item].equals("Remove Picture")) {
-                    imageView.setImageResource(R.drawable.default_pic);
-                    getSharedPreferences("userData", MODE_PRIVATE).edit().putString("PicPath", null).apply();
-                } else if (items[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
