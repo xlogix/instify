@@ -6,14 +6,13 @@ import android.text.TextUtils;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.instify.android.utils.ActivityFrameMetrics;
+
+import timber.log.Timber;
 
 public class MyApplication extends Application {
 
-    public static final String PACKAGE_NAME = MyApplication.class.getPackage().getName();
-    public static final String TAG = MyApplication.class
-            .getSimpleName();
-    public static String APP_VERSION = "0.0.0";
-    public static String ANDROID_ID = "0000000000000000";
+    public static final String TAG = MyApplication.class.getSimpleName();
     private static MyApplication mInstance;
     private RequestQueue mRequestQueue;
 
@@ -25,6 +24,10 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        // Initialize Activity frame matrix for analytics
+        registerActivityLifecycleCallbacks(new ActivityFrameMetrics.Builder().build());
+        // Plant Tiber debug tree
+        Timber.plant(new Timber.DebugTree());
     }
 
     public RequestQueue getReqQueue() {

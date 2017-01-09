@@ -24,3 +24,5 @@
 -keepresourcexmlelements manifest/application/meta-data@value=GlideModule
 
 -keep class !android.support.v7.internal.view.menu.**,android.support.** {*;}
+
+-keep class com.commonsware.cwac.** { *; }

@@ -3,13 +3,16 @@ package com.instify.android.ux;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -20,7 +23,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
 import com.instify.android.models.UserData;
 
-public class ProfileActivity extends AppCompatActivity {
+import timber.log.Timber;
+
+public class UserAccountActivity extends AppCompatActivity {
 
     DatabaseReference dbRef, userRef;
     FirebaseUser currentUser;
@@ -89,13 +94,13 @@ public class ProfileActivity extends AppCompatActivity {
                 userRef.setValue(newData).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(ProfileActivity.this, "Profile updated successfully",
+                        Toast.makeText(UserAccountActivity.this, "Profile updated successfully",
                                 Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(ProfileActivity.this, "Update failed : " + e.getMessage(),
+                        Toast.makeText(UserAccountActivity.this, "Update failed : " + e.getMessage(),
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -121,6 +126,18 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    // TODO: Implement change of user's email address
+    public void updateEmail() {
+        currentUser.updateEmail("user@example.com")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Timber.d("User email address updated.");
+                        }
+                    }
+                });
     }
 }

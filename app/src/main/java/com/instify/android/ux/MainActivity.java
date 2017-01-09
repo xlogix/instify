@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -41,11 +40,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     private static final int GALLERY = 1;
     private static final int RC_CAMERA_PERM = 123;
     private static final int RC_GALLERY_PERM = 121;
-    private static final String TAG = "ActivityMain";
+    private static final String TAG = "MainActivity";
     public FloatingActionButton mSharedFab;
     private DrawerLayout drawerLayout;
     private ViewPager mViewPager;
@@ -97,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     private DatabaseReference dbRef, userRef;
 
     public UserData userInfoObject;
+
+    View headerView;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -113,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         super.onResume();
         // Ensures that user didn't un-install Google Play Services required for Firebase related tasks.
         checkPlayServices();
+
         if (isDeviceOnline()) {
             Timber.d(TAG, "Device is online.");
         } else {
@@ -152,15 +156,8 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         if (navView != null) {
             setupDrawerContent(navView);
         }
-        View headerView = navView.inflateHeaderView(R.layout.nav_header_main);
-        imageView = (ImageView) headerView.findViewById(R.id.profile);
-        ImageButton changer = (ImageButton) headerView.findViewById(R.id.profile_changer);
-        // Set image from Firebase account
-        if (mFirebaseUser != null) {
-            Glide.with(this)
-                    .load(mCaptureUri)
-                    .into(imageView);
-        }
+        headerView = navView.inflateHeaderView(R.layout.nav_header_main);
+        setupHeaderView();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -202,22 +199,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mTabLayout.setupWithViewPager(mViewPager);
 
-        //Listeners
-        changer.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                promptProfileChanger();
-            }
-        });
-
-        //Decode Image to String
-        String imgPath = getSharedPreferences("userData", MODE_PRIVATE).getString("PicPath", null);
-        if (imgPath != null) {
-            byte[] imageAsBytes = Base64.decode(imgPath.getBytes(), Base64.DEFAULT);
-            imageView.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
-        }
-
         checkPlayServices();
 
         // [START initialize_auth]
@@ -250,9 +231,33 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
         } else {
             // User is signed out
-            Toast.makeText(MainActivity.this, "Signed Out", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "onAuthStateChanged:signed_out");
+            Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+            homeIntent.addCategory(Intent.CATEGORY_HOME);
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(homeIntent);
         }
+    }
+
+    public void setupHeaderView() {
+        imageView = (ImageView) headerView.findViewById(R.id.profile);
+        ImageButton changer = (ImageButton) headerView.findViewById(R.id.profile_changer);
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(mFirebaseUser.getEmail())
+                .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
+                .build();
+
+        mFirebaseUser.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User profile updated.");
+                            Toast.makeText(MainActivity.this, "Successfully updated", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     /**
@@ -400,34 +405,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
     }
 
-    //  Log Out User
-    private void logoutUser() {
-        // Clearing all data from Shared Preferences
-        getSharedPreferences("userData", MODE_PRIVATE).edit().clear().apply();
-        // SignOut from Firebase
-        mAuth.signOut();
-        // After logout redirect user to Intro Activity
-        Intent i = new Intent(this, IntroActivity.class);
-        // Closing all the Activities
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        // Add new Flag to start new Activity
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        // Staring Activity
-        startActivity(i);
-        finish();
-    }
-
-    public void intentGPACalculator(Context context, String packageName) {
-        Intent intent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-        if (intent == null) {
-            // Bring user to the market or let them choose an app?
-            intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("market://details?id=" + packageName));
-        }
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    }
-
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -451,6 +428,15 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                         break;
                     case R.id.nav_univ_news:
                         mViewPager.setCurrentItem(4);
+                        break;
+                    case R.id.nav_profile:
+                        startActivity(new Intent(MainActivity.this, UserAccountActivity.class));
+                        break;
+                    case R.id.nav_logout:
+                        logoutUser();
+                        break;
+                    case R.id.nav_settings:
+                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                         break;
                     case R.id.nav_share:
                         try {
@@ -481,15 +467,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     case R.id.nav_about:
                         startActivity(new Intent(MainActivity.this, AboutActivity.class));
                         break;
-                    case R.id.nav_profile:
-                        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-                        break;
-                    case R.id.nav_logout:
-                        logoutUser();
-                        break;
-                    case R.id.nav_settings:
-                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-                        break;
                 }
                 drawerLayout.closeDrawers();
                 return true;
@@ -517,6 +494,34 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //  Log Out User
+    private void logoutUser() {
+        // Clearing all data from Shared Preferences
+        getSharedPreferences("userData", MODE_PRIVATE).edit().clear().apply();
+        // SignOut from Firebase
+        mAuth.signOut();
+        // After logout redirect user to Intro Activity
+        Intent i = new Intent(this, IntroActivity.class);
+        // Closing all the Activities
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        // Add new Flag to start new Activity
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // Staring Activity
+        startActivity(i);
+        finish();
+    }
+
+    public void intentGPACalculator(Context context, String packageName) {
+        Intent intent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+        if (intent == null) {
+            // Bring user to the market or let them choose an app?
+            intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("market://details?id=" + packageName));
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 
     // Tab layout and Fragments

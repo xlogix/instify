@@ -1,12 +1,12 @@
-package com.instify.android.ux.fragments;
+package com.instify.android.ux;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -47,12 +47,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by Abhish3k on 6/22/2016. //Using Firebase real-time database
  */
 
-public class TrendingFragment extends Fragment {
+public class ChatActivity extends AppCompatActivity {
 
     public static final String MESSAGES_CHILD = "messages";
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 100;
     public static final String ANONYMOUS = "anonymous";
-    private static final String TAG = "ActivityMain";
+    private static final String TAG = ChatActivity.class.getSimpleName();
     private static final int REQUEST_INVITE = 1;
     private static final String MESSAGE_SENT_EVENT = "message_sent";
     private static final int RESULT_OK = 200;
@@ -69,21 +69,11 @@ public class TrendingFragment extends Fragment {
     private EditText mMessageEditText;
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
 
-    public TrendingFragment() {
-    }
-
-    public static TrendingFragment newInstance() {
-        TrendingFragment frag = new TrendingFragment();
-        Bundle args = new Bundle();
-        frag.setArguments(args);
-        return frag;
-    }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_trending, container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Initialize Firebase Auth
         FirebaseAuth mFirebaseAuth;
@@ -100,8 +90,8 @@ public class TrendingFragment extends Fragment {
             }
         }
 
-        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
-        mMessageRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_trending);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mMessageRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_trending);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setStackFromEnd(true);
 
@@ -122,7 +112,7 @@ public class TrendingFragment extends Fragment {
                     viewHolder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(getContext(),
                             R.drawable.ic_account_circle_black_36dp));
                 } else {
-                    Glide.with(TrendingFragment.this)
+                    Glide.with(ChatActivity.this)
                             .load(friendlyMessage.getPhotoUrl())
                             .into(viewHolder.messengerImageView);
                 }

@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -34,8 +33,6 @@ import timber.log.Timber;
 
 public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = RegistrationActivity.class.getSimpleName();
-    @VisibleForTesting
     public ProgressDialog mProgressDialog;
     // [END declare_database]
     UserData userInfoObj;
@@ -106,7 +103,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     void registerUser(String emailText, String passwordText, final String name, String regNo, String section) {
 
         mFirebaseDatabase = FirebaseDatabase.getInstance().getReference();
-        Timber.d(TAG, "Registration:");
+        Timber.d("Registration:");
         if (!validateForm()) {
             return;
         }
@@ -156,17 +153,21 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                         }
                     });
 
+                    // Send a confirmation mail to the user's email ID
+                    sendConfirmationMail(user);
+
+                    // Update the UI
                     hideProgressDialog();
 
                     // User is signed in
-                    Timber.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Timber.d("onAuthStateChanged:signed_in:" + user.getUid());
                     Intent loginToMain = new Intent(RegistrationActivity.this, MainActivity.class);
                     loginToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     loginToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(loginToMain);
                 } else {
                     // User is signed out
-                    Timber.d(TAG, "onAuthStateChanged:signed_out");
+                    Timber.d("onAuthStateChanged:signed_out");
                 }
             }
         };
@@ -212,5 +213,17 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
+    }
+
+    public void sendConfirmationMail(FirebaseUser mFirebaseUser) {
+        mFirebaseUser.sendEmailVerification()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Timber.d("Email sent.");
+                        }
+                    }
+                });
     }
 }

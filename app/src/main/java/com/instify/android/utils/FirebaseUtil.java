@@ -4,8 +4,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import timber.log.Timber;
 
 class FirebaseUtil {
+
+    // Prevents multiple references of objects in the app
 
     public static DatabaseReference getBaseRef() {
         return FirebaseDatabase.getInstance().getReference();
@@ -37,5 +43,15 @@ class FirebaseUtil {
 
     public static DatabaseReference getLikesRef() {
         return getBaseRef().child("likes");
+    }
+
+    // Subscribe to Notifications
+    public static void subscribeToPushService() {
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
+        Timber.d("Instify", "Subscribed");
+
+        String token = FirebaseInstanceId.getInstance().getToken();
+        // Log
+        Timber.d("Sender Token : ", token);
     }
 }

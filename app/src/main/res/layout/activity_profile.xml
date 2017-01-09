@@ -1,127 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_profile"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.instify.android.ux.ProfileActivity">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
 
-
-    <TextView
-        android:id="@+id/profile_title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Profile"
-        android:textAlignment="center"
-        android:textSize="25sp"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"/>
+        android:orientation="vertical"
+        android:padding="@dimen/activity_vertical_margin"
+        tools:context="com.instify.android.ux.UserAccountActivity">
 
-
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/profile_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_title"
-        android:layout_marginTop="@dimen/activity_vertical_margin">
-
-
-        <EditText
-            android:id="@+id/profile_name_et"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name"/>
+            android:orientation="vertical">
 
-    </android.support.design.widget.TextInputLayout>
+            <TextView
+                android:id="@+id/profile_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Account"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/profile_regno"
-        android:layout_below="@+id/profile_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin">
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/profile_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
 
+                <EditText
+                    android:id="@+id/profile_name_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Name" />
+            </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/profile_regno_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Registration number"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/profile_regno"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
 
-    </android.support.design.widget.TextInputLayout>
+                <EditText
+                    android:id="@+id/profile_regno_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Registration number" />
+            </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/profile_section"
-        android:layout_below="@+id/profile_regno"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin">
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/profile_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
 
+                <EditText
+                    android:id="@+id/profile_section_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Section" />
+            </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/profile_section_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Section"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/profile_dept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
 
-    </android.support.design.widget.TextInputLayout>
+                <EditText
+                    android:id="@+id/profile_dept_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Department" />
+            </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/profile_dept"
-        android:layout_below="@+id/profile_section"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin">
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/profile_year"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
 
+                <EditText
+                    android:id="@+id/profile_year_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Year" />
+            </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/profile_dept_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Department"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    </android.support.design.widget.TextInputLayout>
+                <Button
+                    android:id="@+id/profile_edit_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:text="EDIT"
+                    android:visibility="invisible" />
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/profile_year"
-        android:layout_below="@+id/profile_dept"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin">
+                <Button
+                    android:id="@+id/profile_save_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:text="SAVE"
+                    android:visibility="invisible" />
+            </RelativeLayout>
 
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:text="@string/Changing_the_password"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/profile_year_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Year"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/account_edit_password_current_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
 
-    </android.support.design.widget.TextInputLayout>
+                <EditText
+                    android:id="@+id/account_edit_password_current"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Password"
+                    android:inputType="textPassword"
+                    android:textColor="@color/textPrimary" />
+            </android.support.design.widget.TextInputLayout>
 
-    <Button
-        android:id="@+id/profile_edit_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="EDIT"
-        android:visibility="invisible"
-        android:layout_below="@id/profile_year"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/activity_vertical_margin"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/account_edit_password_new_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="16dp">
 
-    <Button
-        android:id="@+id/profile_save_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SAVE"
-        android:visibility="invisible"
-        android:layout_below="@id/profile_year"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/activity_vertical_margin"/>
+                <EditText
+                    android:id="@+id/account_edit_password_new"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/New_password"
+                    android:inputType="textPassword" />
+            </android.support.design.widget.TextInputLayout>
 
-</RelativeLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/account_edit_password_new_again_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/account_edit_password_new_again"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Password_again"
+                    android:inputType="textPassword" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

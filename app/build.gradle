@@ -85,6 +85,10 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.github.paolorotolo:appintro:4.1.0'
     compile 'com.github.medyo:android-about-page:1.1.1'
+    compile 'com.commonsware.cwac:camera:0.7.0'
+
+    compile 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 
     testCompile 'junit:junit:4.12'
 }

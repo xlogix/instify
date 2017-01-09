@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="4dp"
-    tools:context=".ux.fragments.TrendingFragment">
+    tools:context=".ux.ChatActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_trending"

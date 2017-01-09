@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.instify.android.R;
+import com.instify.android.helpers.MyFirebaseMessagingService;
 import com.instify.android.models.CampusNewsData;
 
 import java.sql.Timestamp;
@@ -85,7 +86,7 @@ public class UploadNews extends AppCompatActivity {
         newsLevelRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                switch(i){
+                switch (i) {
                     case R.id.campusUploadUniv: {
                         dept.setVisibility(View.INVISIBLE);
                         classYear.setVisibility(View.INVISIBLE);
@@ -131,6 +132,8 @@ public class UploadNews extends AppCompatActivity {
                                     Toast.makeText(UploadNews.this, "News announced!", Toast.LENGTH_SHORT).show();
                                     newsTitle.setText("");
                                     newsDescription.setText("");
+
+
                                     finish();
                                 }
                             });
@@ -140,11 +143,6 @@ public class UploadNews extends AppCompatActivity {
     }
 
     private boolean validateForm() {
-        if (!newsTitle.getText().toString().equals("") &&
-                !newsDescription.getText().toString().equals("")) {
-            return true;
-        }
-        return false;
+        return (!newsTitle.getText().toString().equals("") && !newsDescription.getText().toString().equals(""));
     }
-
 }

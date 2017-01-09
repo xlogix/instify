@@ -17,7 +17,7 @@ allprojects {
     repositories {
         jcenter()
         maven { url "https://jitpack.io" }
-        maven { url 'http://wordpress-mobile.github.io/WordPress-Android' }
+        maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
     }
 }
 
