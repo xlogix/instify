@@ -45,8 +45,6 @@ public class SplashActivity extends Activity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         // Obtain the current logged in user
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        // Set the first run variable as true
-        MyApplication.getInstance().getPrefManager().setIsFirstRun(true);
 
         // Splash screen timer
         final int SPLASH_TIME_OUT = 1000;
@@ -57,7 +55,6 @@ public class SplashActivity extends Activity {
              * want to show case your app logo / company
              */
             public void run() {
-
                 if (MyApplication.getInstance().getPrefManager().getIsFirstRun()) {
                     Intent i = new Intent(SplashActivity.this, IntroActivity.class);
                     startActivity(i);

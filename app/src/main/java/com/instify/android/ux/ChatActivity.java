@@ -33,7 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.instify.android.R;
-import com.instify.android.chat.MessagePreferences;
+import com.instify.android.app.Config;
 import com.instify.android.models.ChatModelMessage;
 
 import java.util.HashMap;
@@ -49,6 +49,7 @@ import timber.log.Timber;
 public class ChatActivity extends AppCompatActivity {
 
     private ChatActivity mInstance = null;
+
     /**
      * Return ChatActivity instance. Null if activity doesn't exist.
      *
@@ -101,10 +102,7 @@ public class ChatActivity extends AppCompatActivity {
 
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // Initialize Firebase Auth
-        FirebaseAuth mFirebaseAuth;
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         // Get data
         if (mFirebaseUser != null) {
@@ -198,7 +196,7 @@ public class ChatActivity extends AppCompatActivity {
 
         mMessageEditText = (EditText) findViewById(R.id.messageEditText);
         mMessageEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(mSharedPreferences
-                .getInt(MessagePreferences.FRIENDLY_MSG_LENGTH, DEFAULT_MSG_LENGTH_LIMIT))});
+                .getInt(Config.FRIENDLY_MSG_LENGTH, DEFAULT_MSG_LENGTH_LIMIT))});
         mMessageEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

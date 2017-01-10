@@ -30,6 +30,10 @@ public class MyApplication extends Application {
 
     private FirebaseAuth mAuth;
 
+    public static synchronized MyApplication getInstance() {
+        return mInstance;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -45,10 +49,6 @@ public class MyApplication extends Application {
             /*Fabric.with(this, new Crashlytics());
             Timber.plant(new CrashReportingTree());*/
         }
-    }
-
-    public static synchronized MyApplication getInstance() {
-        return mInstance;
     }
 
     public RequestQueue getRequestQueue() {
