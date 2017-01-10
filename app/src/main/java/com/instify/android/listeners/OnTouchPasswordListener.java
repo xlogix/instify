@@ -37,7 +37,6 @@ public class OnTouchPasswordListener implements View.OnTouchListener {
                 mPreviousInputType = -1;
                 break;
         }
-
         return false;
     }
 

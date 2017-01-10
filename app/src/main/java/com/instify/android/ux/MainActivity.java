@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -31,6 +32,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -41,11 +45,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -604,19 +605,49 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
         @Override
         public CharSequence getPageTitle(int position) {
+
+            SpannableStringBuilder sb = new SpannableStringBuilder(" ");
+
             switch (position) {
-                case 0:
-                    return "Attendance";
-                case 1:
-                    return "Campus Portal";
-                case 2:
-                    return "Time Table";
-                case 3:
-                    return "Notes";
-                case 4:
-                    return "University Portal";
+                case 0: {
+                    Drawable drawable = getDrawable(R.drawable.ic_attendance);
+                    drawable.setBounds(0, 0, 36, 36);
+                    ImageSpan imageSpan = new ImageSpan(drawable);
+                    //to make our tabs icon only, set the Text as blank string with white space
+                    sb.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    ;
+                }
+                case 1: {
+                    Drawable drawable = getDrawable(R.drawable.ic_attendance);
+                    drawable.setBounds(0, 0, 36, 36);
+                    ImageSpan imageSpan = new ImageSpan(drawable);
+                    //to make our tabs icon only, set the Text as blank string with white space
+                    sb.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                case 2: {
+                    Drawable drawable = getDrawable(R.drawable.ic_attendance);
+                    drawable.setBounds(0, 0, 36, 36);
+                    ImageSpan imageSpan = new ImageSpan(drawable);
+                    //to make our tabs icon only, set the Text as blank string with white space
+                    sb.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                }
+                case 3: {
+                    Drawable drawable = getDrawable(R.drawable.ic_attendance);
+                    drawable.setBounds(0, 0, 36, 36);
+                    ImageSpan imageSpan = new ImageSpan(drawable);
+                    //to make our tabs icon only, set the Text as blank string with white space
+                    sb.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                case 4: {
+                    Drawable drawable = getDrawable(R.drawable.ic_attendance);
+                    drawable.setBounds(0, 0, 36, 36);
+                    ImageSpan imageSpan = new ImageSpan(drawable);
+                    //to make our tabs icon only, set the Text as blank string with white space
+                    sb.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
             }
-            return null;
+            return sb;
         }
     }
 

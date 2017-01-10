@@ -44,7 +44,7 @@
         android:required="false" />
 
     <application
-        android:name=".helpers.MyApplication"
+        android:name=".app.MyApplication"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"

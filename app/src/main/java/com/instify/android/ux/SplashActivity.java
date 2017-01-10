@@ -21,7 +21,6 @@ public class SplashActivity extends Activity {
     public FirebaseAnalytics mFirebaseAnalytics;
 
     // Firebase instance variables
-    private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
     /**
@@ -39,13 +38,12 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        layoutContent = findViewById(R.id.splash_content);
-//        layoutIntroScreen = findViewById(R.id.splash_intro_screen);
+        //layoutContent = findViewById(R.id.splash_content);
+        layoutIntroScreen = findViewById(R.id.splash_content);
 
         // Obtain the FirebaseAnalytics, Auth instances
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         // Splash screen timer
         final int SPLASH_TIME_OUT = 1000;
@@ -57,7 +55,6 @@ public class SplashActivity extends Activity {
              */
             public void run() {
                 Boolean isFirstRun = getSharedPreferences("userData", MODE_PRIVATE).getBoolean("IsFirstRun", true);
-                // String ifRegistered = getSharedPreferences("userData", MODE_PRIVATE).getString("CurrentUser", null);
 
                 // This method will be executed once the timer is over
                 if (isFirstRun) {

@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,7 +30,7 @@ import com.commonsware.cwac.camera.CameraView;
 import com.commonsware.cwac.camera.PictureTransaction;
 import com.commonsware.cwac.camera.SimpleCameraHost;
 import com.instify.android.R;
-import com.instify.android.utils.Config;
+import com.instify.android.utils.PreferenceManager;
 import com.instify.android.ux.adapters.PhotoFiltersAdapter;
 import com.instify.android.view.RevealBackgroundView;
 
@@ -106,7 +105,7 @@ public class TakePhotoActivity extends MainActivity implements RevealBackgroundV
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void updateStatusBarColor() {
-        if (Config.isAndroid5()) {
+        if (PreferenceManager.isAndroid5()) {
             getWindow().setStatusBarColor(0xff111111);
         }
     }

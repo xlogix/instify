@@ -26,7 +26,7 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.instify.android.R;
-import com.instify.android.helpers.MyApplication;
+import com.instify.android.app.MyApplication;
 import com.instify.android.ux.MainActivity;
 
 import org.json.JSONArray;

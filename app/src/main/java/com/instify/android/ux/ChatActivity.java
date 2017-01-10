@@ -48,6 +48,16 @@ import timber.log.Timber;
 
 public class ChatActivity extends AppCompatActivity {
 
+    private ChatActivity mInstance = null;
+    /**
+     * Return ChatActivity instance. Null if activity doesn't exist.
+     *
+     * @return activity instance.
+     */
+    private synchronized ChatActivity getInstance() {
+        return mInstance;
+    }
+
     /**
      * Another class to display the chat items in the UI
      */
