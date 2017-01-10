@@ -18,6 +18,12 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!-- By default, the tab created by TabLayout sets the textAllCaps property to be true, which prevents ImageSpans from being rendered.
+    You can override this behavior by changing the tabTextAppearance property. -->
+    <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+    </style>
+
     <style name="dialogNoTitle" parent="Theme.AppCompat.Light.Dialog">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

@@ -27,7 +27,7 @@
             app:tabIndicatorColor="@color/white"
             app:tabIndicatorHeight="6dp"
             app:tabMode="fixed"
-            app:tabTextColor="@color/blue_grey_800" />
+            app:tabTextAppearance="@style/MyCustomTextAppearance" />
 
     </android.support.design.widget.AppBarLayout>
 
