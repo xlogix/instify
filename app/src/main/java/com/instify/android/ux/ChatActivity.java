@@ -36,6 +36,9 @@ import com.instify.android.R;
 import com.instify.android.app.Config;
 import com.instify.android.models.ChatModelMessage;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 

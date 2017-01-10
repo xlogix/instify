@@ -1,5 +1,8 @@
 package com.instify.android.models;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import java.util.Calendar;
 
 /**
@@ -15,11 +18,10 @@ public class UserData {
     public UserData() {
     }
 
+    /**
+     * Constructor for a new user
+     */
     public UserData(String name, String regno, String section) {
-
-        /*
-        * Constructor for a new user
-        * */
 
         //TODO : Fetch the name field data
 
@@ -29,13 +31,14 @@ public class UserData {
         this.year = getYear();
         this.dept = getDept();
         this.cr = false;
+        // Subscribe to the topic that the user belongs to
+        subscibeToTopic();
     }
 
+    /**
+     * Constructor for updating all the info
+     */
     public UserData(String name, String regno, String section, String dept, String year) {
-
-        /*
-        * Constructor for updating all the info
-        * */
 
         this.name = name;
         this.regno = regno.toLowerCase();
@@ -43,18 +46,18 @@ public class UserData {
         this.year = getDigit(year.charAt(0));
         this.dept = dept.toLowerCase();
         this.cr = false;
-
     }
 
-    public String getRegno() {
-        return this.regno;
+    private int getYear() {
+        Calendar c = Calendar.getInstance();
+        int userYear = c.get(Calendar.YEAR) - (2000 + (getDigit(this.regno.charAt(2)) * 10 + getDigit(this.regno.charAt(3))));
+        if (c.get(Calendar.MONTH) + 1 >= 7) {
+            return userYear + 1;
+        }
+        return userYear;
     }
 
-    public String getSection() {
-        return this.section;
-    }
-
-    public String getDept() {
+    private String getDept() {
         switch (this.regno.charAt(8)) {
             case '1':
                 return "CIVIL";
@@ -71,13 +74,8 @@ public class UserData {
         }
     }
 
-    public int getYear() {
-        Calendar c = Calendar.getInstance();
-        int userYear = c.get(Calendar.YEAR) - (2000 + (getDigit(this.regno.charAt(2)) * 10 + getDigit(this.regno.charAt(3))));
-        if (c.get(Calendar.MONTH) + 1 >= 7) {
-            return userYear + 1;
-        }
-        return userYear;
+    private String getSection() {
+        return this.section;
     }
 
     private int getDigit(char c) {
@@ -105,5 +103,15 @@ public class UserData {
             default:
                 return -1;
         }
+    }
+
+    private void subscibeToTopic() {
+        // Get token
+        String token = FirebaseInstanceId.getInstance().getToken();
+        // Get the topic to subscribe to
+        String topic = getYear() + getDept() + getSection();
+        // [START subscribe_topics]
+        FirebaseMessaging.getInstance().subscribeToTopic(topic);
+        // [END subscribe_topics]
     }
 }

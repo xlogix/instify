@@ -33,6 +33,7 @@ public class UploadNews extends AppCompatActivity {
     DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
     FirebaseUser fUser;
     DatabaseReference campusNewsRef;
+
     private EditText newsTitle, newsDescription;
     private RadioGroup newsLevelRadio;
     private RadioButton univRadio, deptRadio, classRadio;
@@ -113,7 +114,6 @@ public class UploadNews extends AppCompatActivity {
         submitNews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 // TODO : Send the dept and class meta data also to the database
                 if (validateForm()) {
                     selectedLevel = newsLevelRadio.getCheckedRadioButtonId();
@@ -132,8 +132,6 @@ public class UploadNews extends AppCompatActivity {
                                     Toast.makeText(UploadNews.this, "News announced!", Toast.LENGTH_SHORT).show();
                                     newsTitle.setText("");
                                     newsDescription.setText("");
-
-
                                     finish();
                                 }
                             });

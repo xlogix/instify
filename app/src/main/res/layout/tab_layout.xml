@@ -15,7 +15,6 @@
             android:id="@+id/mToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:elevation="3dp"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -24,11 +23,11 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:tabIndicatorColor="@android:color/white"
+            app:tabBackground="?attr/selectableItemBackground"
+            app:tabIndicatorColor="@color/white"
             app:tabIndicatorHeight="6dp"
             app:tabMode="fixed"
-            app:tabSelectedTextColor="@android:color/white"
-            app:tabTextColor="@android:color/white" />
+            app:tabTextColor="@color/blue_grey_800" />
 
     </android.support.design.widget.AppBarLayout>
 

@@ -161,10 +161,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
                     // User is signed in
                     Timber.d("onAuthStateChanged:signed_in:" + user.getUid());
-                    Intent loginToMain = new Intent(RegistrationActivity.this, MainActivity.class);
-                    loginToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    loginToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(loginToMain);
+                    startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
+                    finish();
                 } else {
                     // User is signed out
                     Timber.d("onAuthStateChanged:signed_out");

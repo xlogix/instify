@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -24,6 +25,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -31,6 +33,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -114,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         super.onResume();
         // Ensures that user didn't un-install Google Play Services required for Firebase related tasks.
         checkPlayServices();
-
+        // Checks if the device is connected to the internet
         if (isDeviceOnline()) {
             Timber.d(TAG, "Device is online.");
         } else {
@@ -157,6 +162,10 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         headerView = navView.inflateHeaderView(R.layout.nav_header_main);
         setupHeaderView();
 
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -189,22 +198,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
             }
         });
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-            // Create a tab with text corresponding to the page title defined by
-            // the adapter. Also specify this Activity object, which implements
-            // the TabListener interface, as the callback (listener) for when
-            // this tab is selected.
-            getSupportActionBar().addTab(
-                    getSupportActionBar().newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
-                            .setIcon(R.drawable.about_icon_email));
-        }
 
         TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -577,15 +570,15 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case TAB_ATTENDANCE:
-                    return new AttendanceFragment();
+                    return AttendanceFragment.newInstance();
                 case TAB_CAMPUS_NEWS:
-                    return new CampNewsFragment();
+                    return CampNewsFragment.newInstance();
                 case TAB_TIME_TABLE:
-                    return new TimeTableFragment();
+                    return TimeTableFragment.newInstance();
                 case TAB_NOTES:
-                    return new NotesFragment();
+                    return NotesFragment.newInstance();
                 case TAB_UNIVERSITY_NEWS:
-                    return new UnivNewsFragment();
+                    return UnivNewsFragment.newInstance();
             }
             return PlaceholderFragment.newInstance(position + 1);
         }
@@ -595,23 +588,25 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             return NUM_TABS;
         }
 
+        private int[] imageResId = {
+                R.drawable.ic_videocam_white_24dp,
+                R.drawable.ic_videocam_white_24dp,
+                R.drawable.ic_videocam_white_24dp,
+                R.drawable.ic_videocam_white_24dp,
+                R.drawable.ic_videocam_white_24dp
+        };
+
         @Override
         public CharSequence getPageTitle(int position) {
 
-            switch (position) {
-                case 0:
-                    return "Attendance";
-                case 1:
-                    return "Campus Portal";
-                case 2:
-                    return "Time Table";
-                case 3:
-                    return "Notes";
-                case 4:
-                    return "University Portal";
-            }
-            return null;
+            Drawable image = ContextCompat.getDrawable(getApplication(), imageResId[position]);
+            image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
+            SpannableString sb = new SpannableString(" ");
+            ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
+            sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            return sb;
         }
+
     }
 
     // [START] EasyPermissions Default Functions
