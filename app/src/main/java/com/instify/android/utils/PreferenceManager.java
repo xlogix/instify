@@ -30,6 +30,8 @@ public class PreferenceManager {
     private static final String KEY_USER_NAME = "user_name";
     private static final String KEY_USER_EMAIL = "user_email";
     private static final String KEY_NOTIFICATIONS = "notifications";
+    private static final String IS_FIRST_RUN = "is_first_run";
+    private static final String IS_DARK_THEME = "is_dark_theme";
 
     // Constructor
     public PreferenceManager(Context context) {
@@ -40,14 +42,6 @@ public class PreferenceManager {
 
     public static PreferenceManager newInstance(Context context) {
         return new PreferenceManager(context);
-    }
-
-    public boolean getIsFirstRun() {
-        return mPrefs.getBoolean(ConstantsUtil.IS_FIRST_RUN, true);
-    }
-
-    public void setIsFirstRun(boolean firstRun) {
-        mPrefs.edit().putBoolean(ConstantsUtil.IS_FIRST_RUN, firstRun).apply();
     }
 
     public void addNotification(String notification) {
@@ -69,12 +63,20 @@ public class PreferenceManager {
         return mPrefs.getString(KEY_NOTIFICATIONS, null);
     }
 
+    public boolean getIsFirstRun() {
+        return mPrefs.getBoolean(IS_FIRST_RUN, true);
+    }
+
+    public void setIsFirstRun(boolean firstRun) {
+        editor.putBoolean(IS_FIRST_RUN, firstRun).apply();
+    }
+
     public boolean getIsDarkTheme() {
-        return mPrefs.getBoolean(ConstantsUtil.IS_DARK_THEME, false);
+        return mPrefs.getBoolean(IS_DARK_THEME, false);
     }
 
     public void setIsDarkTheme(boolean isDarkTheme) {
-        mPrefs.edit().putBoolean(ConstantsUtil.IS_DARK_THEME, isDarkTheme).apply();
+        editor.putBoolean(IS_DARK_THEME, isDarkTheme).apply();
     }
 
     public static boolean isAndroid5() {

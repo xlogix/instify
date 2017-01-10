@@ -1,4 +1,4 @@
-package com.instify.android.utils;
+package com.instify.android.app;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -9,7 +9,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import timber.log.Timber;
 
-class FirebaseUtil {
+class FirebaseDeclarations {
 
     // Prevents multiple references of objects in the app
 

@@ -17,7 +17,7 @@ import java.util.Map;
  * Created by Abhish3k on 1/8/2017.
  */
 
-public class ActivityFrameMetricsUtil implements Application.ActivityLifecycleCallbacks {
+public class ActivityFrameMetrics implements Application.ActivityLifecycleCallbacks {
     private static final float DEFAULT_WARNING_LEVEL_MS = 17.f;
     private static final float DEFAULT_ERROR_LEVEL_MS = 34.f;
 
@@ -63,7 +63,7 @@ public class ActivityFrameMetricsUtil implements Application.ActivityLifecycleCa
 
     private Map<String, Window.OnFrameMetricsAvailableListener> frameMetricsAvailableListenerMap = new HashMap<>();
 
-    private ActivityFrameMetricsUtil() {
+    private ActivityFrameMetrics() {
     }
 
     @TargetApi(Build.VERSION_CODES.N)
@@ -147,8 +147,8 @@ public class ActivityFrameMetricsUtil implements Application.ActivityLifecycleCa
             return this;
         }
 
-        public ActivityFrameMetricsUtil build() {
-            ActivityFrameMetricsUtil activityFrameMetrics = new ActivityFrameMetricsUtil();
+        public ActivityFrameMetrics build() {
+            ActivityFrameMetrics activityFrameMetrics = new ActivityFrameMetrics();
             activityFrameMetrics.warningLevelMs = this.warningLevelMs;
             activityFrameMetrics.errorLevelMs = this.errorLevelMs;
             activityFrameMetrics.showError = this.showErrors;

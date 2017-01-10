@@ -11,10 +11,11 @@ import android.text.TextUtils;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.auth.FirebaseAuth;
 import com.instify.android.BuildConfig;
-import com.instify.android.utils.ActivityFrameMetricsUtil;
+import com.instify.android.utils.ActivityFrameMetrics;
 import com.instify.android.utils.PreferenceManager;
-import com.instify.android.ux.SplashActivity;
+import com.instify.android.ux.IntroActivity;
 
 import timber.log.Timber;
 
@@ -25,11 +26,9 @@ public class MyApplication extends Application {
 
     private static MyApplication mInstance;
 
-    private PreferenceManager pref;
+    private PreferenceManager mPrefs;
 
-    public static synchronized MyApplication getInstance() {
-        return mInstance;
-    }
+    private FirebaseAuth mAuth;
 
     @Override
     public void onCreate() {
@@ -40,12 +39,16 @@ public class MyApplication extends Application {
             // Plant Tiber debug tree
             Timber.plant(new Timber.DebugTree());
             // Initialize Activity frame matrix for analytics
-            registerActivityLifecycleCallbacks(new ActivityFrameMetricsUtil.Builder().build());
+            registerActivityLifecycleCallbacks(new ActivityFrameMetrics.Builder().build());
         } else {
             // TODO example of implementation custom crash reporting solution -  Crashlytics.
             /*Fabric.with(this, new Crashlytics());
             Timber.plant(new CrashReportingTree());*/
         }
+    }
+
+    public static synchronized MyApplication getInstance() {
+        return mInstance;
     }
 
     public RequestQueue getRequestQueue() {
@@ -57,11 +60,11 @@ public class MyApplication extends Application {
     }
 
     public PreferenceManager getPrefManager() {
-        if (pref == null) {
-            pref = new PreferenceManager(this);
+        if (mPrefs == null) {
+            mPrefs = new PreferenceManager(this);
         }
 
-        return pref;
+        return mPrefs;
     }
 
     public <T> void addToRequestQueue(Request<T> req, String tag) {
@@ -80,9 +83,13 @@ public class MyApplication extends Application {
         }
     }
 
-    public void logout() {
-        pref.clear();
-        Intent intent = new Intent(this, SplashActivity.class);
+    public void logoutUser() {
+        mPrefs.clear();
+        // SignOut from Firebase
+        mAuth.signOut();
+        // Launch the intro activity
+        Intent intent = new Intent(this, IntroActivity.class);
+        // Closing all the Activities & Add new Flag to start new Activity
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }

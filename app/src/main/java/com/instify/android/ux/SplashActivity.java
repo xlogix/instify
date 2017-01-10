@@ -14,12 +14,13 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.instify.android.R;
+import com.instify.android.app.MyApplication;
 
 import timber.log.Timber;
 
 public class SplashActivity extends Activity {
-    public FirebaseAnalytics mFirebaseAnalytics;
 
+    public FirebaseAnalytics mFirebaseAnalytics;
     // Firebase instance variables
     private FirebaseUser mFirebaseUser;
 
@@ -40,10 +41,12 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         //layoutContent = findViewById(R.id.splash_content);
         layoutIntroScreen = findViewById(R.id.splash_content);
-
-        // Obtain the FirebaseAnalytics, Auth instances
+        // Obtain the FirebaseAnalytics
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        // Obtain the current logged in user
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        // Set the first run variable as true
+        MyApplication.getInstance().getPrefManager().setIsFirstRun(true);
 
         // Splash screen timer
         final int SPLASH_TIME_OUT = 1000;
@@ -54,13 +57,10 @@ public class SplashActivity extends Activity {
              * want to show case your app logo / company
              */
             public void run() {
-                Boolean isFirstRun = getSharedPreferences("userData", MODE_PRIVATE).getBoolean("IsFirstRun", true);
 
-                // This method will be executed once the timer is over
-                if (isFirstRun) {
+                if (MyApplication.getInstance().getPrefManager().getIsFirstRun()) {
                     Intent i = new Intent(SplashActivity.this, IntroActivity.class);
                     startActivity(i);
-                    getSharedPreferences("userData", MODE_PRIVATE).edit().putBoolean("IsFirstRun", false).apply();
                     finish();
                 } else if (mFirebaseUser == null) {
                     Intent i = new Intent(SplashActivity.this, LoginActivity.class);

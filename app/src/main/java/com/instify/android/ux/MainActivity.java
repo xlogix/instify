@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -32,9 +31,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.ImageSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -53,6 +49,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
+import com.instify.android.app.MyApplication;
 import com.instify.android.listeners.OnSingleClickListener;
 import com.instify.android.models.UserData;
 import com.instify.android.ux.fragments.AttendanceFragment;
@@ -160,10 +157,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         headerView = navView.inflateHeaderView(R.layout.nav_header_main);
         setupHeaderView();
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -196,6 +189,22 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
             }
         });
+
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        // For each of the sections in the app, add a tab to the action bar.
+        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+            // Create a tab with text corresponding to the page title defined by
+            // the adapter. Also specify this Activity object, which implements
+            // the TabListener interface, as the callback (listener) for when
+            // this tab is selected.
+            getSupportActionBar().addTab(
+                    getSupportActionBar().newTab()
+                            .setText(mSectionsPagerAdapter.getPageTitle(i))
+                            .setIcon(R.drawable.about_icon_email));
+        }
 
         TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -439,7 +448,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                         startActivity(new Intent(MainActivity.this, UserAccountActivity.class));
                         break;
                     case R.id.nav_logout:
-                        logoutUser();
+                        MyApplication.getInstance().logoutUser();
                         break;
                     case R.id.nav_settings:
                         startActivity(new Intent(MainActivity.this, SettingsActivity.class));
@@ -500,23 +509,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    //  Log Out User
-    private void logoutUser() {
-        // Clearing all data from Shared Preferences
-        getSharedPreferences("userData", MODE_PRIVATE).edit().clear().apply();
-        // SignOut from Firebase
-        mAuth.signOut();
-        // After logout redirect user to Intro Activity
-        Intent i = new Intent(this, IntroActivity.class);
-        // Closing all the Activities
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        // Add new Flag to start new Activity
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        // Staring Activity
-        startActivity(i);
-        finish();
     }
 
     public void intentGPACalculator(Context context, String packageName) {
@@ -585,15 +577,15 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case TAB_ATTENDANCE:
-                    return AttendanceFragment.newInstance();
+                    return new AttendanceFragment();
                 case TAB_CAMPUS_NEWS:
-                    return CampNewsFragment.newInstance();
+                    return new CampNewsFragment();
                 case TAB_TIME_TABLE:
-                    return TimeTableFragment.newInstance();
+                    return new TimeTableFragment();
                 case TAB_NOTES:
-                    return NotesFragment.newInstance();
+                    return new NotesFragment();
                 case TAB_UNIVERSITY_NEWS:
-                    return UnivNewsFragment.newInstance();
+                    return new UnivNewsFragment();
             }
             return PlaceholderFragment.newInstance(position + 1);
         }
@@ -606,48 +598,19 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         @Override
         public CharSequence getPageTitle(int position) {
 
-            SpannableStringBuilder sb = new SpannableStringBuilder(" ");
-
             switch (position) {
-                case 0: {
-                    Drawable drawable = getDrawable(R.drawable.ic_attendance);
-                    drawable.setBounds(0, 0, 36, 36);
-                    ImageSpan imageSpan = new ImageSpan(drawable);
-                    //to make our tabs icon only, set the Text as blank string with white space
-                    sb.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    ;
-                }
-                case 1: {
-                    Drawable drawable = getDrawable(R.drawable.ic_attendance);
-                    drawable.setBounds(0, 0, 36, 36);
-                    ImageSpan imageSpan = new ImageSpan(drawable);
-                    //to make our tabs icon only, set the Text as blank string with white space
-                    sb.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-                case 2: {
-                    Drawable drawable = getDrawable(R.drawable.ic_attendance);
-                    drawable.setBounds(0, 0, 36, 36);
-                    ImageSpan imageSpan = new ImageSpan(drawable);
-                    //to make our tabs icon only, set the Text as blank string with white space
-                    sb.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                }
-                case 3: {
-                    Drawable drawable = getDrawable(R.drawable.ic_attendance);
-                    drawable.setBounds(0, 0, 36, 36);
-                    ImageSpan imageSpan = new ImageSpan(drawable);
-                    //to make our tabs icon only, set the Text as blank string with white space
-                    sb.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-                case 4: {
-                    Drawable drawable = getDrawable(R.drawable.ic_attendance);
-                    drawable.setBounds(0, 0, 36, 36);
-                    ImageSpan imageSpan = new ImageSpan(drawable);
-                    //to make our tabs icon only, set the Text as blank string with white space
-                    sb.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
+                case 0:
+                    return "Attendance";
+                case 1:
+                    return "Campus Portal";
+                case 2:
+                    return "Time Table";
+                case 3:
+                    return "Notes";
+                case 4:
+                    return "University Portal";
             }
-            return sb;
+            return null;
         }
     }
 
