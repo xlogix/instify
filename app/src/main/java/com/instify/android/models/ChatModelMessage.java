@@ -1,5 +1,7 @@
 package com.instify.android.models;
 
+import java.util.Date;
+
 /**
  * Created by Abhish3k on 7/2/2016. // Using Firebase Database
  */
@@ -10,6 +12,7 @@ public class ChatModelMessage {
     private String text;
     private String email;
     private String photoUrl;
+    private long time;
 
     public ChatModelMessage() {
     }
@@ -18,6 +21,8 @@ public class ChatModelMessage {
         this.text = text;
         this.email = name;
         this.photoUrl = photoUrl;
+        // Initialize to current time
+        time = new Date().getTime();
     }
 
     public String getId() {
@@ -50,5 +55,13 @@ public class ChatModelMessage {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 }

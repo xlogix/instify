@@ -123,7 +123,7 @@ public class ImageCompression extends AsyncTask<String, Void, String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        FileOutputStream out = null;
+        FileOutputStream out;
         String filepath = getFilename();
         try {
             out = new FileOutputStream(filepath);
@@ -170,10 +170,7 @@ public class ImageCompression extends AsyncTask<String, Void, String> {
         }
 
         String mImageName = "IMG_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
-        String uriString = (mediaStorageDir.getAbsolutePath() + "/" + mImageName);
-        ;
-        return uriString;
-
+        return mediaStorageDir.getAbsolutePath() + "/" + mImageName;
     }
 
 }

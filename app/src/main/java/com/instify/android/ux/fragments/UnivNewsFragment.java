@@ -150,15 +150,13 @@ public class UnivNewsFragment extends Fragment {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Context context = v.getContext();
-                    Intent intent = null;
                     try {
-                        intent = new Intent(Intent.ACTION_VIEW,
-                                Uri.parse(newsArray.getJSONObject(position).getString("link")));
+                        v.getContext().startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse(newsArray.getJSONObject(position)
+                                        .getString("link"))));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    context.startActivity(intent);
                 }
             });
         }

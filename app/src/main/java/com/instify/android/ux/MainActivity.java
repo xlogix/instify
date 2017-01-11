@@ -141,11 +141,10 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mSharedFab = (FloatingActionButton) findViewById(R.id.shared_fab);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
+
+        mSharedFab = (FloatingActionButton) findViewById(R.id.shared_fab);
 
         // Drawer Layout
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -309,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 } else if (items[item].equals("Choose from Gallery")) {
                     galleryTask();
                 } else if (items[item].equals("Remove Picture")) {
-                    imageView.setImageResource(R.drawable.default_pic);
+                    imageView.setImageResource(R.drawable.default_pic_face);
                     getSharedPreferences("userData", MODE_PRIVATE).edit().putString("PicPath", null).apply();
                 } else if (items[item].equals("Cancel")) {
                     dialog.dismiss();

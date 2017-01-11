@@ -36,9 +36,6 @@ import com.instify.android.R;
 import com.instify.android.app.Config;
 import com.instify.android.models.ChatModelMessage;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,6 +99,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_chat);
 
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -223,7 +221,8 @@ public class ChatActivity extends AppCompatActivity {
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChatModelMessage friendlyMessage = new ChatModelMessage(mMessageEditText.getText().toString(), mUsername,
+                ChatModelMessage friendlyMessage = new ChatModelMessage(mMessageEditText.getText().toString(),
+                        mUsername,
                         mPhotoUrl);
                 mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(friendlyMessage);
                 mMessageEditText.setText("");
