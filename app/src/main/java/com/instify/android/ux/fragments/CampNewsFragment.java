@@ -1,6 +1,5 @@
 package com.instify.android.ux.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,7 +28,7 @@ public class CampNewsFragment extends Fragment {
 
     RecyclerView recyclerView;
     // Firebase declarations
-    DatabaseReference dbRef, campusRef;
+    DatabaseReference campusRef;
     FirebaseRecyclerAdapter<CampusNewsData, CampusViewHolder> fAdapter;
 
     public CampNewsFragment() {
@@ -60,8 +59,7 @@ public class CampNewsFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // Firebase database setup //
-        dbRef = FirebaseDatabase.getInstance().getReference();
-        campusRef = dbRef.child("CampusNews");
+        campusRef = FirebaseDatabase.getInstance().getReference().child("campusNews");
         fAdapter = new FirebaseRecyclerAdapter<CampusNewsData, CampusViewHolder>(
                 CampusNewsData.class,
                 R.layout.card_view_campus,

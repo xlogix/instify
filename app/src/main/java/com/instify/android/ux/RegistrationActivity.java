@@ -1,12 +1,24 @@
 package com.instify.android.ux;
 
+import android.annotation.TargetApi;
+import android.app.LoaderManager;
 import android.app.ProgressDialog;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,60 +37,47 @@ import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
 import com.instify.android.models.UserData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import timber.log.Timber;
+
+import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * Created by Abhish3k on 12/16/2016.  // Redid Auth using Realtime Database on 12/22/2016
  */
 
-public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
+
+    /**
+     * Id to identity READ_CONTACTS permission request.
+     */
+    private static final int REQUEST_READ_CONTACTS = 0;
 
     public ProgressDialog mProgressDialog;
     // [END declare_database]
     UserData userInfoObj;
     private DatabaseReference mFirebaseDatabase;
-    // [START declare_auth]
+    // [declare_auth]
     private FirebaseAuth mAuth;
-    // [END declare_auth]
-    // [START declare_auth_listener]
+    // [declare_auth_listener]
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-    // [END declare_auth_listener]
+
     private String userId;
     private TextView txtDetails;
-    private EditText mNameField, mEmailField, mPasswordField, mRegNoField, mSectionField;
+    private AutoCompleteTextView mEmailField;
+    private EditText mNameField, mPasswordField, mRegNoField;
     private Button btnRegister;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
-
-        // Views
-        mNameField = (EditText) findViewById(R.id.field_name);
-        mRegNoField = (EditText) findViewById(R.id.field_regNO);
-        mEmailField = (EditText) findViewById(R.id.field_email);
-        mPasswordField = (EditText) findViewById(R.id.field_password);
-        btnRegister = (Button) findViewById(R.id.btn_register);
-
-        // Buttons
-        findViewById(R.id.btn_register).setOnClickListener(this);
-
-        // [START initialize_auth]
-        mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
-    }
-
-    @Override
-    public void onClick(View v) {
-        registerUser(mEmailField.getText().toString(), mPasswordField.getText().toString(), mNameField.getText().toString(),
-                mRegNoField.getText().toString(), "B");
-    }
 
     // [START on_start_add_listener]
     @Override
     public void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthStateListener);
+        if (mAuthStateListener != null) {
+            mAuth.addAuthStateListener(mAuthStateListener);
+        }
     }
     // [END on_start_add_listener]
 
@@ -99,6 +98,42 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         mAuth.removeAuthStateListener(mAuthStateListener);
     }
     // [END on_stop_remove_listener]
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
+
+        // Views
+        mNameField = (EditText) findViewById(R.id.field_name);
+        mRegNoField = (EditText) findViewById(R.id.field_regNO);
+        mEmailField = (AutoCompleteTextView) findViewById(R.id.field_email);
+        populateAutoComplete();
+        mPasswordField = (EditText) findViewById(R.id.field_password);
+        btnRegister = (Button) findViewById(R.id.btn_register);
+
+        // Buttons
+        findViewById(R.id.btn_register).setOnClickListener(this);
+
+        // [START initialize_auth]
+        mAuth = FirebaseAuth.getInstance();
+        // [END initialize_auth]
+    }
+
+    private void populateAutoComplete() {
+        if (!mayRequestContacts()) {
+            return;
+        }
+
+        getLoaderManager().initLoader(0, null, this);
+    }
+
+    // Button Click Action
+    @Override
+    public void onClick(View v) {
+        registerUser(mEmailField.getText().toString(), mPasswordField.getText().toString(), mNameField.getText().toString(),
+                mRegNoField.getText().toString(), "B");
+    }
 
     void registerUser(String emailText, String passwordText, final String name, String regNo, String section) {
 
@@ -198,6 +233,43 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         return valid;
     }
 
+    // [START] Request contacts from user
+    private boolean mayRequestContacts() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
+            Snackbar.make(mEmailField, R.string.contacts_permission_rationale, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
+                        @TargetApi(Build.VERSION_CODES.M)
+                        public void onClick(View v) {
+                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+                        }
+                    });
+        } else {
+            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+        }
+        return false;
+    }
+
+    /**
+     * Callback received when a permissions request has been completed.
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_READ_CONTACTS) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                populateAutoComplete();
+            }
+        }
+    }
+    // [END] Request contact information
+
     public void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
@@ -224,4 +296,60 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                     }
                 });
     }
+
+    /* [START] Functions required for AutoComplete E-mail TextView */
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        return new CursorLoader(this,
+                // Retrieve data rows for the device user's 'profile' contact.
+                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
+                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
+
+                // Select only email addresses.
+                ContactsContract.Contacts.Data.MIMETYPE +
+                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
+                .CONTENT_ITEM_TYPE},
+
+                // Show primary email addresses first. Note that there won't be
+                // a primary email address if the user hasn't specified one.
+                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        List<String> emails = new ArrayList<>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            emails.add(cursor.getString(ProfileQuery.ADDRESS));
+            cursor.moveToNext();
+        }
+
+        addEmailsToAutoComplete(emails);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+
+    }
+
+    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<>(RegistrationActivity.this,
+                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+
+        mEmailField.setAdapter(adapter);
+    }
+
+
+    private interface ProfileQuery {
+        String[] PROJECTION = {
+                ContactsContract.CommonDataKinds.Email.ADDRESS,
+                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+        };
+
+        int ADDRESS = 0;
+        int IS_PRIMARY = 1;
+    }
+    /* [STOP] Functions required for AutoComplete E-mail field */
 }

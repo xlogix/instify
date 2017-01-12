@@ -4,14 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:padding="@dimen/activity_vertical_margin"
     tools:context=".ux.LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp">
+        android:orientation="vertical">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -49,17 +48,50 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:text="@string/action_sign_in"
             android:textSize="16sp" />
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/action_to_register"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="Or, Sign up or log in with"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/button_google_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/action_sign_up"
-            android:textSize="16sp" />
+            android:visibility="visible" />
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/button_facebook_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:paddingBottom="14dp"
+            android:paddingTop="14dp"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <!-- this expands to fill the empty space if needed -->
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/action_to_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:onClick="onClick"
+            android:text="Or, use your email to sign up &#10230;"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
     </LinearLayout>
 </ScrollView>

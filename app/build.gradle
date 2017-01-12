@@ -47,12 +47,19 @@ android {
     return void
 }
 
+configurations.all {
+    resolutionStrategy.force 'com.android.support:support-annotations:25.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
     /* Firebase [START] */
     compile 'com.google.firebase:firebase-auth:10.0.1'
     compile 'com.google.firebase:firebase-appindexing:10.0.1'
@@ -67,6 +74,11 @@ dependencies {
     // Firebase UI
     compile 'com.firebaseui:firebase-ui-database:1.0.1'
     /* Firebase [END] */
+
+    // Google Sign In SDK (only required for Google Sign In)
+    compile 'com.google.android.gms:play-services-auth:10.0.1'
+    // Facebook Android SDK (only required for Facebook Login)
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
 
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'
@@ -86,7 +98,6 @@ dependencies {
     compile 'com.github.paolorotolo:appintro:4.1.0'
     compile 'com.github.medyo:android-about-page:1.1.1'
     compile 'com.commonsware.cwac:camera:0.7.0'
-
     compile 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 

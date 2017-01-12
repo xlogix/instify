@@ -1,9 +1,8 @@
 package com.instify.android.ux;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,7 +38,7 @@ public class UserAccountActivity extends AppCompatActivity {
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        dbRef =  FirebaseDatabase.getInstance().getReference();
+        dbRef = FirebaseDatabase.getInstance().getReference();
         userRef = dbRef.child("users").child(currentUser.getUid());
 
         name = (EditText) findViewById(R.id.profile_name_et);
@@ -113,7 +112,7 @@ public class UserAccountActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 UserData data = dataSnapshot.getValue(UserData.class);
                 name.setText(data.name);
-                regno.setText(data.regno);
+                regno.setText(data.regNo);
                 sec.setText(data.section);
                 dept.setText(data.dept);
                 year.setText(data.year + "");

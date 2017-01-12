@@ -28,8 +28,6 @@ public class MyApplication extends Application {
 
     private PreferenceManager mPrefs;
 
-    private FirebaseAuth mAuth;
-
     public static synchronized MyApplication getInstance() {
         return mInstance;
     }
@@ -86,7 +84,7 @@ public class MyApplication extends Application {
     public void logoutUser() {
         mPrefs.clear();
         // SignOut from Firebase
-        mAuth.signOut();
+        FirebaseAuth.getInstance().signOut();
         // Launch the intro activity
         Intent intent = new Intent(this, IntroActivity.class);
         // Closing all the Activities & Add new Flag to start new Activity

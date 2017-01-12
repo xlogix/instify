@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/field_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

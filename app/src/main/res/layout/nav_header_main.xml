@@ -17,6 +17,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_user_photo"
+            android:paddingTop="4dp"
             android:layout_width="@dimen/profile_user_photo_size"
             android:layout_height="@dimen/profile_user_photo_size"
             android:src="@drawable/default_pic_face"/>
@@ -25,9 +26,9 @@
             android:id="@+id/navigation_drawer_list_header_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="12dp"
+            android:paddingTop="4dp"
             android:text="@string/header_unknown_user"
-            android:textColor="@color/textIconColorPrimary"
+            android:textColor="@color/colorPrimary"
             android:textSize="16sp" />
     </LinearLayout>
 </RelativeLayout>

@@ -11,7 +11,7 @@ import java.util.Calendar;
 
 public class UserData {
 
-    public String name, regno, section, dept;
+    public String name, regNo, section, dept;
     public int year;
     public boolean cr;
 
@@ -21,27 +21,25 @@ public class UserData {
     /**
      * Constructor for a new user
      */
-    public UserData(String name, String regno, String section) {
+    public UserData(String name, String regNo, String section) {
 
         //TODO : Fetch the name field data
-
         this.name = name;
-        this.regno = regno.toLowerCase();
+        this.regNo = regNo.toLowerCase();
         this.section = section.toLowerCase();
         this.year = getYear();
         this.dept = getDept();
         this.cr = false;
         // Subscribe to the topic that the user belongs to
-        subscibeToTopic();
+        subscribeToTopic();
     }
 
     /**
      * Constructor for updating all the info
      */
-    public UserData(String name, String regno, String section, String dept, String year) {
-
+    public UserData(String name, String regNo, String section, String dept, String year) {
         this.name = name;
-        this.regno = regno.toLowerCase();
+        this.regNo = regNo.toLowerCase();
         this.section = section.toLowerCase();
         this.year = getDigit(year.charAt(0));
         this.dept = dept.toLowerCase();
@@ -50,7 +48,7 @@ public class UserData {
 
     private int getYear() {
         Calendar c = Calendar.getInstance();
-        int userYear = c.get(Calendar.YEAR) - (2000 + (getDigit(this.regno.charAt(2)) * 10 + getDigit(this.regno.charAt(3))));
+        int userYear = c.get(Calendar.YEAR) - (2000 + (getDigit(this.regNo.charAt(2)) * 10 + getDigit(this.regNo.charAt(3))));
         if (c.get(Calendar.MONTH) + 1 >= 7) {
             return userYear + 1;
         }
@@ -58,7 +56,7 @@ public class UserData {
     }
 
     private String getDept() {
-        switch (this.regno.charAt(8)) {
+        switch (this.regNo.charAt(8)) {
             case '1':
                 return "CIVIL";
             case '2':
@@ -105,7 +103,7 @@ public class UserData {
         }
     }
 
-    private void subscibeToTopic() {
+    private void subscribeToTopic() {
         // Get token
         String token = FirebaseInstanceId.getInstance().getToken();
         // Get the topic to subscribe to
