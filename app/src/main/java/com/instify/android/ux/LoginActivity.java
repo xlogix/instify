@@ -325,8 +325,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             attemptLogin(mEmailField.getText().toString(), mPasswordField.getText().toString());
         } else if (i == R.id.button_google_login) {
             signInWithGoogle();
-        } else if (i == R.id.button_facebook_login) {
-
         } else if (i == R.id.action_to_register) {
             startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
             finish();

@@ -82,7 +82,7 @@ public class UploadNews extends AppCompatActivity {
         // Firebase objects //
         fUser = FirebaseAuth.getInstance().getCurrentUser();
         currentUser = getIntent().getStringExtra("username");
-        campusNewsRef = dbRef.child("CampusNews");
+        campusNewsRef = dbRef.child("campusNews");
 
         newsLevelRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

@@ -108,7 +108,7 @@
             android:name=".ux.ChatActivity" />
 
         <activity
-            android:name=".ux.UserAccountActivity"
+            android:name=".ux.AccountActivity"
             android:label="@string/app_name" />
 
         <activity

@@ -437,7 +437,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                         mViewPager.setCurrentItem(4);
                         break;
                     case R.id.nav_profile:
-                        startActivity(new Intent(MainActivity.this, UserAccountActivity.class));
+                        startActivity(new Intent(MainActivity.this, AccountActivity.class));
                         break;
                     case R.id.nav_logout:
                         MyApplication.getInstance().logoutUser();

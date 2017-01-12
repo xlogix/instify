@@ -24,7 +24,7 @@ import com.instify.android.models.UserData;
 
 import timber.log.Timber;
 
-public class UserAccountActivity extends AppCompatActivity {
+public class AccountActivity extends AppCompatActivity {
 
     DatabaseReference dbRef, userRef;
     FirebaseUser currentUser;
@@ -93,13 +93,13 @@ public class UserAccountActivity extends AppCompatActivity {
                 userRef.setValue(newData).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(UserAccountActivity.this, "Profile updated successfully",
+                        Toast.makeText(AccountActivity.this, "Profile updated successfully",
                                 Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(UserAccountActivity.this, "Update failed : " + e.getMessage(),
+                        Toast.makeText(AccountActivity.this, "Update failed : " + e.getMessage(),
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
