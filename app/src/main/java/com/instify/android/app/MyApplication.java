@@ -13,8 +13,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.instify.android.BuildConfig;
+import com.instify.android.helpers.PreferenceManager;
 import com.instify.android.utils.ActivityFrameMetrics;
-import com.instify.android.utils.PreferenceManager;
 import com.instify.android.ux.IntroActivity;
 
 import timber.log.Timber;

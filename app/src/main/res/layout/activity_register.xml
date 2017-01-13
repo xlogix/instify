@@ -36,8 +36,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
+                android:imeOptions="actionSearch"
                 android:inputType="textEmailAddress"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textColor="@color/colorPrimary" />
 
         </android.support.design.widget.TextInputLayout>
 

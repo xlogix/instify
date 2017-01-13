@@ -1,4 +1,4 @@
-package com.instify.android.utils;
+package com.instify.android.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -32,6 +32,7 @@ public class PreferenceManager {
     private static final String KEY_NOTIFICATIONS = "notifications";
     private static final String IS_FIRST_RUN = "is_first_run";
     private static final String IS_DARK_THEME = "is_dark_theme";
+    private static final String IS_SIGNED_IN_FROM_GOOGLE_OR_FACEBOOK = "is_signed_in_from_google_or_facebook";
 
     // Constructor
     public PreferenceManager(Context context) {
@@ -69,6 +70,14 @@ public class PreferenceManager {
 
     public void setIsFirstRun(boolean firstRun) {
         editor.putBoolean(IS_FIRST_RUN, firstRun).apply();
+    }
+
+    public boolean getSignedInFromGoogleOrFacebook() {
+        return mPrefs.getBoolean(IS_SIGNED_IN_FROM_GOOGLE_OR_FACEBOOK, false);
+    }
+
+    public void setIsSignedInFromGoogleOrFacebook(boolean signedIn) {
+        editor.putBoolean(IS_SIGNED_IN_FROM_GOOGLE_OR_FACEBOOK, true);
     }
 
     public boolean getIsDarkTheme() {

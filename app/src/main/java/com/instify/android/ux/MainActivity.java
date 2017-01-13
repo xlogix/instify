@@ -42,6 +42,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -93,7 +94,8 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     public FloatingActionButton mSharedFab;
     private DrawerLayout drawerLayout;
     private ViewPager mViewPager;
-    private ImageView imageView;
+    private ImageView navImageView;
+    private TextView navTextView;
     private Uri mCaptureUri = null;
 
     private FirebaseAuth mAuth;
@@ -242,13 +244,22 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     }
 
     public void setupHeaderView() {
-        imageView = (ImageView) headerView.findViewById(R.id.profile_user_photo);
-        imageView.setOnClickListener(new OnSingleClickListener() {
+        // Views
+        navImageView = (ImageView) headerView.findViewById(R.id.nav_drawer_user_photo);
+        navTextView = (TextView) headerView.findViewById(R.id.nav_drawer_header_text);
+
+        // Click listeners
+        navImageView.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View view) {
                 promptProfileChanger();
             }
         });
+
+        // Set User Email
+        if (mFirebaseUser != null) {
+            navTextView.setText(mFirebaseUser.getEmail());
+        }
 
         /*UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(mFirebaseUser.getEmail())
@@ -308,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 } else if (items[item].equals("Choose from Gallery")) {
                     galleryTask();
                 } else if (items[item].equals("Remove Picture")) {
-                    imageView.setImageResource(R.drawable.default_pic_face);
+                    navImageView.setImageResource(R.drawable.default_pic_face);
                     getSharedPreferences("userData", MODE_PRIVATE).edit().putString("PicPath", null).apply();
                 } else if (items[item].equals("Cancel")) {
                     dialog.dismiss();
@@ -370,12 +381,12 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Bitmap Image;
-        if (requestCode == RC_TAKE_PICTURE && resultCode != 0) {
+        if (requestCode == RC_TAKE_PICTURE) {
             try {
                 Uri captured_image = mCaptureUri;
                 Image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), captured_image);
                 Bitmap image = Image;
-                imageView.setImageBitmap(Image);
+                navImageView.setImageBitmap(Image);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 image.compress(Bitmap.CompressFormat.PNG, 20, baos);
 
@@ -388,14 +399,14 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 Log.w(TAG, "File URI is null");
                 Toast.makeText(this, "Taking picture failed.", Toast.LENGTH_SHORT).show();
             }
-        } else if (requestCode == GALLERY && resultCode != 0) {
+        } else if (requestCode == GALLERY) {
             Uri mImageUri = data.getData();
             try {
                 Image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 Image.compress(Bitmap.CompressFormat.PNG, 20, baos);
 
-                imageView.setImageBitmap(Image);
+                navImageView.setImageBitmap(Image);
 
                 // Encoding image to string
                 byte[] b = baos.toByteArray();

@@ -1,5 +1,6 @@
 package com.instify.android.ux;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,13 @@ import mehdi.sakout.aboutpage.Element;
  */
 
 public class AboutActivity extends AppCompatActivity {
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(AboutActivity.this, MainActivity.class));
+        finish();
+        super.onBackPressed();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

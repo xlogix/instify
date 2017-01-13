@@ -1,18 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_refresh_layout_attendance"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <!--<LinearLayout
+        android:id="@+id/layout_attendance_ask_password"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_vertical_margin"
+        android:visibility="invisible">
 
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/barChart"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true" />
+            android:text="It looks like you haven't entered your ERP password. Enter your password in Account Settings page to fetch the attendance."
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
 
-    </ScrollView>
-</android.support.design.widget.CoordinatorLayout>
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@color/white"
+            android:elevation="4dp"
+            android:text="Account Settings"
+            android:textColor="@color/colorPrimary" />
+    </LinearLayout>-->
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barChart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="fill"
+        android:fitsSystemWindows="true"
+        android:padding="@dimen/activity_vertical_margin"
+        android:visibility="visible"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+</android.support.v4.widget.SwipeRefreshLayout>
 

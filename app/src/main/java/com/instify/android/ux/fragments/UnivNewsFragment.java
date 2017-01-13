@@ -34,12 +34,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class UnivNewsFragment extends Fragment {
-    private static final String endpoint_final = "http://arjun-apis.herokuapp.com/srm-news-api/";
-    private String TAG = UnivNewsFragment.class.getSimpleName();
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private SimpleStringRecyclerViewAdapter mAdapter;
-    private RecyclerView recyclerView;
-    private JsonObjectRequest req;
 
     public UnivNewsFragment() {
     }
@@ -57,29 +51,35 @@ public class UnivNewsFragment extends Fragment {
         ((MainActivity) getActivity()).mSharedFab = null; // To avoid keeping/leaking the reference of the FAB
     }
 
+    private static final String endpoint = "http://arjun-apis.herokuapp.com/srm-news-api/";
+    private String TAG = UnivNewsFragment.class.getSimpleName();
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private SimpleStringRecyclerViewAdapter mAdapter;
+    private RecyclerView recyclerView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_university_news, container, false);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_university);
-        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setColorSchemeResources(R.color.red500, R.color.black, R.color.google_blue_900);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.red500, R.color.black, R.color.google_blue_900);
 
         // Setting up recycle view
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // Make it look like something is happening
-        swipeRefreshLayout.setRefreshing(true);
+        showRefreshing();
 
         // Make the request!
         makeJSONRequest();
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
+                showRefreshing();
                 makeJSONRequest();
             }
         });
@@ -87,7 +87,7 @@ public class UnivNewsFragment extends Fragment {
     }
 
     public void makeJSONRequest() {
-        req = new JsonObjectRequest(endpoint_final, null,
+        JsonObjectRequest req = new JsonObjectRequest(endpoint, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -96,7 +96,7 @@ public class UnivNewsFragment extends Fragment {
                             JSONArray newsItems = response.getJSONArray("newsItems");
                             mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), newsItems);
                             // UI
-                            swipeRefreshLayout.setRefreshing(false);
+                            hideRefreshing();
                             // Setting the adapter
                             recyclerView.setAdapter(mAdapter);
                         } catch (JSONException e) {
@@ -110,6 +110,7 @@ public class UnivNewsFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Error: " + error.getMessage());
                 Toast.makeText(getContext(), "Error Receiving News", Toast.LENGTH_LONG).show();
+                hideRefreshing();
             }
         });
 
@@ -120,6 +121,16 @@ public class UnivNewsFragment extends Fragment {
 
         // Adding request to request queue             Important : (Roll Back)
         //MyApplication.getInstance().addToRequestQueue(req);
+    }
+
+    private void showRefreshing() {
+        if (!mSwipeRefreshLayout.isRefreshing())
+            mSwipeRefreshLayout.setRefreshing(true);
+    }
+
+    private void hideRefreshing() {
+        if (mSwipeRefreshLayout.isRefreshing())
+            mSwipeRefreshLayout.setRefreshing(false);
     }
 
     public static class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {

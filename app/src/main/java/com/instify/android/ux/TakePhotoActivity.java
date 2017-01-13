@@ -30,7 +30,7 @@ import com.commonsware.cwac.camera.CameraView;
 import com.commonsware.cwac.camera.PictureTransaction;
 import com.commonsware.cwac.camera.SimpleCameraHost;
 import com.instify.android.R;
-import com.instify.android.utils.PreferenceManager;
+import com.instify.android.helpers.PreferenceManager;
 import com.instify.android.ux.adapters.PhotoFiltersAdapter;
 import com.instify.android.view.RevealBackgroundView;
 

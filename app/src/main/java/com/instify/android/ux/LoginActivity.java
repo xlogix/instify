@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -34,6 +33,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.instify.android.R;
+import com.instify.android.app.MyApplication;
 
 import timber.log.Timber;
 
@@ -48,17 +48,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     /**
      * Id to identity GOOGLE_SIGN_IN request
      */
-    private static final int RC_FACEBOOK_SIGN_IN = 9001;
-    private static final int RC_GOOGLE_SIGN_IN = 9002;
+    private static final int RC_GOOGLE_SIGN_IN = 9001;
+    /**
+     * Id to identity FACEBOOK_SIGN_IN request
+     */
+    private static final int RC_FACEBOOK_SIGN_IN = 9002;
 
-    @VisibleForTesting
     public ProgressDialog mProgressDialog;
     private AutoCompleteTextView mEmailField;
     private EditText mPasswordField;
     // [declare_auth]
-    private FirebaseAuth mAuth;
+    public FirebaseAuth mAuth;
     // [declare_auth_listener]
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    public FirebaseAuth.AuthStateListener mAuthStateListener;
     // [declare Google API client]
     private GoogleApiClient mGoogleApiClient;
     // [declare Facebook API callback manager]
@@ -68,9 +70,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onStart() {
         super.onStart();
-        if (mAuthStateListener != null) {
-            mAuth.addAuthStateListener(mAuthStateListener);
-        }
+        mAuth.addAuthStateListener(mAuthStateListener);
     }
     // [END on_start_add_listener]
 
@@ -88,7 +88,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onPause() {
         super.onPause();
-        mAuth.removeAuthStateListener(mAuthStateListener);
+        if (mAuthStateListener != null) {
+            mAuth.removeAuthStateListener(mAuthStateListener);
+        }
     }
     // [END on_stop_remove_listener]
 
@@ -156,11 +158,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
+                if (user != null && MyApplication.getInstance().getPrefManager().getSignedInFromGoogleOrFacebook()) {
+                    // User is signed in & logged in from Facebook or Google
+                    Timber.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Toast.makeText(LoginActivity.this, "This app requires more information to work correctly",
+                            Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(LoginActivity.this, AccountActivity.class));
+                    finish();
+                } else if (user != null) {
                     // User is signed in
                     Timber.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    Intent loginToMain = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(loginToMain);
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
                 } else {
                     // User is signed out
@@ -200,7 +208,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // [START signin]
     private void signInWithGoogle() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_FACEBOOK_SIGN_IN);
+        startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
     }
     // [END signin]
 
@@ -217,6 +225,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Timber.d("signInWithCredential:onComplete:" + task.isSuccessful());
+                        /**
+                         * Set the boolean true to direct the user to Account Activity
+                         */
+                        MyApplication.getInstance().getPrefManager().setIsSignedInFromGoogleOrFacebook(true);
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
@@ -247,6 +259,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Timber.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
+                        /**
+                         * Set the boolean true to direct the user to Account Activity
+                         */
+                        MyApplication.getInstance().getPrefManager().setIsSignedInFromGoogleOrFacebook(true);
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
@@ -327,7 +343,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             signInWithGoogle();
         } else if (i == R.id.action_to_register) {
             startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
-            finish();
         }
     }
 

@@ -16,14 +16,14 @@
         android:orientation="vertical">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profile_user_photo"
+            android:id="@+id/nav_drawer_user_photo"
             android:paddingTop="4dp"
             android:layout_width="@dimen/profile_user_photo_size"
             android:layout_height="@dimen/profile_user_photo_size"
             android:src="@drawable/default_pic_face"/>
 
         <TextView
-            android:id="@+id/navigation_drawer_list_header_text"
+            android:id="@+id/nav_drawer_header_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="4dp"
