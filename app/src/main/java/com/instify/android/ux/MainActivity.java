@@ -45,6 +45,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
@@ -258,6 +259,11 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
         // Set User Email
         if (mFirebaseUser != null) {
+            // Set profile picture from Firebase account
+            Glide.with(this)
+                    .load(mCaptureUri)
+                    .into(navImageView);
+            // Set email from Firebase account
             navTextView.setText(mFirebaseUser.getEmail());
         }
 

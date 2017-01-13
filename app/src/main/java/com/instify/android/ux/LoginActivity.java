@@ -159,17 +159,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null && MyApplication.getInstance().getPrefManager().getSignedInFromGoogleOrFacebook()) {
-                    // User is signed in & logged in from Facebook or Google
+                    // User is signed in & did it from Facebook or Google
                     Timber.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    Toast.makeText(LoginActivity.this, "This app requires more information to work correctly",
+                    /*Toast.makeText(LoginActivity.this, "This app requires more information to work correctly",
                             Toast.LENGTH_LONG).show();
                     startActivity(new Intent(LoginActivity.this, AccountActivity.class));
-                    finish();
+                    finish();*/
                 } else if (user != null) {
                     // User is signed in
                     Timber.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    finish();
+                    /*startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();*/
                 } else {
                     // User is signed out
                     Timber.d(TAG, "onAuthStateChanged:signed_out");
@@ -177,6 +177,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         };
         // [END auth_state_listener]
+    }
+
+    public void intentLoginToAccount() {
+        Toast.makeText(LoginActivity.this, "This app requires more information to work correctly",
+                Toast.LENGTH_LONG).show();
+        startActivity(new Intent(LoginActivity.this, AccountActivity.class));
+        finish();
+    }
+
+    public void intentLoginToMain() {
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        finish();
     }
 
     // [START on_activity_result]
@@ -229,6 +241,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                          * Set the boolean true to direct the user to Account Activity
                          */
                         MyApplication.getInstance().getPrefManager().setIsSignedInFromGoogleOrFacebook(true);
+                        // Take the user to account activity
+                        intentLoginToAccount();
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
@@ -263,6 +277,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                          * Set the boolean true to direct the user to Account Activity
                          */
                         MyApplication.getInstance().getPrefManager().setIsSignedInFromGoogleOrFacebook(true);
+                        // Take the user to account activity
+                        intentLoginToAccount();
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
@@ -297,6 +313,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Timber.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
                         Toast.makeText(LoginActivity.this, R.string.auth_success,
                                 Toast.LENGTH_SHORT).show();
+                        // Take the user to main activity
+                        intentLoginToMain();
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
