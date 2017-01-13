@@ -66,7 +66,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     private String userId;
-    private TextView txtDetails;
     private AutoCompleteTextView mEmailField;
     private EditText mNameField, mPasswordField, mRegNoField;
     private Button btnRegister;
