@@ -259,12 +259,19 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
         // Set User Email
         if (mFirebaseUser != null) {
-            // Set profile picture from Firebase account
-            Glide.with(this)
-                    .load(mCaptureUri)
-                    .into(navImageView);
-            // Set email from Firebase account
-            navTextView.setText(mFirebaseUser.getEmail());
+            try {
+                // Set profile picture from Firebase account
+                Glide.with(this)
+                        .load(mCaptureUri)
+                        .crossFade()
+                        .centerCrop()
+                        .into(navImageView);
+                // Set email from Firebase account
+                navTextView.setText(mFirebaseUser.getEmail());
+
+            } catch (Exception e) {
+                Timber.d(e);
+            }
         }
 
         /*UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()

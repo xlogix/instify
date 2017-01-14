@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 
+import com.instify.android.utils.Theme;
+
 /**
  * Created by Abhish3k on 1/10/2017.
  */
@@ -58,6 +60,14 @@ public class PreferenceManager {
 
         editor.putString(KEY_NOTIFICATIONS, oldNotifications);
         editor.commit();
+    }
+
+    public Theme getCurrentTheme(Context context) {
+        return Theme.valueOf(mPrefs.getString("app_theme", Theme.Blue.name()));
+    }
+
+    public void setCurrentTheme(Theme currentTheme) {
+        editor.putString("app_theme", currentTheme.name());
     }
 
     public String getNotifications() {

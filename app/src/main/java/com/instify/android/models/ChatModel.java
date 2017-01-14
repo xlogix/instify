@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by Abhish3k on 7/2/2016. // Using Firebase Database
  */
 
-public class ChatModelMessage {
+public class ChatModel {
 
     private String id;
     private String text;
@@ -14,10 +14,10 @@ public class ChatModelMessage {
     private String photoUrl;
     private long time;
 
-    public ChatModelMessage() {
+    public ChatModel() {
     }
 
-    public ChatModelMessage(String text, String name, String photoUrl) {
+    public ChatModel(String text, String name, String photoUrl) {
         this.text = text;
         this.email = name;
         this.photoUrl = photoUrl;

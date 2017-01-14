@@ -34,7 +34,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.instify.android.R;
 import com.instify.android.app.Config;
-import com.instify.android.models.ChatModelMessage;
+import com.instify.android.models.ChatModel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -89,7 +89,7 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView mMessageRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private FirebaseAnalytics mFirebaseAnalytics;
-    private FirebaseRecyclerAdapter<ChatModelMessage, MessageViewHolder> mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<ChatModel, MessageViewHolder> mFirebaseAdapter;
     private ProgressBar mProgressBar;
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseUser mFirebaseUser;
@@ -121,15 +121,15 @@ public class ChatActivity extends AppCompatActivity {
         mLinearLayoutManager.setStackFromEnd(true);
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<ChatModelMessage, MessageViewHolder>(
-                ChatModelMessage.class,
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<ChatModel, MessageViewHolder>(
+                ChatModel.class,
                 R.layout.chat_item_message,
                 MessageViewHolder.class,
                 mFirebaseDatabaseReference.child(MESSAGES_CHILD)) {
 
             @Override
-            protected ChatModelMessage parseSnapshot(DataSnapshot snapshot) {
-                ChatModelMessage friendlyMessage = super.parseSnapshot(snapshot);
+            protected ChatModel parseSnapshot(DataSnapshot snapshot) {
+                ChatModel friendlyMessage = super.parseSnapshot(snapshot);
                 if (friendlyMessage != null) {
                     friendlyMessage.setId(snapshot.getKey());
                 }
@@ -137,7 +137,7 @@ public class ChatActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void populateViewHolder(MessageViewHolder viewHolder, ChatModelMessage friendlyMessage, int position) {
+            protected void populateViewHolder(MessageViewHolder viewHolder, ChatModel friendlyMessage, int position) {
                 mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                 viewHolder.messageTextView.setText(friendlyMessage.getText());
                 viewHolder.messengerTextView.setText(friendlyMessage.getName());
@@ -221,7 +221,7 @@ public class ChatActivity extends AppCompatActivity {
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChatModelMessage friendlyMessage = new ChatModelMessage(mMessageEditText.getText().toString(),
+                ChatModel friendlyMessage = new ChatModel(mMessageEditText.getText().toString(),
                         mUsername,
                         mPhotoUrl);
                 mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(friendlyMessage);

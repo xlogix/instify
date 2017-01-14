@@ -19,8 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.instify.android.R;
-import com.instify.android.helpers.MyFirebaseMessagingService;
-import com.instify.android.models.CampusNewsData;
+import com.instify.android.models.CampusNewsModel;
 
 import java.sql.Timestamp;
 
@@ -117,7 +116,7 @@ public class UploadNews extends AppCompatActivity {
                 // TODO : Send the dept and class meta data also to the database
                 if (validateForm()) {
                     selectedLevel = newsLevelRadio.getCheckedRadioButtonId();
-                    CampusNewsData data = new CampusNewsData(newsTitle, newsDescription, selectedLevel, currentUser);
+                    CampusNewsModel data = new CampusNewsModel(newsTitle, newsDescription, selectedLevel, currentUser);
                     Timestamp tStamp = new Timestamp(System.currentTimeMillis());
                     campusNewsRef.child("" + tStamp.getTime()).setValue(data)
                             .addOnFailureListener(new OnFailureListener() {

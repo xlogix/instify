@@ -60,26 +60,45 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    /* Firebase [START] */
-    compile 'com.google.firebase:firebase-auth:10.0.1'
-    compile 'com.google.firebase:firebase-appindexing:10.0.1'
-    compile 'com.google.firebase:firebase-core:10.0.1'
-    compile 'com.google.firebase:firebase-config:10.0.1'
-    compile 'com.google.firebase:firebase-database:10.0.1'
-    compile 'com.google.firebase:firebase-storage:10.0.1'
+
     // for App Invites and Dynamic Links
     compile 'com.google.firebase:firebase-invites:10.0.1'
     // for cloud messaging i.e sending notifications
     compile 'com.google.firebase:firebase-messaging:10.0.1'
-    // Firebase UI
-    compile 'com.firebaseui:firebase-ui-database:1.0.1'
-    /* Firebase [END] */
 
-    // Google Sign In SDK (only required for Google Sign In)
+    // AUTH
+    compile 'com.google.firebase:firebase-auth:10.0.1'
     compile 'com.google.android.gms:play-services-auth:10.0.1'
-    // Facebook Android SDK (only required for Facebook Login)
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
 
+    // DATABASE FIREBASE,UI
+    compile 'com.google.firebase:firebase-database:10.0.1'
+    compile 'com.firebaseui:firebase-ui-database:1.0.1'
+
+    // IMAGE LOAD
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+
+    // GRAPH
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
+
+    compile 'com.android.volley:volley:1.0.0'
+    compile 'pub.devrel:easypermissions:0.2.1'
+
+    // LOGGING
+    compile 'com.jakewharton.timber:timber:4.4.0'
+    compile 'com.google.firebase:firebase-core:10.0.1'
+    compile 'com.google.firebase:firebase-appindexing:10.0.1'
+    compile 'com.google.firebase:firebase-config:10.0.1'
+
+    // BIND VIEWS
+    compile 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+
+    // STORAGE FIREBASE
+    compile 'com.google.firebase:firebase-storage:10.0.1'
+
+    // SUPPORT ANDROID
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'
     compile 'com.android.support:support-v4:25.1.0'
@@ -87,18 +106,10 @@ dependencies {
     compile 'com.android.support:cardview-v7:25.1.0'
     compile 'com.android.support:support-vector-drawable:25.1.0'
 
-    compile 'com.android.volley:volley:1.0.0'
-    compile 'pub.devrel:easypermissions:0.2.1'
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.jakewharton.timber:timber:4.4.0'
-
-    compile 'de.hdodenhof:circleimageview:2.1.0'
+    // UI
     compile 'com.github.paolorotolo:appintro:4.1.0'
     compile 'com.github.medyo:android-about-page:1.1.1'
     compile 'com.commonsware.cwac:camera:0.7.0'
-    compile 'com.jakewharton:butterknife:8.4.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 
     testCompile 'junit:junit:4.12'
 }

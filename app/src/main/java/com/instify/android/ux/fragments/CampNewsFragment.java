@@ -15,7 +15,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.instify.android.R;
-import com.instify.android.models.CampusNewsData;
+import com.instify.android.models.CampusNewsModel;
 import com.instify.android.upload.UploadNews;
 import com.instify.android.ux.ChatActivity;
 import com.instify.android.ux.MainActivity;
@@ -29,7 +29,7 @@ public class CampNewsFragment extends Fragment {
     RecyclerView recyclerView;
     // Firebase declarations
     DatabaseReference campusRef;
-    FirebaseRecyclerAdapter<CampusNewsData, CampusViewHolder> fAdapter;
+    FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder> fAdapter;
 
     public CampNewsFragment() {
     }
@@ -60,13 +60,13 @@ public class CampNewsFragment extends Fragment {
 
         // Firebase database setup //
         campusRef = FirebaseDatabase.getInstance().getReference().child("campusNews");
-        fAdapter = new FirebaseRecyclerAdapter<CampusNewsData, CampusViewHolder>(
-                CampusNewsData.class,
+        fAdapter = new FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder>(
+                CampusNewsModel.class,
                 R.layout.card_view_campus,
                 CampusViewHolder.class,
                 campusRef) {
             @Override
-            protected void populateViewHolder(final CampusViewHolder holder, CampusNewsData model, int position) {
+            protected void populateViewHolder(final CampusViewHolder holder, CampusNewsModel model, int position) {
                 holder.campusTitle.setText(model.title);
                 holder.campusDescription.setText(model.description);
                 holder.campusAuthor.setText(model.author);
