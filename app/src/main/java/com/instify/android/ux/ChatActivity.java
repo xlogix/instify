@@ -111,14 +111,18 @@ public class ChatActivity extends AppCompatActivity {
         if (mFirebaseUser != null) {
             try {
                 mUsername = mFirebaseUser.getEmail();
-                mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
+                if(mFirebaseUser.getPhotoUrl() != null) {
+                    mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
+                }else{
+                    mPhotoUrl = "";
+                }
             } catch (Exception e) {
                 mUsername = ANONYMOUS;
             }
         }
 
         localNewsId = getIntent().getStringExtra("localNewsId");
-        MESSAGES_CHILD = localNewsId +  "/discussion";
+        MESSAGES_CHILD = "campusNews/" + localNewsId +  "/discussion";
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mMessageRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_trending);
