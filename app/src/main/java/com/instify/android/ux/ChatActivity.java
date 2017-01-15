@@ -64,9 +64,9 @@ public class ChatActivity extends AppCompatActivity {
      * Another class to display the chat items in the UI
      */
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
-        public TextView messageTextView;
-        public TextView messengerTextView;
-        public CircleImageView messengerImageView;
+        TextView messageTextView;
+        TextView messengerTextView;
+        CircleImageView messengerImageView;
 
         public MessageViewHolder(View v) {
             super(v);
