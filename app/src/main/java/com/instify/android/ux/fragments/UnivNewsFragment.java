@@ -64,7 +64,7 @@ public class UnivNewsFragment extends Fragment {
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_university);
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.red500, R.color.black, R.color.google_blue_900);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.red_primary, R.color.black, R.color.google_blue_900);
 
         // Setting up recycle view
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));

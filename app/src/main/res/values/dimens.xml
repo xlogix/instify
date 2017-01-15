@@ -15,4 +15,6 @@
     <dimen name="image_thumbnail_size">100dp</dimen>
     <dimen name="image_thumbnail_spacing">1dp</dimen>
 
+    <!-- Theme Margin -->
+    <dimen name="theme_dialog_margin">4dp</dimen>
 </resources>

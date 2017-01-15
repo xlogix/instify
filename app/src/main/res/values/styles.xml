@@ -24,6 +24,10 @@
         <item name="textAllCaps">false</item>
     </style>
 
+    <style name="ThemeDialogText">
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+    </style>
+
     <style name="dialogFragmentAnimation">
         <item name="android:windowEnterAnimation">@anim/slide_in_appear</item>
         <item name="android:windowExitAnimation">@anim/slide_away_disappear</item>
