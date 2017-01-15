@@ -66,15 +66,16 @@ public class CampNewsFragment extends Fragment {
                 CampusViewHolder.class,
                 campusRef) {
             @Override
-            protected void populateViewHolder(final CampusViewHolder holder, CampusNewsModel model, int position) {
+            protected void populateViewHolder(final CampusViewHolder holder, final CampusNewsModel model, final int position) {
                 holder.campusTitle.setText(model.title);
                 holder.campusDescription.setText(model.description);
                 holder.campusAuthor.setText(model.author);
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivity(new Intent(view.getContext(),
-                                ChatActivity.class));
+                        Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
+                        launchChat.putExtra("localNewsId", fAdapter.getRef(position).getKey());
+                        startActivity(launchChat);
                     }
                 });
 

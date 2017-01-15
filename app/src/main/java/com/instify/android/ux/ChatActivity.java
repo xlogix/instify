@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -75,7 +76,8 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    public static final String MESSAGES_CHILD = "messages";
+    String localNewsId;
+    private  String MESSAGES_CHILD;
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 100;
     public static final String ANONYMOUS = "anonymous";
     private static final int REQUEST_INVITE = 1;
@@ -114,6 +116,9 @@ public class ChatActivity extends AppCompatActivity {
                 mUsername = ANONYMOUS;
             }
         }
+
+        localNewsId = getIntent().getStringExtra("localNewsId");
+        MESSAGES_CHILD = localNewsId +  "/discussion";
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mMessageRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_trending);
