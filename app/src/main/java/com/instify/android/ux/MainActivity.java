@@ -140,6 +140,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
     }
 
+
+    TextView navHeaderName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -224,7 +227,13 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             userRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    // Collecting users data to use throught the app
                     userInfoObject = dataSnapshot.getValue(UserData.class);
+
+                    // Setting the name in the nav drawer
+                    navHeaderName = (TextView) findViewById(R.id.nav_drawer_header_text);
+                    navHeaderName.setText(userInfoObject.name);
                     Toast.makeText(MainActivity.this, "User data collected!! :)", Toast.LENGTH_SHORT).show();
                 }
 

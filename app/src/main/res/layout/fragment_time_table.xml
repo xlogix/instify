@@ -1,12 +1,30 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
 
     <!-- TODO: Update blank fragment layout -->
+    <EditText
+        android:id="@+id/timeTablePassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter your ERP password"
+        android:layout_marginTop="@dimen/activity_vertical_margin"/>
+
+    <Button
+        android:id="@+id/timeTablePasswordSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fetch"
+        android:layout_below="@+id/timeTablePassword"
+        android:layout_centerInParent="true"/>
+
     <TextView
+        android:id="@+id/timeTableData"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello"
-        android:textSize="56sp" />
+        android:layout_below="@+id/timeTablePasswordSubmit"/>
 
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>
