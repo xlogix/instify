@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -77,7 +76,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     String localNewsId;
-    private  String MESSAGES_CHILD;
+    private String MESSAGES_CHILD;
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 100;
     public static final String ANONYMOUS = "anonymous";
     private static final int REQUEST_INVITE = 1;
@@ -111,9 +110,9 @@ public class ChatActivity extends AppCompatActivity {
         if (mFirebaseUser != null) {
             try {
                 mUsername = mFirebaseUser.getEmail();
-                if(mFirebaseUser.getPhotoUrl() != null) {
+                if (mFirebaseUser.getPhotoUrl() != null) {
                     mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
-                }else{
+                } else {
                     mPhotoUrl = "";
                 }
             } catch (Exception e) {
@@ -122,7 +121,7 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         localNewsId = getIntent().getStringExtra("localNewsId");
-        MESSAGES_CHILD = "campusNews/" + localNewsId +  "/discussion";
+        MESSAGES_CHILD = "campusNews/" + localNewsId + "/discussion";
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mMessageRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_trending);
@@ -244,14 +243,6 @@ public class ChatActivity extends AppCompatActivity {
         throw new NullPointerException("Fake null pointer exception");
     }
 
-    private void sendInvitation() {
-        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
-                .setMessage(getString(R.string.invitation_message))
-                .setCallToActionText(getString(R.string.invitation_cta))
-                .build();
-        startActivityForResult(intent, REQUEST_INVITE);
-    }
-
     // Fetch the config to determine the allowed length of messages.
     public void fetchConfig() {
         long cacheExpiration = 3600; // 1 hour in seconds
@@ -277,32 +268,6 @@ public class ChatActivity extends AppCompatActivity {
                         applyRetrievedLengthLimit();
                     }
                 });
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Timber.d("onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
-
-        if (requestCode == REQUEST_INVITE) {
-            if (resultCode == RESULT_OK) {
-                // Use Firebase Measurement to log that invitation was sent.
-                Bundle payload = new Bundle();
-                payload.putString(FirebaseAnalytics.Param.VALUE, "inv_sent");
-
-                // Check how many invitations were sent and log.
-                String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
-                Timber.d("Invitations sent: " + ids.length);
-            } else {
-                // Use Firebase Measurement to log that invitation was not sent
-                Bundle payload = new Bundle();
-                payload.putString(FirebaseAnalytics.Param.VALUE, "inv_not_sent");
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, payload);
-
-                // Sending failed or it was canceled, show failure message to the user
-                Timber.d("Failed to send invitation.");
-            }
-        }
     }
 
     /**
