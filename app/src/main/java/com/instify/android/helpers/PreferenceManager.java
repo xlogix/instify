@@ -28,13 +28,11 @@ public class PreferenceManager {
     private static final String PREF_NAME = "app_data";
 
     // All Shared Preferences Keys
-    private static final String KEY_USER_ID = "user_id";
-    private static final String KEY_USER_NAME = "user_name";
-    private static final String KEY_USER_EMAIL = "user_email";
     private static final String KEY_NOTIFICATIONS = "notifications";
     private static final String IS_FIRST_RUN = "is_first_run";
     private static final String IS_DARK_THEME = "is_dark_theme";
     private static final String IS_SIGNED_IN_FROM_GOOGLE_OR_FACEBOOK = "is_signed_in_from_google_or_facebook";
+    private static final String SET_USER_PASSWORD = "set_user_password";
 
     // Constructor
     public PreferenceManager(Context context) {
@@ -45,6 +43,10 @@ public class PreferenceManager {
 
     public static PreferenceManager newInstance(Context context) {
         return new PreferenceManager(context);
+    }
+
+    public String getNotifications() {
+        return mPrefs.getString(KEY_NOTIFICATIONS, null);
     }
 
     public void addNotification(String notification) {
@@ -62,6 +64,11 @@ public class PreferenceManager {
         editor.commit();
     }
 
+    /**
+     * Sets the theme of the app
+     *
+     * @return theme name value
+     */
     public Theme getCurrentTheme(Context context) {
         return Theme.valueOf(mPrefs.getString("app_theme", Theme.Blue.name()));
     }
@@ -70,10 +77,11 @@ public class PreferenceManager {
         editor.putString("app_theme", currentTheme.name());
     }
 
-    public String getNotifications() {
-        return mPrefs.getString(KEY_NOTIFICATIONS, null);
-    }
-
+    /**
+     * Check if the user is running the app for the first time. Used to check if Intro Activities should be showed.
+     *
+     * @return boolean value, true or false
+     */
     public boolean getIsFirstRun() {
         return mPrefs.getBoolean(IS_FIRST_RUN, true);
     }
@@ -82,6 +90,11 @@ public class PreferenceManager {
         editor.putBoolean(IS_FIRST_RUN, firstRun).apply();
     }
 
+    /**
+     * Check if the user is signed in from Google or Facebook
+     *
+     * @return boolean value, true or false
+     */
     public boolean getSignedInFromGoogleOrFacebook() {
         return mPrefs.getBoolean(IS_SIGNED_IN_FROM_GOOGLE_OR_FACEBOOK, false);
     }
@@ -90,6 +103,24 @@ public class PreferenceManager {
         editor.putBoolean(IS_SIGNED_IN_FROM_GOOGLE_OR_FACEBOOK, true);
     }
 
+    /**
+     * Check if the user is signed in from Google or Facebook
+     *
+     * @return boolean value, true or false
+     */
+    public void setUserPassword(String password) {
+        editor.putString(SET_USER_PASSWORD, password);
+    }
+
+    public String getUserPassword() {
+        return mPrefs.getString(SET_USER_PASSWORD, "empty");
+    }
+
+    /**
+     * Check if the user is signed in from Google or Facebook
+     *
+     * @return boolean value, true or false
+     */
     public boolean getIsDarkTheme() {
         return mPrefs.getBoolean(IS_DARK_THEME, false);
     }
@@ -102,6 +133,9 @@ public class PreferenceManager {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
 
+    /**
+     * Clear shared preferences data (reset)
+     */
     public void clear() {
         editor.clear();
         editor.commit();
