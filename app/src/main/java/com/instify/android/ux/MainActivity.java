@@ -228,12 +228,13 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    // Collecting users data to use throught the app
+                    // Collecting users data to use through out the app
                     userInfoObject = dataSnapshot.getValue(UserData.class);
 
                     // Setting the name in the nav drawer
-                    navHeaderName = (TextView) findViewById(R.id.nav_drawer_header_text);
-                    navHeaderName.setText(userInfoObject.name);
+                    // todo: Causing a null point exception when main activity restarts
+//                    navHeaderName = (TextView) findViewById(R.id.nav_drawer_header_text);
+//                    navHeaderName.setText(userInfoObject.name);
                     Toast.makeText(MainActivity.this, "User data collected!! :)", Toast.LENGTH_SHORT).show();
                 }
 
