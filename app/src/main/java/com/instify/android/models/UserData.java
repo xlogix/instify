@@ -23,7 +23,6 @@ public class UserData {
      */
     public UserData(String name, String regNo, String section) {
 
-        //TODO : Fetch the name field data
         this.name = name;
         this.regNo = regNo.toLowerCase();
         this.section = section.toLowerCase();
@@ -56,6 +55,7 @@ public class UserData {
     }
 
     private String getDept() {
+        // TODO : GET 'EEE' pattern
         switch (this.regNo.charAt(8)) {
             case '1':
                 return "CIVIL";
