@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -86,8 +87,13 @@ public class CampNewsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getActivity(), UploadNews.class);
-                i.putExtra("username", ((MainActivity) getActivity()).userInfoObject.name);
-                startActivity(i);
+                try{
+                    i.putExtra("username", ((MainActivity) getActivity()).userInfoObject.name);
+                    startActivity(i);
+                }catch (NullPointerException e){
+                    Toast.makeText(getActivity(), "Not ready to announce news yet. Check your internet connection",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
