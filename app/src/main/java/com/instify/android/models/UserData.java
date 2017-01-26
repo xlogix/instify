@@ -42,7 +42,7 @@ public class UserData {
         this.regNo = regNo.toLowerCase();
         this.section = section.toLowerCase();
         this.year = getDigit(year.charAt(0));
-        this.dept = dept.toLowerCase();
+        this.dept = dept.toUpperCase();
         this.cr = false;
     }
 
