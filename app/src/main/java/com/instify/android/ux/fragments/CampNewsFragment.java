@@ -29,8 +29,8 @@ public class CampNewsFragment extends Fragment {
 
     RecyclerView recyclerView;
     // Firebase declarations
-    DatabaseReference campusRef;
-    FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder> fAdapter;
+    DatabaseReference campusRefAll;
+    FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder> fAdapter, fAdapter1;
 
     public CampNewsFragment() {
     }
@@ -60,12 +60,12 @@ public class CampNewsFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // Firebase database setup //
-        campusRef = FirebaseDatabase.getInstance().getReference().child("campusNews");
+        campusRefAll = FirebaseDatabase.getInstance().getReference().child("campusNews/all");
         fAdapter = new FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder>(
                 CampusNewsModel.class,
                 R.layout.card_view_campus,
                 CampusViewHolder.class,
-                campusRef) {
+                campusRefAll) {
             @Override
             protected void populateViewHolder(final CampusViewHolder holder, final CampusNewsModel model, final int position) {
                 holder.campusTitle.setText(model.title);
@@ -83,6 +83,30 @@ public class CampNewsFragment extends Fragment {
             }
         };
 
+        ///  >><<
+//        fAdapter1 = new FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder>(
+//                CampusNewsModel.class,
+//                R.layout.card_view_campus,
+//                CampusViewHolder.class,
+//                campusRefAll) {
+//            @Override
+//            protected void populateViewHolder(final CampusViewHolder holder, final CampusNewsModel model, final int position) {
+//                holder.campusTitle.setText(model.title);
+//                holder.campusDescription.setText(model.description);
+//                holder.campusAuthor.setText(model.author);
+//                holder.mView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
+//                        launchChat.putExtra("localNewsId", fAdapter.getRef(position).getKey());
+//                        startActivity(launchChat);
+//                    }
+//                });
+//
+//            }
+//        };
+        /// >><<
+
         ((MainActivity) getActivity()).mSharedFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,7 +118,6 @@ public class CampNewsFragment extends Fragment {
                     Toast.makeText(getActivity(), "Not ready to announce news yet. Check your internet connection",
                             Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 

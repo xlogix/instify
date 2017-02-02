@@ -119,12 +119,12 @@
     <!-- Arrays for campus upload spinner -->
     <string-array name="campusUploadDeptArray">
         <item>Select Department</item>
-        <item>Information technology</item>
-        <item>Computer science</item>
-        <item>Mechanical</item>
-        <item>Civil</item>
-        <item>Electronics and communication</item>
-        <item>Electrical and electronics</item>
+        <item>IT</item>
+        <item>CSE</item>
+        <item>MECH</item>
+        <item>CIVIL</item>
+        <item>ECE</item>
+        <item>EEE</item>
     </string-array>
 
     <string-array name="campusUploadYearArray">

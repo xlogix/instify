@@ -10,9 +10,9 @@ import java.util.Date;
 
 public class CampusNewsModel {
 
-    public String title, description, author;
-    private long time;
-    private int level;
+    public String title, description, author, dept, sec;
+
+    public int level, year;
 
     public CampusNewsModel() {
     }
@@ -21,15 +21,16 @@ public class CampusNewsModel {
         this.title = snap.title;
         this.description = snap.description;
         this.author = snap.author;
-        // Initialize to current time
-        time = new Date().getTime();
     }
 
-    public CampusNewsModel(TextView t, TextView d, int level, String user) {
-        this.title = t.getText().toString();
-        this.description = d.getText().toString();
+    public CampusNewsModel(String t, String d, int level, int year, String dept, String sec, String user) {
+        this.title = t;
+        this.description = d;
         this.author = user;
         this.level = level;
+        this.year = year;
+        this.dept = dept;
+        this.sec = sec;
     }
 
 }

@@ -31,7 +31,7 @@ public class UploadNews extends AppCompatActivity {
 
     DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
     FirebaseUser fUser;
-    DatabaseReference campusNewsRef;
+    DatabaseReference campusNewsRef, finalUploadRef;
 
     private EditText newsTitle, newsDescription;
     private RadioGroup newsLevelRadio;
@@ -57,8 +57,6 @@ public class UploadNews extends AppCompatActivity {
         dept = (Spinner) findViewById(R.id.campusUploadDeptSpinner);
         classYear = (Spinner) findViewById(R.id.campusUploadClassYearSpinner);
         classSec = (Spinner) findViewById(R.id.campusUploadClassSecSpinner);
-
-        selectedLevel = newsLevelRadio.getCheckedRadioButtonId();
 
         // Adapters //
         ArrayAdapter<CharSequence> deptAdapter = ArrayAdapter
@@ -91,6 +89,7 @@ public class UploadNews extends AppCompatActivity {
                         dept.setVisibility(View.INVISIBLE);
                         classYear.setVisibility(View.INVISIBLE);
                         classSec.setVisibility(View.INVISIBLE);
+                        selectedLevel = R.id.campusUploadUniv;
                         break;
                     }
 
@@ -98,13 +97,15 @@ public class UploadNews extends AppCompatActivity {
                         dept.setVisibility(View.VISIBLE);
                         classYear.setVisibility(View.INVISIBLE);
                         classSec.setVisibility(View.INVISIBLE);
+                        selectedLevel = R.id.campusUploadDept;
                         break;
                     }
 
                     case R.id.campusUploadClass: {
-                        dept.setVisibility(View.INVISIBLE);
+                        dept.setVisibility(View.VISIBLE);
                         classYear.setVisibility(View.VISIBLE);
                         classSec.setVisibility(View.VISIBLE);
+                        selectedLevel = R.id.campusUploadClass;
                     }
                 }
             }
@@ -113,12 +114,21 @@ public class UploadNews extends AppCompatActivity {
         submitNews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO : Send the dept and class meta data also to the database
+                // timestamp acts as news ID
                 if (validateForm()) {
                     selectedLevel = newsLevelRadio.getCheckedRadioButtonId();
-                    CampusNewsModel data = new CampusNewsModel(newsTitle, newsDescription, selectedLevel, currentUser);
+                    CampusNewsModel data = new CampusNewsModel(
+                            newsTitle.getText().toString(),
+                            newsDescription.getText().toString(),
+                            selectedLevel,
+                            getIntYear(classYear.getSelectedItem().toString()),
+                            dept.getSelectedItem().toString(),
+                            classSec.getSelectedItem().toString(),
+                            currentUser
+                    );
                     Timestamp tStamp = new Timestamp(System.currentTimeMillis());
-                    campusNewsRef.child("" + tStamp.getTime()).setValue(data)
+                    finalUploadRef = campusNewsRef.child(getRefString());
+                    finalUploadRef.child("" + tStamp.getTime()).setValue(data)
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
@@ -142,4 +152,31 @@ public class UploadNews extends AppCompatActivity {
     private boolean validateForm() {
         return (!newsTitle.getText().toString().equals("") && !newsDescription.getText().toString().equals(""));
     }
+
+    private int getIntYear(String strYear){
+        int intYear;
+        switch(strYear){
+            case "First": return 1;
+            case "Second": return 2;
+            case "Third" : return 3;
+            case "Fourth" : return 4;
+            default: return -1;
+        }
+    }
+
+    private String getRefString(){
+        switch(newsLevelRadio.getCheckedRadioButtonId()){
+            case R.id.campusUploadUniv: return "all";
+            case R.id.campusUploadDept: return dept.getSelectedItem().toString() + "/all";
+            case R.id.campusUploadClass: {
+                return dept.getSelectedItem().toString() +
+                        "/" + getIntYear(classYear.getSelectedItem().toString()) +
+                        "/" + classSec.getSelectedItem().toString();
+            }
+            default: return "all";
+        }
+    }
+
 }
+
+
