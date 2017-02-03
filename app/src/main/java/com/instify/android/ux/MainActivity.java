@@ -55,6 +55,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.instify.android.BuildConfig;
 import com.instify.android.R;
 import com.instify.android.app.MyApplication;
 import com.instify.android.listeners.OnSingleClickListener;
@@ -232,10 +233,12 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     userInfoObject = dataSnapshot.getValue(UserData.class);
 
                     // Setting the name in the nav drawer
-                    // todo: Causing a null point exception when main activity restarts
-//                    navHeaderName = (TextView) findViewById(R.id.nav_drawer_header_text);
-//                    navHeaderName.setText(userInfoObject.name);
-                    Toast.makeText(MainActivity.this, "User data collected!! :)", Toast.LENGTH_SHORT).show();
+                    // TODO: Causing a null point exception when main activity restarts
+                    navHeaderName = (TextView) findViewById(R.id.nav_drawer_header_text);
+                    navHeaderName.setText(mFirebaseUser.getDisplayName());
+                    if (BuildConfig.DEBUG) {
+                        Toast.makeText(MainActivity.this, "User data collected!! :)", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
@@ -272,17 +275,24 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             try {
                 // Set profile picture from Firebase account
                 Glide.with(this)
-                        .load(mCaptureUri)
+                        .load(mFirebaseUser.getPhotoUrl())
                         .crossFade()
                         .centerCrop()
                         .into(navImageView);
                 // Set email from Firebase account
-                navTextView.setText(mFirebaseUser.getEmail());
+                navTextView.setText(mFirebaseUser.getDisplayName());
 
             } catch (Exception e) {
                 Timber.d(e);
             }
         }
+
+        /*//Decode Image to String
+        String imgPath = getSharedPreferences("userData", MODE_PRIVATE).getString("PicPath", null);
+        if (imgPath != null) {
+            byte[] imageAsBytes = Base64.decode(imgPath.getBytes(), Base64.DEFAULT);
+            imageView.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
+        }*/
 
         /*UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(mFirebaseUser.getEmail())

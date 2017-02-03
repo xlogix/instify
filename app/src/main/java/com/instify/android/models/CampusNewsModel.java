@@ -1,9 +1,5 @@
 package com.instify.android.models;
 
-import android.widget.TextView;
-
-import java.util.Date;
-
 /**
  * Created by arjun on 26/12/16.
  */

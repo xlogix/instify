@@ -111,7 +111,7 @@ public class AccountActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 UserData data = dataSnapshot.getValue(UserData.class);
-                name.setText(data.name);
+                name.setText(currentUser.getDisplayName());
                 regno.setText(data.regNo);
                 sec.setText(data.section);
                 dept.setText(data.dept);
