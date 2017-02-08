@@ -13,10 +13,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
 import com.instify.android.models.CampusNewsModel;
+import com.instify.android.models.UserData;
 import com.instify.android.upload.UploadNews;
 import com.instify.android.ux.ChatActivity;
 import com.instify.android.ux.MainActivity;
@@ -29,8 +35,10 @@ public class CampNewsFragment extends Fragment {
 
     RecyclerView recyclerView;
     // Firebase declarations
-    DatabaseReference campusRefAll;
-    FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder> fAdapter, fAdapter1;
+
+    DatabaseReference dbRef, campusRefAll, userRef, campusRefDeptAll;
+    FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder> fAdapterAll, fAdapterDeptAll, fAdapterDeptSec;
+    FirebaseUser currentUser;
 
     public CampNewsFragment() {
     }
@@ -53,6 +61,8 @@ public class CampNewsFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_campus_news, container, false);
 
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
         // Recycler view set up //
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_campus_news);
         recyclerView.setHasFixedSize(true);
@@ -60,8 +70,12 @@ public class CampNewsFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // Firebase database setup //
+
+//        createAdapter("campusNews/all", fAdapterAll);
+//        createAdapter("campusNews/IT/all", fAdapterDeptAll);
+
         campusRefAll = FirebaseDatabase.getInstance().getReference().child("campusNews/all");
-        fAdapter = new FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder>(
+        fAdapterAll = new FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder>(
                 CampusNewsModel.class,
                 R.layout.card_view_campus,
                 CampusViewHolder.class,
@@ -75,7 +89,7 @@ public class CampNewsFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
-                        launchChat.putExtra("localNewsId", fAdapter.getRef(position).getKey());
+                        launchChat.putExtra("localNewsId", fAdapterAll.getRef(position).getKey());
                         startActivity(launchChat);
                     }
                 });
@@ -84,27 +98,49 @@ public class CampNewsFragment extends Fragment {
         };
 
         ///  >><<
-//        fAdapter1 = new FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder>(
-//                CampusNewsModel.class,
-//                R.layout.card_view_campus,
-//                CampusViewHolder.class,
-//                campusRefAll) {
-//            @Override
-//            protected void populateViewHolder(final CampusViewHolder holder, final CampusNewsModel model, final int position) {
-//                holder.campusTitle.setText(model.title);
-//                holder.campusDescription.setText(model.description);
-//                holder.campusAuthor.setText(model.author);
-//                holder.mView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
-//                        launchChat.putExtra("localNewsId", fAdapter.getRef(position).getKey());
-//                        startActivity(launchChat);
-//                    }
-//                });
+        // After the user has logged in
+//        if(currentUser != null) {
+//            dbRef = FirebaseDatabase.getInstance().getReference();
+//            userRef = dbRef.child("users").child(currentUser.getUid());
+//            userRef.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    UserData userData = dataSnapshot.getValue(UserData.class);
+//                    Toast.makeText(getActivity(), "data collected locally", Toast.LENGTH_SHORT).show();
 //
-//            }
-//        };
+//                    String address = "campusNews/" + userData.dept + "/all";
+//                    Toast.makeText(getActivity(), address, Toast.LENGTH_SHORT).show();
+//                    campusRefDeptAll = FirebaseDatabase.getInstance().getReference().child("campusNews/IT/all");
+//                    fAdapterAll = new FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder>(
+//                            CampusNewsModel.class,
+//                            R.layout.card_view_campus,
+//                            CampusViewHolder.class,
+//                            campusRefDeptAll) {
+//                        @Override
+//                        protected void populateViewHolder(final CampusViewHolder holder, final CampusNewsModel model, final int position) {
+//                            holder.campusTitle.setText(model.title);
+//                            holder.campusDescription.setText(model.description);
+//                            holder.campusAuthor.setText(model.author);
+//                            holder.mView.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+//                                    Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
+//                                    launchChat.putExtra("localNewsId", fAdapterAll.getRef(position).getKey());
+//                                    startActivity(launchChat);
+//                                }
+//                            });
+//
+//                        }
+//                    };
+//
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
+//        }
         /// >><<
 
         ((MainActivity) getActivity()).mSharedFab.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +157,7 @@ public class CampNewsFragment extends Fragment {
             }
         });
 
-        recyclerView.setAdapter(fAdapter);
+        recyclerView.setAdapter(fAdapterAll);
         return rootView;
     }
 
@@ -137,4 +173,35 @@ public class CampNewsFragment extends Fragment {
             campusDescription = (TextView) v.findViewById(R.id.campusDescription);
         }
     }
+
+//    private void createAdapter(String dbAddress, FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder> fAdapter){
+//        DatabaseReference campusRefAll = FirebaseDatabase.getInstance().getReference().child(dbAddress);
+//
+//        fAdapter = new FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder>(
+//                CampusNewsModel.class,
+//                R.layout.card_view_campus,
+//                CampusViewHolder.class,
+//                campusRefAll) {
+//
+//            @Override
+//            protected void populateViewHolder(final CampusViewHolder holder, final CampusNewsModel model, final int position) {
+//
+////                String newsId = fAdapter.getRef(position).getKey();
+//
+//                holder.campusTitle.setText(model.title);
+//                holder.campusDescription.setText(model.description);
+//                holder.campusAuthor.setText(model.author);
+//                holder.mView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
+//                        launchChat.putExtra("localNewsId", fAdapter.getRef(position).getKey());
+//                        startActivity(launchChat);
+//                    }
+//                });
+//            }
+//        };
+//
+//        recyclerView.setAdapter(fAdapter);
+//    }
 }

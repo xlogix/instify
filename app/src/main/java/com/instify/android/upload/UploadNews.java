@@ -76,6 +76,11 @@ public class UploadNews extends AppCompatActivity {
         classYear.setAdapter(classYearAdapter);
         classSec.setAdapter(classSecAdapter);
 
+        // disabling the spinners
+        dept.setEnabled(false);
+        classYear.setEnabled(false);
+        classSec.setEnabled(false);
+
         // Firebase objects //
         fUser = FirebaseAuth.getInstance().getCurrentUser();
         currentUser = getIntent().getStringExtra("username");
@@ -86,25 +91,25 @@ public class UploadNews extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (i) {
                     case R.id.campusUploadUniv: {
-                        dept.setVisibility(View.INVISIBLE);
-                        classYear.setVisibility(View.INVISIBLE);
-                        classSec.setVisibility(View.INVISIBLE);
+                        dept.setEnabled(false);
+                        classYear.setEnabled(false);
+                        classSec.setEnabled(false);
                         selectedLevel = R.id.campusUploadUniv;
                         break;
                     }
 
                     case R.id.campusUploadDept: {
-                        dept.setVisibility(View.VISIBLE);
-                        classYear.setVisibility(View.INVISIBLE);
-                        classSec.setVisibility(View.INVISIBLE);
+                        dept.setEnabled(true);
+                        classYear.setEnabled(false);
+                        classSec.setEnabled(false);
                         selectedLevel = R.id.campusUploadDept;
                         break;
                     }
 
                     case R.id.campusUploadClass: {
-                        dept.setVisibility(View.VISIBLE);
-                        classYear.setVisibility(View.VISIBLE);
-                        classSec.setVisibility(View.VISIBLE);
+                        dept.setEnabled(true);
+                        classYear.setEnabled(true);
+                        classSec.setEnabled(true);
                         selectedLevel = R.id.campusUploadClass;
                     }
                 }

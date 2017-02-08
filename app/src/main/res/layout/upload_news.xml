@@ -86,7 +86,6 @@
         android:id="@+id/campusUploadDeptSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
         android:layout_below="@+id/campusUploadRadioGroup"
         android:layout_marginTop="@dimen/activity_vertical_margin">
 
@@ -96,7 +95,6 @@
         android:id="@+id/campusUploadClassYearSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_below="@+id/campusUploadDeptSpinner">
 
@@ -106,7 +104,6 @@
         android:id="@+id/campusUploadClassSecSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_below="@+id/campusUploadDeptSpinner"
         android:layout_toRightOf="@+id/campusUploadClassYearSpinner"
