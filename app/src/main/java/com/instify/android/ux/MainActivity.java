@@ -468,7 +468,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     case R.id.nav_erp:
                         mViewPager.setCurrentItem(0);
                         break;
-                    case R.id.nav_campus:
+                    case R.id.nav_campus_news:
                         mViewPager.setCurrentItem(1);
                         break;
                     case R.id.nav_timetable:
@@ -632,11 +632,11 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
 
         private int[] imageResId = {
-                R.drawable.ic_videocam_white_24dp,
-                R.drawable.ic_videocam_white_24dp,
-                R.drawable.ic_videocam_white_24dp,
-                R.drawable.ic_videocam_white_24dp,
-                R.drawable.ic_videocam_white_24dp
+                R.drawable.ic_tabs_attendance,
+                R.drawable.ic_tabs_campus_news,
+                R.drawable.ic_tabs_time_table,
+                R.drawable.ic_tabs_notes,
+                R.drawable.ic_tabs_univ_news
         };
 
         @Override
