@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -21,6 +22,7 @@ import com.instify.android.ux.MainActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.Iterator;
 
@@ -49,19 +51,25 @@ public class TimeTableFragment extends Fragment {
         ((MainActivity) getActivity()).mSharedFab = null; // To avoid keeping/leaking the reference of the FAB
     }
 
+    TextView ttData;
+
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private String userRegNo;
-    private String userPass = MyApplication.getInstance().getPrefManager().getUserPassword();
-    private final String endpoint = "http://instify.herokuapp.com/api/attendance/?regno="
+    private String userRegNo  = "ra1511008020111";
+//    private String userPass = MyApplication.getInstance().getPrefManager().getUserPassword();
+    private String userPass = "dps12345";
+    private final String endpoint = "http://instify.herokuapp.com/api/time-table/?regno="
             + userRegNo + "&password=" + userPass;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_time_table, container, false);
+        ttData = (TextView) rootView.findViewById(R.id.timeTableData);
         mSwipeRefreshLayout = (SwipeRefreshLayout)
                 rootView.findViewById(R.id.swipe_refresh_layout_time_table);
 
+        AttemptJson dataObj = new AttemptJson();
+        dataObj.doInBackground();
         return rootView;
     }
 
@@ -79,6 +87,7 @@ public class TimeTableFragment extends Fragment {
          * Handle UI
          */
         showRefreshing();
+        Toast.makeText(getActivity(), "Calling API...", Toast.LENGTH_SHORT).show();
         /**
          * Method to make json object request where json response is dynamic
          * */
@@ -87,6 +96,7 @@ public class TimeTableFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            String msg = "";
                             Iterator<String> it = response.keys();
                             while (it.hasNext()) {
                                 String key = it.next();
@@ -94,11 +104,16 @@ public class TimeTableFragment extends Fragment {
                                     JSONArray array = response.getJSONArray(key);
                                     int size = array.length();
                                     for (int i = 0; i < size; i++) {
-
+                                        msg += array.get(i) + " ";
                                     }
+                                    ttData.setText(msg);
                                 } else {
-                                    System.out.println(key + ":" + response.getString(key));
+                                    msg = key + ":" + response.getString(key);
+                                    Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+//                                    System.out.println(key + ":" + response.getString(key));
                                 }
+
+                                hideRefreshing();
                             }
                         } catch (JSONException e) {
                             Log.d("debug", "Object DataSet is incorrect");
