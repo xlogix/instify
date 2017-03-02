@@ -77,7 +77,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="@drawable/btn_default_light"
-                    android:src="drawable/ic_edit_white_24dp" />
+                     />
 
                 <ImageButton
                     android:layout_width="48dp"
@@ -85,7 +85,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/btn_default_light"
-                    android:src="@drawable/ic_edit_white_24dp" />
+                     />
 
                 <ImageButton
                     android:layout_width="48dp"
