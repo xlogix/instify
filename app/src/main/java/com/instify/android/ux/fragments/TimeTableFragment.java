@@ -104,7 +104,7 @@ public class TimeTableFragment extends Fragment {
                                     JSONArray array = response.getJSONArray(key);
                                     int size = array.length();
                                     for (int i = 0; i < size; i++) {
-                                        msg += array.get(i) + " ";
+                                        msg +=  "Hour " + (i+1) + " : " + array.get(i) + "\n";
                                     }
                                     ttData.setText(msg);
                                 } else {
