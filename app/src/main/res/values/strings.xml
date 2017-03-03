@@ -14,7 +14,7 @@
     <string name="imageView_edit">Change Default Image</string>
     <string name="nav_section_1">Calculate GPA</string>
     <string name="nav_section_2">Navigate</string>
-    <string name="nav_time_table">Time Table</string>
+    <string name="nav_attendance">Attendance</string>
     <string name="nav_campus_news">Campus News</string>
     <string name="nav_univ_news">University News</string>
     <string name="nav_notes">Notes</string>

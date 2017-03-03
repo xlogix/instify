@@ -14,7 +14,6 @@ import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.instify.android.BuildConfig;
 import com.instify.android.helpers.PreferenceManager;
-import com.instify.android.utils.ActivityFrameMetrics;
 import com.instify.android.ux.IntroActivity;
 
 import timber.log.Timber;
@@ -40,8 +39,6 @@ public class MyApplication extends Application {
         if (BuildConfig.DEBUG) {
             // Plant Tiber debug tree
             Timber.plant(new Timber.DebugTree());
-            // Initialize Activity frame matrix for analytics
-            registerActivityLifecycleCallbacks(new ActivityFrameMetrics.Builder().build());
         } else {
             // TODO example of implementation custom crash reporting solution -  Crashlytics.
             /*Fabric.with(this, new Crashlytics());

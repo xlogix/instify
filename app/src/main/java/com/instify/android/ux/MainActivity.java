@@ -58,6 +58,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.instify.android.BuildConfig;
 import com.instify.android.R;
 import com.instify.android.app.MyApplication;
+import com.instify.android.helpers.ImageCompression;
 import com.instify.android.listeners.OnSingleClickListener;
 import com.instify.android.models.UserData;
 import com.instify.android.ux.fragments.AttendanceFragment;
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     private DatabaseReference dbRef, userRef;
 
     public UserData userInfoObject;
+    String i;
 
     View headerView;
 
@@ -373,6 +375,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             File file = new File(Environment.getExternalStorageDirectory(), UUID.randomUUID().toString() + ".jpg");
             takePicture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
             mCaptureUri = Uri.fromFile(file);
+            i  =  new ImageCompression(getApplicationContext()).compressImage(String.valueOf(mCaptureUri));
 
             // Camera
             final List<Intent> cameraIntents = new ArrayList<Intent>();
@@ -384,10 +387,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 final Intent intent = new Intent(captureIntent);
                 intent.setComponent(new ComponentName(packageName, res.activityInfo.name));
                 intent.setPackage(packageName);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, mCaptureUri);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, i);
                 cameraIntents.add(intent);
             }
-
             startActivityForResult(takePicture, RC_TAKE_PICTURE);
 
         } else {
@@ -416,7 +418,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         Bitmap Image;
         if (requestCode == RC_TAKE_PICTURE) {
             try {
-                Uri captured_image = mCaptureUri;
+                Uri captured_image = Uri.parse(i);
                 Image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), captured_image);
                 Bitmap image = Image;
                 navImageView.setImageBitmap(Image);
@@ -465,13 +467,13 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     case R.id.nav_gpa:
                         intentGPACalculator(MainActivity.this, "com.gupta.ishansh.gcmcalculator");
                         break;
-                    case R.id.nav_erp:
+                    case R.id.nav_planner:
                         mViewPager.setCurrentItem(0);
                         break;
                     case R.id.nav_campus_news:
                         mViewPager.setCurrentItem(1);
                         break;
-                    case R.id.nav_timetable:
+                    case R.id.nav_attendance:
                         mViewPager.setCurrentItem(2);
                         break;
                     case R.id.nav_notes:
@@ -632,11 +634,11 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
 
         private int[] imageResId = {
-                R.drawable.ic_tabs_attendance,
-                R.drawable.ic_tabs_campus_news,
-                R.drawable.ic_tabs_time_table,
-                R.drawable.ic_tabs_notes,
-                R.drawable.ic_tabs_univ_news
+                R.drawable.ic_attendance_white,
+                R.drawable.ic_campus_news_white,
+                R.drawable.ic_time_table_white,
+                R.drawable.ic_notes_white,
+                R.drawable.ic_univ_news_white
         };
 
         @Override

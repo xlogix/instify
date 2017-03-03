@@ -9,25 +9,25 @@
     <item android:title="@string/nav_section_2">
         <menu>
             <item
-                android:id="@+id/nav_timetable"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="@string/nav_time_table" />
+                android:id="@+id/nav_attendance"
+                android:icon="@drawable/ic_attendance_white"
+                android:title="@string/nav_attendance" />
             <item
                 android:id="@+id/nav_campus_news"
-                android:icon="@drawable/ic_menu_gallery"
+                android:icon="@drawable/ic_campus_news_white"
                 android:title="@string/nav_campus_news" />
             <item
-                android:id="@+id/nav_univ_news"
-                android:icon="@drawable/ic_menu_gallery"
-                android:title="@string/nav_univ_news" />
+                android:id="@+id/nav_planner"
+                android:icon="@drawable/ic_univ_news_white"
+                android:title="@string/nav_erp" />
             <item
                 android:id="@+id/nav_notes"
-                android:icon="@drawable/ic_menu_gallery"
+                android:icon="@drawable/ic_notes_white"
                 android:title="@string/nav_notes" />
             <item
-                android:id="@+id/nav_erp"
-                android:icon="@drawable/ic_menu_gallery"
-                android:title="@string/nav_erp" />
+                android:id="@+id/nav_univ_news"
+                android:icon="@drawable/ic_univ_news_white"
+                android:title="@string/nav_univ_news" />
         </menu>
     </item>
 
@@ -36,7 +36,7 @@
             <item
                 android:id="@+id/nav_profile"
                 android:title="Profile"
-                android:icon="@drawable/ic_tabs_attendance"/>
+                android:icon="@drawable/ic_attendance_white"/>
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_account_circle_black_36dp"

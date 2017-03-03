@@ -181,7 +181,4 @@ public class UploadNews extends AppCompatActivity {
             default: return "all";
         }
     }
-
 }
-
-
