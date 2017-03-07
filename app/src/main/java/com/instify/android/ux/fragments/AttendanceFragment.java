@@ -3,7 +3,6 @@ package com.instify.android.ux.fragments;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -11,12 +10,14 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -26,7 +27,9 @@ import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.instify.android.R;
+import com.instify.android.app.AppConfig;
 import com.instify.android.app.MyApplication;
+import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.ux.MainActivity;
 
 import org.json.JSONArray;
@@ -34,8 +37,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -74,6 +79,8 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
         View rootView = inflater.inflate(R.layout.fragment_attendance, container, false);
         mSwipeRefreshLayout = (SwipeRefreshLayout)
                 rootView.findViewById(R.id.swipe_refresh_layout_attendance);
+        // Expand list view
+        expListView = (ExpandableListView) rootView.findViewById(R.id.expListView);
         // create a new chart object
         mChart = (BarChart) rootView.findViewById(R.id.barChart);
 
@@ -104,6 +111,149 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
         mChart.invalidate();
 
         return rootView;
+    }
+
+    private void getAttendance() {
+        // Tag used to cancel the request
+        String tag_string_req = "req_attendance";
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_ATTANDENCE, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                // Log.d(TAG, "Login Response: " + response.toString());
+                //hideDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+
+                    // Check for error node in json
+                    if (!error) {
+
+                        ListAdapterExpandible adapter;
+                        //    ExpandableListView expListView;
+                        //expListView = (ExpandableListView)
+
+                        // declare array List for all headers in list
+                        ArrayList<String> headersArrayList = new ArrayList<String>();
+
+                        // Declare Hash map for all headers and their corresponding values
+                        HashMap<String, ArrayList<String>> childArrayList = new HashMap<String, ArrayList<String>>();
+
+//                        expListView = (ExpandableListView)findViewById(R.id.expListView);
+                        JSONArray user = jObj.getJSONArray("subjects");
+
+                        Integer i;
+
+                        for (i = 0; i < user.length(); i++) {
+                            String name = user.getString(i);
+                            JSONObject subs = jObj.getJSONObject(user.getString(i));
+
+                            ;
+
+                            ArrayList<String> daysOfWeekArrayList = new ArrayList<String>();
+                            headersArrayList.add(name + "-" + subs.getString("sub-desc") + " " + subs.getString("avg-attd") + "%");
+
+                            // daysOfWeekArrayList.add(subs.getString("sub-desc"));
+                            daysOfWeekArrayList.add("MAX-HOURS: " + subs.getString("max-hrs"));
+                            daysOfWeekArrayList.add("ATTENDED-HOURS: " + subs.getString("attd-hrs"));
+                            daysOfWeekArrayList.add("ABSENT-HOURS: " + subs.getString("abs-hrs"));
+                            daysOfWeekArrayList.add("PERCENTAGE: " + subs.getString("avg-attd") + "%");
+
+                            childArrayList.put(name + "-" + subs.getString("sub-desc") + " " + subs.getString("avg-attd") + "%", daysOfWeekArrayList);
+
+                        }
+
+                        adapter = new ListAdapterExpandible(getContext(), headersArrayList, childArrayList);
+
+                        expListView.setAdapter(adapter);
+
+                        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
+                            @Override
+                            public boolean onChildClick(ExpandableListView parent, View v,
+                                                        int groupPosition, int childPosition, long id) {
+                                //  Toast.makeText(getContext(), "Child is clicked", Toast.LENGTH_LONG).show();
+                                return false;
+                            }
+                        });
+
+                        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+
+                            @Override
+                            public boolean onGroupClick(ExpandableListView parent, View v,
+                                                        int groupPosition, long id) {
+
+                                // Toast.makeText(getContext(), "Group is Clicked", Toast.LENGTH_LONG).show();
+                                return false;
+                            }
+                        });
+                        expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+
+                            @Override
+                            public void onGroupCollapse(int groupPosition) {
+
+                                //Toast.makeText(getContext(), "Child is Collapsed", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                        final ExpandableListView finalExpListView = expListView;
+                        expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+                            int previousGroup = -1;
+
+                            @Override
+                            public void onGroupExpand(int groupPosition) {
+
+
+                                if (groupPosition != previousGroup)
+                                    finalExpListView.collapseGroup(previousGroup);
+                                previousGroup = groupPosition;
+
+                                //  Toast.makeText(getContext(), "Child is Expanded", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //  Log.e(TAG, "Login Error: " + error.getMessage());
+                Toast.makeText(getContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                //hideDialog();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                SQLiteHandler db = new SQLiteHandler(getContext());
+                String pass = db.getUserDetails().get("token");
+                String unm = db.getUserDetails().get("regno");
+
+                params.put("regno", unm);
+                params.put("pass", pass);
+
+                return params;
+            }
+        };
+
+        // Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
     /*private void askPassword() {

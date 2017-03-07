@@ -3,8 +3,11 @@ package com.instify.android.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.util.Log;
 
 import com.instify.android.utils.Theme;
+
+import timber.log.Timber;
 
 /**
  * Created by Abhish3k on 1/10/2017.
@@ -89,6 +92,18 @@ public class PreferenceManager {
     public void setIsFirstRun(boolean firstRun) {
         editor.putBoolean(IS_FIRST_RUN, firstRun).apply();
     }
+
+    public void setLogin(boolean isLoggedIn) {
+
+        editor.putBoolean(KEY_IS_LOGGED_IN, isLoggedIn);
+        // commit changes
+        editor.commit();
+
+        Timber.d("User login session modified!");
+    }
+
+    public boolean isLoggedIn() {
+        return pref.getBoolean(KEY_IS_LOGGED_IN, false);
 
     /**
      * Check if the user is signed in from Google or Facebook

@@ -1,42 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipe_refresh_layout_attendance"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <android.support.v4.widget.SlidingPaneLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:padding="16dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ExpandableListView
+                    android:id="@+id/expListView"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true">
+                </ExpandableListView>
+            </RelativeLayout>
+        </ScrollView>
+    </android.support.v4.widget.SlidingPaneLayout>
+</android.support.v4.widget.SwipeRefreshLayout><!--<ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:padding="@dimen/activity_vertical_margin">
-
-        <!--<LinearLayout
-            android:id="@+id/layout_attendance_ask_password"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="@dimen/activity_vertical_margin"
-            android:visibility="invisible">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="It looks like you haven't entered your ERP password. Enter your password in Account Settings page to fetch the attendance."
-                android:textColor="@color/colorPrimary"
-                android:textSize="18sp" />
-
-            <android.support.v7.widget.AppCompatButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:background="@color/white"
-                android:elevation="4dp"
-                android:text="Account Settings"
-                android:textColor="@color/colorPrimary" />
-        </LinearLayout>-->
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/barChart"
@@ -45,6 +41,5 @@
             android:visibility="visible"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    </ScrollView>
-</android.support.v4.widget.SwipeRefreshLayout>
+    </ScrollView>-->
 

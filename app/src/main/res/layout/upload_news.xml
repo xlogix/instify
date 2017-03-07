@@ -1,125 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:padding="@dimen/activity_vertical_margin"
-    tools:context=".ux.RegistrationActivity">
+    android:padding="@dimen/activity_vertical_margin">
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10dp">
-
-
-    <TextView
-        android:id="@+id/post_announcement_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:padding="20dp"
-        android:text="Post an Announcement"
-        android:textColor="@color/colorPrimary"
-        android:textAllCaps="true"
-        android:textSize="24sp" />
-
-    <EditText
-        android:id="@+id/news_title"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/post_announcement_text"
-        android:layout_marginBottom="10dp"
-        android:hint="Title"
-        android:padding="10dp"
-        android:maxLines="1" />
+        android:orientation="vertical"
+        android:padding="10dp">
 
-    <EditText
-        android:id="@+id/news_description"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:textColor="@color/black"
-        android:layout_below="@+id/news_title"
-        android:layout_marginBottom="10dp"
-        android:hint="Description"
-        android:padding="10dp" />
-
-    <TextView
-        android:id="@+id/CampusUploadRadioTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:textSize="24sp"
-        android:text="Choose level"
-        android:textColor="@color/colorPrimary"
-        android:layout_below="@+id/news_description"/>
-
-    <RadioGroup
-        android:id="@+id/campusUploadRadioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/CampusUploadRadioTitle">
-
-        <RadioButton
-            android:id="@+id/campusUploadUniv"
+        <TextView
+            android:id="@+id/post_announcement_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="University"/>
+            android:layout_centerHorizontal="true"
+            android:padding="20dp"
+            android:text="Post an Announcement"
+            android:textAllCaps="true"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp" />
 
-        <RadioButton
-            android:id="@+id/campusUploadDept"
+        <EditText
+            android:id="@+id/news_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/post_announcement_text"
+            android:layout_marginBottom="10dp"
+            android:hint="Title"
+            android:maxLines="1"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/news_description"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_below="@+id/news_title"
+            android:layout_marginBottom="10dp"
+            android:hint="Description"
+            android:padding="10dp"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/CampusUploadRadioTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Department"/>
+            android:layout_below="@+id/news_description"
+            android:layout_centerHorizontal="true"
+            android:text="Choose level"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp" />
 
-        <RadioButton
-            android:id="@+id/campusUploadClass"
+        <RadioGroup
+            android:id="@+id/campusUploadRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/CampusUploadRadioTitle">
+
+            <RadioButton
+                android:id="@+id/campusUploadUniv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="University" />
+
+            <RadioButton
+                android:id="@+id/campusUploadDept"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Department" />
+
+            <RadioButton
+                android:id="@+id/campusUploadClass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Class" />
+
+        </RadioGroup>
+
+        <Spinner
+            android:id="@+id/campusUploadDeptSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Class"/>
+            android:layout_below="@+id/campusUploadRadioGroup"
+            android:layout_marginTop="@dimen/activity_vertical_margin">
 
-    </RadioGroup>
+        </Spinner>
 
-    <Spinner
-        android:id="@+id/campusUploadDeptSpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/campusUploadRadioGroup"
-        android:layout_marginTop="@dimen/activity_vertical_margin">
+        <Spinner
+            android:id="@+id/campusUploadClassYearSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/campusUploadDeptSpinner"
+            android:layout_marginTop="@dimen/activity_vertical_margin">
 
-    </Spinner>
+        </Spinner>
 
-    <Spinner
-        android:id="@+id/campusUploadClassYearSpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_below="@+id/campusUploadDeptSpinner">
+        <Spinner
+            android:id="@+id/campusUploadClassSecSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/campusUploadDeptSpinner"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_toEndOf="@+id/campusUploadClassYearSpinner"
+            android:layout_toRightOf="@+id/campusUploadClassYearSpinner">
 
-    </Spinner>
+        </Spinner>
 
-    <Spinner
-        android:id="@+id/campusUploadClassSecSpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_below="@+id/campusUploadDeptSpinner"
-        android:layout_toRightOf="@+id/campusUploadClassYearSpinner"
-        android:layout_toEndOf="@+id/campusUploadClassYearSpinner">
-
-    </Spinner>
-
-    <Button
-        android:id="@+id/post"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/campusUploadClassYearSpinner"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:background="@color/colorPrimaryLight"
-        android:text="Post" />
-
-</RelativeLayout>
+        <Button
+            android:id="@+id/post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/campusUploadClassYearSpinner"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@color/colorPrimaryLight"
+            android:text="Post" />
+    </RelativeLayout>
 </ScrollView>

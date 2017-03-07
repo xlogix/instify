@@ -143,7 +143,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
     }
 
-
     TextView navHeaderName;
 
     @Override
@@ -237,7 +236,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     // Setting the name in the nav drawer
                     // TODO: Causing a null point exception when main activity restarts
                     navHeaderName = (TextView) findViewById(R.id.nav_drawer_header_text);
-                    navHeaderName.setText(mFirebaseUser.getDisplayName());
                     if (BuildConfig.DEBUG) {
                         Toast.makeText(MainActivity.this, "User data collected!! :)", Toast.LENGTH_SHORT).show();
                     }
@@ -375,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             File file = new File(Environment.getExternalStorageDirectory(), UUID.randomUUID().toString() + ".jpg");
             takePicture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
             mCaptureUri = Uri.fromFile(file);
-            i  =  new ImageCompression(getApplicationContext()).compressImage(String.valueOf(mCaptureUri));
+            i = new ImageCompression(getApplicationContext()).compressImage(String.valueOf(mCaptureUri));
 
             // Camera
             final List<Intent> cameraIntents = new ArrayList<Intent>();
@@ -483,7 +481,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                         mViewPager.setCurrentItem(4);
                         break;
                     case R.id.nav_profile:
-                        startActivity(new Intent(MainActivity.this, AccountActivity.class));
+                        // startActivity(new Intent(MainActivity.this, AccountActivity.class));
                         break;
                     case R.id.nav_logout:
                         MyApplication.getInstance().logoutUser();

@@ -68,8 +68,6 @@ dependencies {
 
     // AUTH
     compile 'com.google.firebase:firebase-auth:10.2.0'
-    compile 'com.google.android.gms:play-services-auth:10.2.0'
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
 
     // DATABASE FIREBASE,UI
     compile 'com.google.firebase:firebase-database:10.2.0'
@@ -92,8 +90,8 @@ dependencies {
     compile 'com.google.firebase:firebase-config:10.2.0'
 
     // BIND VIEWS
-    compile 'com.jakewharton:butterknife:8.4.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
     // STORAGE FIREBASE
     compile 'com.google.firebase:firebase-storage:10.2.0'
