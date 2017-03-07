@@ -3,7 +3,6 @@ package com.instify.android.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.util.Log;
 
 import com.instify.android.utils.Theme;
 
@@ -36,6 +35,7 @@ public class PreferenceManager {
     private static final String IS_DARK_THEME = "is_dark_theme";
     private static final String IS_SIGNED_IN_FROM_GOOGLE_OR_FACEBOOK = "is_signed_in_from_google_or_facebook";
     private static final String SET_USER_PASSWORD = "set_user_password";
+    private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
 
     // Constructor
     public PreferenceManager(Context context) {
@@ -103,7 +103,8 @@ public class PreferenceManager {
     }
 
     public boolean isLoggedIn() {
-        return pref.getBoolean(KEY_IS_LOGGED_IN, false);
+        return mPrefs.getBoolean(KEY_IS_LOGGED_IN, false);
+    }
 
     /**
      * Check if the user is signed in from Google or Facebook
@@ -119,7 +120,7 @@ public class PreferenceManager {
     }
 
     /**
-     * Check if the user is signed in from Google or Facebook
+     * Saves the user credentials in the preferences so they can used later
      *
      * @return boolean value, true or false
      */
@@ -132,7 +133,7 @@ public class PreferenceManager {
     }
 
     /**
-     * Check if the user is signed in from Google or Facebook
+     * Checks if the user has chosen a dark theme for the app.
      *
      * @return boolean value, true or false
      */

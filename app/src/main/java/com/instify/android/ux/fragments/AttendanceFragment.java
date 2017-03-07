@@ -31,6 +31,7 @@ import com.instify.android.app.AppConfig;
 import com.instify.android.app.MyApplication;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.ux.MainActivity;
+import com.instify.android.ux.adapters.ListAdapterExpandible;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,6 +68,7 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
     }
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ExpandableListView expListView;
     private BarChart mChart;
     private Typeface tf;
     private String userRegNo, userPass;
@@ -82,7 +84,7 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
         // Expand list view
         expListView = (ExpandableListView) rootView.findViewById(R.id.expListView);
         // create a new chart object
-        mChart = (BarChart) rootView.findViewById(R.id.barChart);
+        //mChart = (BarChart) rootView.findViewById(R.id.barChart);
 
        /* new Handler().postDelayed(new Runnable() {
             @Override
@@ -122,16 +124,12 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
 
             @Override
             public void onResponse(String response) {
-                // Log.d(TAG, "Login Response: " + response.toString());
-                //hideDialog();
-
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
 
                     // Check for error node in json
                     if (!error) {
-
                         ListAdapterExpandible adapter;
                         //    ExpandableListView expListView;
                         //expListView = (ExpandableListView)
@@ -142,7 +140,7 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
                         // Declare Hash map for all headers and their corresponding values
                         HashMap<String, ArrayList<String>> childArrayList = new HashMap<String, ArrayList<String>>();
 
-//                        expListView = (ExpandableListView)findViewById(R.id.expListView);
+                        // expListView = (ExpandableListView)findViewById(R.id.expListView);
                         JSONArray user = jObj.getJSONArray("subjects");
 
                         Integer i;
@@ -150,8 +148,6 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
                         for (i = 0; i < user.length(); i++) {
                             String name = user.getString(i);
                             JSONObject subs = jObj.getJSONObject(user.getString(i));
-
-                            ;
 
                             ArrayList<String> daysOfWeekArrayList = new ArrayList<String>();
                             headersArrayList.add(name + "-" + subs.getString("sub-desc") + " " + subs.getString("avg-attd") + "%");
@@ -206,12 +202,9 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
                             @Override
                             public void onGroupExpand(int groupPosition) {
 
-
                                 if (groupPosition != previousGroup)
                                     finalExpListView.collapseGroup(previousGroup);
                                 previousGroup = groupPosition;
-
-                                //  Toast.makeText(getContext(), "Child is Expanded", Toast.LENGTH_LONG).show();
                             }
                         });
 

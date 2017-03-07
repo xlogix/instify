@@ -28,7 +28,8 @@
             </RelativeLayout>
         </ScrollView>
     </android.support.v4.widget.SlidingPaneLayout>
-</android.support.v4.widget.SwipeRefreshLayout><!--<ScrollView
+</android.support.v4.widget.SwipeRefreshLayout>
+    <!--<ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -40,6 +41,5 @@
             android:layout_height="wrap_content"
             android:visibility="visible"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
     </ScrollView>-->
 

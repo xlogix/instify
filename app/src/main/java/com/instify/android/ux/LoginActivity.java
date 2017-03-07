@@ -11,6 +11,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,7 +23,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.instify.android.R;
+import com.instify.android.app.AppConfig;
 import com.instify.android.app.MyApplication;
+import com.instify.android.helpers.SQLiteHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -35,6 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public ProgressDialog mProgressDialog;
     private AutoCompleteTextView mEmailField;
     private EditText mPasswordField;
+    private SQLiteHandler db;
     // [declare_auth]
     public FirebaseAuth mAuth;
     // [declare_auth_listener]
@@ -79,7 +92,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         // Buttons
         findViewById(R.id.action_login).setOnClickListener(this);
-        findViewById(R.id.action_to_register).setOnClickListener(this);
+
+        // SQLite database handler
+        db = new SQLiteHandler(getApplicationContext());
+
+        // Check if user is already logged in or not
+        if (MyApplication.getInstance().getPrefManager().isLoggedIn()) {
+            // User is already logged in. Take him to main activity
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+        }
 
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
@@ -117,7 +139,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     // [START sign_in_with_email]
-    private void attemptLogin(String email, String password) {
+    private void attemptLogin(final String email, final String password) {
         Timber.d(TAG, "attemptLogin:" + email);
         if (!validateForm()) {
             return;
@@ -125,6 +147,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         showProgressDialog();
 
+        // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -132,8 +155,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Timber.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
                         Toast.makeText(LoginActivity.this, R.string.auth_success,
                                 Toast.LENGTH_SHORT).show();
-                        // Take the user to main activity
-                        intentLoginToMain();
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
@@ -143,10 +164,89 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     Toast.LENGTH_SHORT).show();
                         }
 
-                        hideProgressDialog();
+                        // Hide the Progress Dialog but it's redundant.
+                        // hideProgressDialog();
                     }
                 });
         // [END sign_in_with_email]
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_LOGIN, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Timber.d(TAG, "Login Response: " + response);
+                hideProgressDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+
+                    // Check for error node in json
+                    if (!error) {
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                        // user successfully logged in
+                        // Create login session
+                        MyApplication.getInstance().getPrefManager().setLogin(true);
+
+                        // Now store the user in SQLite
+                        String uid = jObj.getString("folio_no");
+
+                        //   JSONObject user = jObj.getJSONObject("user");
+                        String name = jObj.getString("name");
+                        String email = jObj.getString("email");
+                        String created_at = jObj.getString("image");
+                        String regno = jObj.getString("regno");
+                        String dept = jObj.getString("dept");
+
+                        // Inserting row in users table
+                        db.addUser(name, email, uid, created_at, password, regno, dept);
+
+                        // Launch main activity
+                        intentLoginToMain();
+
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Timber.e(TAG, "Login Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                // hide the Progress bar
+                hideProgressDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("regno", email);
+                params.put("pass", password);
+
+                return params;
+            }
+        };
+        // Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
     private boolean validateForm() {
