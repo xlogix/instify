@@ -31,7 +31,7 @@ import com.instify.android.app.AppConfig;
 import com.instify.android.app.MyApplication;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.ux.MainActivity;
-import com.instify.android.ux.adapters.ListAdapterExpandible;
+import com.instify.android.ux.adapters.ListAdapterExpandable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +40,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import timber.log.Timber;
@@ -84,8 +83,12 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
         // Expand list view
         expListView = (ExpandableListView) rootView.findViewById(R.id.expListView);
         // create a new chart object
-        //mChart = (BarChart) rootView.findViewById(R.id.barChart);
+        // mChart = (BarChart) rootView.findViewById(R.id.barChart);
 
+        // Fetch the attendance
+        getAttendance();
+
+        // Method to call the JSON
        /* new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -93,7 +96,16 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
             }
         }, 6000);*/
 
-        List<BarEntry> entries = new ArrayList<>();
+        /*new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                new fetchAttendance().execute();
+            }
+        }, 6000);*/
+
+        // Setting the data in the chart (8 entries).. [DISABLED}
+
+       /* List<BarEntry> entries = new ArrayList<>();
         entries.add(new BarEntry(0f, 0f));
         entries.add(new BarEntry(1f, 0f));
         entries.add(new BarEntry(2f, 0f));
@@ -101,6 +113,8 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
         // gap of 2f
         entries.add(new BarEntry(5f, 0f));
         entries.add(new BarEntry(6f, 0f));
+        entries.add(new BarEntry(3f, 0f));
+        entries.add(new BarEntry(3f, 0f));
 
         BarDataSet set = new BarDataSet(entries, "BarDataSet");
         BarData data = new BarData(set);
@@ -110,12 +124,31 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
         //mChart.setOnChartGestureListener(this);
         mChart.setDrawBarShadow(true);
         mChart.setFitBars(true); // make the x-axis fit exactly all bars
-        mChart.invalidate();
+        mChart.invalidate();*/
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getAttendance();
+            }
+        });
 
         return rootView;
     }
 
+    private class fetchAttendance extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            getAttendance();
+            return "";
+        }
+    }
+
     private void getAttendance() {
+        // Handle UI
+        showRefreshing();
+
         // Tag used to cancel the request
         String tag_string_req = "req_attendance";
 
@@ -128,17 +161,20 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
 
+                    // Handle UI
+                    hideRefreshing();
+
                     // Check for error node in json
                     if (!error) {
-                        ListAdapterExpandible adapter;
+                        ListAdapterExpandable adapter;
                         //    ExpandableListView expListView;
                         //expListView = (ExpandableListView)
 
                         // declare array List for all headers in list
-                        ArrayList<String> headersArrayList = new ArrayList<String>();
+                        ArrayList<String> headersArrayList = new ArrayList<>();
 
                         // Declare Hash map for all headers and their corresponding values
-                        HashMap<String, ArrayList<String>> childArrayList = new HashMap<String, ArrayList<String>>();
+                        HashMap<String, ArrayList<String>> childArrayList = new HashMap<>();
 
                         // expListView = (ExpandableListView)findViewById(R.id.expListView);
                         JSONArray user = jObj.getJSONArray("subjects");
@@ -149,7 +185,7 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
                             String name = user.getString(i);
                             JSONObject subs = jObj.getJSONObject(user.getString(i));
 
-                            ArrayList<String> daysOfWeekArrayList = new ArrayList<String>();
+                            ArrayList<String> daysOfWeekArrayList = new ArrayList<>();
                             headersArrayList.add(name + "-" + subs.getString("sub-desc") + " " + subs.getString("avg-attd") + "%");
 
                             // daysOfWeekArrayList.add(subs.getString("sub-desc"));
@@ -162,7 +198,7 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
 
                         }
 
-                        adapter = new ListAdapterExpandible(getContext(), headersArrayList, childArrayList);
+                        adapter = new ListAdapterExpandable(getContext(), headersArrayList, childArrayList);
 
                         expListView.setAdapter(adapter);
 
@@ -171,7 +207,6 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
                             @Override
                             public boolean onChildClick(ExpandableListView parent, View v,
                                                         int groupPosition, int childPosition, long id) {
-                                //  Toast.makeText(getContext(), "Child is clicked", Toast.LENGTH_LONG).show();
                                 return false;
                             }
                         });
@@ -182,7 +217,6 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
                             public boolean onGroupClick(ExpandableListView parent, View v,
                                                         int groupPosition, long id) {
 
-                                // Toast.makeText(getContext(), "Group is Clicked", Toast.LENGTH_LONG).show();
                                 return false;
                             }
                         });
@@ -191,7 +225,6 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
                             @Override
                             public void onGroupCollapse(int groupPosition) {
 
-                                //Toast.makeText(getContext(), "Child is Collapsed", Toast.LENGTH_LONG).show();
                             }
                         });
 
@@ -209,12 +242,16 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
                         });
 
                     } else {
+                        // Update UI
+                        hideRefreshing();
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");
                         Toast.makeText(getContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
+                    // Update UI
+                    hideRefreshing();
                     // JSON error
                     e.printStackTrace();
                     Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -224,16 +261,15 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                //  Log.e(TAG, "Login Error: " + error.getMessage());
+                Timber.e("Network Error: " + error.getMessage());
                 Toast.makeText(getContext(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
-                //hideDialog();
             }
         }) {
             @Override
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 SQLiteHandler db = new SQLiteHandler(getContext());
                 String pass = db.getUserDetails().get("token");
                 String unm = db.getUserDetails().get("regno");
@@ -414,5 +450,4 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
     public void onChartTranslate(MotionEvent me, float dX, float dY) {
         Log.i("Translate / Move", "dX: " + dX + ", dY: " + dY);
     }
-
 }

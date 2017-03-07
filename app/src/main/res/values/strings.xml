@@ -56,20 +56,15 @@
     <string name="menu_action_favorites">Favorites</string>
     <string name="no_network_connection_toast">No network connection found</string>
 
-    <!-- Registration Activity -->
-    <string name="hint_name">Full Name</string>
+    <!-- Login Activity -->
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_regNo">Registration Number</string>
-    <string name="action_register">Register and Login</string>
-    <string name="name">Name</string>
     <string name="email">Email</string>
-
-    <!--Login Activity -->
     <string name="auth_failed">Authentication Failed. Try Again.</string>
     <string name="auth_success">Authentication Successful!</string>
     <string name="action_sign_in">Login</string>
-    <string name="action_sign_up">New User?</string>
+    <string name="action_register">Register and Login</string>
 
     <!-- Activity Chat -->
     <string name="msg_edit_box">Type a Message</string>

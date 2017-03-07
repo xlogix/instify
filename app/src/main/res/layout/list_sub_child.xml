@@ -10,6 +10,6 @@
         android:id="@+id/textViewChild"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
+        android:textColor="@color/black"
         android:textSize="14sp" />
 </LinearLayout>

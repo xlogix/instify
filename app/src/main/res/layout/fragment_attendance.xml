@@ -4,30 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.widget.SlidingPaneLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:padding="6dp">
 
-        <ScrollView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:padding="16dp">
+            android:layout_height="wrap_content">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ExpandableListView
-                    android:id="@+id/expListView"
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true">
-                </ExpandableListView>
-            </RelativeLayout>
-        </ScrollView>
-    </android.support.v4.widget.SlidingPaneLayout>
+            <ExpandableListView
+                android:id="@+id/expListView"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
+            </ExpandableListView>
+        </RelativeLayout>
+    </ScrollView>
 </android.support.v4.widget.SwipeRefreshLayout>
     <!--<ScrollView
         android:layout_width="match_parent"
@@ -42,4 +37,3 @@
             android:visibility="visible"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </ScrollView>-->
-

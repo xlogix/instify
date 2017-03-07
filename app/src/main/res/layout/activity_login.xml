@@ -34,6 +34,21 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp">
 
+            <AutoCompleteTextView
+                android:id="@+id/field_regNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_regNo"
+                android:inputType="textCapCharacters"
+                android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp">
+
             <EditText
                 android:id="@+id/field_password"
                 android:layout_width="match_parent"

@@ -22,10 +22,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
 import com.instify.android.app.AppConfig;
 import com.instify.android.app.MyApplication;
 import com.instify.android.helpers.SQLiteHandler;
+import com.instify.android.models.UserData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,12 +51,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public ProgressDialog mProgressDialog;
     private AutoCompleteTextView mEmailField;
+    private AutoCompleteTextView mRegNoField;
     private EditText mPasswordField;
     private SQLiteHandler db;
     // [declare_auth]
     public FirebaseAuth mAuth;
     // [declare_auth_listener]
     public FirebaseAuth.AuthStateListener mAuthStateListener;
+    // [declare_database_reference]
+    private DatabaseReference mFirebaseDatabase;
+
+    UserData userInfoObj;
+
 
     // [START on_start_add_listener]
     @Override
@@ -88,6 +99,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         // Views
         mEmailField = (AutoCompleteTextView) findViewById(R.id.field_email);
+        mRegNoField = (AutoCompleteTextView) findViewById(R.id.field_regNo);
         mPasswordField = (EditText) findViewById(R.id.field_password);
 
         // Buttons
@@ -112,18 +124,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null && MyApplication.getInstance().getPrefManager().getSignedInFromGoogleOrFacebook()) {
-                    // User is signed in & did it from Facebook or Google
-                    Timber.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    /*Toast.makeText(LoginActivity.this, "This app requires more information to work correctly",
-                            Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(LoginActivity.this, AccountActivity.class));
-                    finish();*/
-                } else if (user != null) {
+                if (user != null) {
+                    mFirebaseDatabase.child("users").child(user.getUid()).setValue(userInfoObj);
+
+                    // Checking and waiting till the info has be added //
+                    mFirebaseDatabase.child("users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Toast.makeText(LoginActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Toast.makeText(LoginActivity.this, "Registration Failed!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                     // User is signed in
                     Timber.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    /*startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    finish();*/
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
                 } else {
                     // User is signed out
                     Timber.d(TAG, "onAuthStateChanged:signed_out");
@@ -139,36 +159,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     // [START sign_in_with_email]
-    private void attemptLogin(final String email, final String password) {
+    private void attemptLogin(String email, final String regNo, final String password) {
         Timber.d(TAG, "attemptLogin:" + email);
         if (!validateForm()) {
             return;
         }
 
         showProgressDialog();
-
-        // [START sign_in_with_email]
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Timber.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
-                        Toast.makeText(LoginActivity.this, R.string.auth_success,
-                                Toast.LENGTH_SHORT).show();
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Timber.w(TAG, "signInWithEmail:failed", task.getException());
-                            Toast.makeText(LoginActivity.this, R.string.auth_failed,
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                        // Hide the Progress Dialog but it's redundant.
-                        // hideProgressDialog();
-                    }
-                });
-        // [END sign_in_with_email]
 
         // Tag used to cancel the request
         String tag_string_req = "req_login";
@@ -239,12 +236,51 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("regno", email);
+                params.put("regno", regNo);
                 params.put("pass", password);
 
                 return params;
             }
         };
+
+        // [START sign_up_with_email]
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Timber.d(TAG, "CreateUserWithEmail:onComplete:" + task.isSuccessful());
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Registration Failed!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+        // [END sign_up_with_email]
+
+        // [START sign_in_with_email]
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Timber.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+                        Toast.makeText(LoginActivity.this, R.string.auth_success,
+                                Toast.LENGTH_SHORT).show();
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Timber.w(TAG, "signInWithEmail:failed", task.getException());
+                            Toast.makeText(LoginActivity.this, R.string.auth_failed,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        // Hide the Progress Dialog but it's redundant.
+                        // hideProgressDialog();
+                    }
+                });
+        // [END sign_in_with_email]
+
         // Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
@@ -256,14 +292,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (TextUtils.isEmpty(email)) {
             mEmailField.setError("Required.");
             valid = false;
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            mEmailField.setError("Invalid Email Address");
         } else {
             mEmailField.setError(null);
+        }
+
+        String regNo = mRegNoField.getText().toString();
+        if (TextUtils.isEmpty(regNo)) {
+            mRegNoField.setError("Required.");
+            valid = false;
+        } else {
+            mRegNoField.setError(null);
         }
 
         String password = mPasswordField.getText().toString();
         if (TextUtils.isEmpty(password)) {
             mPasswordField.setError("Required.");
             valid = false;
+        } else if (password.length() < 6) {
+            mPasswordField.setError("At least six characters.");
         } else {
             mPasswordField.setError(null);
         }
@@ -275,8 +323,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.action_login) {
-            attemptLogin(mEmailField.getText().toString(), mPasswordField.getText().toString());
+            attemptLogin(mEmailField.getText().toString(), mRegNoField.getText().toString(), mPasswordField.getText().toString());
         }
+    }
+
+    public void sendConfirmationMail(FirebaseUser mFirebaseUser) {
+        mFirebaseUser.sendEmailVerification()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Timber.d("Email sent.");
+                        }
+                    }
+                });
     }
 
     public void showProgressDialog() {

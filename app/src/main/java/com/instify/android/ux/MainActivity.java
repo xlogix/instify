@@ -45,7 +45,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,7 +57,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.instify.android.BuildConfig;
 import com.instify.android.R;
 import com.instify.android.app.MyApplication;
+import com.instify.android.helpers.DownloadImage;
 import com.instify.android.helpers.ImageCompression;
+import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.listeners.OnSingleClickListener;
 import com.instify.android.models.UserData;
 import com.instify.android.ux.fragments.AttendanceFragment;
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     private FirebaseAuth mAuth;
     private FirebaseUser mFirebaseUser;
     private DatabaseReference dbRef, userRef;
+    SQLiteHandler db = new SQLiteHandler(this);
 
     public UserData userInfoObject;
     String i;
@@ -262,6 +264,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         navImageView = (ImageView) headerView.findViewById(R.id.nav_drawer_user_photo);
         navTextView = (TextView) headerView.findViewById(R.id.nav_drawer_header_text);
 
+        new DownloadImage(navImageView).execute(db.getUserDetails().get("created_at"));
+        navTextView.setText(db.getUserDetails().get("name"));
+
         // Click listeners
         navImageView.setOnClickListener(new OnSingleClickListener() {
             @Override
@@ -270,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             }
         });
 
-        // Set User Email
+        /*// Set User Email
         if (mFirebaseUser != null) {
             try {
                 // Set profile picture from Firebase account
@@ -285,7 +290,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             } catch (Exception e) {
                 Timber.d(e);
             }
-        }
+        }*/
+
+
 
         /*//Decode Image to String
         String imgPath = getSharedPreferences("userData", MODE_PRIVATE).getString("PicPath", null);

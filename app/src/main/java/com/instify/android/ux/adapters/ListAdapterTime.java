@@ -98,7 +98,7 @@ public class ListAdapterTime extends BaseExpandableListAdapter {
 
         TextView textViewHeader = (TextView) convertView
                 .findViewById(R.id.textViewHeader);
-        convertView.setBackgroundResource(R.color.bg_login);
+        convertView.setBackgroundResource(R.color.light_blue_500);
         textViewHeader.setText(headerTitle);
 
         return convertView;

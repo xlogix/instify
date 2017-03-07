@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class ListAdapterExpandible extends BaseExpandableListAdapter {
+public class ListAdapterExpandable extends BaseExpandableListAdapter {
 
     private Context context;
     private List<String> headerArray;
@@ -22,7 +22,7 @@ public class ListAdapterExpandible extends BaseExpandableListAdapter {
     private LayoutInflater infalInflater;
 
     // Initialize constructor for array list
-    public ListAdapterExpandible(Context context, ArrayList<String> headerArray,
+    public ListAdapterExpandable(Context context, ArrayList<String> headerArray,
                                  HashMap<String, ArrayList<String>> listChildData) {
         this.context = context;
         this.headerArray = headerArray;
@@ -42,9 +42,7 @@ public class ListAdapterExpandible extends BaseExpandableListAdapter {
         return childPosition;
     }
 
-
     // Inflate child view
-
     @Override
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
@@ -99,7 +97,7 @@ public class ListAdapterExpandible extends BaseExpandableListAdapter {
 
         TextView textViewHeader = (TextView) convertView
                 .findViewById(R.id.textViewHeader);
-        convertView.setBackgroundResource(R.color.bg_login);
+        convertView.setBackgroundResource(R.color.light_blue_500);
         textViewHeader.setText(headerTitle);
 
         return convertView;
