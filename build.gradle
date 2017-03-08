@@ -16,8 +16,12 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-        maven { url "https://jitpack.io" }
-        maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
+        maven { url "https://jitpack.io"
+        }
+        maven { url "https://s3.amazonaws.com/repo.commonsware.com"
+        }
+        maven { url "https://github.com/omadahealth/omada-nexus/raw/master/release"
+        }
     }
 }
 
