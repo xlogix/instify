@@ -38,6 +38,7 @@ import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,6 +67,7 @@ import com.instify.android.ux.fragments.CampNewsFragment;
 import com.instify.android.ux.fragments.NotesFragment;
 import com.instify.android.ux.fragments.TimeTableFragment;
 import com.instify.android.ux.fragments.UnivNewsFragment;
+import com.thefinestartist.finestwebview.FinestWebView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -462,6 +464,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     case R.id.nav_gpa:
                         intentGPACalculator(MainActivity.this, "com.gupta.ishansh.gcmcalculator");
                         break;
+                    case R.id.nav_feekart:
+                        FeekartWebView();
+                        break;
                     case R.id.nav_schedule:
                         mViewPager.setCurrentItem(0);
                         break;
@@ -553,6 +558,31 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    public void FeekartWebView() {
+        new FinestWebView.Builder(this).theme(R.style.FinestWebViewTheme)
+                .titleDefault("Feekart")
+                .showUrl(false)
+                .statusBarColorRes(R.color.colorPrimaryDark)
+                .toolbarColorRes(R.color.colorPrimary)
+                .titleColorRes(R.color.finestWhite)
+                .urlColorRes(R.color.colorPrimaryLight)
+                .iconDefaultColorRes(R.color.finestWhite)
+                .progressBarColorRes(R.color.finestWhite)
+                .stringResCopiedToClipboard(R.string.copied_to_clipboard)
+                .stringResCopiedToClipboard(R.string.copied_to_clipboard)
+                .stringResCopiedToClipboard(R.string.copied_to_clipboard)
+                .showSwipeRefreshLayout(true)
+                .updateTitleFromHtml(true)
+                .swipeRefreshColorRes(R.color.colorPrimaryDark)
+                .menuSelector(R.drawable.selector_light_theme)
+                .menuTextGravity(Gravity.CENTER)
+                .menuTextPaddingRightRes(R.dimen.defaultMenuTextPaddingLeft)
+                .dividerHeight(0)
+                .gradientDivider(false)
+                .setCustomAnimations(R.anim.slide_up, R.anim.hold, R.anim.hold, R.anim.slide_down)
+                .show("http://feekart.srmuniv.ac.in/srmopp/");
     }
 
     // Tab layout and Fragments

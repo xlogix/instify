@@ -5,8 +5,12 @@
         android:id="@+id/nav_gpa"
         android:icon="@drawable/ic_gpa_calculator"
         android:title="@string/nav_section_1" />
+    <item
+        android:id="@+id/nav_feekart"
+        android:icon="@drawable/ic_add_white_24dp"
+        android:title="@string/nav_section_2" />
 
-    <item android:title="@string/nav_section_2">
+    <item android:title="@string/nav_section_3">
         <menu>
             <item
                 android:id="@+id/nav_attendance"
@@ -31,7 +35,7 @@
         </menu>
     </item>
 
-    <item android:title="General">
+    <item android:title="@string/nav_section_4">
         <menu>
             <item
                 android:id="@+id/nav_profile"
@@ -48,7 +52,7 @@
         </menu>
     </item>
 
-    <item android:title="@string/nav_section_3">
+    <item android:title="@string/nav_section_5">
         <menu>
             <item
                 android:id="@+id/nav_share"
