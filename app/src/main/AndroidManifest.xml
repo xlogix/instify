@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.instify.android">
 
     <supports-screens
@@ -22,7 +21,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <!-- FCM (Firebase Cloud Messaging) for all build types configuration -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -52,6 +50,12 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity
+            android:name="com.thefinestartist.finestwebview.FinestWebViewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensor"
+            android:theme="@style/FinestWebViewTheme.Light" />
 
         <activity
             android:name=".ux.SplashActivity"
@@ -88,7 +92,8 @@
             android:theme="@style/AppTheme.NoActionBarTransparent" />
 
         <activity
-            android:name=".ux.ChatActivity" />
+            android:name=".ux.ChatActivity"
+            android:label="@string/title_activity_chat" />
 
         <activity
             android:name=".ux.AboutActivity"

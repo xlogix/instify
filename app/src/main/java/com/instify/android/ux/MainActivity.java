@@ -54,7 +54,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.instify.android.BuildConfig;
 import com.instify.android.R;
 import com.instify.android.app.MyApplication;
 import com.instify.android.helpers.DownloadImage;
@@ -234,13 +233,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
                     // Collecting users data to use through out the app
                     userInfoObject = dataSnapshot.getValue(UserData.class);
-
-                    // Setting the name in the nav drawer
-                    // TODO: Causing a null point exception when main activity restarts
-                    navHeaderName = (TextView) findViewById(R.id.nav_drawer_header_text);
-                    if (BuildConfig.DEBUG) {
-                        Toast.makeText(MainActivity.this, "User data collected!! :)", Toast.LENGTH_SHORT).show();
-                    }
                 }
 
                 @Override
@@ -291,8 +283,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 Timber.d(e);
             }
         }*/
-
-
 
         /*//Decode Image to String
         String imgPath = getSharedPreferences("userData", MODE_PRIVATE).getString("PicPath", null);
@@ -383,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             i = new ImageCompression(getApplicationContext()).compressImage(String.valueOf(mCaptureUri));
 
             // Camera
-            final List<Intent> cameraIntents = new ArrayList<Intent>();
+            final List<Intent> cameraIntents = new ArrayList<>();
             final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             final PackageManager packageManager = getPackageManager();
             final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
@@ -472,7 +462,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     case R.id.nav_gpa:
                         intentGPACalculator(MainActivity.this, "com.gupta.ishansh.gcmcalculator");
                         break;
-                    case R.id.nav_planner:
+                    case R.id.nav_schedule:
                         mViewPager.setCurrentItem(0);
                         break;
                     case R.id.nav_campus_news:

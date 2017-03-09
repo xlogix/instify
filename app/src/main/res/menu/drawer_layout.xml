@@ -3,8 +3,8 @@
 
     <item
         android:id="@+id/nav_gpa"
-        android:title="@string/nav_section_1"
-        android:icon="@drawable/ic_gpa_calculator"/>
+        android:icon="@drawable/ic_gpa_calculator"
+        android:title="@string/nav_section_1" />
 
     <item android:title="@string/nav_section_2">
         <menu>
@@ -17,9 +17,9 @@
                 android:icon="@drawable/ic_campus_news_white"
                 android:title="@string/nav_campus_news" />
             <item
-                android:id="@+id/nav_planner"
-                android:icon="@drawable/ic_univ_news_white"
-                android:title="@string/nav_erp" />
+                android:id="@+id/nav_schedule"
+                android:icon="@drawable/ic_time_table_white"
+                android:title="@string/nav_schedule" />
             <item
                 android:id="@+id/nav_notes"
                 android:icon="@drawable/ic_notes_white"
@@ -35,8 +35,8 @@
         <menu>
             <item
                 android:id="@+id/nav_profile"
-                android:title="Profile"
-                android:icon="@drawable/ic_attendance_white"/>
+                android:icon="@drawable/ic_attendance_white"
+                android:title="Profile" />
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_account_circle_black_36dp"

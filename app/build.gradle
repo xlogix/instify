@@ -39,7 +39,8 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
-            //signingConfig signingConfigs.release
+            versionNameSuffix '-RELEASE'
+            // signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -86,7 +87,8 @@ dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
 
     compile 'com.android.volley:volley:1.0.0'
-    compile 'pub.devrel:easypermissions:0.2.1'
+    compile 'pub.devrel:easypermissions:0.3.0'
+    compile 'com.thefinestartist:finestwebview:1.2.7'
 
     // LOGGING
     compile 'com.jakewharton.timber:timber:4.4.0'
