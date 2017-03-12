@@ -34,7 +34,8 @@ public class PreferenceManager {
     private static final String IS_FIRST_RUN = "is_first_run";
     private static final String IS_DARK_THEME = "is_dark_theme";
     private static final String IS_SIGNED_IN_FROM_GOOGLE_OR_FACEBOOK = "is_signed_in_from_google_or_facebook";
-    private static final String SET_USER_PASSWORD = "set_user_password";
+    private static final String USER_REGNO = "user_regNo";
+    private static final String USER_PASSWORD = "user_password";
     private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
 
     // Constructor
@@ -120,16 +121,29 @@ public class PreferenceManager {
     }
 
     /**
-     * Saves the user credentials in the preferences so they can used later
+     * Saves the user's regNo in the preferences so they can used later
+     *
+     * @return boolean value, true or false
+     */
+    public void setUserRegNo(String regNo) {
+        editor.putString(USER_REGNO, regNo);
+    }
+
+    public String getUserRegNo() {
+        return mPrefs.getString(USER_REGNO, "empty");
+    }
+
+    /**
+     * Saves the user's password in the preferences so they can used later
      *
      * @return boolean value, true or false
      */
     public void setUserPassword(String password) {
-        editor.putString(SET_USER_PASSWORD, password);
+        editor.putString(USER_PASSWORD, password);
     }
 
     public String getUserPassword() {
-        return mPrefs.getString(SET_USER_PASSWORD, "empty");
+        return mPrefs.getString(USER_PASSWORD, "empty");
     }
 
     /**

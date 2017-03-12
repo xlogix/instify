@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ import com.instify.android.ux.MainActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.Iterator;
 
@@ -54,8 +52,8 @@ public class TimeTableFragment extends Fragment {
     TextView ttData;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private String userRegNo  = "ra1511008020111";
-//    private String userPass = MyApplication.getInstance().getPrefManager().getUserPassword();
+    private String userRegNo = "ra1511008020111";
+    //    private String userPass = MyApplication.getInstance().getPrefManager().getUserPassword();
     private String userPass = "dps12345";
     private final String endpoint = "http://instify.herokuapp.com/api/time-table/?regno="
             + userRegNo + "&password=" + userPass;
@@ -87,7 +85,6 @@ public class TimeTableFragment extends Fragment {
          * Handle UI
          */
         showRefreshing();
-        Toast.makeText(getActivity(), "Calling API...", Toast.LENGTH_SHORT).show();
         /**
          * Method to make json object request where json response is dynamic
          * */
@@ -104,7 +101,7 @@ public class TimeTableFragment extends Fragment {
                                     JSONArray array = response.getJSONArray(key);
                                     int size = array.length();
                                     for (int i = 0; i < size; i++) {
-                                        msg +=  "Hour " + (i+1) + " : " + array.get(i) + "\n";
+                                        msg += "Hour " + (i + 1) + " : " + array.get(i) + "\n";
                                     }
                                     ttData.setText(msg);
                                 } else {
@@ -116,7 +113,7 @@ public class TimeTableFragment extends Fragment {
                                 hideRefreshing();
                             }
                         } catch (JSONException e) {
-                            Log.d("debug", "Object DataSet is incorrect");
+                            Timber.d("JSON error : ", "Object DataSet is incorrect");
                             e.printStackTrace();
                         }
                     }

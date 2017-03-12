@@ -61,7 +61,7 @@ import com.instify.android.helpers.DownloadImage;
 import com.instify.android.helpers.ImageCompression;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.listeners.OnSingleClickListener;
-import com.instify.android.models.UserData;
+import com.instify.android.models.UserDataFirebase;
 import com.instify.android.ux.fragments.AttendanceFragment;
 import com.instify.android.ux.fragments.CampNewsFragment;
 import com.instify.android.ux.fragments.NotesFragment;
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     private DatabaseReference dbRef, userRef;
     SQLiteHandler db = new SQLiteHandler(this);
 
-    public UserData userInfoObject;
+    public UserDataFirebase userInfoObject;
     String i;
 
     View headerView;
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                     // Collecting users data to use through out the app
-                    userInfoObject = dataSnapshot.getValue(UserData.class);
+                    userInfoObject = dataSnapshot.getValue(UserDataFirebase.class);
                 }
 
                 @Override
@@ -458,7 +458,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 //menuItem.setChecked(true);
                 switch (menuItem.getItemId()) {
                     case R.id.nav_gpa:
@@ -560,7 +560,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         context.startActivity(intent);
     }
 
-    public void FeekartWebView() {
+    private void FeekartWebView() {
         new FinestWebView.Builder(this).theme(R.style.FinestWebViewTheme)
                 .titleDefault("Feekart")
                 .showUrl(false)
@@ -582,6 +582,11 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 .dividerHeight(0)
                 .gradientDivider(false)
                 .setCustomAnimations(R.anim.slide_up, R.anim.hold, R.anim.hold, R.anim.slide_down)
+                .injectJavaScript("javascript:" + "document.getElementById('accountname').value = '"
+                        + MyApplication.getInstance().getPrefManager().getUserRegNo() + "';" +
+                        "document.getElementById('password').value = '"
+                        + MyApplication.getInstance().getPrefManager().getUserPassword() + "';" +
+                        "loginform()")
                 .show("http://feekart.srmuniv.ac.in/srmopp/");
     }
 
@@ -630,7 +635,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         static final int TAB_NOTES = 3;
         static final int TAB_UNIVERSITY_NEWS = 4;
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        private SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

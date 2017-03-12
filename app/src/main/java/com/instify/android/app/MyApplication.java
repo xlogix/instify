@@ -7,7 +7,6 @@ package com.instify.android.app;
 import android.app.Application;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,6 +14,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.instify.android.BuildConfig;
 import com.instify.android.helpers.PreferenceManager;
+import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.ux.IntroActivity;
 
 import timber.log.Timber;
@@ -83,6 +83,9 @@ public class MyApplication extends Application {
         mPrefs.clear();
         // SignOut from Firebase
         FirebaseAuth.getInstance().signOut();
+        // Delete database
+        SQLiteHandler sqLiteHandler = new SQLiteHandler(this);
+        sqLiteHandler.deleteUsers();
         // Launch the intro activity
         Intent intent = new Intent(this, IntroActivity.class);
         // Closing all the Activities & Add new Flag to start new Activity

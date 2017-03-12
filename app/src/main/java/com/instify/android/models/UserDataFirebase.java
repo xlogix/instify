@@ -9,19 +9,19 @@ import java.util.Calendar;
  * Created by Arjun Mahishi on 18-Dec-16.
  */
 
-public class UserData {
+public class UserDataFirebase {
 
     public String name, regNo, section, dept;
     public int year;
     public boolean cr;
 
-    public UserData() {
+    public UserDataFirebase() {
     }
 
     /**
      * Constructor for a new user
      */
-    public UserData(String name, String regNo, String section) {
+    public UserDataFirebase(String name, String regNo, String section) {
 
         this.name = name;
         this.regNo = regNo.toLowerCase();
@@ -36,7 +36,7 @@ public class UserData {
     /**
      * Constructor for updating all the info
      */
-    public UserData(String name, String regNo, String section, String dept, String year) {
+    public UserDataFirebase(String name, String regNo, String section, String dept, String year) {
         this.name = name;
         this.regNo = regNo.toLowerCase();
         this.section = section.toLowerCase();

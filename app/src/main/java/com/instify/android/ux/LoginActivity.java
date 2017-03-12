@@ -21,16 +21,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
 import com.instify.android.app.AppConfig;
 import com.instify.android.app.MyApplication;
 import com.instify.android.helpers.SQLiteHandler;
-import com.instify.android.models.UserData;
+import com.instify.android.models.UserDataFirebase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,7 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
-    public ProgressDialog mProgressDialog;
+    private ProgressDialog mProgressDialog;
     private AutoCompleteTextView mEmailField;
     private AutoCompleteTextView mRegNoField;
     private EditText mPasswordField;
@@ -61,8 +59,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // [declare_database_reference]
     private DatabaseReference mFirebaseDatabase;
 
-    UserData userInfoObj;
-
+    UserDataFirebase userInfoObj;
 
     // [START on_start_add_listener]
     @Override
@@ -106,13 +103,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.action_login).setOnClickListener(this);
 
         // SQLite database handler
-        db = new SQLiteHandler(getApplicationContext());
+        db = new SQLiteHandler(this);
 
         // Check if user is already logged in or not
-        if (MyApplication.getInstance().getPrefManager().isLoggedIn()) {
+        if (MyApplication.getInstance().getPrefManager().isLoggedIn() && mAuth.getCurrentUser() != null) {
             // User is already logged in. Take him to main activity
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            finish();
+            intentLoginToMain();
         }
 
         // [START initialize_auth]
@@ -125,7 +121,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    mFirebaseDatabase.child("users").child(user.getUid()).setValue(userInfoObj);
+                    /*mFirebaseDatabase.child("users").child(user.getUid()).setValue(userInfoObj);
 
                     // Checking and waiting till the info has be added //
                     mFirebaseDatabase.child("users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
@@ -138,12 +134,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         public void onCancelled(DatabaseError databaseError) {
                             Toast.makeText(LoginActivity.this, "Registration Failed!", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    });*/
 
                     // User is signed in
                     Timber.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    finish();
                 } else {
                     // User is signed out
                     Timber.d(TAG, "onAuthStateChanged:signed_out");
@@ -159,12 +153,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     // [START sign_in_with_email]
-    private void attemptLogin(String email, final String regNo, final String password) {
+    private void attemptLogin(final String email, final String regNo, final String password) {
         Timber.d(TAG, "attemptLogin:" + email);
         if (!validateForm()) {
             return;
         }
 
+        // Start showing the progress dialog
         showProgressDialog();
 
         // Tag used to cancel the request
@@ -176,7 +171,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onResponse(String response) {
                 Timber.d(TAG, "Login Response: " + response);
-                hideProgressDialog();
 
                 try {
                     JSONObject jObj = new JSONObject(response);
@@ -190,7 +184,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         // user successfully logged in
                         // Create login session
                         MyApplication.getInstance().getPrefManager().setLogin(true);
-
                         // Now store the user in SQLite
                         String uid = jObj.getString("folio_no");
 
@@ -203,20 +196,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                         // Inserting row in users table
                         db.addUser(name, email, uid, created_at, password, regno, dept);
-
-                        // Launch main activity
-                        intentLoginToMain();
-
                     } else {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(getApplicationContext(),
+                        Toast.makeText(getBaseContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     // JSON error
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -235,7 +224,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("regno", regNo);
                 params.put("pass", password);
 
@@ -249,16 +238,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Timber.d(TAG, "CreateUserWithEmail:onComplete:" + task.isSuccessful());
+                        // Send Confirmation Email
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            sendConfirmationMail(user);
+                        }
+                        // User's account is created... Sign him in
+                        userExistsSignInWithFirebase(email, password);
+
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
+
                         if (!task.isSuccessful()) {
+                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                                Timber.d("User exists with the same email id");
+                                userExistsSignInWithFirebase(email, password);
+                            }
                             Toast.makeText(LoginActivity.this, "Registration Failed!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
         // [END sign_up_with_email]
 
+        // Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+    void userExistsSignInWithFirebase(String email, String password) {
         // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -275,14 +282,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Toast.makeText(LoginActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                         }
-                        // Hide the Progress Dialog but it's redundant.
-                        // hideProgressDialog();
+                        // Hide the Progress Dialog
+                        hideProgressDialog();
                     }
                 });
         // [END sign_in_with_email]
-
-        // Adding request to request queue
-        MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
     private boolean validateForm() {
