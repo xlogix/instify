@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +16,24 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.github.vipulasri.timelineview.TimelineView;
 import com.instify.android.R;
 import com.instify.android.app.MyApplication;
+import com.instify.android.models.OrderStatus;
+import com.instify.android.models.TimeTableModel;
 import com.instify.android.ux.MainActivity;
+import com.instify.android.ux.adapters.TimeLineAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 /**
@@ -49,11 +59,13 @@ public class TimeTableFragment extends Fragment {
         ((MainActivity) getActivity()).mSharedFab = null; // To avoid keeping/leaking the reference of the FAB
     }
 
-    TextView ttData;
-
+    private RecyclerView mRecyclerView;
+    private TimeLineAdapter mTimeLineAdapter;
+    private List<TimeTableModel> mDataList = new ArrayList<>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private boolean mWithLinePadding;
+
     private String userRegNo = "ra1511008020111";
-    //    private String userPass = MyApplication.getInstance().getPrefManager().getUserPassword();
     private String userPass = "dps12345";
     private final String endpoint = "http://instify.herokuapp.com/api/time-table/?regno="
             + userRegNo + "&password=" + userPass;
@@ -62,16 +74,34 @@ public class TimeTableFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_time_table, container, false);
-        ttData = (TextView) rootView.findViewById(R.id.timeTableData);
+
         mSwipeRefreshLayout = (SwipeRefreshLayout)
                 rootView.findViewById(R.id.swipe_refresh_layout_time_table);
+
+        mWithLinePadding = true;
+
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewTimeTable);
+        mRecyclerView.setLayoutManager(getLinearLayoutManager());
+        mRecyclerView.setHasFixedSize(true);
+
+        initView();
 
         AttemptJson dataObj = new AttemptJson();
         dataObj.doInBackground();
         return rootView;
     }
 
-    class AttemptJson extends AsyncTask<String, String, String> {
+    private LinearLayoutManager getLinearLayoutManager() {
+        return new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+    }
+
+    private void initView() {
+        // setDataListItems();
+        mTimeLineAdapter = new TimeLineAdapter(mDataList, mWithLinePadding);
+        mRecyclerView.setAdapter(mTimeLineAdapter);
+    }
+
+    private class AttemptJson extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... strings) {
@@ -102,18 +132,19 @@ public class TimeTableFragment extends Fragment {
                                     int size = array.length();
                                     for (int i = 0; i < size; i++) {
                                         msg += "Hour " + (i + 1) + " : " + array.get(i) + "\n";
+                                        mDataList.add(new TimeTableModel(array.get(i).toString(), "2017-02-12 08:00", OrderStatus.INACTIVE));
                                     }
-                                    ttData.setText(msg);
                                 } else {
                                     msg = key + ":" + response.getString(key);
                                     Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-//                                    System.out.println(key + ":" + response.getString(key));
                                 }
-
-                                hideRefreshing();
                             }
+                            // Hide the Progress Dialog
+                            hideRefreshing();
+                            // Notify the adapter that data has been retrieved.
+                            mTimeLineAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
-                            Timber.d("JSON error : ", "Object DataSet is incorrect");
+                            Timber.d("JSON error : ", "Object DataSet is Incorrect");
                             e.printStackTrace();
                         }
                     }

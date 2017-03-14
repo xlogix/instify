@@ -21,6 +21,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <!-- FCM (Firebase Cloud Messaging) for all build types configuration -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -83,6 +84,12 @@
         <activity
             android:name=".ux.LoginActivity"
             android:label="@string/title_activity_login"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ux.RegistrationActivity"
+            android:label="@string/title_activity_register"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize" />
 

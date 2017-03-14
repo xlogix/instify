@@ -102,10 +102,6 @@ public class SQLiteHandler extends SQLiteOpenHelper {
             user.put("token", cursor.getString(5));
             user.put("regno", cursor.getString(6));
             user.put("dept", cursor.getString(7));
-
-            // Saving Registration Number and Password in SharedPreferences
-            MyApplication.getInstance().getPrefManager().setUserRegNo(cursor.getString(6));
-            MyApplication.getInstance().getPrefManager().setUserPassword(cursor.getString(5));
         }
         cursor.close();
         db.close();

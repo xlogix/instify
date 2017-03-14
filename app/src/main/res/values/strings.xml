@@ -6,6 +6,7 @@
     <string name="title_activity_first_launch_tut">FirstLaunchTut</string>
     <string name="title_activity_splash">Made with &#10084; by fnplus</string>
     <string name="title_activity_login">Login Here</string>
+    <string name="title_activity_register">Register Yourself</string>
     <string name="title_activity_chat">Discuss</string>
     <string name="title_activity_upload_notes">Post a new Note</string>
     <string name="title_activity_upload_campus">Post a new Update</string>
@@ -32,9 +33,8 @@
     <string name="nav_share">Share</string>
     <string name="nav_help_feedback">Help &amp; Feedback</string>
 
-
     <!-- Nav_header_main -->
-    <string name="header_imageView_description">Placeholder text for image view description </string>
+    <string name="header_imageView_description">Placeholder text for image view description</string>
     <string name="header_unknown_user">Unknown User</string>
 
     <!-- General strings-->
@@ -64,8 +64,8 @@
     <string name="no_network_connection_toast">No network connection found</string>
 
     <!-- Login Activity -->
-    <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
+    <string name="hint_email">Your Email</string>
+    <string name="hint_password">ERP\'s Password</string>
     <string name="hint_regNo">Registration Number</string>
     <string name="email">Email</string>
     <string name="auth_failed">Authentication Failed. Try Again.</string>
@@ -206,5 +206,4 @@
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
     <string name="pref_title_vibrate">Vibrate</string>
-
 </resources>

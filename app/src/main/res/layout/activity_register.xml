@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:padding="@dimen/activity_vertical_margin"
-    tools:context=".ux.LoginActivity">
+    tools:context=".ux.RegistrationActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,62 +31,41 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
+            android:layout_height="wrap_content">
 
-            <AutoCompleteTextView
-                android:id="@+id/field_regNo"
+            <EditText
+                android:id="@+id/field_regNO"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_regNo"
-                android:inputType="textCapCharacters"
+                android:inputType="text"
                 android:maxLines="1" />
+
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/field_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_password"
-                android:inputType="textPassword"
+                android:inputType="textVisiblePassword"
                 android:maxLines="1" />
+
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/action_login"
+        <Button
+            android:id="@+id/btn_register"
+            style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="36dp"
             android:background="@color/colorPrimary"
-            android:text="@string/action_sign_in"
+            android:text="@string/action_register"
             android:textColor="@android:color/white"
-            android:textSize="16sp"
             android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-            <!-- this expands to fill the empty space if needed -->
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/action_to_register"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:clickable="true"
-            android:onClick="onClick"
-            android:text="New User? &#10230;"
-            android:textColor="@color/colorPrimary"
-            android:textSize="24sp" />
     </LinearLayout>
 </ScrollView>

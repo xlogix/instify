@@ -96,6 +96,7 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
             }
         }, 6000);*/
 
+       // Method to call the API for graph view
         /*new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -126,6 +127,11 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
         mChart.setFitBars(true); // make the x-axis fit exactly all bars
         mChart.invalidate();*/
 
+        ((MainActivity) getActivity()).mSharedFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

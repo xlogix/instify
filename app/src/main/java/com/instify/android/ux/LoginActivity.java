@@ -21,7 +21,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.instify.android.R;
@@ -101,15 +100,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         // Buttons
         findViewById(R.id.action_login).setOnClickListener(this);
+        findViewById(R.id.action_to_register).setOnClickListener(this);
 
         // SQLite database handler
         db = new SQLiteHandler(this);
-
-        // Check if user is already logged in or not
-        if (MyApplication.getInstance().getPrefManager().isLoggedIn() && mAuth.getCurrentUser() != null) {
-            // User is already logged in. Take him to main activity
-            intentLoginToMain();
-        }
 
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
@@ -120,7 +114,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
+                if (user != null && MyApplication.getInstance().getPrefManager().isLoggedIn()) {
+                    // User is already logged in. Take him to main activity
+                    intentLoginToMain();
+
                     /*mFirebaseDatabase.child("users").child(user.getUid()).setValue(userInfoObj);
 
                     // Checking and waiting till the info has be added //
@@ -154,7 +151,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     // [START sign_in_with_email]
     private void attemptLogin(final String email, final String regNo, final String password) {
-        Timber.d(TAG, "attemptLogin:" + email);
+        Timber.d(TAG, "attemptLogin:" + regNo);
         if (!validateForm()) {
             return;
         }
@@ -171,7 +168,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onResponse(String response) {
                 Timber.d(TAG, "Login Response: " + response);
-
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
@@ -179,10 +175,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     // Check for error node in json
                     if (!error) {
                         String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(getApplicationContext(),
+                        Toast.makeText(LoginActivity.this,
                                 errorMsg, Toast.LENGTH_LONG).show();
-                        // user successfully logged in
-                        // Create login session
+                        // User successfully logged in. Create login session
                         MyApplication.getInstance().getPrefManager().setLogin(true);
                         // Now store the user in SQLite
                         String uid = jObj.getString("folio_no");
@@ -194,12 +189,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         String regno = jObj.getString("regno");
                         String dept = jObj.getString("dept");
 
+                        // Saving Registration Number and Password in SharedPreferences
+                        MyApplication.getInstance().getPrefManager().setUserRegNo(regNo);
+                        MyApplication.getInstance().getPrefManager().setUserPassword(password);
+
                         // Inserting row in users table
                         db.addUser(name, email, uid, created_at, password, regno, dept);
                     } else {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(getBaseContext(),
+                        Toast.makeText(LoginActivity.this,
                                 errorMsg, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
@@ -216,7 +215,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Timber.e(TAG, "Login Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
-                // hide the Progress bar
+                // Got an error, hide the Progress bar
                 hideProgressDialog();
             }
         }) {
@@ -232,40 +231,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         };
 
-        // [START sign_up_with_email]
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Timber.d(TAG, "CreateUserWithEmail:onComplete:" + task.isSuccessful());
-                        // Send Confirmation Email
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        if (user != null) {
-                            sendConfirmationMail(user);
-                        }
-                        // User's account is created... Sign him in
-                        userExistsSignInWithFirebase(email, password);
-
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-
-                        if (!task.isSuccessful()) {
-                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                                Timber.d("User exists with the same email id");
-                                userExistsSignInWithFirebase(email, password);
-                            }
-                            Toast.makeText(LoginActivity.this, "Registration Failed!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-        // [END sign_up_with_email]
-
-        // Adding request to request queue
-        MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
-    }
-
-    void userExistsSignInWithFirebase(String email, String password) {
         // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -287,7 +252,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 });
         // [END sign_in_with_email]
+
+        // Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
+
 
     private boolean validateForm() {
         boolean valid = true;
@@ -328,19 +297,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         int i = v.getId();
         if (i == R.id.action_login) {
             attemptLogin(mEmailField.getText().toString(), mRegNoField.getText().toString(), mPasswordField.getText().toString());
+        } else if (i == R.id.action_to_register) {
+            startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
         }
-    }
-
-    public void sendConfirmationMail(FirebaseUser mFirebaseUser) {
-        mFirebaseUser.sendEmailVerification()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Timber.d("Email sent.");
-                        }
-                    }
-                });
     }
 
     public void showProgressDialog() {
