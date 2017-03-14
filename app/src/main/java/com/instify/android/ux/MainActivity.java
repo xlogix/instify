@@ -561,6 +561,12 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     }
 
     private void FeekartWebView() {
+
+        // Fetching the login details from the database
+        SQLiteHandler db = new SQLiteHandler(this);
+        String regNo = db.getUserDetails().get("token");
+        String pass = db.getUserDetails().get("created_at");
+
         new FinestWebView.Builder(this).theme(R.style.FinestWebViewTheme)
                 .titleDefault("Feekart")
                 .showUrl(false)
@@ -583,9 +589,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 .gradientDivider(false)
                 .setCustomAnimations(R.anim.slide_up, R.anim.hold, R.anim.hold, R.anim.slide_down)
                 .injectJavaScript("javascript:" + "document.getElementById('accountname').value = '"
-                        + MyApplication.getInstance().getPrefManager().getUserRegNo() + "';" +
-                        "document.getElementById('password').value = '"
-                        + MyApplication.getInstance().getPrefManager().getUserPassword() + "';" +
+                        + regNo + "';" + "document.getElementById('password').value = '" + pass + "';" +
                         "loginform()")
                 .show("http://feekart.srmuniv.ac.in/srmopp/");
     }

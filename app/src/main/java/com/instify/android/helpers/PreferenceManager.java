@@ -120,45 +120,6 @@ public class PreferenceManager {
         editor.putBoolean(IS_SIGNED_IN_FROM_GOOGLE_OR_FACEBOOK, true);
     }
 
-    /**
-     * Saves the user's regNo in the preferences so they can used later
-     *
-     * @return boolean value, true or false
-     */
-    public void setUserRegNo(String regNo) {
-        editor.putString(USER_REGNO, regNo);
-    }
-
-    public String getUserRegNo() {
-        return mPrefs.getString(USER_REGNO, "empty");
-    }
-
-    /**
-     * Saves the user's password in the preferences so they can used later
-     *
-     * @return boolean value, true or false
-     */
-    public void setUserPassword(String password) {
-        editor.putString(USER_PASSWORD, password);
-    }
-
-    public String getUserPassword() {
-        return mPrefs.getString(USER_PASSWORD, "empty");
-    }
-
-    /**
-     * Checks if the user has chosen a dark theme for the app.
-     *
-     * @return boolean value, true or false
-     */
-    public boolean getIsDarkTheme() {
-        return mPrefs.getBoolean(IS_DARK_THEME, false);
-    }
-
-    public void setIsDarkTheme(boolean isDarkTheme) {
-        editor.putBoolean(IS_DARK_THEME, isDarkTheme).apply();
-    }
-
     public static boolean isAndroid5() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }

@@ -104,7 +104,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         populateAutoComplete();
         mPasswordField = (EditText) findViewById(R.id.field_password);
         btnRegister = (Button) findViewById(R.id.btn_register);
-
         // Buttons
         findViewById(R.id.btn_register).setOnClickListener(this);
 
@@ -270,6 +269,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage(getString(R.string.Loading));
             mProgressDialog.setIndeterminate(true);
+            // mProgressDialog.setCancelable(false);
         }
         mProgressDialog.show();
     }

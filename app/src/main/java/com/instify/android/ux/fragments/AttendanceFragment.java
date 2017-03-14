@@ -277,10 +277,10 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
                 SQLiteHandler db = new SQLiteHandler(getContext());
-                String pass = db.getUserDetails().get("token");
-                String unm = db.getUserDetails().get("regno");
+                String regNo = db.getUserDetails().get("token");
+                String pass = db.getUserDetails().get("created_at");
 
-                params.put("regno", unm);
+                params.put("regno", regNo);
                 params.put("pass", pass);
 
                 return params;

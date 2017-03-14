@@ -150,8 +150,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     // [START sign_in_with_email]
-    private void attemptLogin(final String email, final String regNo, final String password) {
-        Timber.d(TAG, "attemptLogin:" + regNo);
+    private void attemptERPLogin(final String email, final String regNo, final String password) {
+        Timber.d(TAG, "attemptERPLogin:" + regNo);
         if (!validateForm()) {
             return;
         }
@@ -189,12 +189,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         String regno = jObj.getString("regno");
                         String dept = jObj.getString("dept");
 
-                        // Saving Registration Number and Password in SharedPreferences
-                        MyApplication.getInstance().getPrefManager().setUserRegNo(regNo);
-                        MyApplication.getInstance().getPrefManager().setUserPassword(password);
-
                         // Inserting row in users table
                         db.addUser(name, email, uid, created_at, password, regno, dept);
+
+                        // Creating user in Firebase
+                        attemptFirebaseLogin(email, password);
+
                     } else {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");
@@ -231,6 +231,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         };
 
+        // Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+    void attemptFirebaseLogin(String email, String password) {
         // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -252,11 +257,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 });
         // [END sign_in_with_email]
-
-        // Adding request to request queue
-        MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
-
 
     private boolean validateForm() {
         boolean valid = true;
@@ -296,7 +297,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.action_login) {
-            attemptLogin(mEmailField.getText().toString(), mRegNoField.getText().toString(), mPasswordField.getText().toString());
+            attemptERPLogin(mEmailField.getText().toString(), mRegNoField.getText().toString(), mPasswordField.getText().toString());
         } else if (i == R.id.action_to_register) {
             startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
         }

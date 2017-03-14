@@ -9,9 +9,7 @@ public class AppConfig {
     // Server user login url
     public static String URL_LOGIN = "https://hashbird.com/gogrit.in/workspace/srm-api/get-info.php";
     public static String URL_ATTANDENCE = "https://hashbird.com/gogrit.in/workspace/srm-api/get-attd.php";
-    // Server user register url
     public static String URL_GETTT = "https://hashbird.com/gogrit.in/workspace/srm-api/get-ptt.php";
-    public static String URL_REGISTER = "http://192.168.0.102/android_login_api/register.php";
 
     public static final String INSTANCE_ID_TOKEN_RETRIEVED = "iid_token_retrieved";
     public static final String FRIENDLY_MSG_LENGTH = "friendly_msg_length";
