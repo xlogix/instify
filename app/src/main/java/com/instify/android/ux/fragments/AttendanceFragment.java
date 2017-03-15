@@ -80,29 +80,14 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
         View rootView = inflater.inflate(R.layout.fragment_attendance, container, false);
         mSwipeRefreshLayout = (SwipeRefreshLayout)
                 rootView.findViewById(R.id.swipe_refresh_layout_attendance);
-        // Expand list view
+        // [LAYOUT LIST] Expand list view
         expListView = (ExpandableListView) rootView.findViewById(R.id.expListView);
-        // create a new chart object
+        // [LAYOUT GRAPH] create a new chart object
         // mChart = (BarChart) rootView.findViewById(R.id.barChart);
 
         // Fetch the attendance
-        getAttendance();
-
-        // Method to call the JSON
-       /* new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                new AttemptJson().execute();
-            }
-        }, 6000);*/
-
-       // Method to call the API for graph view
-        /*new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                new fetchAttendance().execute();
-            }
-        }, 6000);*/
+        AttendanceFragment.AsyncGetAttendance dataObj = new AttendanceFragment.AsyncGetAttendance();
+        dataObj.doInBackground();
 
         // Setting the data in the chart (8 entries).. [DISABLED}
 
@@ -142,12 +127,12 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
         return rootView;
     }
 
-    private class fetchAttendance extends AsyncTask<String, String, String> {
+    private class AsyncGetAttendance extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... strings) {
             getAttendance();
-            return "";
+            return null;
         }
     }
 
@@ -172,9 +157,7 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
 
                     // Check for error node in json
                     if (!error) {
-                        ListAdapterExpandable adapter;
-                        //    ExpandableListView expListView;
-                        //expListView = (ExpandableListView)
+                        ListAdapterExpandable expListAdapter;
 
                         // declare array List for all headers in list
                         ArrayList<String> headersArrayList = new ArrayList<>();
@@ -204,9 +187,9 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
 
                         }
 
-                        adapter = new ListAdapterExpandable(getContext(), headersArrayList, childArrayList);
+                        expListAdapter = new ListAdapterExpandable(getContext(), headersArrayList, childArrayList);
 
-                        expListView.setAdapter(adapter);
+                        expListView.setAdapter(expListAdapter);
 
                         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
 
@@ -290,37 +273,6 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
         // Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
-
-    /*private void askPassword() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Enter your password");
-
-                // Set up the input
-                final EditText password = new EditText(getActivity());
-                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                builder.setView(password);
-
-                // Set up the buttons
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mPassword = password.getText().toString();
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                builder.show();
-            }
-        });
-    }*/
 
     private String[] mLabels = new String[]{"Company A", "Company B", "Company C", "Company D", "Company E", "Company F"};
 

@@ -15,5 +15,4 @@
             android:clipToPadding="false"
             android:padding="10dp" />
     </RelativeLayout>
-
 </android.support.v4.widget.SwipeRefreshLayout>

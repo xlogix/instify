@@ -23,6 +23,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -32,9 +36,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.instify.android.R;
+import com.instify.android.app.AppConfig;
+import com.instify.android.app.MyApplication;
+import com.instify.android.helpers.SQLiteHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -51,6 +63,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
+    // TAG
+    private static final String TAG = RegistrationActivity.class.getSimpleName();
 
     public ProgressDialog mProgressDialog;
     // [END declare_database]
@@ -59,6 +73,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     private FirebaseAuth mAuth;
     // [declare_auth_listener]
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    // Init
+    private SQLiteHandler db;
 
     private String userId;
     private AutoCompleteTextView mEmailField;
@@ -104,62 +120,16 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         populateAutoComplete();
         mPasswordField = (EditText) findViewById(R.id.field_password);
         btnRegister = (Button) findViewById(R.id.btn_register);
+
         // Buttons
         findViewById(R.id.btn_register).setOnClickListener(this);
+
+        // SQLite database handler
+        db = new SQLiteHandler(this);
 
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
-    }
-
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-
-        getLoaderManager().initLoader(0, null, this);
-    }
-
-    // Button Click Action
-    @Override
-    public void onClick(View v) {
-        registerUser(mEmailField.getText().toString(), mPasswordField.getText().toString(), mRegNoField.getText().toString());
-    }
-
-    void registerUser(String emailText, String passwordText, String regNo) {
-
-        mFirebaseDatabase = FirebaseDatabase.getInstance().getReference();
-        Timber.d("Registration:");
-        if (!validateForm()) {
-            return;
-        }
-
-        showProgressDialog();
-
-        // TODO
-        // In real apps this userId should be fetched
-        // by implementing firebase auth
-        if (TextUtils.isEmpty(userId)) {
-            userId = mFirebaseDatabase.push().getKey();
-        }
-
-        // userInfoObj = new UserData(name, regNo, section);
-
-        mAuth.createUserWithEmailAndPassword(emailText, passwordText)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                                Timber.d("User exists with the same email id");
-                            }
-                            Toast.makeText(RegistrationActivity.this, "Registration Failed!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
 
         // [START auth_state_listener]
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -167,20 +137,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    /*mFirebaseDatabase.child("users").child(user.getUid()).setValue(userInfoObj);
-
-                    // Checking and waiting till the info has be added //
-                    mFirebaseDatabase.child("users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Toast.makeText(RegistrationActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Toast.makeText(RegistrationActivity.this, "Registration Failed!", Toast.LENGTH_SHORT).show();
-                        }
-                    });*/
 
                     // Send a confirmation mail to the user's email ID
                     sendConfirmationMail(user);
@@ -199,6 +155,130 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             }
         };
         // [END auth_state_listener]
+    }
+
+    private void populateAutoComplete() {
+        if (!mayRequestContacts()) {
+            return;
+        }
+
+        getLoaderManager().initLoader(0, null, this);
+    }
+
+    // Button Click Action
+    @Override
+    public void onClick(View v) {
+        attemptERPLogin(mEmailField.getText().toString(), mPasswordField.getText().toString(), mRegNoField.getText().toString());
+    }
+
+    void attemptERPLogin(final String emailText, final String passwordText, final String regNo) {
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance().getReference();
+        Timber.d("Registration:");
+        if (!validateForm()) {
+            return;
+        }
+
+        showProgressDialog();
+
+        // TODO
+        // In real apps this userId should be fetched
+        // by implementing firebase auth
+        if (TextUtils.isEmpty(userId)) {
+            userId = mFirebaseDatabase.push().getKey();
+        }
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_LOGIN, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Timber.d(TAG, "Login Response: " + response);
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+
+                    // Check for error node in json
+                    if (!error) {
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(RegistrationActivity.this,
+                                errorMsg, Toast.LENGTH_LONG).show();
+                        // User successfully logged in. Create login session
+                        MyApplication.getInstance().getPrefManager().setLogin(true);
+                        // Now store the user in SQLite
+                        String uid = jObj.getString("folio_no");
+
+                        //   JSONObject user = jObj.getJSONObject("user");
+                        String name = jObj.getString("name");
+                        String email = jObj.getString("email");
+                        String created_at = jObj.getString("image");
+                        String regno = jObj.getString("regno");
+                        String dept = jObj.getString("dept");
+
+                        // Inserting row in users table
+                        db.addUser(name, email, uid, created_at, passwordText, regno, dept);
+
+                        // Creating user in Firebase
+                        attemptFirebaseLogin(emailText, passwordText);
+
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(RegistrationActivity.this,
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(RegistrationActivity.this, "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Timber.e(TAG, "Login Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                // Got an error, hide the Progress bar
+                hideProgressDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+                params.put("regno", regNo);
+                params.put("pass", passwordText);
+
+                return params;
+            }
+        };
+        // Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+    void attemptFirebaseLogin(String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                                Timber.d("User exists with the same email id");
+                            }
+                            Toast.makeText(RegistrationActivity.this, "Registration Failed!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     private boolean validateForm() {
@@ -331,7 +411,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(RegistrationActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+                        android.R.layout.simple_list_item_1, emailAddressCollection);
 
         mEmailField.setAdapter(adapter);
     }

@@ -146,8 +146,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
     }
 
-    TextView navHeaderName;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -258,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         navImageView = (ImageView) headerView.findViewById(R.id.nav_drawer_user_photo);
         navTextView = (TextView) headerView.findViewById(R.id.nav_drawer_header_text);
 
-        new DownloadImage(navImageView).execute(db.getUserDetails().get("created_at"));
+        new DownloadImage(navImageView).execute(db.getUserDetails().get("dept"));
         navTextView.setText(db.getUserDetails().get("name"));
 
         // Click listeners
@@ -446,7 +444,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 getSharedPreferences("userData", MODE_PRIVATE).edit().putString("PicPath", imageEncoded).apply();
 
             } catch (FileNotFoundException e) {
-                Toast.makeText(this, "NULL, Try Again!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "File was not found, Try Again!", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             } catch (IOException e) {
                 Toast.makeText(this, "Taking picture failed", Toast.LENGTH_SHORT).show();

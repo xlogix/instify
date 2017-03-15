@@ -16,6 +16,7 @@ import com.instify.android.BuildConfig;
 import com.instify.android.helpers.PreferenceManager;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.ux.IntroActivity;
+import com.squareup.leakcanary.LeakCanary;
 
 import timber.log.Timber;
 
@@ -45,6 +46,13 @@ public class MyApplication extends Application {
             /*Fabric.with(this, new Crashlytics());
             Timber.plant(new CrashReportingTree());*/
         }
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+        // Normal app init code...
     }
 
     public RequestQueue getRequestQueue() {

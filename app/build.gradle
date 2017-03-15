@@ -114,6 +114,10 @@ dependencies {
     compile 'com.klinkerapps:link_builder:1.5.2'
     compile 'com.github.vipulasri:timelineview:1.0.5'
 
+    // TEST MEMORY LEAK
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

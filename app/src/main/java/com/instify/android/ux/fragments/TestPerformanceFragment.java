@@ -17,7 +17,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.instify.android.R;
 import com.instify.android.app.MyApplication;
-import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.OrderStatus;
 import com.instify.android.models.TimeTableModel;
 import com.instify.android.ux.MainActivity;
@@ -34,17 +33,16 @@ import java.util.List;
 import timber.log.Timber;
 
 /**
- * Created by Abhish3k on 21/02/2016.
- * Thanks :)
+ * Created by Abhish3k on 15-03-2017.
  */
 
-public class TimeTableFragment extends Fragment {
+public class TestPerformanceFragment extends Fragment {
 
-    public TimeTableFragment() {
+    public TestPerformanceFragment() {
     }
 
-    public static TimeTableFragment newInstance() {
-        TimeTableFragment frag = new TimeTableFragment();
+    public static TestPerformanceFragment newInstance() {
+        TestPerformanceFragment frag = new TestPerformanceFragment();
         Bundle args = new Bundle();
         frag.setArguments(args);
         return frag;
@@ -62,14 +60,8 @@ public class TimeTableFragment extends Fragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private boolean mWithLinePadding;
 
-    /*// Fetch data from database
-    SQLiteHandler db = new SQLiteHandler(getActivity());
-    String userRegNo = db.getUserDetails().get("token");
-    String userPass = db.getUserDetails().get("created_at");*/
-
-    String userRegNo = "RA1511008020111";
-    String userPass = "dps12345";
-
+    private String userRegNo = "ra1511008020111";
+    private String userPass = "dps12345";
     private final String endpoint = "http://instify.herokuapp.com/api/time-table/?regno="
             + userRegNo + "&password=" + userPass;
 
@@ -77,38 +69,20 @@ public class TimeTableFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_time_table, container, false);
-        // Initialize Swipe Refresh Layout
+
         mSwipeRefreshLayout = (SwipeRefreshLayout)
                 rootView.findViewById(R.id.swipe_refresh_layout_time_table);
-        // Set color scheme
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.red_primary, R.color.black, R.color.google_blue_900);
+
+        mWithLinePadding = true;
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewTimeTable);
         mRecyclerView.setLayoutManager(getLinearLayoutManager());
         mRecyclerView.setHasFixedSize(true);
 
-        /**
-         * Handle UI
-         *
-         * @return NULL
-         */
-        showRefreshing();
-
-        mWithLinePadding = true;
-
         initView();
 
-        final AttemptJson dataObj = new AttemptJson();
+        TestPerformanceFragment.AttemptJson dataObj = new TestPerformanceFragment.AttemptJson();
         dataObj.doInBackground();
-
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                showRefreshing();
-                dataObj.doInBackground();
-            }
-        });
-
         return rootView;
     }
 
@@ -133,6 +107,10 @@ public class TimeTableFragment extends Fragment {
 
     private void getData() {
         /**
+         * Handle UI
+         */
+        showRefreshing();
+        /**
          * Method to make json object request where json response is dynamic
          * */
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, endpoint, null,
@@ -140,12 +118,10 @@ public class TimeTableFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            String msg = "";
                             // Hide the Progress Dialog
                             hideRefreshing();
-                            // Clear the list
-                            mDataList.clear();
-                            // Handle response
-                            String msg = "";
+
                             Iterator<String> it = response.keys();
                             while (it.hasNext()) {
                                 String key = it.next();
@@ -190,5 +166,3 @@ public class TimeTableFragment extends Fragment {
             mSwipeRefreshLayout.setRefreshing(false);
     }
 }
-
-

@@ -150,7 +150,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     // [START sign_in_with_email]
-    private void attemptERPLogin(final String email, final String regNo, final String password) {
+    private void attemptERPLogin(final String userEmail, final String regNo, final String password) {
         Timber.d(TAG, "attemptERPLogin:" + regNo);
         if (!validateForm()) {
             return;
@@ -174,11 +174,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     // Check for error node in json
                     if (!error) {
+                        // User successfully logged in. Create login session
+                        MyApplication.getInstance().getPrefManager().setLogin(true);
+                        // Fetch the error msg
                         String errorMsg = jObj.getString("error_msg");
                         Toast.makeText(LoginActivity.this,
                                 errorMsg, Toast.LENGTH_LONG).show();
-                        // User successfully logged in. Create login session
-                        MyApplication.getInstance().getPrefManager().setLogin(true);
                         // Now store the user in SQLite
                         String uid = jObj.getString("folio_no");
 
@@ -193,7 +194,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         db.addUser(name, email, uid, created_at, password, regno, dept);
 
                         // Creating user in Firebase
-                        attemptFirebaseLogin(email, password);
+                        attemptFirebaseLogin(userEmail, password);
 
                     } else {
                         // Error in login. Get the error message
@@ -230,7 +231,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 return params;
             }
         };
-
         // Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
