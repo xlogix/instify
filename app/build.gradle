@@ -15,6 +15,7 @@ android {
                 storePassword KEYSTORE_PASSWORD
                 keyAlias KEYSTORE_ALIAS
                 keyPassword KEY_PASSWORD
+                v2SigningEnabled true
             } catch (ex) {
                 throw new InvalidUserDataException("You should define KEYSTORE_PASSWORD, KEYSTORE_ALIAS and KEY_PASSWORD in gradle.properties." + ex)
             }
@@ -72,7 +73,7 @@ dependencies {
 
     // DATABASE FIREBASE,UI
     compile 'com.google.firebase:firebase-database:10.2.0'
-    compile 'com.firebaseui:firebase-ui-database:1.0.1'
+    compile 'com.firebaseui:firebase-ui-database:1.1.0'
 
     // IMAGE LOAD
     compile 'com.github.bumptech.glide:glide:3.7.0'
@@ -86,7 +87,7 @@ dependencies {
     compile 'com.thefinestartist:finestwebview:1.2.7'
 
     // LOGGING
-    compile 'com.jakewharton.timber:timber:4.4.0'
+    compile 'com.jakewharton.timber:timber:4.5.1'
     compile 'com.google.firebase:firebase-core:10.2.0'
     compile 'com.google.firebase:firebase-config:10.2.0'
 
@@ -98,14 +99,14 @@ dependencies {
     compile 'com.google.firebase:firebase-storage:10.2.0'
 
     // SUPPORTING LIBRARIES
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.android.support:customtabs:25.2.0'
-    compile 'com.android.support:design:25.2.0'
-    compile 'com.android.support:support-v4:25.2.0'
-    compile 'com.android.support:support-v13:25.2.0'
-    compile 'com.android.support:recyclerview-v7:25.2.0'
-    compile 'com.android.support:cardview-v7:25.2.0'
-    compile 'com.android.support:support-vector-drawable:25.2.0'
+    compile 'com.android.support:appcompat-v7:25.3.0'
+    compile 'com.android.support:customtabs:25.3.0'
+    compile 'com.android.support:design:25.3.0'
+    compile 'com.android.support:support-v4:25.3.0'
+    compile 'com.android.support:support-v13:25.3.0'
+    compile 'com.android.support:recyclerview-v7:25.3.0'
+    compile 'com.android.support:cardview-v7:25.3.0'
+    compile 'com.android.support:support-vector-drawable:25.3.0'
 
     // UI
     compile 'com.github.paolorotolo:appintro:4.1.0'

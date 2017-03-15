@@ -5,8 +5,6 @@ package com.instify.android.ux.fragments;
  */
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,6 +12,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +27,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.instify.android.R;
 import com.instify.android.app.MyApplication;
 import com.instify.android.ux.MainActivity;
+import com.thefinestartist.finestwebview.FinestWebView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -162,9 +162,29 @@ public class UnivNewsFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     try {
-                        v.getContext().startActivity(new Intent(Intent.ACTION_VIEW,
-                                Uri.parse(newsArray.getJSONObject(position)
-                                        .getString("link"))));
+                        new FinestWebView.Builder(v.getContext()).theme(R.style.FinestWebViewTheme)
+                                .titleDefault("News Update")
+                                .showUrl(false)
+                                .statusBarColorRes(R.color.colorPrimaryDark)
+                                .toolbarColorRes(R.color.colorPrimary)
+                                .titleColorRes(R.color.finestWhite)
+                                .urlColorRes(R.color.colorPrimaryLight)
+                                .iconDefaultColorRes(R.color.finestWhite)
+                                .progressBarColorRes(R.color.finestWhite)
+                                .stringResCopiedToClipboard(R.string.copied_to_clipboard)
+                                .stringResCopiedToClipboard(R.string.copied_to_clipboard)
+                                .stringResCopiedToClipboard(R.string.copied_to_clipboard)
+                                .showSwipeRefreshLayout(true)
+                                .updateTitleFromHtml(true)
+                                .swipeRefreshColorRes(R.color.colorPrimaryDark)
+                                .menuSelector(R.drawable.selector_light_theme)
+                                .menuTextGravity(Gravity.CENTER)
+                                .menuTextPaddingRightRes(R.dimen.defaultMenuTextPaddingLeft)
+                                .dividerHeight(0)
+                                .gradientDivider(false)
+                                .setCustomAnimations(R.anim.slide_up, R.anim.hold, R.anim.hold, R.anim.slide_down)
+                                .show(newsArray.getJSONObject(position)
+                                        .getString("link"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

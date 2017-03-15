@@ -56,18 +56,15 @@ public class SplashActivity extends Activity {
              */
             public void run() {
                 if (MyApplication.getInstance().getPrefManager().getIsFirstRun()) {
-                    Intent i = new Intent(SplashActivity.this, IntroActivity.class);
-                    startActivity(i);
+                    startActivity(new Intent(SplashActivity.this, IntroActivity.class));
                     finish();
                 } else if (mFirebaseUser == null) {
-                    Intent i = new Intent(SplashActivity.this, LoginActivity.class);
                     Timber.d("Pass to auth activity");
-                    startActivity(i);
+                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                     finish();
                 } else {
-                    Intent i = new Intent(SplashActivity.this, MainActivity.class);
                     Timber.d("Pass to main activity");
-                    startActivity(i);
+                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
                     finish();
                 }
             }
