@@ -39,6 +39,7 @@ import com.instify.android.R;
 import com.instify.android.app.AppConfig;
 import com.instify.android.app.MyApplication;
 import com.instify.android.helpers.SQLiteHandler;
+import com.instify.android.models.UserDataFirebase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,7 +69,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
     public ProgressDialog mProgressDialog;
     // [END declare_database]
-    private DatabaseReference mFirebaseDatabase;
+    private DatabaseReference mFirebaseDatabase, usersRef;
     // [declare_auth]
     private FirebaseAuth mAuth;
     // [declare_auth_listener]
@@ -174,6 +175,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     void attemptERPLogin(final String emailText, final String passwordText, final String regNo) {
 
         mFirebaseDatabase = FirebaseDatabase.getInstance().getReference();
+        usersRef = FirebaseDatabase.getInstance().getReference("users");
         Timber.d("Registration:");
         if (!validateForm()) {
             return;
@@ -220,6 +222,10 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
                         // Inserting row in users table
                         db.addUser(name, email, uid, created_at, passwordText, regno, dept);
+
+                        //Add details to firebase database
+                        // TODO : not working. Fix!
+                        usersRef.child(uid).setValue(new UserDataFirebase(name, email, created_at, regno, dept));
 
                         // Creating user in Firebase
                         attemptFirebaseLogin(emailText, passwordText);
