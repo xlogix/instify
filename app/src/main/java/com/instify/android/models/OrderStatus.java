@@ -8,6 +8,6 @@ public enum OrderStatus {
 
     COMPLETED,
     ACTIVE,
-    INACTIVE;
+    INACTIVE
 
 }

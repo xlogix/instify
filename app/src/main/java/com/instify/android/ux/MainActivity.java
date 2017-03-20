@@ -2,12 +2,10 @@ package com.instify.android.ux;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.content.ComponentName;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -15,8 +13,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -36,7 +32,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -58,7 +53,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
 import com.instify.android.app.MyApplication;
 import com.instify.android.helpers.DownloadImage;
-import com.instify.android.helpers.ImageCompression;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.listeners.OnSingleClickListener;
 import com.instify.android.models.UserDataFirebase;
@@ -67,15 +61,10 @@ import com.instify.android.ux.fragments.CampNewsFragment;
 import com.instify.android.ux.fragments.NotesFragment;
 import com.instify.android.ux.fragments.TimeTableFragment;
 import com.instify.android.ux.fragments.UnivNewsFragment;
+import com.theartofdev.edmodo.cropper.CropImage;
 import com.thefinestartist.finestwebview.FinestWebView;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
@@ -91,17 +80,15 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     /* Play Services Request required to check if Google Services is installed or not */
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final int RC_SETTINGS_SCREEN = 125;
-    private static final int RC_TAKE_PICTURE = 101;
     private static final int GALLERY = 1;
-    private static final int RC_CAMERA_PERM = 123;
-    private static final int RC_GALLERY_PERM = 121;
+    private static final int RC_CAMERA_AND_GALLERY_PERM = 123;
+    private static final int RC_STORAGE_PERM = 121;
     private static final String TAG = "MainActivity";
     public FloatingActionButton mSharedFab;
     private DrawerLayout drawerLayout;
     private ViewPager mViewPager;
     private ImageView navImageView;
     private TextView navTextView;
-    private Uri mCaptureUri = null;
 
     private FirebaseAuth mAuth;
     private FirebaseUser mFirebaseUser;
@@ -337,17 +324,15 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     }
 
     private void promptProfileChanger() {
-        final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Remove Picture", "Cancel"};
+        final CharSequence[] items = {"Take Photo or Choose from Gallery", "Remove Picture", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Profile Photo");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("Take Photo")) {
+                if (items[item].equals("Take Photo or Choose from Gallery")) {
                     // Open Camera
-                    cameraTask();
-                } else if (items[item].equals("Choose from Gallery")) {
-                    galleryTask();
+                    getPicture();
                 } else if (items[item].equals("Remove Picture")) {
                     navImageView.setImageResource(R.drawable.default_pic_face);
                     getSharedPreferences("userData", MODE_PRIVATE).edit().putString("PicPath", null).apply();
@@ -360,97 +345,47 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    @AfterPermissionGranted(RC_CAMERA_PERM)
-    public void cameraTask() {
-        if (EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA)) {
+    @AfterPermissionGranted(RC_CAMERA_AND_GALLERY_PERM)
+    public void getPicture() {
+        if (EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             // Have permission, do the thing!
-            Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-            // Choose file storage location
-            File file = new File(Environment.getExternalStorageDirectory(), UUID.randomUUID().toString() + ".jpg");
-            takePicture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-            mCaptureUri = Uri.fromFile(file);
-            i = new ImageCompression(getApplicationContext()).compressImage(String.valueOf(mCaptureUri));
-
-            // Camera
-            final List<Intent> cameraIntents = new ArrayList<>();
-            final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            final PackageManager packageManager = getPackageManager();
-            final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
-            for (ResolveInfo res : listCam) {
-                final String packageName = res.activityInfo.packageName;
-                final Intent intent = new Intent(captureIntent);
-                intent.setComponent(new ComponentName(packageName, res.activityInfo.name));
-                intent.setPackage(packageName);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, i);
-                cameraIntents.add(intent);
-            }
-            startActivityForResult(takePicture, RC_TAKE_PICTURE);
+            CropImage.startPickImageActivity(this);
 
         } else {
             // Ask for one permission
             EasyPermissions.requestPermissions(this, getString(R.string.rationale_camera),
-                    RC_CAMERA_PERM, Manifest.permission.CAMERA);
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    @AfterPermissionGranted(RC_GALLERY_PERM)
-    public void galleryTask() {
-        if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            // Have permissions, yay!
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, "Select Picture "), GALLERY);
-        } else {
-            EasyPermissions.requestPermissions(this, getString(R.string.rationale_storage),
-                    RC_GALLERY_PERM, Manifest.permission.READ_EXTERNAL_STORAGE);
+                    RC_CAMERA_AND_GALLERY_PERM, Manifest.permission.CAMERA);
         }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Bitmap Image;
-        if (requestCode == RC_TAKE_PICTURE) {
-            try {
-                Uri captured_image = Uri.parse(i);
-                Image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), captured_image);
-                Bitmap image = Image;
-                navImageView.setImageBitmap(Image);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                image.compress(Bitmap.CompressFormat.PNG, 20, baos);
+        super.onActivityResult(requestCode, resultCode, data);
+        // handle result of pick image chooser
+        if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Uri imageUri = CropImage.getPickImageResultUri(this, data);
 
-                // Encoding image to string
-                byte[] b = baos.toByteArray();
-                String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
-                getSharedPreferences("userData", MODE_PRIVATE).edit().putString("PicPath", imageEncoded).apply();
+            // Start CropImage Activity
+            startCropImageActivity(imageUri);
+            // Set the image to Nav View
+            navImageView.setImageURI(imageUri);
 
-            } catch (IOException e) {
-                Log.w(TAG, "File URI is null");
-                Toast.makeText(this, "Taking picture failed.", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == GALLERY) {
-            Uri mImageUri = data.getData();
-            try {
-                Image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                Image.compress(Bitmap.CompressFormat.PNG, 20, baos);
+            /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            Image.compress(Bitmap.CompressFormat.PNG, 20, baos);
+            // Encoding image to string
+            byte[] b = baos.toByteArray();
+            String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
+            getSharedPreferences("userData", MODE_PRIVATE).edit().putString("PicPath", imageEncoded).apply();*/
 
-                navImageView.setImageBitmap(Image);
-
-                // Encoding image to string
-                byte[] b = baos.toByteArray();
-                String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
-                getSharedPreferences("userData", MODE_PRIVATE).edit().putString("PicPath", imageEncoded).apply();
-
-            } catch (FileNotFoundException e) {
-                Toast.makeText(this, "File was not found, Try Again!", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            } catch (IOException e) {
-                Toast.makeText(this, "Taking picture failed", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
+        } else if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
+            // Do something after user returned from app settings screen, like showing a Toast.
+            Toast.makeText(this, R.string.returned_from_app_settings_to_activity, Toast.LENGTH_SHORT)
+                    .show();
         }
+    }
+
+    private void startCropImageActivity(Uri imageUri) {
+        CropImage.activity(imageUri)
+                .start(this);
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -708,13 +643,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         // (Optional) Check whether the user denied any permissions and checked "NEVER ASK AGAIN."
         // This will display a dialog directing them to enable the permission in app settings.
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-            new AppSettingsDialog.Builder(this, getString(R.string.rationale_ask_again))
-                    .setTitle(getString(R.string.title_settings_dialog))
-                    .setPositiveButton(getString(R.string.setting))
-                    .setNegativeButton(getString(R.string.cancel), null /* click listener */)
-                    .setRequestCode(RC_SETTINGS_SCREEN)
-                    .build()
-                    .show();
+            new AppSettingsDialog.Builder(this).build().show();
         }
     }
     // [END] EasyPermission Default Functions

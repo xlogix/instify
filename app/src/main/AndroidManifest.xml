@@ -62,6 +62,9 @@
             android:screenOrientation="sensor"
             android:theme="@style/FinestWebViewTheme.Light" />
 
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/>
+
         <activity
             android:name=".ux.SplashActivity"
             android:screenOrientation="portrait"
@@ -115,11 +118,11 @@
             android:label="@string/app_name" />
 
         <activity
-            android:name=".upload.UploadNotes"
+            android:name=".ux.UploadNotesActivity"
             android:label="@string/title_activity_upload_notes" />
 
         <activity
-            android:name=".upload.UploadNews"
+            android:name=".ux.UploadNewsActivity"
             android:label="@string/title_activity_upload_campus" />
 
         <service

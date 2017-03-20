@@ -66,6 +66,55 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
         ((MainActivity) getActivity()).mSharedFab = null; // To avoid keeping/leaking the reference of the FAB
     }
 
+    class Att {
+
+        private double pre;
+        private double ttl;
+        double main_attendance;
+        //Variables
+        int count = 0, num = 1, denom = 1;
+        int countp = 0, deno = 1;
+
+        //****************************************************************************
+        public double attnCalc(double present, double total) {
+            pre = present;
+            ttl = total;
+            main_attendance = pre / ttl * 100;
+
+
+            while (true) {
+
+                double current_attendance = ((present + num) / (total + denom)) * 100;
+                num++;
+                denom++;
+
+                if (current_attendance > 75) {
+                    break;
+                }
+                count++;
+            }
+            return count;
+        }
+
+        //****************************************************************************
+        public double predict() {
+
+            if (main_attendance > 75) {
+                while (deno <= 1000) {
+
+                    double predicted_attandance = ((pre) / (ttl + deno)) * 100;
+                    if (predicted_attandance >= 75) {
+                        countp++;
+                    }
+                    deno++;
+                }
+
+            }
+            return countp;
+        }
+        //****************************************************************************
+    }
+
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ExpandableListView expListView;
     private BarChart mChart;
@@ -168,23 +217,36 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
                         // expListView = (ExpandableListView)findViewById(R.id.expListView);
                         JSONArray user = jObj.getJSONArray("subjects");
 
-                        Integer i;
+                        int i;
+                        double ar[], br[];
+                        ar = new double[100];
+                        br = new double[100];
 
                         for (i = 0; i < user.length(); i++) {
+                            // Create an object of Att class
+                            Att obj = new Att();
+
                             String name = user.getString(i);
                             JSONObject subs = jObj.getJSONObject(user.getString(i));
 
                             ArrayList<String> daysOfWeekArrayList = new ArrayList<>();
                             headersArrayList.add(name + "-" + subs.getString("sub-desc") + " " + subs.getString("avg-attd") + "%");
 
-                            // daysOfWeekArrayList.add(subs.getString("sub-desc"));
                             daysOfWeekArrayList.add("MAX-HOURS: " + subs.getString("max-hrs"));
                             daysOfWeekArrayList.add("ATTENDED-HOURS: " + subs.getString("attd-hrs"));
                             daysOfWeekArrayList.add("ABSENT-HOURS: " + subs.getString("abs-hrs"));
                             daysOfWeekArrayList.add("PERCENTAGE: " + subs.getString("avg-attd") + "%");
+                            ar[i] = Double.parseDouble(subs.getString("attd-hrs"));
+                            br[i] = Double.parseDouble(subs.getString("max-hrs"));
+                            double tempa = ar[i];
+                            double tempb = br[i];
+
+                            double resultA = obj.attnCalc(tempa, tempb);
+                            double resultB = obj.predict();
+                            daysOfWeekArrayList.add("TOT CLASSES FOR >= 75% :  " + resultA);
+                            daysOfWeekArrayList.add("May Take Leave For Next: " + resultB + " consecutive classes *if taken ");
 
                             childArrayList.put(name + "-" + subs.getString("sub-desc") + " " + subs.getString("avg-attd") + "%", daysOfWeekArrayList);
-
                         }
 
                         expListAdapter = new ListAdapterExpandable(getContext(), headersArrayList, childArrayList);

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.instify.android.R;
-import com.instify.android.upload.UploadNotes;
+import com.instify.android.ux.UploadNotesActivity;
 import com.instify.android.ux.MainActivity;
 import com.instify.android.ux.adapters.NotesAdapter;
 
@@ -51,7 +51,7 @@ public class NotesFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // Click action
-                Intent i = new Intent(getActivity(), UploadNotes.class);
+                Intent i = new Intent(getActivity(), UploadNotesActivity.class);
                 startActivity(i);
             }
         });

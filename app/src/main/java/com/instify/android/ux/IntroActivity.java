@@ -45,7 +45,7 @@ public class IntroActivity extends AppIntro2 {
 
         // This will ask for the camera permission AND the contacts permission on the same slide.
         // Ensure your slide talks about both so as not to confuse the user.
-        askForPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_CONTACTS}, 2);
+        // askForPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_CONTACTS}, 2);
     }
 
     @Override

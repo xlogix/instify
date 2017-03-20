@@ -33,23 +33,19 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        Element adsElement = new Element();
-        adsElement.setTitle("Advertise with us");
-
         View aboutPage = new AboutPage(this)
                 .isRTL(false)
+                .setDescription("Instify is an (add content here)\n\nDevelopers : Abhishek, Arjun and Somnath\n\nSepcial thanks to : Chandan Singh, Ankur, Trishansh")
                 .setImage(R.drawable.background)
-                .addItem(new Element().setTitle("Version 6.2"))
-                .addItem(adsElement)
+                .addItem(new Element().setTitle("Version 1.0"))
                 .addGroup("Connect with us")
-                .addEmail("something@fnplus.com")
-                .addWebsite("something.com")
-                .addFacebook("something")
+                .addEmail("abhishekuniyal09@gmail.com")
+                .addWebsite("http://www.fnplus.xyz/")
+                .addFacebook("https://www.facebook.com/fnplus.xyz")
                 .addYoutube("something")
-                .addPlayStore("something")
+                .addPlayStore("https://play.google.com/store")
                 .addItem(getCopyRightsElement())
                 .create();
-
         setContentView(aboutPage);
     }
 
@@ -57,8 +53,8 @@ public class AboutActivity extends AppCompatActivity {
         Element copyRightsElement = new Element();
         final String copyrights = String.format(getString(R.string.copy_right), Calendar.getInstance().get(Calendar.YEAR));
         copyRightsElement.setTitle(copyrights);
-        copyRightsElement.setIcon(R.drawable.about_icon_copy_right);
-        copyRightsElement.setColor(ContextCompat.getColor(this, mehdi.sakout.aboutpage.R.color.about_item_icon_color));
+        copyRightsElement.setIconDrawable(R.drawable.about_icon_copy_right);
+        copyRightsElement.setIconTint(R.color.about_item_icon_color);
         copyRightsElement.setGravity(Gravity.CENTER);
         copyRightsElement.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,4 +1,4 @@
-package com.instify.android.upload;
+package com.instify.android.ux;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,7 +27,7 @@ import java.sql.Timestamp;
  * Created by Abhish3k on 4/18/2016.
  */
 
-public class UploadNews extends AppCompatActivity {
+public class UploadNewsActivity extends AppCompatActivity {
 
     DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
     FirebaseUser fUser;
@@ -137,13 +137,13 @@ public class UploadNews extends AppCompatActivity {
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(UploadNews.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(UploadNewsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Toast.makeText(UploadNews.this, "News announced!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(UploadNewsActivity.this, "News announced!", Toast.LENGTH_SHORT).show();
                                     newsTitle.setText("");
                                     newsDescription.setText("");
                                     finish();

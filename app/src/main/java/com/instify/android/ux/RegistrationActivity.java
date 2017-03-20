@@ -411,7 +411,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(RegistrationActivity.this,
-                        android.R.layout.simple_list_item_1, emailAddressCollection);
+                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailField.setAdapter(adapter);
     }

@@ -19,7 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.instify.android.R;
 import com.instify.android.models.CampusNewsModel;
-import com.instify.android.upload.UploadNews;
+import com.instify.android.ux.UploadNewsActivity;
 import com.instify.android.ux.ChatActivity;
 import com.instify.android.ux.MainActivity;
 
@@ -142,7 +142,7 @@ public class CampNewsFragment extends Fragment {
         ((MainActivity) getActivity()).mSharedFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getActivity(), UploadNews.class);
+                Intent i = new Intent(getActivity(), UploadNewsActivity.class);
                 try{
                     i.putExtra("username", ((MainActivity) getActivity()).userInfoObject.name);
                     startActivity(i);

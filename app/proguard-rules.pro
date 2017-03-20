@@ -18,8 +18,16 @@
 
 -keep public class * implements com.bumptech.glide.module.GlideModule
 
--keep class !android.support.v7.internal.view.menu.**,android.support.** {*;}
-
 -keep class com.commonsware.cwac.** { *; }
 
 -keep class com.github.mikephil.charting.** { *; }
+
+-keep class android.support.v4.** {  *; }
+
+-keep class android.support.v7.internal.** { *; }
+
+-keep interface android.support.v7.internal.** { *; }
+
+-keep class android.support.v7.** { *; }
+
+-keep interface android.support.v7.** { *; }

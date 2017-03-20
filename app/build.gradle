@@ -45,12 +45,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE-FIREBASE.txt'
+        exclude 'META-INF/NOTICE'
+    }
     // `return void` removes the lint error: `Not all execution paths return a value`.
     return void
-}
-
-configurations.all {
-    resolutionStrategy.force 'com.android.support:support-annotations:25.2.0'
 }
 
 repositories {
@@ -74,6 +75,9 @@ dependencies {
     // DATABASE FIREBASE,UI
     compile 'com.google.firebase:firebase-database:10.2.0'
     compile 'com.firebaseui:firebase-ui-database:1.1.0'
+
+    // CRASH
+    compile 'com.google.firebase:firebase-crash:10.2.0'
 
     // IMAGE LOAD
     compile 'com.github.bumptech.glide:glide:3.7.0'
@@ -100,7 +104,6 @@ dependencies {
 
     // SUPPORTING LIBRARIES
     compile 'com.android.support:appcompat-v7:25.3.0'
-    compile 'com.android.support:customtabs:25.3.0'
     compile 'com.android.support:design:25.3.0'
     compile 'com.android.support:support-v4:25.3.0'
     compile 'com.android.support:support-v13:25.3.0'
@@ -110,8 +113,8 @@ dependencies {
 
     // UI
     compile 'com.github.paolorotolo:appintro:4.1.0'
-    compile 'com.github.medyo:android-about-page:1.1.1'
-    compile 'com.commonsware.cwac:camera:0.7.0'
+    compile 'com.github.medyo:android-about-page:1.2'
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.3.+'
     compile 'com.klinkerapps:link_builder:1.5.2'
     compile 'com.github.vipulasri:timelineview:1.0.5'
 
