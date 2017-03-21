@@ -242,8 +242,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Timber.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
-                        Toast.makeText(LoginActivity.this, R.string.auth_success,
-                                Toast.LENGTH_SHORT).show();
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.

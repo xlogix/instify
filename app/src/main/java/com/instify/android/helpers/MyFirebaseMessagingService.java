@@ -32,7 +32,7 @@ import com.instify.android.ux.MainActivity;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    private static final String TAG = "MyFirebaseMsgService";
+    private static final String TAG = "MyFMService";
 
     /**
      * Called when message is received.

@@ -26,8 +26,8 @@ android {
         applicationId "com.instify.android"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -38,8 +38,8 @@ android {
             versionNameSuffix '-DEBUG'
         }
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             versionNameSuffix '-RELEASE'
             // signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -60,11 +60,9 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
 
     // for App Invites and Dynamic Links
+    compile 'com.google.firebase:firebase-appindexing:10.2.0'
     compile 'com.google.firebase:firebase-invites:10.2.0'
     // for cloud messaging i.e sending notifications
     compile 'com.google.firebase:firebase-messaging:10.2.0'
@@ -117,6 +115,13 @@ dependencies {
     compile 'com.theartofdev.edmodo:android-image-cropper:2.3.+'
     compile 'com.klinkerapps:link_builder:1.5.2'
     compile 'com.github.vipulasri:timelineview:1.0.5'
+
+    // TESTING
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support:support-annotations:25.3.0'
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
 
     // TEST MEMORY LEAK
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'

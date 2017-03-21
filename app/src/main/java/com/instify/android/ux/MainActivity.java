@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -79,10 +78,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     /* Play Services Request required to check if Google Services is installed or not */
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private static final int RC_SETTINGS_SCREEN = 125;
-    private static final int GALLERY = 1;
     private static final int RC_CAMERA_AND_GALLERY_PERM = 123;
-    private static final int RC_STORAGE_PERM = 121;
     private static final String TAG = "MainActivity";
     public FloatingActionButton mSharedFab;
     private DrawerLayout drawerLayout;
@@ -96,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     SQLiteHandler db = new SQLiteHandler(this);
 
     public UserDataFirebase userInfoObject;
-    String i;
 
     View headerView;
 
@@ -207,8 +202,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
         if (mFirebaseUser != null) {
             // User is signed in
-            Log.d(TAG, "onAuthStateChanged:signed_in:" + mFirebaseUser.getUid());
-            Toast.makeText(MainActivity.this, "Welcome " + mFirebaseUser.getEmail(), Toast.LENGTH_SHORT).show();
+            Timber.d(TAG, "onAuthStateChanged:signed_in:" + mFirebaseUser.getUid());
 
             dbRef = FirebaseDatabase.getInstance().getReference();
             userRef = dbRef.child("users").child(mFirebaseUser.getUid());
@@ -354,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         } else {
             // Ask for one permission
             EasyPermissions.requestPermissions(this, getString(R.string.rationale_camera),
-                    RC_CAMERA_AND_GALLERY_PERM, Manifest.permission.CAMERA);
+                    RC_CAMERA_AND_GALLERY_PERM, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
     }
 

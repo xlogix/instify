@@ -6,21 +6,24 @@ import java.util.Date;
  * Created by Abhish3k on 7/2/2016. // Using Firebase Database
  */
 
-public class ChatModel {
+public class ChatMessageModel {
 
     private String id;
     private String text;
     private String email;
     private String photoUrl;
+    private String imageUrl;
     private long time;
 
-    public ChatModel() {
+    public ChatMessageModel() {
     }
 
-    public ChatModel(String text, String name, String photoUrl) {
+    public ChatMessageModel(String text, String name, String photoUrl, String imageUrl) {
         this.text = text;
         this.email = name;
         this.photoUrl = photoUrl;
+        this.imageUrl = imageUrl;
+
         // Initialize to current time
         time = new Date().getTime();
     }
@@ -55,6 +58,14 @@ public class ChatModel {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public long getTime() {

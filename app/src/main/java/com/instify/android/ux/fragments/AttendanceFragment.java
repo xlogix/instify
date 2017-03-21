@@ -243,8 +243,8 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
 
                             double resultA = obj.attnCalc(tempa, tempb);
                             double resultB = obj.predict();
-                            daysOfWeekArrayList.add("TOT CLASSES FOR >= 75% :  " + resultA);
-                            daysOfWeekArrayList.add("May Take Leave For Next: " + resultB + " consecutive classes *if taken ");
+                            daysOfWeekArrayList.add("TOTAL CLASSES FOR >= 75% :  " + resultA);
+                            daysOfWeekArrayList.add("MAY TAKE LEAVE FOR NEXT: " + resultB + " CONSECUTIVE CLASSES");
 
                             childArrayList.put(name + "-" + subs.getString("sub-desc") + " " + subs.getString("avg-attd") + "%", daysOfWeekArrayList);
                         }

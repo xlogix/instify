@@ -30,8 +30,8 @@ import com.instify.android.ux.MainActivity;
 public class CampNewsFragment extends Fragment {
 
     RecyclerView recyclerView;
-    // Firebase declarations
 
+    // Firebase Declarations
     DatabaseReference dbRef, campusRefAll, userRef, campusRefDeptAll;
     FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder> fAdapterAll, fAdapterDeptAll, fAdapterDeptSec;
     FirebaseUser currentUser;
@@ -76,6 +76,7 @@ public class CampNewsFragment extends Fragment {
                 R.layout.card_view_campus,
                 CampusViewHolder.class,
                 campusRefAll) {
+
             @Override
             protected void populateViewHolder(final CampusViewHolder holder, final CampusNewsModel model, final int position) {
                 holder.campusTitle.setText(model.title);
@@ -89,7 +90,6 @@ public class CampNewsFragment extends Fragment {
                         startActivity(launchChat);
                     }
                 });
-
             }
         };
 
@@ -157,9 +157,11 @@ public class CampNewsFragment extends Fragment {
         return rootView;
     }
 
-    private static class CampusViewHolder extends RecyclerView.ViewHolder {
-        View mView;
-        TextView campusTitle, campusDescription, campusAuthor;
+    public static class CampusViewHolder extends RecyclerView.ViewHolder {
+        public View mView;
+        public TextView campusTitle;
+        public TextView campusDescription;
+        public TextView campusAuthor;
 
         public CampusViewHolder(View v) {
             super(v);
@@ -169,35 +171,4 @@ public class CampNewsFragment extends Fragment {
             campusDescription = (TextView) v.findViewById(R.id.campusDescription);
         }
     }
-
-//    private void createAdapter(String dbAddress, FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder> fAdapter){
-//        DatabaseReference campusRefAll = FirebaseDatabase.getInstance().getReference().child(dbAddress);
-//
-//        fAdapter = new FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder>(
-//                CampusNewsModel.class,
-//                R.layout.card_view_campus,
-//                CampusViewHolder.class,
-//                campusRefAll) {
-//
-//            @Override
-//            protected void populateViewHolder(final CampusViewHolder holder, final CampusNewsModel model, final int position) {
-//
-////                String newsId = fAdapter.getRef(position).getKey();
-//
-//                holder.campusTitle.setText(model.title);
-//                holder.campusDescription.setText(model.description);
-//                holder.campusAuthor.setText(model.author);
-//                holder.mView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
-//                        launchChat.putExtra("localNewsId", fAdapter.getRef(position).getKey());
-//                        startActivity(launchChat);
-//                    }
-//                });
-//            }
-//        };
-//
-//        recyclerView.setAdapter(fAdapter);
-//    }
 }
