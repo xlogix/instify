@@ -136,7 +136,7 @@ public class TimeTableFragment extends Fragment {
 
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date());
 
-        final String[] mTimeValues = new String[]{date + " 08:00", date + " 09:10", date + " 10:05", date + " 10:55", date + " 12:55", date + " 01:50", date + " 02:45"};
+        final String[] mTimeValues = new String[]{date + " 08:00", date + " 09:10", date + " 10:05", date + " 11:00", date + " 12:55", date + " 13:50", date + " 14:45"};
 
         /**
          * Method to make json object request where json response is dynamic
