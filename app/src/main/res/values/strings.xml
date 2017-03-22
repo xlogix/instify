@@ -3,8 +3,8 @@
     <string name="facebook_app_id" translatable="false">701704016670490</string>
     <string name="copy_right">Copyrights © %1$d</string>
 
-    <string name="title_activity_first_launch_tut">FirstLaunchTut</string>
-    <string name="title_activity_splash">Made with &#10084; by fnplus</string>
+    <string name="title_activity_intro">Thanks for downloading!</string>
+    <string name="title_activity_splash">Made with &#10084; by Fnplus</string>
     <string name="title_activity_login">Login Here</string>
     <string name="title_activity_register">Register Yourself</string>
     <string name="title_activity_chat">Discuss</string>
@@ -30,8 +30,9 @@
     <string name="nav_logout">Logout</string>
 
     <string name="nav_section_5">Communicate</string>
-    <string name="nav_share">Share</string>
     <string name="nav_help_feedback">Help &amp; Feedback</string>
+    <string name="nav_rate_us">Love Us? Rate Us!</string>
+    <string name="nav_donate_us">Donate Us</string>
 
     <!-- Nav_header_main -->
     <string name="header_imageView_description">Placeholder text for image view description</string>

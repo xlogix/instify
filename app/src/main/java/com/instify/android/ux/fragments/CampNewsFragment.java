@@ -19,9 +19,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.instify.android.R;
 import com.instify.android.models.CampusNewsModel;
-import com.instify.android.ux.UploadNewsActivity;
 import com.instify.android.ux.ChatActivity;
 import com.instify.android.ux.MainActivity;
+import com.instify.android.ux.UploadNewsActivity;
 
 /**
  * Created by Abhish3k on 2/23/2016.
@@ -143,10 +143,10 @@ public class CampNewsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getActivity(), UploadNewsActivity.class);
-                try{
+                try {
                     i.putExtra("username", ((MainActivity) getActivity()).userInfoObject.name);
                     startActivity(i);
-                }catch (NullPointerException e){
+                } catch (NullPointerException e) {
                     Toast.makeText(getActivity(), "Not ready to announce news yet. Check your internet connection",
                             Toast.LENGTH_SHORT).show();
                 }

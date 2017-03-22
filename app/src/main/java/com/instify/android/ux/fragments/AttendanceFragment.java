@@ -4,6 +4,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import timber.log.Timber;
@@ -48,7 +50,7 @@ import timber.log.Timber;
  * Created by Abhish3k on 1/2/2017.
  */
 
-public class AttendanceFragment extends Fragment implements OnChartGestureListener {
+public class AttendanceFragment extends Fragment {
 
     public AttendanceFragment() {
     }
@@ -81,7 +83,6 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
             ttl = total;
             main_attendance = pre / ttl * 100;
 
-
             while (true) {
 
                 double current_attendance = ((present + num) / (total + denom)) * 100;
@@ -102,8 +103,8 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
             if (main_attendance > 75) {
                 while (deno <= 1000) {
 
-                    double predicted_attandance = ((pre) / (ttl + deno)) * 100;
-                    if (predicted_attandance >= 75) {
+                    double predicted_attendance = ((pre) / (ttl + deno)) * 100;
+                    if (predicted_attendance >= 75) {
                         countp++;
                     }
                     deno++;
@@ -119,9 +120,7 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
     private ExpandableListView expListView;
     private BarChart mChart;
     private Typeface tf;
-    private String userRegNo, userPass;
-    private final String endpoint = "http://instify.herokuapp.com/api/attendance/?regno="
-            + userRegNo + "&password=" + userPass;
+    String userRegNo, userPass;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -132,7 +131,7 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
         // [LAYOUT LIST] Expand list view
         expListView = (ExpandableListView) rootView.findViewById(R.id.expListView);
         // [LAYOUT GRAPH] create a new chart object
-        // mChart = (BarChart) rootView.findViewById(R.id.barChart);
+        mChart = (BarChart) rootView.findViewById(R.id.barChart);
 
         // Fetch the attendance
         AttendanceFragment.AsyncGetAttendance dataObj = new AttendanceFragment.AsyncGetAttendance();
@@ -140,7 +139,7 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
 
         // Setting the data in the chart (8 entries).. [DISABLED}
 
-       /* List<BarEntry> entries = new ArrayList<>();
+        List<BarEntry> entries = new ArrayList<>();
         entries.add(new BarEntry(0f, 0f));
         entries.add(new BarEntry(1f, 0f));
         entries.add(new BarEntry(2f, 0f));
@@ -156,14 +155,16 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
         mChart.setData(data);
         mChart.getDescription().setEnabled(false);
         mChart.animateXY(2000, 2000);
-        //mChart.setOnChartGestureListener(this);
         mChart.setDrawBarShadow(true);
         mChart.setFitBars(true); // make the x-axis fit exactly all bars
-        mChart.invalidate();*/
+        mChart.invalidate();
 
         ((MainActivity) getActivity()).mSharedFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /*expListView.setVisibility(View.GONE);
+                mChart.setVisibility(View.VISIBLE);
+                ((MainActivity) getActivity()).mSharedFab.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_menu_share));*/
             }
         });
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -186,6 +187,7 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
     }
 
     private void getAttendance() {
+
         // Handle UI
         showRefreshing();
 
@@ -376,9 +378,17 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
     }
 
     private void updateChart() {
-        /**
-         * Handle UI
-         */
+
+        // Fetch details from the database
+        SQLiteHandler db = new SQLiteHandler(getContext());
+        userRegNo = db.getUserDetails().get("token");
+        userPass = db.getUserDetails().get("created_at");
+
+        // Set the end point with the acquired credentials
+        String endpoint = "http://instify.herokuapp.com/api/attendance/?regno="
+                + userRegNo + "&password=" + userPass;
+
+        // Handle UI
         showRefreshing();
         /**
          * Method to make json object request where json response is dynamic
@@ -426,48 +436,5 @@ public class AttendanceFragment extends Fragment implements OnChartGestureListen
     private void hideRefreshing() {
         if (mSwipeRefreshLayout.isRefreshing())
             mSwipeRefreshLayout.setRefreshing(false);
-    }
-
-    @Override
-    public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
-        Log.i("Gesture", "START");
-    }
-
-    @Override
-    public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
-        Log.i("Gesture", "END");
-        mChart.highlightValues(null);
-    }
-
-    @Override
-    public void onChartLongPressed(MotionEvent me) {
-        Log.i("LongPress", "Chart longpressed.");
-    }
-
-    @Override
-    public void onChartDoubleTapped(MotionEvent me) {
-        mChart.saveToGallery("myAttendance" + System.currentTimeMillis(), 85);
-        Log.i("DoubleTap", "Saved the graph successfully...");
-        Toast.makeText(getActivity(), "Saved the graph successfully", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onChartSingleTapped(MotionEvent me) {
-        Log.i("SingleTap", "Chart single-tapped.");
-    }
-
-    @Override
-    public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
-        Log.i("Fling", "Chart flinged. VeloX: " + velocityX + ", VeloY: " + velocityY);
-    }
-
-    @Override
-    public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
-        Log.i("Scale / Zoom", "ScaleX: " + scaleX + ", ScaleY: " + scaleY);
-    }
-
-    @Override
-    public void onChartTranslate(MotionEvent me, float dX, float dY) {
-        Log.i("Translate / Move", "dX: " + dX + ", dY: " + dY);
     }
 }

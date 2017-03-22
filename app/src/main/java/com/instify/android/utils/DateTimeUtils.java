@@ -14,7 +14,7 @@ public class DateTimeUtils {
 
     public static String parseDateTime(String dateString, String originalFormat, String outputFromat){
 
-        SimpleDateFormat formatter = new SimpleDateFormat(originalFormat, Locale.US);
+        SimpleDateFormat formatter = new SimpleDateFormat(originalFormat, Locale.UK);
         Date date = null;
         try {
             date = formatter.parse(dateString);

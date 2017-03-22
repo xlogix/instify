@@ -78,8 +78,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     private SQLiteHandler db;
 
     private String userId;
-    private AutoCompleteTextView mEmailField;
-    private EditText mNameField, mPasswordField, mRegNoField;
+    private AutoCompleteTextView mEmailField, mRegNoField;
+    private EditText mPasswordField;
     private Button btnRegister;
 
     // [START on_start_add_listener]
@@ -116,9 +116,9 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_register);
 
         // Views
-        mRegNoField = (EditText) findViewById(R.id.field_regNO);
         mEmailField = (AutoCompleteTextView) findViewById(R.id.field_email);
         populateAutoComplete();
+        mRegNoField = (AutoCompleteTextView) findViewById(R.id.field_regNo);
         mPasswordField = (EditText) findViewById(R.id.field_password);
         btnRegister = (Button) findViewById(R.id.btn_register);
 

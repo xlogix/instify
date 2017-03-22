@@ -27,9 +27,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -62,16 +66,8 @@ public class TimeTableFragment extends Fragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private boolean mWithLinePadding;
 
-    /*// Fetch data from database
-    SQLiteHandler db = new SQLiteHandler(getActivity());
-    String userRegNo = db.getUserDetails().get("token");
-    String userPass = db.getUserDetails().get("created_at");*/
-
-    String userRegNo = "RA1511008020111";
-    String userPass = "dps12345";
-
-    private final String endpoint = "http://instify.herokuapp.com/api/time-table/?regno="
-            + userRegNo + "&password=" + userPass;
+    String userRegNo;
+    String userPass;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,11 +83,7 @@ public class TimeTableFragment extends Fragment {
         mRecyclerView.setLayoutManager(getLinearLayoutManager());
         mRecyclerView.setHasFixedSize(true);
 
-        /**
-         * Handle UI
-         *
-         * @return NULL
-         */
+        // Handle UI
         showRefreshing();
 
         mWithLinePadding = true;
@@ -132,6 +124,20 @@ public class TimeTableFragment extends Fragment {
     }
 
     private void getData() {
+
+        // Fetch details from the database
+        SQLiteHandler db = new SQLiteHandler(getContext());
+        userRegNo = db.getUserDetails().get("token");
+        userPass = db.getUserDetails().get("created_at");
+
+        // Set the end point with the acquired credentials
+        String endpoint = "http://instify.herokuapp.com/api/time-table/?regno="
+                + userRegNo + "&password=" + userPass;
+
+        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date());
+
+        final String[] mTimeValues = new String[]{date + " 08:00", date + " 09:10", date + " 10:05", date + " 10:55", date + " 12:55", date + " 01:50", date + " 02:45"};
+
         /**
          * Method to make json object request where json response is dynamic
          * */
@@ -152,9 +158,11 @@ public class TimeTableFragment extends Fragment {
                                 if (response.get(key) instanceof JSONArray) {
                                     JSONArray array = response.getJSONArray(key);
                                     int size = array.length();
+                                    // [TRY] Fix the card overlap issue
+                                    mTimeLineAdapter.notifyItemRangeRemoved(0, size);
                                     for (int i = 0; i < size; i++) {
                                         msg += "Hour " + (i + 1) + " : " + array.get(i) + "\n";
-                                        mDataList.add(new TimeTableModel(array.get(i).toString(), "2017-02-12 08:00", OrderStatus.INACTIVE));
+                                        mDataList.add(new TimeTableModel(array.get(i).toString(), mTimeValues[i], OrderStatus.INACTIVE));
                                     }
                                     // Notify the adapter that data has been retrieved.
                                     mTimeLineAdapter.notifyDataSetChanged();

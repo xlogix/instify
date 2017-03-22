@@ -20,7 +20,6 @@ import timber.log.Timber;
 
 public class SplashActivity extends Activity {
 
-    public FirebaseAnalytics mFirebaseAnalytics;
     // Firebase instance variables
     private FirebaseUser mFirebaseUser;
 
@@ -41,8 +40,6 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         //layoutContent = findViewById(R.id.splash_content);
         layoutIntroScreen = findViewById(R.id.splash_content);
-        // Obtain the FirebaseAnalytics
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         // Obtain the current logged in user
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 

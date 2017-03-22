@@ -46,6 +46,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
+    private static final int RC_SIGN_IN = 9001;
+
     private ProgressDialog mProgressDialog;
     private AutoCompleteTextView mEmailField;
     private AutoCompleteTextView mRegNoField;
@@ -176,10 +178,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     if (!error) {
                         // User successfully logged in. Create login session
                         MyApplication.getInstance().getPrefManager().setLogin(true);
-                        // Fetch the error msg
-                        String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(LoginActivity.this,
-                                errorMsg, Toast.LENGTH_LONG).show();
+
                         // Now store the user in SQLite
                         String uid = jObj.getString("folio_no");
 
@@ -195,6 +194,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                         // Creating user in Firebase
                         attemptFirebaseLogin(userEmail, password);
+
+                        // Fetch the error msg
+                        String errorMsg = jObj.getString("error_msg");
+                        if (mAuth.getCurrentUser() != null) {
+                            Toast.makeText(LoginActivity.this,
+                                    errorMsg, Toast.LENGTH_LONG).show();
+                        }
 
                     } else {
                         // Error in login. Get the error message
@@ -214,7 +220,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onErrorResponse(VolleyError error) {
                 Timber.e(TAG, "Login Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
+                Toast.makeText(LoginActivity.this,
                         error.getMessage(), Toast.LENGTH_LONG).show();
                 // Got an error, hide the Progress bar
                 hideProgressDialog();

@@ -5,18 +5,21 @@ package com.instify.android.app;
  */
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.instify.android.BuildConfig;
 import com.instify.android.helpers.PreferenceManager;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.ux.IntroActivity;
 import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import timber.log.Timber;
 
@@ -27,10 +30,18 @@ public class MyApplication extends Application {
 
     private static MyApplication mInstance;
 
-    private PreferenceManager mPrefs;
-
     public static synchronized MyApplication getInstance() {
         return mInstance;
+    }
+
+    private PreferenceManager mPrefs;
+
+    public FirebaseAnalytics mFirebaseAnalytics;
+
+    private RefWatcher mRefWatcher;
+
+    public static RefWatcher getRefWatcher(Context context) {
+        return ((MyApplication) context.getApplicationContext()).mRefWatcher;
     }
 
     @Override
@@ -42,7 +53,10 @@ public class MyApplication extends Application {
             // Plant Tiber debug tree
             Timber.plant(new Timber.DebugTree());
         } else {
-            // TODO example of implementation custom crash reporting solution -  Crashlytics.
+            // Obtain the FirebaseAnalytics
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+            // Set Analytics collection to true
+            mFirebaseAnalytics.setAnalyticsCollectionEnabled(true);
             /*Fabric.with(this, new Crashlytics());
             Timber.plant(new CrashReportingTree());*/
         }
@@ -51,7 +65,7 @@ public class MyApplication extends Application {
             // You should not init your app in this process.
             return;
         }
-        LeakCanary.install(this);
+        mRefWatcher = LeakCanary.install(this);
         // Normal app init code...
     }
 

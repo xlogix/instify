@@ -161,6 +161,8 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         mViewPager.setAdapter(mSectionsPagerAdapter);
         // Set the default tab as Campus Portal
         mViewPager.setCurrentItem(1);
+        // Prevent fragments from destroying themselves
+        mViewPager.setOffscreenPageLimit(5);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -171,7 +173,13 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             public void onPageSelected(int position) {
 
                 switch (position) {
+                    case 0:
+                        mSharedFab.show();
+                        break;
                     case 1:
+                        mSharedFab.show();
+                        break;
+                    case 2:
                         mSharedFab.show();
                         break;
                     case 3:
@@ -394,13 +402,13 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     case R.id.nav_feekart:
                         FeekartWebView();
                         break;
-                    case R.id.nav_schedule:
+                    case R.id.nav_attendance:
                         mViewPager.setCurrentItem(0);
                         break;
                     case R.id.nav_campus_news:
                         mViewPager.setCurrentItem(1);
                         break;
-                    case R.id.nav_attendance:
+                    case R.id.nav_schedule:
                         mViewPager.setCurrentItem(2);
                         break;
                     case R.id.nav_notes:
@@ -421,17 +429,17 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     case R.id.nav_share:
                         try {
                             Intent share = new Intent(Intent.ACTION_VIEW);
-                            share.setData(Uri.parse("market://details?id=com.google.android.gms"));
+                            share.setData(Uri.parse("market://details?id=com.instify.android"));
                             startActivity(share);
                         } catch (Exception e) { // Google Play is not installed
                             Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms"));
+                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.instify.android"));
                             startActivity(intent);
                         }
                         break;
                     case R.id.nav_send:
                         String[] emails = {"abhishekuniyal09@gmail.com"};
-                        String subject = "I want to submit a Feedback";
+                        String subject = "I want to submit Feedback";
                         String message = "Hi, ";
                         Intent email = new Intent(Intent.ACTION_SENDTO);
                         email.putExtra(Intent.EXTRA_EMAIL, emails);
