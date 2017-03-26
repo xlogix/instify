@@ -33,10 +33,10 @@ public class PreferenceManager {
     private static final String KEY_NOTIFICATIONS = "notifications";
     private static final String IS_FIRST_RUN = "is_first_run";
     private static final String IS_DARK_THEME = "is_dark_theme";
-    private static final String IS_SIGNED_IN_FROM_GOOGLE_OR_FACEBOOK = "is_signed_in_from_google_or_facebook";
     private static final String USER_REGNO = "user_regNo";
     private static final String USER_PASSWORD = "user_password";
-    private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
+    private static final String KEY_IS_LOGGED_IN = "is_logged_in";
+    private static final String KEY_HAS_SET_PROFILE_PICTURE = "has_set_profile_picture";
 
     // Constructor
     public PreferenceManager(Context context) {
@@ -95,7 +95,6 @@ public class PreferenceManager {
     }
 
     public void setLogin(boolean isLoggedIn) {
-
         editor.putBoolean(KEY_IS_LOGGED_IN, isLoggedIn);
         // commit changes
         editor.commit();
@@ -107,21 +106,16 @@ public class PreferenceManager {
         return mPrefs.getBoolean(KEY_IS_LOGGED_IN, false);
     }
 
-    /**
-     * Check if the user is signed in from Google or Facebook
+    /** Check if the user has set a profile picture
      *
      * @return boolean value, true or false
      */
-    public boolean getSignedInFromGoogleOrFacebook() {
-        return mPrefs.getBoolean(IS_SIGNED_IN_FROM_GOOGLE_OR_FACEBOOK, false);
+    public boolean getHasSetProfilePicture() {
+        return mPrefs.getBoolean(KEY_HAS_SET_PROFILE_PICTURE, true);
     }
 
-    public void setIsSignedInFromGoogleOrFacebook(boolean signedIn) {
-        editor.putBoolean(IS_SIGNED_IN_FROM_GOOGLE_OR_FACEBOOK, true);
-    }
-
-    public static boolean isAndroid5() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+    public void setHasSetProfilePicture(boolean profile) {
+        editor.putBoolean(KEY_HAS_SET_PROFILE_PICTURE, profile).apply();
     }
 
     /**

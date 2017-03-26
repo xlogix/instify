@@ -6,8 +6,7 @@ package com.instify.android.ux.adapters;
 
 public class NotesAdapter {
     public static final String[] data = {
-            "Advanced Calculus And Complex Analysis", "Basic Electrical Engineering", "Basic Mechanical Engineering",
-            "Biology for Engineers", "Chemistry", "Program Design & Development using C", "Materials Science", "Programming Lab",
-            "Value Added Courses"
+            "Subject 1", "Subject 2", "Subject 3", "Work In Progress", "Will update soon", "Future Update",
+            "This will contain all your notes in every subject", "Thanks"
     };
 }

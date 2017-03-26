@@ -8,6 +8,7 @@
     <string name="title_activity_login">Login Here</string>
     <string name="title_activity_register">Register Yourself</string>
     <string name="title_activity_chat">Discuss</string>
+    <string name="title_activity_fee_payment_history">Fee Payment History</string>
     <string name="title_activity_upload_notes">Post a new Note</string>
     <string name="title_activity_upload_campus">Post a new Update</string>
 
@@ -15,14 +16,16 @@
     <string name="imageView_edit">Change Default Image</string>
     <string name="nav_section_1">Calculate GPA</string>
 
-    <string name="nav_section_2">Pay Fees</string>
-
-    <string name="nav_section_3">Navigate</string>
+    <string name="nav_section_2">Navigate</string>
     <string name="nav_attendance">Attendance</string>
     <string name="nav_campus_news">Campus News</string>
     <string name="nav_univ_news">University News</string>
     <string name="nav_notes">Notes</string>
     <string name="nav_schedule">Schedule</string>
+
+    <string name="nav_section_3">Fee Payment</string>
+    <string name="nav_fee_pay">Pay Fees</string>
+    <string name="nav_fee_history">Fee Payment History</string>
 
     <string name="nav_section_4">General</string>
     <string name="nav_about">About</string>
@@ -32,7 +35,7 @@
     <string name="nav_section_5">Communicate</string>
     <string name="nav_help_feedback">Help &amp; Feedback</string>
     <string name="nav_rate_us">Love Us? Rate Us!</string>
-    <string name="nav_donate_us">Donate Us</string>
+    <string name="nav_donate_us">Support Us</string>
 
     <!-- Nav_header_main -->
     <string name="header_imageView_description">Placeholder text for image view description</string>
@@ -61,7 +64,7 @@
     <string name="All_categories">All categories</string>
     <string name="menu_action_search">Search</string>
     <string name="Type_your_query">Type your query</string>
-    <string name="menu_action_favorites">Favorites</string>
+    <string name="menu_action_filter">Filter</string>
     <string name="no_network_connection_toast">No network connection found</string>
 
     <!-- Login Activity -->
@@ -69,6 +72,7 @@
     <string name="hint_password">ERP\'s Password</string>
     <string name="hint_regNo">Registration Number</string>
     <string name="email">Email</string>
+    <string name="and">And</string>
     <string name="auth_failed">Authentication Failed. Try Again.</string>
     <string name="auth_success">Authentication Successful!</string>
     <string name="action_sign_in">Login</string>
@@ -97,14 +101,6 @@
     <string name="rationale_storage">Requesting access to the Storage</string>
     <string name="label_link">Link to Uploaded File</string>
     <string name="label_download">Download File</string>
-
-    <!-- Activity User Account -->
-    <string name="Changing_the_password">Change Password</string>
-    <string name="Password">Password</string>
-    <string name="New_password">New password</string>
-    <string name="Password_again">Password again</string>
-    <string name="Change_password">Change password</string>
-    <string name="Save">Save</string>
 
     <!--[START] Easy Permissions-->
     <string name="title_settings_dialog">Permissions Required</string>

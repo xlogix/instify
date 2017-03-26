@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.instify.android.app.MyApplication;
-
 import java.util.HashMap;
 
 public class SQLiteHandler extends SQLiteOpenHelper {

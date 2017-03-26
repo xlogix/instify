@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
     android:padding="@dimen/activity_vertical_margin"
     tools:context=".ux.LoginActivity">
@@ -13,21 +13,22 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello Again!"
+            android:textSize="28sp"
+            android:layout_gravity="center_horizontal"/>
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/button_google_login"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="visible" />
 
-            <AutoCompleteTextView
-                android:id="@+id/field_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autoLink="email"
-                android:hint="@string/email"
-                android:imeOptions="actionSearch"
-                android:inputType="textEmailAddress"
-                android:maxLines="1" />
-
-        </android.support.design.widget.TextInputLayout>
+        <include layout="@layout/fragment_divider"/>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -67,27 +68,10 @@
             android:layout_marginBottom="24dp"
             android:layout_marginTop="8dp"
             android:background="@color/colorPrimary"
+            android:clickable="false"
             android:text="@string/action_sign_in"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-            <!-- this expands to fill the empty space if needed -->
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/action_to_register"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:clickable="true"
-            android:onClick="onClick"
-            android:text="New User? &#10230;"
-            android:textColor="@color/colorPrimary"
-            android:textSize="24sp" />
     </LinearLayout>
 </ScrollView>

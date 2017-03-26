@@ -1,6 +1,5 @@
 package com.instify.android.ux;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,7 +8,7 @@ import android.support.v4.app.Fragment;
 import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 import com.instify.android.R;
-import com.instify.android.app.MyApplication;
+import com.instify.android.app.AppController;
 
 /**
  * An example full-screen activity that shows and hides the system ui (i.e.
@@ -72,6 +71,6 @@ public class IntroActivity extends AppIntro2 {
 
     public void setIsFirstRunFalse() {
         // Set isFirstRun Boolean value to false
-        MyApplication.getInstance().getPrefManager().setIsFirstRun(false);
+        AppController.getInstance().getPrefManager().setIsFirstRun(false);
     }
 }

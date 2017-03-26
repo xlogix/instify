@@ -50,7 +50,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
-import com.instify.android.app.MyApplication;
+import com.instify.android.app.AppController;
 import com.instify.android.helpers.DownloadImage;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.listeners.OnSingleClickListener;
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         // Set the default tab as Campus Portal
         mViewPager.setCurrentItem(1);
         // Prevent fragments from destroying themselves
-        mViewPager.setOffscreenPageLimit(5);
+        mViewPager.setOffscreenPageLimit(1);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -394,13 +394,16 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                //menuItem.setChecked(true);
+                menuItem.setChecked(true);
                 switch (menuItem.getItemId()) {
                     case R.id.nav_gpa:
                         intentGPACalculator(MainActivity.this, "com.gupta.ishansh.gcmcalculator");
                         break;
                     case R.id.nav_feekart:
                         FeekartWebView();
+                        break;
+                    case R.id.nav_feekart_history:
+                        startActivity(new Intent(MainActivity.this, FeePaymentHistoryActivity.class));
                         break;
                     case R.id.nav_attendance:
                         mViewPager.setCurrentItem(0);
@@ -416,15 +419,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                         break;
                     case R.id.nav_univ_news:
                         mViewPager.setCurrentItem(4);
-                        break;
-                    case R.id.nav_profile:
-                        // startActivity(new Intent(MainActivity.this, AccountActivity.class));
-                        break;
-                    case R.id.nav_logout:
-                        MyApplication.getInstance().logoutUser();
-                        break;
-                    case R.id.nav_settings:
-                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                         break;
                     case R.id.nav_share:
                         try {
@@ -480,6 +474,12 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             return true;
         } else if (id == R.id.action_filter) {
             return true;
+        } else if (id == R.id.action_account) {
+            return true;
+        } else if (id == R.id.action_settings) {
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+        } else if (id == R.id.action_logout) {
+            AppController.getInstance().logoutUser();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -501,6 +501,8 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         SQLiteHandler db = new SQLiteHandler(this);
         String regNo = db.getUserDetails().get("token");
         String pass = db.getUserDetails().get("created_at");
+        // Notify the user about the app's features
+        Toast.makeText(this, "Instify will automatically log you in!", Toast.LENGTH_LONG).show();
 
         new FinestWebView.Builder(this).theme(R.style.FinestWebViewTheme)
                 .titleDefault("Feekart")
@@ -521,6 +523,10 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 .menuTextGravity(Gravity.CENTER)
                 .menuTextPaddingRightRes(R.dimen.defaultMenuTextPaddingLeft)
                 .dividerHeight(0)
+                .webViewDomStorageEnabled(true)
+                .webViewJavaScriptEnabled(true)
+                .webViewDisplayZoomControls(true)
+                .webViewJavaScriptCanOpenWindowsAutomatically(true)
                 .gradientDivider(false)
                 .setCustomAnimations(R.anim.slide_up, R.anim.hold, R.anim.hold, R.anim.slide_down)
                 .injectJavaScript("javascript:" + "document.getElementById('accountname').value = '"

@@ -10,11 +10,10 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.instify.android.R;
-import com.instify.android.app.MyApplication;
+import com.instify.android.app.AppController;
 
 import timber.log.Timber;
 
@@ -52,7 +51,7 @@ public class SplashActivity extends Activity {
              * want to show case your app logo / company
              */
             public void run() {
-                if (MyApplication.getInstance().getPrefManager().getIsFirstRun()) {
+                if (AppController.getInstance().getPrefManager().getIsFirstRun()) {
                     startActivity(new Intent(SplashActivity.this, IntroActivity.class));
                     finish();
                 } else if (mFirebaseUser == null) {

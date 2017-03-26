@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 import com.instify.android.R;
-import com.instify.android.app.MyApplication;
+import com.instify.android.app.AppController;
 import com.instify.android.utils.Theme;
 import com.instify.android.ux.MainActivity;
 
@@ -89,7 +89,7 @@ public class ThemeDialog extends DialogFragment implements View.OnClickListener 
                 break;
         }
 
-        MyApplication.getInstance().getPrefManager().setCurrentTheme(theme);
+        AppController.getInstance().getPrefManager().setCurrentTheme(theme);
         startActivity(new Intent(getContext(), MainActivity.class));
         getActivity().finish();
     }

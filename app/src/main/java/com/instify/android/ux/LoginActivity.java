@@ -15,17 +15,23 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.instify.android.R;
 import com.instify.android.app.AppConfig;
-import com.instify.android.app.MyApplication;
+import com.instify.android.app.AppController;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.UserDataFirebase;
 
@@ -46,15 +52,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
-    private static final int RC_SIGN_IN = 9001;
+    /**
+     * Id to identity GOOGLE_SIGN_IN request
+     */
+    private static final int RC_GOOGLE_SIGN_IN = 9001;
 
     private ProgressDialog mProgressDialog;
-    private AutoCompleteTextView mEmailField;
     private AutoCompleteTextView mRegNoField;
     private EditText mPasswordField;
     private SQLiteHandler db;
     // [declare_auth]
     public FirebaseAuth mAuth;
+    // [declare Google API client]
+    private GoogleApiClient mGoogleApiClient;
     // [declare_auth_listener]
     public FirebaseAuth.AuthStateListener mAuthStateListener;
     // [declare_database_reference]
@@ -96,13 +106,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         // Views
-        mEmailField = (AutoCompleteTextView) findViewById(R.id.field_email);
         mRegNoField = (AutoCompleteTextView) findViewById(R.id.field_regNo);
         mPasswordField = (EditText) findViewById(R.id.field_password);
 
         // Buttons
+        findViewById(R.id.button_google_login).setOnClickListener(this);
         findViewById(R.id.action_login).setOnClickListener(this);
-        findViewById(R.id.action_to_register).setOnClickListener(this);
+
+        // Disable the buttons by default
+        mRegNoField.setEnabled(false);
+        mPasswordField.setEnabled(false);
+
+        // [START config_signin]
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .requestProfile()
+                .build();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        // [END config_signin]
 
         // SQLite database handler
         db = new SQLiteHandler(this);
@@ -116,25 +143,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null && MyApplication.getInstance().getPrefManager().isLoggedIn()) {
-                    // User is already logged in. Take him to main activity
-                    intentLoginToMain();
-
-                    /*mFirebaseDatabase.child("users").child(user.getUid()).setValue(userInfoObj);
-
-                    // Checking and waiting till the info has be added //
-                    mFirebaseDatabase.child("users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Toast.makeText(LoginActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Toast.makeText(LoginActivity.this, "Registration Failed!", Toast.LENGTH_SHORT).show();
-                        }
-                    });*/
-
+                if (user != null) {
                     // User is signed in
                     Timber.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
@@ -146,13 +155,79 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // [END auth_state_listener]
     }
 
+    // [START signin]
+    private void signInWithGoogle() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
+    }
+    // [END signin]
+
+    // [START on_activity_result]
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_GOOGLE_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = result.getSignInAccount();
+                firebaseAuthWithGoogle(account);
+            } else {
+                // Google Sign In failed, update UI appropriately
+                Toast.makeText(LoginActivity.this, "Try Again.",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+    // [END on_activity_result]
+
+    // [START auth_with_google]
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Timber.d("firebaseAuthWithGoogle:" + acct.getId());
+        // [START_EXCLUDE silent]
+        showProgressDialog();
+        // [END_EXCLUDE]
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Timber.d("signInWithCredential:onComplete:" + task.isSuccessful());
+
+                        // Notify the user
+                        Toast.makeText(LoginActivity.this,
+                                "Successfully logged into Google. Continue with the ERP login", Toast.LENGTH_LONG).show();
+                        // Make the fields active
+                        mRegNoField.setEnabled(true);
+                        mPasswordField.setEnabled(true);
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Timber.w("signInWithCredential", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        // [START_EXCLUDE]
+                        hideProgressDialog();
+                        // [END_EXCLUDE]
+                    }
+                });
+    }
+    // [END auth_with_google]
+
     public void intentLoginToMain() {
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
+        overridePendingTransition(R.anim.slide_away_disappear, R.anim.slide_in_appear);
     }
 
     // [START sign_in_with_email]
-    private void attemptERPLogin(final String userEmail, final String regNo, final String password) {
+    private void attemptERPLogin(final String regNo, final String password) {
         Timber.d(TAG, "attemptERPLogin:" + regNo);
         if (!validateForm()) {
             return;
@@ -177,7 +252,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     // Check for error node in json
                     if (!error) {
                         // User successfully logged in. Create login session
-                        MyApplication.getInstance().getPrefManager().setLogin(true);
+                        AppController.getInstance().getPrefManager().setLogin(true);
 
                         // Now store the user in SQLite
                         String uid = jObj.getString("folio_no");
@@ -192,8 +267,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         // Inserting row in users table
                         db.addUser(name, email, uid, created_at, password, regno, dept);
 
-                        // Creating user in Firebase
-                        attemptFirebaseLogin(userEmail, password);
+                        // Take the user to the main activity
+                        intentLoginToMain();
 
                         // Fetch the error msg
                         String errorMsg = jObj.getString("error_msg");
@@ -238,43 +313,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         };
         // Adding request to request queue
-        MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
-    }
-
-    void attemptFirebaseLogin(String email, String password) {
-        // [START sign_in_with_email]
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Timber.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Timber.w(TAG, "signInWithEmail:failed", task.getException());
-                            Toast.makeText(LoginActivity.this, R.string.auth_failed,
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        // Hide the Progress Dialog
-                        hideProgressDialog();
-                    }
-                });
-        // [END sign_in_with_email]
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
     private boolean validateForm() {
         boolean valid = true;
-
-        String email = mEmailField.getText().toString();
-        if (TextUtils.isEmpty(email)) {
-            mEmailField.setError("Required.");
-            valid = false;
-        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            mEmailField.setError("Invalid Email Address");
-        } else {
-            mEmailField.setError(null);
-        }
 
         String regNo = mRegNoField.getText().toString();
         if (TextUtils.isEmpty(regNo)) {
@@ -301,9 +344,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.action_login) {
-            attemptERPLogin(mEmailField.getText().toString(), mRegNoField.getText().toString(), mPasswordField.getText().toString());
-        } else if (i == R.id.action_to_register) {
-            startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
+            attemptERPLogin(mRegNoField.getText().toString(), mPasswordField.getText().toString());
+        } else if (i == R.id.button_google_login) {
+            signInWithGoogle();
         }
     }
 

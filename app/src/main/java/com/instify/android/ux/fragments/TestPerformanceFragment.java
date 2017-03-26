@@ -16,7 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.instify.android.R;
-import com.instify.android.app.MyApplication;
+import com.instify.android.app.AppController;
 import com.instify.android.models.OrderStatus;
 import com.instify.android.models.TimeTableModel;
 import com.instify.android.ux.MainActivity;
@@ -153,7 +153,7 @@ public class TestPerformanceFragment extends Fragment {
                 Toast.makeText(getContext(), "Error Receiving Data", Toast.LENGTH_LONG).show();
             }
         });
-        MyApplication.getInstance().addToRequestQueue(req);
+        AppController.getInstance().addToRequestQueue(req);
     }
 
     private void showRefreshing() {

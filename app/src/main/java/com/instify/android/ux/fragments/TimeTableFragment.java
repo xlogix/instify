@@ -16,7 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.instify.android.R;
-import com.instify.android.app.MyApplication;
+import com.instify.android.app.AppController;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.OrderStatus;
 import com.instify.android.models.TimeTableModel;
@@ -27,7 +27,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -185,7 +184,7 @@ public class TimeTableFragment extends Fragment {
                 Toast.makeText(getContext(), "Error Receiving Data", Toast.LENGTH_LONG).show();
             }
         });
-        MyApplication.getInstance().addToRequestQueue(req);
+        AppController.getInstance().addToRequestQueue(req);
     }
 
     private void showRefreshing() {

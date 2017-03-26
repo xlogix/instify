@@ -37,13 +37,13 @@ public class AboutActivity extends AppCompatActivity {
                 .isRTL(false)
                 .setDescription("Instify is an (add content here)\n\nDevelopers : Abhishek, Arjun and Somnath\n\nSepcial thanks to : Chandan Singh, Ankur, Trishansh")
                 .setImage(R.drawable.background)
-                .addItem(new Element().setTitle("Version 1.0"))
+                .addItem(new Element().setTitle("Version 1.0.4"))
                 .addGroup("Connect with us")
                 .addEmail("abhishekuniyal09@gmail.com")
                 .addWebsite("http://www.fnplus.xyz/")
                 .addFacebook("https://www.facebook.com/fnplus.xyz")
-                .addYoutube("something")
-                .addPlayStore("https://play.google.com/store")
+                .addYoutube("https://youtu.be/RMDjTWrylOk")
+                .addPlayStore("https://play.google.com/store/apps/details?id=com.instify.android")
                 .addItem(getCopyRightsElement())
                 .create();
         setContentView(aboutPage);

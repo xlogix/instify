@@ -4,11 +4,9 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
@@ -24,15 +22,13 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.listener.ChartTouchListener;
-import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.instify.android.R;
 import com.instify.android.app.AppConfig;
-import com.instify.android.app.MyApplication;
+import com.instify.android.app.AppController;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.ux.MainActivity;
-import com.instify.android.ux.adapters.ListAdapterExpandable;
+import com.instify.android.ux.adapters.ListAdapterExpandableAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -208,7 +204,7 @@ public class AttendanceFragment extends Fragment {
 
                     // Check for error node in json
                     if (!error) {
-                        ListAdapterExpandable expListAdapter;
+                        ListAdapterExpandableAdapter expListAdapter;
 
                         // declare array List for all headers in list
                         ArrayList<String> headersArrayList = new ArrayList<>();
@@ -251,7 +247,7 @@ public class AttendanceFragment extends Fragment {
                             childArrayList.put(name + "-" + subs.getString("sub-desc") + " " + subs.getString("avg-attd") + "%", daysOfWeekArrayList);
                         }
 
-                        expListAdapter = new ListAdapterExpandable(getContext(), headersArrayList, childArrayList);
+                        expListAdapter = new ListAdapterExpandableAdapter(getContext(), headersArrayList, childArrayList);
 
                         expListView.setAdapter(expListAdapter);
 
@@ -315,7 +311,7 @@ public class AttendanceFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Timber.e("Network Error: " + error.getMessage());
-                Toast.makeText(getContext(),
+                Toast.makeText(getActivity(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
             }
         }) {
@@ -335,7 +331,7 @@ public class AttendanceFragment extends Fragment {
         };
 
         // Adding request to request queue
-        MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
     private String[] mLabels = new String[]{"Company A", "Company B", "Company C", "Company D", "Company E", "Company F"};
@@ -425,7 +421,7 @@ public class AttendanceFragment extends Fragment {
                 Toast.makeText(getContext(), "Error Receiving Data", Toast.LENGTH_LONG).show();
             }
         });
-        MyApplication.getInstance().addToRequestQueue(req);
+        AppController.getInstance().addToRequestQueue(req);
     }
 
     private void showRefreshing() {

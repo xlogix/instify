@@ -7,15 +7,54 @@
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_action_search_24dp"
-        android:orderInCategory="10"
+        android:orderInCategory="1"
         android:title="@string/menu_action_search"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
 
     <item
         android:id="@+id/action_filter"
-        android:icon="@drawable/filter_unselected"
-        android:orderInCategory="100"
-        android:title="@string/menu_action_favorites"
-        app:showAsAction="ifRoom" />
+        android:icon="@drawable/filter_selected"
+        android:orderInCategory="2"
+        android:title="@string/menu_action_filter"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/filter_by_class"
+                android:checked="false"
+                android:title="Filter By Class News"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/filter_by_department"
+                android:checked="false"
+                android:title="Filter By Department News"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/filter_by_university"
+                android:checked="false"
+                android:title="All"
+                app:showAsAction="never" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/action_account"
+        android:checked="false"
+        android:icon="@drawable/ic_attendance_white"
+        android:orderInCategory="3"
+        android:title="My Profile" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:checked="false"
+        android:icon="@drawable/ic_menu_slideshow"
+        android:orderInCategory="4"
+        android:title="@string/nav_settings" />
+
+    <item
+        android:id="@+id/action_logout"
+        android:checked="false"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:orderInCategory="5"
+        android:title="@string/nav_logout" />
 </menu>

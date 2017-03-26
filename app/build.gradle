@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
 
     dexOptions {
-        javaMaxHeapSize "2g"
+        javaMaxHeapSize "3g"
     }
 
     /*signingConfigs {
@@ -26,8 +26,8 @@ android {
         applicationId "com.instify.android"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 4
-        versionName "1.0.3"
+        versionCode 5
+        versionName "1.0.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -66,6 +66,9 @@ dependencies {
     compile 'com.google.firebase:firebase-invites:10.2.0'
     // for cloud messaging i.e sending notifications
     compile 'com.google.firebase:firebase-messaging:10.2.0'
+
+    // ADS
+    compile 'com.google.firebase:firebase-ads:10.2.0'
 
     // AUTH
     compile 'com.google.firebase:firebase-auth:10.2.0'

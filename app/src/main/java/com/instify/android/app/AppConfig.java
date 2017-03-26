@@ -6,10 +6,14 @@ package com.instify.android.app;
 
 public class AppConfig {
 
-    // Server user login url
+    // Server user login URL
     public static String URL_LOGIN = "https://hashbird.com/gogrit.in/workspace/srm-api/get-info.php";
+    // Server Attendance details URL
     public static String URL_ATTANDENCE = "https://hashbird.com/gogrit.in/workspace/srm-api/get-attd.php";
+    // Server Time Table details URL
     public static String URL_GETTT = "https://hashbird.com/gogrit.in/workspace/srm-api/get-ptt.php";
+    // Server fee details URL
+    public static String URL_FEE = "https://hashbird.com/gogrit.in/workspace/srm-api/fee_details.php";
 
     public static final String INSTANCE_ID_TOKEN_RETRIEVED = "iid_token_retrieved";
     public static final String FRIENDLY_MSG_LENGTH = "friendly_msg_length";

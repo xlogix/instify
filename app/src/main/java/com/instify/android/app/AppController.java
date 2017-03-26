@@ -23,14 +23,14 @@ import com.squareup.leakcanary.RefWatcher;
 
 import timber.log.Timber;
 
-public class MyApplication extends Application {
-    public static final String TAG = MyApplication.class.getSimpleName();
+public class AppController extends Application {
+    public static final String TAG = AppController.class.getSimpleName();
 
     private RequestQueue mRequestQueue;
 
-    private static MyApplication mInstance;
+    private static AppController mInstance;
 
-    public static synchronized MyApplication getInstance() {
+    public static synchronized AppController getInstance() {
         return mInstance;
     }
 
@@ -41,7 +41,7 @@ public class MyApplication extends Application {
     private RefWatcher mRefWatcher;
 
     public static RefWatcher getRefWatcher(Context context) {
-        return ((MyApplication) context.getApplicationContext()).mRefWatcher;
+        return ((AppController) context.getApplicationContext()).mRefWatcher;
     }
 
     @Override

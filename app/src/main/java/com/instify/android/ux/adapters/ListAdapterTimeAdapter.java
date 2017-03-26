@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class ListAdapterExpandable extends BaseExpandableListAdapter {
+public class ListAdapterTimeAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private List<String> headerArray;
@@ -22,8 +22,8 @@ public class ListAdapterExpandable extends BaseExpandableListAdapter {
     private LayoutInflater infalInflater;
 
     // Initialize constructor for array list
-    public ListAdapterExpandable(Context context, ArrayList<String> headerArray,
-                                 HashMap<String, ArrayList<String>> listChildData) {
+    public ListAdapterTimeAdapter(Context context, ArrayList<String> headerArray,
+                                  HashMap<String, ArrayList<String>> listChildData) {
         this.context = context;
         this.headerArray = headerArray;
         this.childArray = listChildData;
@@ -42,7 +42,9 @@ public class ListAdapterExpandable extends BaseExpandableListAdapter {
         return childPosition;
     }
 
+
     // Inflate child view
+
     @Override
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
@@ -53,7 +55,6 @@ public class ListAdapterExpandable extends BaseExpandableListAdapter {
 
             convertView = infalInflater.inflate(R.layout.list_sub_child, null);
         }
-
         TextView textViewChild = (TextView) convertView
                 .findViewById(R.id.textViewChild);
 
@@ -112,5 +113,4 @@ public class ListAdapterExpandable extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
-
 }
