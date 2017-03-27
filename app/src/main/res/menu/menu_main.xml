@@ -22,12 +22,12 @@
             <item
                 android:id="@+id/filter_by_class"
                 android:checked="false"
-                android:title="Filter By Class News"
+                android:title="Filter By Class"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/filter_by_department"
                 android:checked="false"
-                android:title="Filter By Department News"
+                android:title="Filter By Department"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/filter_by_university"

@@ -48,7 +48,6 @@ public class UnivNewsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ((MainActivity) getActivity()).mSharedFab = null; // To avoid keeping/leaking the reference of the FAB
     }
 
     private static final String endpoint = "http://arjun-apis.herokuapp.com/srm-news-api/";
@@ -118,9 +117,6 @@ public class UnivNewsFragment extends Fragment {
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         req.setRetryPolicy(policy);
         AppController.getInstance().addToRequestQueue(req);
-
-        // Adding request to request queue             Important : (Roll Back)
-        //MyApplication.getInstance().addToRequestQueue(req);
     }
 
     private void showRefreshing() {

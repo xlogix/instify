@@ -135,8 +135,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         Toolbar toolbar = (Toolbar) findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
 
-        mSharedFab = (FloatingActionButton) findViewById(R.id.shared_fab);
-
         // Drawer Layout
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -162,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         // Set the default tab as Campus Portal
         mViewPager.setCurrentItem(1);
         // Prevent fragments from destroying themselves
-        mViewPager.setOffscreenPageLimit(1);
+        mViewPager.setOffscreenPageLimit(3);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -171,24 +169,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
             @Override
             public void onPageSelected(int position) {
-
-                switch (position) {
-                    case 0:
-                        mSharedFab.show();
-                        break;
-                    case 1:
-                        mSharedFab.show();
-                        break;
-                    case 2:
-                        mSharedFab.show();
-                        break;
-                    case 3:
-                        mSharedFab.show();
-                        break;
-                    default:
-                        mSharedFab.hide();
-                        break;
-                }
             }
 
             @Override
@@ -208,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
         mFirebaseUser = mAuth.getCurrentUser();
 
-        if (mFirebaseUser != null) {
+        if (mFirebaseUser != null && AppController.getInstance().getPrefManager().isLoggedIn()) {
             // User is signed in
             Timber.d(TAG, "onAuthStateChanged:signed_in:" + mFirebaseUser.getUid());
 

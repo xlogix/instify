@@ -23,6 +23,9 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     // Login table name
     private static final String TABLE_USER = "user";
 
+    // Time Table
+    public static final String TABLE_TIME_TABLE = "time_table";
+
     // Login Table Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
@@ -32,6 +35,17 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String KEY_TOKEN = "token";
     private static final String KEY_REGNO = "regno";
     private static final String KEY_DEPT = "dept";
+
+    // Time Table Columns names
+    private static final String COL_0 = "id";
+    private static final String COL_1 = "day";
+    private static final String COL_2 = "h1";
+    private static final String COL_3 = "h2";
+    private static final String COL_4 = "h3";
+    private static final String COL_5 = "h4";
+    private static final String COL_6 = "h5";
+    private static final String COL_7 = "h6";
+    private static final String COL_8 = "h7";
 
     public SQLiteHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -46,17 +60,12 @@ public class SQLiteHandler extends SQLiteOpenHelper {
                 + KEY_CREATED_AT + " TEXT" + ")";
         db.execSQL(CREATE_LOGIN_TABLE);
 
+        String CREATE_TIME_TABLE = "CREATE TABLE " + TABLE_TIME_TABLE + " (" + COL_0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COL_1 + " TEXT, " + COL_2 + " TEXT, " + COL_3 + " TEXT, " + COL_4 + " TEXT, "
+                + COL_5 + " TEXT, " + COL_6 + " TEXT, " + COL_7 + " TEXT, " + COL_8 + " TEXT)";
+        db.execSQL(CREATE_TIME_TABLE);
+
         Log.d(TAG, "Database tables created");
-    }
-
-    // Upgrading database
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
-
-        // Create tables again
-        onCreate(db);
     }
 
     /**
@@ -107,6 +116,49 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         Log.d(TAG, "Fetching user from Sqlite: " + user.toString());
 
         return user;
+    }
+
+    /**
+     * Storing user details in database
+     */
+    public boolean create_tt(String day, String h1, String h2, String h3, String h4, String h5, String h6, String h7) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_1, day);
+        cv.put(COL_2, h1);
+        cv.put(COL_3, h2);
+        cv.put(COL_4, h3);
+        cv.put(COL_5, h4);
+        cv.put(COL_6, h5);
+        cv.put(COL_7, h6);
+        cv.put(COL_8, h7);
+        long result = db.insert(TABLE_TIME_TABLE, null, cv);
+
+        if (result == -1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Getting user data from database
+     */
+    public Cursor gettt() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_TIME_TABLE, null);
+
+        return res;
+    }
+
+    // Upgrading database
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Drop older table if existed
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
+
+        // Create tables again
+        onCreate(db);
     }
 
     /**

@@ -49,7 +49,6 @@ public class CampNewsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ((MainActivity) getActivity()).mSharedFab = null; // To avoid keeping/leaking the reference of the FAB
     }
 
     @Override
@@ -139,7 +138,7 @@ public class CampNewsFragment extends Fragment {
 //        }
         /// >><<
 
-        ((MainActivity) getActivity()).mSharedFab.setOnClickListener(new View.OnClickListener() {
+        /*((MainActivity) getActivity()).mSharedFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getActivity(), UploadNewsActivity.class);
@@ -151,7 +150,7 @@ public class CampNewsFragment extends Fragment {
                             Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
 
         recyclerView.setAdapter(fAdapterAll);
         return rootView;

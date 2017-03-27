@@ -27,8 +27,7 @@ import com.instify.android.R;
 import com.instify.android.app.AppConfig;
 import com.instify.android.app.AppController;
 import com.instify.android.helpers.SQLiteHandler;
-import com.instify.android.ux.MainActivity;
-import com.instify.android.ux.adapters.ListAdapterExpandableAdapter;
+import com.instify.android.ux.adapters.ListExpandableAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,7 +60,6 @@ public class AttendanceFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ((MainActivity) getActivity()).mSharedFab = null; // To avoid keeping/leaking the reference of the FAB
     }
 
     class Att {
@@ -155,14 +153,14 @@ public class AttendanceFragment extends Fragment {
         mChart.setFitBars(true); // make the x-axis fit exactly all bars
         mChart.invalidate();
 
-        ((MainActivity) getActivity()).mSharedFab.setOnClickListener(new View.OnClickListener() {
+        /*((MainActivity) getActivity()).mSharedFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*expListView.setVisibility(View.GONE);
+                *//*expListView.setVisibility(View.GONE);
                 mChart.setVisibility(View.VISIBLE);
-                ((MainActivity) getActivity()).mSharedFab.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_menu_share));*/
+                ((MainActivity) getActivity()).mSharedFab.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_menu_share));*//*
             }
-        });
+        });*/
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -204,7 +202,7 @@ public class AttendanceFragment extends Fragment {
 
                     // Check for error node in json
                     if (!error) {
-                        ListAdapterExpandableAdapter expListAdapter;
+                        ListExpandableAdapter expListAdapter;
 
                         // declare array List for all headers in list
                         ArrayList<String> headersArrayList = new ArrayList<>();
@@ -247,7 +245,7 @@ public class AttendanceFragment extends Fragment {
                             childArrayList.put(name + "-" + subs.getString("sub-desc") + " " + subs.getString("avg-attd") + "%", daysOfWeekArrayList);
                         }
 
-                        expListAdapter = new ListAdapterExpandableAdapter(getContext(), headersArrayList, childArrayList);
+                        expListAdapter = new ListExpandableAdapter(getContext(), headersArrayList, childArrayList);
 
                         expListView.setAdapter(expListAdapter);
 

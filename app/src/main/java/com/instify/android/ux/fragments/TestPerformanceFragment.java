@@ -51,7 +51,6 @@ public class TestPerformanceFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ((MainActivity) getActivity()).mSharedFab = null; // To avoid keeping/leaking the reference of the FAB
     }
 
     private RecyclerView mRecyclerView;
