@@ -23,9 +23,8 @@ public class AboutActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(AboutActivity.this, MainActivity.class));
-        finish();
         super.onBackPressed();
+        finish();
     }
 
     @Override
@@ -40,7 +39,7 @@ public class AboutActivity extends AppCompatActivity {
                 .addItem(new Element().setTitle("Version 1.0.4"))
                 .addGroup("Connect with us")
                 .addEmail("abhishekuniyal09@gmail.com")
-                .addWebsite("http://www.fnplus.xyz/")
+                .addWebsite("https://www.fnplus.xyz/")
                 .addFacebook("https://www.facebook.com/fnplus.xyz")
                 .addYoutube("https://youtu.be/RMDjTWrylOk")
                 .addPlayStore("https://play.google.com/store/apps/details?id=com.instify.android")

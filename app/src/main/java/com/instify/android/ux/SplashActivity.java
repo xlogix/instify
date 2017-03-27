@@ -54,7 +54,7 @@ public class SplashActivity extends Activity {
                 if (AppController.getInstance().getPrefManager().getIsFirstRun()) {
                     startActivity(new Intent(SplashActivity.this, IntroActivity.class));
                     finish();
-                } else if (mFirebaseUser == null) {
+                } else if (mFirebaseUser == null && AppController.getInstance().getPrefManager().isLoggedIn()) {
                     Timber.d("Pass to auth activity");
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                     finish();

@@ -19,8 +19,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
 
     <!-- FCM (Firebase Cloud Messaging) for all build types configuration -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -121,6 +119,9 @@
         <activity
             android:name=".ux.FeePaymentHistoryActivity"
             android:label="@string/title_activity_fee_payment_history"/>
+
+        <activity android:name=".ux.SupportUsActivity"
+            android:label="@string/title_activity_support_us"/>
 
         <activity
             android:name=".ux.UploadNotesActivity"

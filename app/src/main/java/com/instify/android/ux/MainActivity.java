@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     private boolean isDeviceOnline() {
         ConnectivityManager connMgr =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
     }
@@ -399,12 +399,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     case R.id.nav_gpa:
                         intentGPACalculator(MainActivity.this, "com.gupta.ishansh.gcmcalculator");
                         break;
-                    case R.id.nav_feekart:
-                        FeekartWebView();
-                        break;
-                    case R.id.nav_feekart_history:
-                        startActivity(new Intent(MainActivity.this, FeePaymentHistoryActivity.class));
-                        break;
                     case R.id.nav_attendance:
                         mViewPager.setCurrentItem(0);
                         break;
@@ -420,16 +414,11 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     case R.id.nav_univ_news:
                         mViewPager.setCurrentItem(4);
                         break;
-                    case R.id.nav_share:
-                        try {
-                            Intent share = new Intent(Intent.ACTION_VIEW);
-                            share.setData(Uri.parse("market://details?id=com.instify.android"));
-                            startActivity(share);
-                        } catch (Exception e) { // Google Play is not installed
-                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.instify.android"));
-                            startActivity(intent);
-                        }
+                    case R.id.nav_feekart:
+                        FeekartWebView();
+                        break;
+                    case R.id.nav_feekart_history:
+                        startActivity(new Intent(MainActivity.this, FeePaymentHistoryActivity.class));
                         break;
                     case R.id.nav_send:
                         String[] emails = {"abhishekuniyal09@gmail.com"};
@@ -445,6 +434,20 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                         if (email.resolveActivity(getPackageManager()) != null) {
                             startActivity(email);
                         }
+                        break;
+                    case R.id.nav_share:
+                        try {
+                            Intent share = new Intent(Intent.ACTION_VIEW);
+                            share.setData(Uri.parse("market://details?id=com.instify.android"));
+                            startActivity(share);
+                        } catch (Exception e) { // Google Play is not installed
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.instify.android"));
+                            startActivity(intent);
+                        }
+                        break;
+                    case R.id.nav_donate_us:
+                        startActivity(new Intent(MainActivity.this, SupportUsActivity.class));
                         break;
                     case R.id.nav_about:
                         startActivity(new Intent(MainActivity.this, AboutActivity.class));
