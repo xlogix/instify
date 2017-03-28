@@ -1,11 +1,9 @@
 package com.instify.android.ux.fragments;
 
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +13,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.instify.android.R;
 import com.instify.android.app.AppConfig;
 import com.instify.android.app.AppController;
@@ -35,8 +26,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import timber.log.Timber;
@@ -112,9 +101,6 @@ public class AttendanceFragment extends Fragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ExpandableListView expListView;
-    private BarChart mChart;
-    private Typeface tf;
-    String userRegNo, userPass;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -124,43 +110,11 @@ public class AttendanceFragment extends Fragment {
                 rootView.findViewById(R.id.swipe_refresh_layout_attendance);
         // [LAYOUT LIST] Expand list view
         expListView = (ExpandableListView) rootView.findViewById(R.id.expListView);
-        // [LAYOUT GRAPH] create a new chart object
-        mChart = (BarChart) rootView.findViewById(R.id.barChart);
 
         // Fetch the attendance
         AttendanceFragment.AsyncGetAttendance dataObj = new AttendanceFragment.AsyncGetAttendance();
         dataObj.doInBackground();
 
-        // Setting the data in the chart (8 entries).. [DISABLED}
-
-        List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0f, 0f));
-        entries.add(new BarEntry(1f, 0f));
-        entries.add(new BarEntry(2f, 0f));
-        entries.add(new BarEntry(3f, 0f));
-        // gap of 2f
-        entries.add(new BarEntry(5f, 0f));
-        entries.add(new BarEntry(6f, 0f));
-        entries.add(new BarEntry(3f, 0f));
-        entries.add(new BarEntry(3f, 0f));
-
-        BarDataSet set = new BarDataSet(entries, "BarDataSet");
-        BarData data = new BarData(set);
-        mChart.setData(data);
-        mChart.getDescription().setEnabled(false);
-        mChart.animateXY(2000, 2000);
-        mChart.setDrawBarShadow(true);
-        mChart.setFitBars(true); // make the x-axis fit exactly all bars
-        mChart.invalidate();
-
-        /*((MainActivity) getActivity()).mSharedFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                *//*expListView.setVisibility(View.GONE);
-                mChart.setVisibility(View.VISIBLE);
-                ((MainActivity) getActivity()).mSharedFab.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_menu_share));*//*
-            }
-        });*/
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -330,96 +284,6 @@ public class AttendanceFragment extends Fragment {
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-    }
-
-    private String[] mLabels = new String[]{"Company A", "Company B", "Company C", "Company D", "Company E", "Company F"};
-
-    private String getLabel(int i) {
-        return mLabels[i];
-    }
-
-    protected BarData generateBarData(int dataSets, float range, int count) {
-
-        ArrayList<IBarDataSet> sets = new ArrayList<IBarDataSet>();
-
-        for (int i = 0; i < dataSets; i++) {
-
-            ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
-
-//            entries = FileUtils.loadEntriesFromAssets(getActivity().getAssets(), "stacked_bars.txt");
-
-            for (int j = 0; j < count; j++) {
-                entries.add(new BarEntry(j, (float) (Math.random() * range) + range / 4));
-            }
-
-            BarDataSet ds = new BarDataSet(entries, getLabel(i));
-            ds.setColors(ColorTemplate.VORDIPLOM_COLORS);
-            sets.add(ds);
-        }
-
-        BarData d = new BarData(sets);
-        d.setValueTypeface(tf);
-        return d;
-    }
-
-    class AttemptJson extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-            updateChart();
-            return "";
-        }
-    }
-
-    private void updateChart() {
-
-        // Fetch details from the database
-        SQLiteHandler db = new SQLiteHandler(getContext());
-        userRegNo = db.getUserDetails().get("token");
-        userPass = db.getUserDetails().get("created_at");
-
-        // Set the end point with the acquired credentials
-        String endpoint = "http://instify.herokuapp.com/api/attendance/?regno="
-                + userRegNo + "&password=" + userPass;
-
-        // Handle UI
-        showRefreshing();
-        /**
-         * Method to make json object request where json response is dynamic
-         * */
-        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, endpoint, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            Iterator<String> it = response.keys();
-                            while (it.hasNext()) {
-                                String key = it.next();
-                                if (response.get(key) instanceof JSONArray) {
-                                    JSONArray array = response.getJSONArray(key);
-                                    int size = array.length();
-                                    for (int i = 0; i < size; i++) {
-
-                                    }
-                                } else {
-                                    System.out.println(key + ":" + response.getString(key));
-                                }
-                            }
-                        } catch (JSONException e) {
-                            Log.d("debug", "Object DataSet is incorrect");
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Timber.e("Error: " + error.getMessage());
-                // Handle UI
-                hideRefreshing();
-                Toast.makeText(getContext(), "Error Receiving Data", Toast.LENGTH_LONG).show();
-            }
-        });
-        AppController.getInstance().addToRequestQueue(req);
     }
 
     private void showRefreshing() {

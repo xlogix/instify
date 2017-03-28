@@ -85,9 +85,6 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
 
-    // GRAPH
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
-
     compile 'com.android.volley:volley:1.0.0'
     compile 'pub.devrel:easypermissions:0.3.0'
     compile 'com.thefinestartist:finestwebview:1.2.7'
