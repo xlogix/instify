@@ -88,7 +88,7 @@ public class ChatActivity extends AppCompatActivity {
     private String mUsername;
     private String mPhotoUrl;
     private Button mSendButton;
-    String localNewsId;
+    String refPath;
 
     private RecyclerView mMessageRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
@@ -124,8 +124,8 @@ public class ChatActivity extends AppCompatActivity {
             }
         }
 
-        localNewsId = getIntent().getStringExtra("localNewsId");
-        MESSAGES_CHILD = "campusNews/" + localNewsId + "/discussion";
+        refPath = getIntent().getStringExtra("refPath");
+        MESSAGES_CHILD = refPath + "/discussion";
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mMessageRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_trending);

@@ -108,7 +108,7 @@ public class CampNewsFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showNews(String path){
+    private void showNews(final String path){
 
         newsRef = FirebaseDatabase.getInstance().getReference().child(path);
         fAdapterAll = new FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder>(
@@ -126,7 +126,7 @@ public class CampNewsFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
-                        launchChat.putExtra("localNewsId", fAdapterAll.getRef(position).getKey());
+                        launchChat.putExtra("refPath", path + "/" +fAdapterAll.getRef(position).getKey());
                         startActivity(launchChat);
                     }
                 });
