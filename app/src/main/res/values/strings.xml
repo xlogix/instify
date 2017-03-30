@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name" translatable="false">Instify</string>
-    <string name="facebook_app_id" translatable="false">701704016670490</string>
+
+    <string name="banner_ad_unit_test_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="banner_ad_unit_id">ca-app-pub-1515135859021344/6954228116</string>
+
+    <string name="interstitial_ad_unit_test_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="interstitial_ad_unit_id">ca-app-pub-1515135859021344/1379346114</string>
     <string name="copy_right">Copyrights © %1$d</string>
 
     <string name="title_activity_intro">Thanks for downloading!</string>
@@ -8,6 +13,7 @@
     <string name="title_activity_login">Login Here</string>
     <string name="title_activity_register">Register Yourself</string>
     <string name="title_activity_chat">Discuss</string>
+    <string name="title_activity_profile">Your Profile</string>
     <string name="title_activity_fee_payment_history">Fee Payment History</string>
     <string name="title_activity_support_us">App is free but server is not!</string>
     <string name="title_activity_upload_notes">Post a new Note</string>
@@ -15,14 +21,14 @@
 
     <!--DrawerLayout Strings-->
     <string name="imageView_edit">Change Default Image</string>
-    <string name="nav_section_1">Calculate GPA</string>
-
-    <string name="nav_section_2">Navigate</string>
+    <string name="nav_section_1">Navigate</string>
     <string name="nav_attendance">Attendance</string>
     <string name="nav_campus_news">Campus News</string>
     <string name="nav_univ_news">University News</string>
     <string name="nav_notes">Notes</string>
     <string name="nav_schedule">Schedule</string>
+
+    <string name="nav_section_2">Test Performance</string>
 
     <string name="nav_section_3">Fee Payment</string>
     <string name="nav_fee_pay">Pay Fees</string>

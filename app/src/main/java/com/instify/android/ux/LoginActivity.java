@@ -100,6 +100,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
     // [END on_stop_remove_listener]
 
+    // [START on_destroy_remove_listener]
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+            mProgressDialog = null;
+        }
+    }
+    // [STOP on_destroy_remove_listener]
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

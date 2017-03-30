@@ -88,17 +88,17 @@ public class TimeTableFragment extends Fragment {
         // Set color scheme
         mSwipeRefreshLayout.setColorSchemeResources(R.color.red_primary, R.color.black, R.color.google_blue_900);
 
-        // Declare elements of TimeLine view
+        /*// Declare elements of TimeLine view
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewTimeTable);
         mRecyclerView.setLayoutManager(getLinearLayoutManager());
         // Setting the adapter
         mTimeLineAdapter = new TimeLineAdapter(mDataList, mWithLinePadding);
-        mRecyclerView.setAdapter(mTimeLineAdapter);
+        mRecyclerView.setAdapter(mTimeLineAdapter);*/
 
         // Declare elements of another view
         expListView = (ExpandableListView) rootView.findViewById(R.id.expListView);
 
-        // Declare FAB
+        /*// Declare FAB
         final FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,12 +114,12 @@ public class TimeTableFragment extends Fragment {
                     clicked = true;
                 }
             }
-        });
+        });*/
 
         // Handle UI
         showRefreshing();
 
-        mWithLinePadding = true;
+        // mWithLinePadding = true;
 
         // Call data fetcher
         final AttemptJson dataObj = new AttemptJson();
@@ -145,7 +145,6 @@ public class TimeTableFragment extends Fragment {
         @Override
         protected String doInBackground(String... strings) {
             // Get data for both the views
-            getData();
             getTimeTable();
             return "";
         }

@@ -42,20 +42,7 @@ public class FeePaymentHistoryActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     SQLiteHandler db = new SQLiteHandler(this);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fee_details);
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new FeePaymentHistoryAdapter(getDataSet());
-        mRecyclerView.setAdapter(mAdapter);
-        // Fetch the details from the user
-        getFeeDetails();
-    }
+    String tag_string_req = "req_fee";
 
     @Override
     protected void onResume() {
@@ -63,9 +50,31 @@ public class FeePaymentHistoryActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+    protected void onDestroy() {
+        AppController.getInstance().cancelPendingRequests(tag_string_req);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_fee_details);
+
+        if (getActionBar() != null) {
+            getActionBar().setHomeButtonEnabled(true);
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        // Set a linear layout
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        // Get adapter and set it
+        mAdapter = new FeePaymentHistoryAdapter(getDataSet());
+        mRecyclerView.setAdapter(mAdapter);
+        // Fetch the details from the user
+        getFeeDetails();
     }
 
     private ArrayList<FeePaymentHistoryModel> getDataSet() {
@@ -80,7 +89,6 @@ public class FeePaymentHistoryActivity extends AppCompatActivity {
     }
 
     public void getFeeDetails() {
-        String tag_string_req = "req_fee";
 
         showProgressDialog();
 

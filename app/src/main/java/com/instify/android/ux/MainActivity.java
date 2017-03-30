@@ -12,8 +12,8 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -40,10 +40,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,7 +55,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
 import com.instify.android.app.AppController;
-import com.instify.android.helpers.DownloadImage;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.listeners.OnSingleClickListener;
 import com.instify.android.models.UserDataFirebase;
@@ -78,9 +81,10 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     /* Play Services Request required to check if Google Services is installed or not */
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    // Permission code for Camera and Gallery Permission
     private static final int RC_CAMERA_AND_GALLERY_PERM = 123;
-    private static final String TAG = "MainActivity";
-    public FloatingActionButton mSharedFab;
+    // Get the name of the tag variable
+    private static final String TAG = MainActivity.class.getSimpleName();
     private DrawerLayout drawerLayout;
     private ViewPager mViewPager;
     private ImageView navImageView;
@@ -92,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     SQLiteHandler db = new SQLiteHandler(this);
 
     public UserDataFirebase userInfoObject;
+    boolean doubleBackToExitPressedOnce = false;
 
     View headerView;
 
@@ -123,8 +128,19 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        } else if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
+        } else {
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
         }
     }
 
@@ -147,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         if (navView != null) {
             setupDrawerContent(navView);
         }
+
         headerView = navView.inflateHeaderView(R.layout.nav_header_main);
         setupHeaderView();
 
@@ -180,6 +197,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mTabLayout.setupWithViewPager(mViewPager);
 
+        // Check if Google Play Services is installed or not
         checkPlayServices();
 
         // [START initialize_auth]
@@ -225,18 +243,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         navImageView = (ImageView) headerView.findViewById(R.id.nav_drawer_user_photo);
         navTextView = (TextView) headerView.findViewById(R.id.nav_drawer_header_text);
 
-        new DownloadImage(navImageView).execute(db.getUserDetails().get("dept"));
-        navTextView.setText(db.getUserDetails().get("name"));
+        // Download the image from ERP
+        // new DownloadImage(navImageView).execute(db.getUserDetails().get("dept"));
 
-        // Click listeners
-        navImageView.setOnClickListener(new OnSingleClickListener() {
-            @Override
-            public void onSingleClick(View view) {
-                promptProfileChanger();
-            }
-        });
-
-        /*// Set User Email
         if (mFirebaseUser != null) {
             try {
                 // Set profile picture from Firebase account
@@ -245,36 +254,22 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                         .crossFade()
                         .centerCrop()
                         .into(navImageView);
-                // Set email from Firebase account
-                navTextView.setText(mFirebaseUser.getDisplayName());
 
             } catch (Exception e) {
                 Timber.d(e);
             }
-        }*/
+        }
 
-        /*//Decode Image to String
-        String imgPath = getSharedPreferences("userData", MODE_PRIVATE).getString("PicPath", null);
-        if (imgPath != null) {
-            byte[] imageAsBytes = Base64.decode(imgPath.getBytes(), Base64.DEFAULT);
-            imageView.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
-        }*/
+        navTextView.setText(db.getUserDetails().get("name"));
 
-        /*UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(mFirebaseUser.getEmail())
-                .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
-                .build();
-
-        mFirebaseUser.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "User profile updated.");
-                            Toast.makeText(MainActivity.this, "Successfully updated", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });*/
+        // Click listeners
+        navImageView.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View view) {
+                startActivity(new Intent(MainActivity.this, ProfilePictureFullScreenActivity.class));
+                // promptProfileChanger();
+            }
+        });
     }
 
     /**
@@ -351,12 +346,21 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             // Set the image to Nav View
             navImageView.setImageURI(imageUri);
 
-            /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            Image.compress(Bitmap.CompressFormat.PNG, 20, baos);
-            // Encoding image to string
-            byte[] b = baos.toByteArray();
-            String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
-            getSharedPreferences("userData", MODE_PRIVATE).edit().putString("PicPath", imageEncoded).apply();*/
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(mFirebaseUser.getEmail())
+                    .setPhotoUri(Uri.parse(imageUri.toString()))
+                    .build();
+
+            mFirebaseUser.updateProfile(profileUpdates)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "User profile updated.");
+                                Toast.makeText(MainActivity.this, "Successfully updated", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
 
         } else if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
             // Do something after user returned from app settings screen, like showing a Toast.
@@ -376,9 +380,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 menuItem.setChecked(true);
                 switch (menuItem.getItemId()) {
-                    case R.id.nav_gpa:
-                        intentGPACalculator(MainActivity.this, "com.gupta.ishansh.gcmcalculator");
-                        break;
                     case R.id.nav_attendance:
                         mViewPager.setCurrentItem(0);
                         break;
@@ -393,6 +394,12 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                         break;
                     case R.id.nav_univ_news:
                         mViewPager.setCurrentItem(4);
+                        break;
+                    case R.id.nav_calculate_gpa:
+                        intentGPACalculator(MainActivity.this, "com.gupta.ishansh.gcmcalculator");
+                        break;
+                    case R.id.nav_test_performance:
+
                         break;
                     case R.id.nav_feekart:
                         FeekartWebView();
@@ -453,7 +460,11 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.action_search) {
+        if (id == android.R.id.home) {
+            startActivity(new Intent(this, MainActivity.class));
+            return true;
+
+        } else if (id == R.id.action_search) {
             return true;
         } else if (id == R.id.action_filter) {
             return true;

@@ -53,16 +53,7 @@ public class TestPerformanceFragment extends Fragment {
         super.onDestroy();
     }
 
-    private RecyclerView mRecyclerView;
-    private TimeLineAdapter mTimeLineAdapter;
-    private List<TimeTableModel> mDataList = new ArrayList<>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private boolean mWithLinePadding;
-
-    private String userRegNo = "ra1511008020111";
-    private String userPass = "dps12345";
-    private final String endpoint = "http://instify.herokuapp.com/api/time-table/?regno="
-            + userRegNo + "&password=" + userPass;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,87 +63,17 @@ public class TestPerformanceFragment extends Fragment {
         mSwipeRefreshLayout = (SwipeRefreshLayout)
                 rootView.findViewById(R.id.swipe_refresh_layout_time_table);
 
-        mWithLinePadding = true;
-
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewTimeTable);
-        mRecyclerView.setLayoutManager(getLinearLayoutManager());
-        mRecyclerView.setHasFixedSize(true);
-
-        initView();
-
-        TestPerformanceFragment.AttemptJson dataObj = new TestPerformanceFragment.AttemptJson();
-        dataObj.doInBackground();
         return rootView;
     }
 
-    private LinearLayoutManager getLinearLayoutManager() {
-        return new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-    }
-
-    private void initView() {
-        // setDataListItems();
-        mTimeLineAdapter = new TimeLineAdapter(mDataList, mWithLinePadding);
-        mRecyclerView.setAdapter(mTimeLineAdapter);
-    }
 
     private class AttemptJson extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... strings) {
-            getData();
+            // Call the function
             return "";
         }
-    }
-
-    private void getData() {
-        /**
-         * Handle UI
-         */
-        showRefreshing();
-        /**
-         * Method to make json object request where json response is dynamic
-         * */
-        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, endpoint, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            String msg = "";
-                            // Hide the Progress Dialog
-                            hideRefreshing();
-
-                            Iterator<String> it = response.keys();
-                            while (it.hasNext()) {
-                                String key = it.next();
-                                if (response.get(key) instanceof JSONArray) {
-                                    JSONArray array = response.getJSONArray(key);
-                                    int size = array.length();
-                                    for (int i = 0; i < size; i++) {
-                                        msg += "Hour " + (i + 1) + " : " + array.get(i) + "\n";
-                                        mDataList.add(new TimeTableModel(array.get(i).toString(), "2017-02-12 08:00", OrderStatus.INACTIVE));
-                                    }
-                                    // Notify the adapter that data has been retrieved.
-                                    mTimeLineAdapter.notifyDataSetChanged();
-                                } else {
-                                    msg = key + ":" + response.getString(key);
-                                    Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        } catch (JSONException e) {
-                            Timber.d("JSON error : ", "Object DataSet is Incorrect");
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Timber.e("Error: " + error.getMessage());
-                // Handle UI
-                hideRefreshing();
-                Toast.makeText(getContext(), "Error Receiving Data", Toast.LENGTH_LONG).show();
-            }
-        });
-        AppController.getInstance().addToRequestQueue(req);
     }
 
     private void showRefreshing() {

@@ -50,7 +50,7 @@ public class UnivNewsFragment extends Fragment {
         super.onDestroy();
     }
 
-    private static final String endpoint = "http://arjun-apis.herokuapp.com/srm-news-api/";
+    private static final String endpoint = "https://hashbird.com/gogrit.in/workspace/srm-api/univ-news.php";
     private String TAG = UnivNewsFragment.class.getSimpleName();
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private SimpleStringRecyclerViewAdapter mAdapter;
@@ -108,7 +108,7 @@ public class UnivNewsFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Error: " + error.getMessage());
-                Toast.makeText(getContext(), "Error Receiving News", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Error Receiving University News", Toast.LENGTH_LONG).show();
                 hideRefreshing();
             }
         });

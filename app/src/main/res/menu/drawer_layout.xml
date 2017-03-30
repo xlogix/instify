@@ -1,33 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item
-        android:id="@+id/nav_gpa"
-        android:icon="@drawable/ic_gpa_calculator"
-        android:title="@string/nav_section_1" />
+    <group>
+        <item
+            android:id="@+id/nav_attendance"
+            android:icon="@drawable/ic_attendance_white"
+            android:title="@string/nav_attendance" />
+        <item
+            android:id="@+id/nav_campus_news"
+            android:icon="@drawable/ic_campus_news_white"
+            android:title="@string/nav_campus_news" />
+        <item
+            android:id="@+id/nav_schedule"
+            android:icon="@drawable/ic_time_table_white"
+            android:title="@string/nav_schedule" />
+        <item
+            android:id="@+id/nav_notes"
+            android:icon="@drawable/ic_notes_white"
+            android:title="@string/nav_notes" />
+        <item
+            android:id="@+id/nav_univ_news"
+            android:icon="@drawable/ic_univ_news_white"
+            android:title="@string/nav_univ_news" />
+    </group>
 
     <item android:title="@string/nav_section_2">
         <menu>
             <item
-                android:id="@+id/nav_attendance"
-                android:icon="@drawable/ic_attendance_white"
-                android:title="@string/nav_attendance" />
+                android:id="@+id/nav_test_performance"
+                android:icon="@drawable/ic_action_payment"
+                android:title="@string/nav_fee_pay" />
             <item
-                android:id="@+id/nav_campus_news"
-                android:icon="@drawable/ic_campus_news_white"
-                android:title="@string/nav_campus_news" />
-            <item
-                android:id="@+id/nav_schedule"
-                android:icon="@drawable/ic_time_table_white"
-                android:title="@string/nav_schedule" />
-            <item
-                android:id="@+id/nav_notes"
-                android:icon="@drawable/ic_notes_white"
-                android:title="@string/nav_notes" />
-            <item
-                android:id="@+id/nav_univ_news"
-                android:icon="@drawable/ic_univ_news_white"
-                android:title="@string/nav_univ_news" />
+                android:id="@+id/nav_calculate_gpa"
+                android:icon="@drawable/ic_gpa_calculator"
+                android:title="@string/nav_section_1" />
         </menu>
     </item>
 

@@ -20,19 +20,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <android.support.v7.widget.RecyclerView
+               <!-- <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerViewTimeTable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"
                     android:padding="10dp"
-                    android:visibility="visible" />
+                    android:visibility="visible" />-->
 
                 <ExpandableListView
                     android:id="@+id/expListView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="invisible" />
+                    android:visibility="visible" />
             </RelativeLayout>
         </android.support.v4.widget.NestedScrollView>
 

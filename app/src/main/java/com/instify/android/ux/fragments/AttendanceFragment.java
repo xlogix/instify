@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -23,11 +24,13 @@ import com.instify.android.ux.adapters.ListExpandableAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.BindView;
 import timber.log.Timber;
 
 /**
@@ -92,7 +95,6 @@ public class AttendanceFragment extends Fragment {
                     }
                     deno++;
                 }
-
             }
             return countp;
         }
@@ -101,6 +103,7 @@ public class AttendanceFragment extends Fragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ExpandableListView expListView;
+    private TextView updatedAt;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -110,6 +113,7 @@ public class AttendanceFragment extends Fragment {
                 rootView.findViewById(R.id.swipe_refresh_layout_attendance);
         // [LAYOUT LIST] Expand list view
         expListView = (ExpandableListView) rootView.findViewById(R.id.expListView);
+        updatedAt = (TextView) rootView.findViewById(R.id.textDate);
 
         // Fetch the attendance
         AttendanceFragment.AsyncGetAttendance dataObj = new AttendanceFragment.AsyncGetAttendance();
@@ -164,13 +168,16 @@ public class AttendanceFragment extends Fragment {
                         // Declare Hash map for all headers and their corresponding values
                         HashMap<String, ArrayList<String>> childArrayList = new HashMap<>();
 
-                        // expListView = (ExpandableListView)findViewById(R.id.expListView);
                         JSONArray user = jObj.getJSONArray("subjects");
+                        JSONObject updated = jObj.getJSONObject("updated");
 
                         int i;
                         double ar[], br[];
-                        ar = new double[100];
-                        br = new double[100];
+                        ar = new double[20];
+                        br = new double[20];
+
+                        // Set the text
+                        updatedAt.setText(updated.toString());
 
                         for (i = 0; i < user.length(); i++) {
                             // Create an object of Att class
@@ -185,16 +192,19 @@ public class AttendanceFragment extends Fragment {
                             daysOfWeekArrayList.add("MAX-HOURS: " + subs.getString("max-hrs"));
                             daysOfWeekArrayList.add("ATTENDED-HOURS: " + subs.getString("attd-hrs"));
                             daysOfWeekArrayList.add("ABSENT-HOURS: " + subs.getString("abs-hrs"));
+                            daysOfWeekArrayList.add("OD/ML PERCENTAGE: " + subs.getString("od-hrs"));
                             daysOfWeekArrayList.add("PERCENTAGE: " + subs.getString("avg-attd") + "%");
+
                             ar[i] = Double.parseDouble(subs.getString("attd-hrs"));
                             br[i] = Double.parseDouble(subs.getString("max-hrs"));
+                            // Variable declaration
                             double tempa = ar[i];
                             double tempb = br[i];
 
                             double resultA = obj.attnCalc(tempa, tempb);
                             double resultB = obj.predict();
-                            daysOfWeekArrayList.add("TOTAL CLASSES FOR >= 75% :  " + resultA);
-                            daysOfWeekArrayList.add("MAY TAKE LEAVE FOR NEXT: " + resultB + " CONSECUTIVE CLASSES");
+                            daysOfWeekArrayList.add("TOTAL HOUR(S) FOR >= 75% :  " + resultA);
+                            daysOfWeekArrayList.add("MAY TAKE LEAVE FOR NEXT: " + resultB + " CONSECUTIVE HOUR(S)");
 
                             childArrayList.put(name + "-" + subs.getString("sub-desc") + " " + subs.getString("avg-attd") + "%", daysOfWeekArrayList);
                         }
@@ -281,7 +291,6 @@ public class AttendanceFragment extends Fragment {
                 return params;
             }
         };
-
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }

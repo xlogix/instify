@@ -105,12 +105,12 @@
             android:theme="@style/AppTheme.NoActionBarTransparent" />
 
         <activity
-            android:name=".ux.AboutActivity"
-            android:label="@string/app_name" />
+            android:name=".ux.ProfileActivity"
+            android:label="@string/title_activity_profile" />
 
         <activity
-            android:name=".ux.SettingsActivity"
-            android:label="@string/app_name" />
+            android:name=".ux.ProfilePictureFullScreenActivity"
+            android:parentActivityName=".ux.MainActivity" />
 
         <activity
             android:name=".ux.ChatActivity"
@@ -118,18 +118,32 @@
 
         <activity
             android:name=".ux.FeePaymentHistoryActivity"
-            android:label="@string/title_activity_fee_payment_history"/>
+            android:label="@string/title_activity_fee_payment_history"
+            android:parentActivityName=".ux.MainActivity" />
 
-        <activity android:name=".ux.SupportUsActivity"
-            android:label="@string/title_activity_support_us"/>
+        <activity
+            android:name=".ux.SupportUsActivity"
+            android:label="@string/title_activity_support_us"
+            android:parentActivityName=".ux.MainActivity" />
 
         <activity
             android:name=".ux.UploadNotesActivity"
-            android:label="@string/title_activity_upload_notes" />
+            android:label="@string/title_activity_upload_notes"
+            android:parentActivityName=".ux.MainActivity" />
 
         <activity
             android:name=".ux.UploadNewsActivity"
-            android:label="@string/title_activity_upload_campus" />
+            android:label="@string/title_activity_upload_campus"
+            android:parentActivityName=".ux.MainActivity" />
+
+        <activity
+            android:name=".ux.AboutActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".ux.MainActivity" />
+
+        <activity
+            android:name=".ux.SettingsActivity"
+            android:label="@string/app_name" />
 
         <service
             android:name=".helpers.MyDownloadService"
