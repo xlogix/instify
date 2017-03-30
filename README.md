@@ -6,7 +6,7 @@
 # Features
 
 It's also on Google Play:
-<a href="https://play.google.com/store/apps/" target="_blank">
+<a href="https://play.google.com/store/apps/details?id=com.instify.android" target="_blank">
   <img alt="Get it on Google Play"
       src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="60"/>
 </a>
@@ -14,7 +14,13 @@ It's also on Google Play:
 #### Manifest Settings
 
 ```xml
- <!-- Normal permissions, access automatically granted to app -->
+ <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true" />
+
+    <!-- Normal permissions, access automatically granted to app -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -25,9 +31,6 @@ It's also on Google Play:
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <!-- FCM (Firebase Cloud Messaging) for all build types configuration -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -37,3 +40,13 @@ It's also on Google Play:
         android:name="${applicationId}.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
     <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="true" />
