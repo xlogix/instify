@@ -2,6 +2,7 @@ package com.instify.android.ux.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -65,6 +66,18 @@ public class CampNewsFragment extends Fragment {
         setHasOptionsMenu(true);
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        // FAB //
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent uploadNews = new Intent(getContext(), UploadNewsActivity.class);
+                uploadNews.putExtra("userDept", userDept);
+//                uploadNews.putExtra("userSec", )
+                startActivity(uploadNews);
+            }
+        });
 
         // Recycler view set up //
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_campus_news);
