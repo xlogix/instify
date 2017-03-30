@@ -41,11 +41,9 @@ public class CampNewsFragment extends Fragment {
     FirebaseUser currentUser;
     String userRegNo, userDept, pathAll, pathDept, pathSec;
 
+
     public CampNewsFragment() {
-        // Paths //
-        pathAll = "campusNews/all";
-        pathDept = "campusNews/dept/"+ userDept +"/all";
-        pathSec = "campusNews/dept/"+ userDept +"/all";
+
     }
 
     public static CampNewsFragment newInstance() {
@@ -66,11 +64,6 @@ public class CampNewsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_campus_news, container, false);
         setHasOptionsMenu(true);
 
-        // Student details from dB //
-        SQLiteHandler db = new SQLiteHandler(getContext());
-        userRegNo = db.getUserDetails().get("token");
-        userDept = db.getUserDetails().get("regno");
-
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         // Recycler view set up //
@@ -78,6 +71,16 @@ public class CampNewsFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        // Student details from dB //
+        SQLiteHandler db = new SQLiteHandler(getContext());
+        userRegNo = db.getUserDetails().get("token");
+        userDept = db.getUserDetails().get("regno").replace(".","-");
+
+        // Paths //
+        pathAll = "campusNews/all";
+        pathDept = "campusNews/dept/"+ userDept +"/all";
+        pathSec = "campusNews/dept/"+ userDept +"/all";
 
         showNews(pathAll);
 
@@ -95,11 +98,11 @@ public class CampNewsFragment extends Fragment {
             showNews(pathAll);
             return true;
         } else if(id == R.id.filter_by_department){
-            Toast.makeText(getActivity(), "TEST1", Toast.LENGTH_SHORT).show();
             showNews(pathDept);
             return true;
         } else if(id == R.id.filter_by_class){
             showNews(pathSec);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
