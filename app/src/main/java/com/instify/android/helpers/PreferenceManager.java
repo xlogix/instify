@@ -36,7 +36,6 @@ public class PreferenceManager {
     private static final String USER_REGNO = "user_regNo";
     private static final String USER_PASSWORD = "user_password";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
-    private static final String KEY_HAS_SET_PROFILE_PICTURE = "has_set_profile_picture";
 
     // Constructor
     public PreferenceManager(Context context) {
@@ -104,18 +103,6 @@ public class PreferenceManager {
 
     public boolean isLoggedIn() {
         return mPrefs.getBoolean(KEY_IS_LOGGED_IN, false);
-    }
-
-    /** Check if the user has set a profile picture
-     *
-     * @return boolean value, true or false
-     */
-    public boolean getHasSetProfilePicture() {
-        return mPrefs.getBoolean(KEY_HAS_SET_PROFILE_PICTURE, true);
-    }
-
-    public void setHasSetProfilePicture(boolean profile) {
-        editor.putBoolean(KEY_HAS_SET_PROFILE_PICTURE, profile).apply();
     }
 
     /**

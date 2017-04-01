@@ -10,10 +10,10 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.AppCompatTextView
+            style="@style/TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Show your appreciation and support the development of this app by donating us via Paytm."
-            android:textSize="28sp" />
+            android:text="Show your appreciation and support the development of this app by donating us via Paytm." />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -23,19 +23,19 @@
             android:src="@drawable/paytm_qrcode" />
 
         <android.support.v7.widget.AppCompatTextView
+            style="@style/TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Or, Enter Mobile No."
-            android:textSize="24sp" />
+            android:text="Or, Enter Mobile No." />
 
         <android.support.v7.widget.AppCompatTextView
+            style="@style/TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:padding="15dp"
-            android:text="9962892900"
-            android:textSize="24sp" />
+            android:text="9962892900" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/copy"

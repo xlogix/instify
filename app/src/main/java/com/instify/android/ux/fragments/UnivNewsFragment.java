@@ -26,7 +26,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.instify.android.R;
 import com.instify.android.app.AppController;
-import com.instify.android.ux.MainActivity;
 import com.thefinestartist.finestwebview.FinestWebView;
 
 import org.json.JSONArray;
@@ -34,6 +33,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class UnivNewsFragment extends Fragment {
+
+    private String TAG = UnivNewsFragment.class.getSimpleName();
 
     public UnivNewsFragment() {
     }
@@ -51,7 +52,7 @@ public class UnivNewsFragment extends Fragment {
     }
 
     private static final String endpoint = "https://hashbird.com/gogrit.in/workspace/srm-api/univ-news.php";
-    private String TAG = UnivNewsFragment.class.getSimpleName();
+
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private SimpleStringRecyclerViewAdapter mAdapter;
     private RecyclerView recyclerView;
@@ -119,16 +120,6 @@ public class UnivNewsFragment extends Fragment {
         AppController.getInstance().addToRequestQueue(req);
     }
 
-    private void showRefreshing() {
-        if (!mSwipeRefreshLayout.isRefreshing())
-            mSwipeRefreshLayout.setRefreshing(true);
-    }
-
-    private void hideRefreshing() {
-        if (mSwipeRefreshLayout.isRefreshing())
-            mSwipeRefreshLayout.setRefreshing(false);
-    }
-
     public static class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
         private Context mContext;
         private JSONArray newsArray;
@@ -147,45 +138,43 @@ public class UnivNewsFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, final int position) {
+        public void onBindViewHolder(final ViewHolder holder, int position) {
             try {
-                holder.mTextViewTitle.setText(newsArray.getJSONObject(position).getString("title"));
-                holder.mTextViewSnip.setText(newsArray.getJSONObject(position).getString("snip"));
+                holder.mTextViewTitle.setText(newsArray.getJSONObject(holder.getAdapterPosition()).getString("title"));
+                holder.mTextViewSnip.setText(newsArray.getJSONObject(holder.getAdapterPosition()).getString("snip"));
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            new FinestWebView.Builder(v.getContext()).theme(R.style.FinestWebViewTheme)
+                                    .titleDefault("News Update")
+                                    .showUrl(false)
+                                    .statusBarColorRes(R.color.colorPrimaryDark)
+                                    .toolbarColorRes(R.color.colorPrimary)
+                                    .titleColorRes(R.color.finestWhite)
+                                    .urlColorRes(R.color.colorPrimaryLight)
+                                    .iconDefaultColorRes(R.color.finestWhite)
+                                    .progressBarColorRes(R.color.finestWhite)
+                                    .stringResCopiedToClipboard(R.string.copied_to_clipboard)
+                                    .stringResCopiedToClipboard(R.string.copied_to_clipboard)
+                                    .stringResCopiedToClipboard(R.string.copied_to_clipboard)
+                                    .updateTitleFromHtml(true)
+                                    .swipeRefreshColorRes(R.color.colorPrimaryDark)
+                                    .menuSelector(R.drawable.selector_light_theme)
+                                    .menuTextGravity(Gravity.CENTER)
+                                    .menuTextPaddingRightRes(R.dimen.defaultMenuTextPaddingLeft)
+                                    .dividerHeight(0)
+                                    .gradientDivider(false)
+                                    .setCustomAnimations(R.anim.slide_up, R.anim.hold, R.anim.hold, R.anim.slide_down)
+                                    .show(newsArray.getJSONObject(holder.getAdapterPosition()).getString("link"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        new FinestWebView.Builder(v.getContext()).theme(R.style.FinestWebViewTheme)
-                                .titleDefault("News Update")
-                                .showUrl(false)
-                                .statusBarColorRes(R.color.colorPrimaryDark)
-                                .toolbarColorRes(R.color.colorPrimary)
-                                .titleColorRes(R.color.finestWhite)
-                                .urlColorRes(R.color.colorPrimaryLight)
-                                .iconDefaultColorRes(R.color.finestWhite)
-                                .progressBarColorRes(R.color.finestWhite)
-                                .stringResCopiedToClipboard(R.string.copied_to_clipboard)
-                                .stringResCopiedToClipboard(R.string.copied_to_clipboard)
-                                .stringResCopiedToClipboard(R.string.copied_to_clipboard)
-                                .showSwipeRefreshLayout(true)
-                                .updateTitleFromHtml(true)
-                                .swipeRefreshColorRes(R.color.colorPrimaryDark)
-                                .menuSelector(R.drawable.selector_light_theme)
-                                .menuTextGravity(Gravity.CENTER)
-                                .menuTextPaddingRightRes(R.dimen.defaultMenuTextPaddingLeft)
-                                .dividerHeight(0)
-                                .gradientDivider(false)
-                                .setCustomAnimations(R.anim.slide_up, R.anim.hold, R.anim.hold, R.anim.slide_down)
-                                .show(newsArray.getJSONObject(position)
-                                        .getString("link"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
         }
 
         @Override
@@ -204,5 +193,15 @@ public class UnivNewsFragment extends Fragment {
                 mTextViewSnip = (TextView) view.findViewById(R.id.univ_news_snip);
             }
         }
+    }
+
+    private void showRefreshing() {
+        if (!mSwipeRefreshLayout.isRefreshing())
+            mSwipeRefreshLayout.setRefreshing(true);
+    }
+
+    private void hideRefreshing() {
+        if (mSwipeRefreshLayout.isRefreshing())
+            mSwipeRefreshLayout.setRefreshing(false);
     }
 }

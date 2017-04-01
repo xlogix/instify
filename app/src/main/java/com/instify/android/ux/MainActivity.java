@@ -41,6 +41,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -90,9 +95,13 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     private ImageView navImageView;
     private TextView navTextView;
 
-    private FirebaseAuth mAuth;
-    private FirebaseUser mFirebaseUser;
-    private DatabaseReference dbRef, userRef;
+    // Initialize Ad
+    private AdView mAdView;
+    private InterstitialAd mInterstitialAd;
+
+    // Set Firebase User
+    FirebaseUser mFirebaseUser;
+    DatabaseReference dbRef, userRef;
     SQLiteHandler db = new SQLiteHandler(this);
 
     public UserDataFirebase userInfoObject;
@@ -109,19 +118,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Ensures that user didn't un-install Google Play Services required for Firebase related tasks.
-        checkPlayServices();
-        // Checks if the device is connected to the internet
-        if (isDeviceOnline()) {
-            Timber.d(TAG, "Device is online.");
-        } else {
-            Snackbar.make(mViewPager, "Device Offline. Functionality may be limited", Snackbar.LENGTH_SHORT).show();
-        }
-    }
 
     @Override
     public void onBackPressed() {
@@ -144,12 +140,89 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
     }
 
+    // [START add_lifecycle_methods]
+
+    /**
+     * Called when leaving the activity
+     */
+    @Override
+    public void onPause() {
+        if (mAdView != null) {
+            mAdView.pause();
+        }
+        super.onPause();
+    }
+
+    /**
+     * Called when returning to the activity
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Ensures that user didn't un-install Google Play Services required for Firebase related tasks.
+        checkPlayServices();
+
+        if (mAdView != null) {
+            mAdView.resume();
+        }
+        // Checks if the device is connected to the internet
+        if (isDeviceOnline()) {
+            Timber.d(TAG, "Device is online.");
+        } else {
+            Snackbar.make(mViewPager, "Device Offline. Functionality may be limited", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Called before the activity is destroyed
+     */
+    @Override
+    public void onDestroy() {
+        if (mAdView != null) {
+            mAdView.destroy();
+        }
+        super.onDestroy();
+    }
+    // [END add_lifecycle_methods]
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
+
+        // Get the current logged-in user
+        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        // Initialize Mobile Ads (AdWords)
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-1515135859021344~5949146511");
+
+        // [START instantiate_interstitial_ad]
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
+
+        // [START create_interstitial_ad_listener]
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Add your method here
+            }
+
+            @Override
+            public void onAdLoaded() {
+                // Ad received, ready to display
+                mInterstitialAd.isLoaded();
+                mInterstitialAd.show();
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                // See https://goo.gl/sCZj0H for possible error codes.
+                Timber.w(TAG, "onAdFailedToLoad:" + i);
+            }
+        });
+        // [END create_interstitial_ad_listener]
 
         // Drawer Layout
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -165,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
 
         headerView = navView.inflateHeaderView(R.layout.nav_header_main);
+        // Initialize other views in Nav bar
         setupHeaderView();
 
         // Create the adapter that will return a fragment for each of the three
@@ -199,12 +273,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
         // Check if Google Play Services is installed or not
         checkPlayServices();
-
-        // [START initialize_auth]
-        mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
-
-        mFirebaseUser = mAuth.getCurrentUser();
 
         if (mFirebaseUser != null && AppController.getInstance().getPrefManager().isLoggedIn()) {
             // User is signed in
@@ -250,11 +318,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             try {
                 // Set profile picture from Firebase account
                 Glide.with(this)
-                        .load(mFirebaseUser.getPhotoUrl())
+                        .load(mFirebaseUser.getPhotoUrl().toString()).placeholder(R.drawable.default_pic_face)
                         .crossFade()
-                        .centerCrop()
                         .into(navImageView);
-
             } catch (Exception e) {
                 Timber.d(e);
             }
@@ -271,6 +337,19 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             }
         });
     }
+
+    /**
+     * Load a new interstitial ad asynchronously.
+     */
+    // [START request_new_interstitial]
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("11408151BC4116DE6AD4B6BFC1B34457")
+                .build();
+
+        mInterstitialAd.loadAd(adRequest);
+    }
+    // [END request_new_interstitial]
 
     /**
      * Check the device to make sure it has the Google Play Services APK. If
@@ -395,11 +474,11 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     case R.id.nav_univ_news:
                         mViewPager.setCurrentItem(4);
                         break;
+                    case R.id.nav_test_performance:
+                        startActivity(new Intent(MainActivity.this, TestPerformanceActivity.class));
+                        break;
                     case R.id.nav_calculate_gpa:
                         intentGPACalculator(MainActivity.this, "com.gupta.ishansh.gcmcalculator");
-                        break;
-                    case R.id.nav_test_performance:
-
                         break;
                     case R.id.nav_feekart:
                         FeekartWebView();

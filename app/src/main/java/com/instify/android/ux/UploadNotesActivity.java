@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,18 +18,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.instify.android.R;
-import com.instify.android.helpers.MyDownloadService;
+import com.instify.android.helpers.MyFirebaseDownloadService;
+import com.instify.android.helpers.MyFirebaseUploadService;
 
 import java.io.File;
 import java.util.List;
@@ -48,15 +44,19 @@ public class UploadNotesActivity extends AppCompatActivity implements View.OnCli
     static final String[] Chapters = new String[]{"Chapter 1", "Chapter 2", "Chapter 3", "Chapter 4", "Chapter 5", "Chapter 6", "Chapter 7",
             "Chapter 8", "Chapter 9", "Chapter 10"};
 
-    private static final String TAG = "Storage";
+    private static final String TAG = UploadNotesActivity.class.getSimpleName();
+    // PERMS
     private static final int RC_TAKE_PICTURE = 101;
     private static final int GALLERY = 102;
     private static final int RC_STORAGE_PERMS = 103;
+
     private static final String KEY_FILE_URI = "key_file_uri";
     private static final String KEY_DOWNLOAD_URL = "key_download_url";
-    private BroadcastReceiver mDownloadReceiver;
+
+    private BroadcastReceiver mBroadcastReceiver;
     private ProgressDialog mProgressDialog;
     private FirebaseAuth mAuth;
+
     private Uri mDownloadUrl = null;
     private Uri mFileUri = null;
     // Declare Firebase Storage
@@ -66,6 +66,12 @@ public class UploadNotesActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.upload_notes);
+
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        // [END get_storage_ref]
 
         // Spinner 1
         final Spinner spinnerSubjects = (Spinner) findViewById(R.id.spinner_subjects);
@@ -81,12 +87,6 @@ public class UploadNotesActivity extends AppCompatActivity implements View.OnCli
         adapterChapters.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerChapters.setAdapter(adapterChapters);
 
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
-
-        mStorageRef = FirebaseStorage.getInstance().getReference();
-        // [END get_storage_ref]
-
         // Click listeners
         findViewById(R.id.button_camera).setOnClickListener(this);
         //findViewById(R.id.button_sign_in).setOnClickListener(this);
@@ -97,32 +97,49 @@ public class UploadNotesActivity extends AppCompatActivity implements View.OnCli
             mFileUri = savedInstanceState.getParcelable(KEY_FILE_URI);
             mDownloadUrl = savedInstanceState.getParcelable(KEY_DOWNLOAD_URL);
         }
+        onNewIntent(getIntent());
 
         // Download receiver
-        mDownloadReceiver = new BroadcastReceiver() {
+        mBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(TAG, "downloadReceiver:onReceive:" + intent);
+                Log.d(TAG, "onReceive:" + intent);
                 hideProgressDialog();
 
-                if (MyDownloadService.ACTION_COMPLETED.equals(intent.getAction())) {
-                    String path = intent.getStringExtra(MyDownloadService.EXTRA_DOWNLOAD_PATH);
-                    long numBytes = intent.getLongExtra(MyDownloadService.EXTRA_BYTES_DOWNLOADED, 0);
+                switch (intent.getAction()) {
+                    case MyFirebaseDownloadService.DOWNLOAD_COMPLETED:
+                        // Get number of bytes downloaded
+                        long numBytes = intent.getLongExtra(MyFirebaseDownloadService.EXTRA_BYTES_DOWNLOADED, 0);
 
-                    // Alert success
-                    showMessageDialog("Success", String.format(Locale.getDefault(),
-                            "%d bytes downloaded from %s", numBytes, path));
-                }
-
-                if (MyDownloadService.ACTION_ERROR.equals(intent.getAction())) {
-                    String path = intent.getStringExtra(MyDownloadService.EXTRA_DOWNLOAD_PATH);
-
-                    // Alert failure
-                    showMessageDialog("Error", String.format(Locale.getDefault(),
-                            "Failed to download from %s", path));
+                        // Alert success
+                        showMessageDialog(getString(R.string.success), String.format(Locale.getDefault(),
+                                "%d bytes downloaded from %s",
+                                numBytes,
+                                intent.getStringExtra(MyFirebaseDownloadService.EXTRA_DOWNLOAD_PATH)));
+                        break;
+                    case MyFirebaseDownloadService.DOWNLOAD_ERROR:
+                        // Alert failure
+                        showMessageDialog("Error", String.format(Locale.getDefault(),
+                                "Failed to download from %s",
+                                intent.getStringExtra(MyFirebaseDownloadService.EXTRA_DOWNLOAD_PATH)));
+                        break;
+                    case MyFirebaseUploadService.UPLOAD_COMPLETED:
+                    case MyFirebaseUploadService.UPLOAD_ERROR:
+                        onUploadResultIntent(intent);
+                        break;
                 }
             }
         };
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        // Check if this Activity was launched by clicking on an upload notification
+        if (intent.hasExtra(MyFirebaseUploadService.EXTRA_DOWNLOAD_URL)) {
+            onUploadResultIntent(intent);
+        }
     }
 
     @Override
@@ -130,9 +147,10 @@ public class UploadNotesActivity extends AppCompatActivity implements View.OnCli
         super.onStart();
         updateUI(mAuth.getCurrentUser());
 
-        // Register download receiver
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(mDownloadReceiver, MyDownloadService.getIntentFilter());
+        // Register receiver for uploads and downloads
+        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
+        manager.registerReceiver(mBroadcastReceiver, MyFirebaseDownloadService.getIntentFilter());
+        manager.registerReceiver(mBroadcastReceiver, MyFirebaseUploadService.getIntentFilter());
     }
 
     @Override
@@ -140,7 +158,7 @@ public class UploadNotesActivity extends AppCompatActivity implements View.OnCli
         super.onStop();
 
         // Unregister download receiver
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mDownloadReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
@@ -150,6 +168,7 @@ public class UploadNotesActivity extends AppCompatActivity implements View.OnCli
         out.putParcelable(KEY_DOWNLOAD_URL, mDownloadUrl);
     }
 
+    // Launch the camera
     @AfterPermissionGranted(RC_STORAGE_PERMS)
     private void launchCamera() {
         Log.d(TAG, "launchCamera");
@@ -196,6 +215,7 @@ public class UploadNotesActivity extends AppCompatActivity implements View.OnCli
         Log.d(TAG, "onActivityResult:" + requestCode + ":" + resultCode + ":" + data);
         if (requestCode == RC_TAKE_PICTURE) {
             if (resultCode == RESULT_OK) {
+                mFileUri = data.getData();
                 if (mFileUri != null) {
                     //Function Call
                     uploadFromUri(mFileUri);
@@ -220,45 +240,25 @@ public class UploadNotesActivity extends AppCompatActivity implements View.OnCli
     private void uploadFromUri(Uri fileUri) {
         Log.d(TAG, "uploadFromUri:src:" + fileUri.toString());
 
+        // Save the File URI
+        mFileUri = fileUri;
+
+        // Clear the last download, if any
+        updateUI(mAuth.getCurrentUser());
+        mDownloadUrl = null;
+
+        // Start MyUploadService to upload the file, so that the file is uploaded
+        // even if this Activity is killed or put in the background
+        startService(new Intent(this, MyFirebaseUploadService.class)
+                .putExtra(MyFirebaseUploadService.EXTRA_FILE_URI, fileUri)
+                .setAction(MyFirebaseUploadService.ACTION_UPLOAD));
+
+        // Show loading spinner
+        showProgressDialog();
+
         // Get a reference to store file at photos/<FILENAME>.jpg
         final StorageReference photoRef = mStorageRef.child("photos")
                 .child(fileUri.getLastPathSegment());
-
-        // uploads file to Firebase Storage
-        showProgressDialog();
-        Log.d(TAG, "uploadFromUri:dst:" + photoRef.getPath());
-        photoRef.putFile(fileUri)
-                .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // uploads succeeded
-                        Log.d(TAG, "uploadFromUri:onSuccess");
-
-                        // Get the public download URL
-                        mDownloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
-
-                        // [START_EXCLUDE]
-                        hideProgressDialog();
-                        updateUI(mAuth.getCurrentUser());
-                        // [END_EXCLUDE]
-                    }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // uploads failed
-                        Log.w(TAG, "uploadFromUri:onFailure", exception);
-
-                        mDownloadUrl = null;
-
-                        // [START_EXCLUDE]
-                        hideProgressDialog();
-                        Toast.makeText(UploadNotesActivity.this, "Error: upload failed",
-                                Toast.LENGTH_SHORT).show();
-                        updateUI(mAuth.getCurrentUser());
-                        // [END_EXCLUDE]
-                    }
-                });
     }
     // [END upload_from_uri]
 
@@ -267,13 +267,21 @@ public class UploadNotesActivity extends AppCompatActivity implements View.OnCli
         String path = "photos/" + mFileUri.getLastPathSegment();
 
         // Kick off download service
-        Intent intent = new Intent(this, MyDownloadService.class);
-        intent.setAction(MyDownloadService.ACTION_DOWNLOAD);
-        intent.putExtra(MyDownloadService.EXTRA_DOWNLOAD_PATH, path);
+        Intent intent = new Intent(this, MyFirebaseDownloadService.class)
+                .putExtra(MyFirebaseDownloadService.EXTRA_DOWNLOAD_PATH, path)
+                .setAction(MyFirebaseDownloadService.ACTION_DOWNLOAD);
         startService(intent);
 
         // Show loading spinner
         showProgressDialog();
+    }
+
+    private void onUploadResultIntent(Intent intent) {
+        // Got a new intent from MyUploadService with a success or failure
+        mDownloadUrl = intent.getParcelableExtra(MyFirebaseUploadService.EXTRA_DOWNLOAD_URL);
+        mFileUri = intent.getParcelableExtra(MyFirebaseUploadService.EXTRA_FILE_URI);
+
+        updateUI(mAuth.getCurrentUser());
     }
 
     private void updateUI(FirebaseUser user) {
@@ -288,12 +296,8 @@ public class UploadNotesActivity extends AppCompatActivity implements View.OnCli
 
         // Download URL and Download button
         if (mDownloadUrl != null) {
-            ((TextView) findViewById(R.id.picture_download_uri))
-                    .setText(mDownloadUrl.toString());
             findViewById(R.id.layout_download).setVisibility(View.VISIBLE);
         } else {
-            ((TextView) findViewById(R.id.picture_download_uri))
-                    .setText(null);
             findViewById(R.id.layout_download).setVisibility(View.GONE);
         }
     }

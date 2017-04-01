@@ -5,7 +5,6 @@ package com.instify.android.app;
  */
 
 import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
@@ -19,7 +18,6 @@ import com.instify.android.helpers.PreferenceManager;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.ux.IntroActivity;
 import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
 
 import timber.log.Timber;
 
@@ -37,12 +35,6 @@ public class AppController extends Application {
     private PreferenceManager mPrefs;
 
     public FirebaseAnalytics mFirebaseAnalytics;
-
-    private RefWatcher mRefWatcher;
-
-    public static RefWatcher getRefWatcher(Context context) {
-        return ((AppController) context.getApplicationContext()).mRefWatcher;
-    }
 
     @Override
     public void onCreate() {
@@ -65,7 +57,7 @@ public class AppController extends Application {
             // You should not init your app in this process.
             return;
         }
-        mRefWatcher = LeakCanary.install(this);
+        LeakCanary.install(this);
         // Normal app init code...
     }
 

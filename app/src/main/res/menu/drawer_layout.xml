@@ -27,12 +27,12 @@
         <menu>
             <item
                 android:id="@+id/nav_test_performance"
-                android:icon="@drawable/ic_action_payment"
-                android:title="@string/nav_fee_pay" />
+                android:icon="@drawable/ic_action_test_performance"
+                android:title="@string/nav_test_scores" />
             <item
                 android:id="@+id/nav_calculate_gpa"
                 android:icon="@drawable/ic_gpa_calculator"
-                android:title="@string/nav_section_1" />
+                android:title="@string/nav_gpa_calculator" />
         </menu>
     </item>
 
@@ -53,7 +53,7 @@
         <menu>
             <item
                 android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_action_feedback"
                 android:title="@string/nav_help_feedback" />
             <item
                 android:id="@+id/nav_share"
@@ -61,7 +61,7 @@
                 android:title="@string/nav_rate_us" />
             <item
                 android:id="@+id/nav_donate_us"
-                android:icon="@drawable/ic_heart_red"
+                android:icon="@drawable/ic_action_support"
                 android:title="@string/nav_donate_us" />
             <item
                 android:id="@+id/nav_about"

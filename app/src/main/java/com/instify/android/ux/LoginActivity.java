@@ -70,8 +70,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // [declare_database_reference]
     private DatabaseReference mFirebaseDatabase;
 
-    UserDataFirebase userInfoObj;
-
     // [START on_start_add_listener]
     @Override
     public void onStart() {

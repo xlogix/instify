@@ -29,6 +29,8 @@
     <string name="nav_schedule">Schedule</string>
 
     <string name="nav_section_2">Test Performance</string>
+    <string name="nav_gpa_calculator">Calculate GPA</string>
+    <string name="nav_test_scores">Test Scores</string>
 
     <string name="nav_section_3">Fee Payment</string>
     <string name="nav_fee_pay">Pay Fees</string>
@@ -99,15 +101,23 @@
     <string name="fresh_config">Fresh Config</string>
     <string name="cause_crash">Cause Crash</string>
 
-    <!--Temp-->
+    <!-- Storage -->
     <string name="camera_button_text">Upload</string>
-    <string name="sign_in_prompt">Sign In to begin</string>
     <string name="take_photo_prompt">Upload a Photo</string>
     <string name="download">Download</string>
-    <string name="sign_in_anonymously">Sign In</string>
     <string name="rationale_storage">Requesting access to the Storage</string>
-    <string name="label_link">Link to Uploaded File</string>
     <string name="label_download">Download File</string>
+    <string name="success">Success</string>
+
+    <string name="progress_downloading">Downloading…</string>
+    <string name="progress_uploading">Uploading…</string>
+    <string name="progress_auth">Signing In…</string>
+
+    <string name="upload_success">Upload finished</string>
+    <string name="upload_failure">Upload failed</string>\
+
+    <string name="download_success">Download finished</string>
+    <string name="download_failure">Download failure</string>
 
     <!--[START] Easy Permissions-->
     <string name="title_settings_dialog">Permissions Required</string>
@@ -186,7 +196,7 @@
         <item>-1</item>
     </string-array>
 
-     <string-array name="list_preference_entries">
+    <string-array name="list_preference_entries">
         <item>Entry 1</item>
         <item>Entry 2</item>
         <item>Entry 3</item>
