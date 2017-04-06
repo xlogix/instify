@@ -49,6 +49,7 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/LICENSE-FIREBASE.txt'
         exclude 'META-INF/NOTICE'
+        exclude 'LICENSE.txt'
     }
     // `return void` removes the lint error: `Not all execution paths return a value`.
     return void

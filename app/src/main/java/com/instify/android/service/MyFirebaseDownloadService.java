@@ -1,4 +1,4 @@
-package com.instify.android.helpers;
+package com.instify.android.service;
 
 import android.content.Intent;
 import android.content.IntentFilter;

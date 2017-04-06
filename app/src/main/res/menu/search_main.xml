@@ -14,7 +14,7 @@
         android:id="@+id/noti"
         android:actionProviderClass="android.widget.ShareActionProvider"
         android:icon="@android:drawable/ic_menu_add"
-        android:title="Search"
+        android:title="Add"
         app:showAsAction="always" />
 
 </menu>

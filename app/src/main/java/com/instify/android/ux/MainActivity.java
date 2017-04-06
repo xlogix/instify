@@ -53,7 +53,7 @@ import com.instify.android.R;
 import com.instify.android.app.AppController;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.listeners.OnSingleClickListener;
-import com.instify.android.models.UserDataFirebase;
+import com.instify.android.models.FirebaseUserDataModel;
 import com.instify.android.ux.fragments.AttendanceFragment;
 import com.instify.android.ux.fragments.CampNewsFragment;
 import com.instify.android.ux.fragments.NotesFragment;
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference dbRef, userRef;
     SQLiteHandler db = new SQLiteHandler(this);
 
-    public UserDataFirebase userInfoObject;
+    public FirebaseUserDataModel userInfoObject;
     boolean doubleBackToExitPressedOnce = false;
 
     View headerView;
@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                     // Collecting users data to use through out the app
-                    userInfoObject = dataSnapshot.getValue(UserDataFirebase.class);
+                    userInfoObject = dataSnapshot.getValue(FirebaseUserDataModel.class);
                 }
 
                 @Override

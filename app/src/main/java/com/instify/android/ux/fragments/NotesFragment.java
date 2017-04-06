@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -18,7 +19,7 @@ import com.instify.android.R;
 import com.instify.android.app.AppConfig;
 import com.instify.android.app.AppController;
 import com.instify.android.helpers.SQLiteHandler;
-import com.instify.android.models.notes;
+import com.instify.android.models.NotesModel;
 import com.instify.android.ux.adapters.NotesAdapter;
 
 import org.json.JSONArray;
@@ -60,6 +61,9 @@ public class NotesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_notes, container, false);
+        // Taking control of the menu options
+        setHasOptionsMenu(true);
+        // Initialize SwipeRefreshLayout
         mSwipeRefreshLayout = (SwipeRefreshLayout)
                 rootView.findViewById(R.id.swipe_refresh_layout_notes);
 
@@ -85,7 +89,7 @@ public class NotesFragment extends Fragment {
         String tag_string_req = "req_attendance";
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_ATTANDENCE, new Response.Listener<String>() {
+                AppConfig.URL_ATTENDANCE, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -99,7 +103,7 @@ public class NotesFragment extends Fragment {
                     // Check for error node in json
                     if (!error) {
 
-                        List<notes> notes = new ArrayList<>();
+                        List<NotesModel> notes = new ArrayList<>();
                         // Declare Hash map for all headers and their corresponding values
                         HashMap<String, ArrayList<String>> childArrayList = new HashMap<>();
 
@@ -123,7 +127,7 @@ public class NotesFragment extends Fragment {
                             //   notes obj = new notes(subs.getString("sub-desc"));
 
 
-                            notes fishData = new notes();
+                            NotesModel fishData = new NotesModel();
                             fishData.fishName = subs.getString("sub-desc");
                             fishData.catName = name;
                             //fishData.sizeName = json_data.getString("registration").trim();
@@ -183,6 +187,11 @@ public class NotesFragment extends Fragment {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.removeGroup(R.id.main_menu_group);
+        super.onPrepareOptionsMenu(menu);
+    }
 
     private void showRefreshing() {
         if (!mSwipeRefreshLayout.isRefreshing())

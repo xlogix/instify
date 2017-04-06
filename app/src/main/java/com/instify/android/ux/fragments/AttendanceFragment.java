@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
@@ -26,13 +27,11 @@ import com.instify.android.ux.adapters.ListExpandableAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.BindView;
 import timber.log.Timber;
 
 /**
@@ -56,53 +55,6 @@ public class AttendanceFragment extends Fragment {
         super.onDestroy();
     }
 
-    class Att {
-
-        private double pre;
-        private double ttl;
-        double main_attendance;
-        //Variables
-        int count = 0, num = 1, denom = 1;
-        int countp = 0, deno = 1;
-
-        //****************************************************************************
-        public double attnCalc(double present, double total) {
-            pre = present;
-            ttl = total;
-            main_attendance = pre / ttl * 100;
-
-            while (true) {
-
-                double current_attendance = ((present + num) / (total + denom)) * 100;
-                num++;
-                denom++;
-
-                if (current_attendance > 75) {
-                    break;
-                }
-                count++;
-            }
-            return count;
-        }
-
-        //****************************************************************************
-        public double predict() {
-
-            if (main_attendance > 75) {
-                while (deno <= 1000) {
-
-                    double predicted_attendance = ((pre) / (ttl + deno)) * 100;
-                    if (predicted_attendance >= 75) {
-                        countp++;
-                    }
-                    deno++;
-                }
-            }
-            return countp;
-        }
-        //****************************************************************************
-    }
-
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ExpandableListView expListView;
     private TextView updatedAt;
@@ -111,6 +63,9 @@ public class AttendanceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_attendance, container, false);
+        // Taking control of the menu options
+        setHasOptionsMenu(true);
+        // Initialize SwipeRefreshLayout
         mSwipeRefreshLayout = (SwipeRefreshLayout)
                 rootView.findViewById(R.id.swipe_refresh_layout_attendance);
         // [LAYOUT LIST] Expand list view
@@ -149,7 +104,7 @@ public class AttendanceFragment extends Fragment {
         String tag_string_req = "req_attendance";
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_ATTANDENCE, new Response.Listener<String>() {
+                AppConfig.URL_ATTENDANCE, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -189,7 +144,7 @@ public class AttendanceFragment extends Fragment {
                             JSONObject subs = jObj.getJSONObject(user.getString(i));
 
                             ArrayList<String> daysOfWeekArrayList = new ArrayList<>();
-                            headersArrayList.add(name + "-" + subs.getString("sub-desc") + " " + subs.getString("avg-attd") + "%");
+                            headersArrayList.add(name + "-" + subs.getString("sub-desc") + " (" + subs.getString("avg-attd") + "%)");
 
                             daysOfWeekArrayList.add("MAX-HOURS: " + subs.getString("max-hrs"));
                             daysOfWeekArrayList.add("ATTENDED-HOURS: " + subs.getString("attd-hrs"));
@@ -301,6 +256,12 @@ public class AttendanceFragment extends Fragment {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.removeGroup(R.id.main_menu_group);
+        super.onPrepareOptionsMenu(menu);
+    }
+
     private void showRefreshing() {
         if (!mSwipeRefreshLayout.isRefreshing())
             mSwipeRefreshLayout.setRefreshing(true);
@@ -309,5 +270,52 @@ public class AttendanceFragment extends Fragment {
     private void hideRefreshing() {
         if (mSwipeRefreshLayout.isRefreshing())
             mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    class Att {
+
+        private double pre;
+        private double ttl;
+        double main_attendance;
+        //Variables
+        int count = 0, num = 1, denom = 1;
+        int countp = 0, deno = 1;
+
+        //****************************************************************************
+        private double attnCalc(double present, double total) {
+            pre = present;
+            ttl = total;
+            main_attendance = pre / ttl * 100;
+
+            while (true) {
+
+                double current_attendance = ((present + num) / (total + denom)) * 100;
+                num++;
+                denom++;
+
+                if (current_attendance > 75) {
+                    break;
+                }
+                count++;
+            }
+            return count;
+        }
+
+        //****************************************************************************
+        private double predict() {
+
+            if (main_attendance > 75) {
+                while (deno <= 1000) {
+
+                    double predicted_attendance = ((pre) / (ttl + deno)) * 100;
+                    if (predicted_attendance >= 75) {
+                        countp++;
+                    }
+                    deno++;
+                }
+            }
+            return countp;
+        }
+        //****************************************************************************
     }
 }

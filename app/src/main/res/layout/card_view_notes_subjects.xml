@@ -12,8 +12,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:orientation="horizontal">
 
         <ImageView
@@ -34,19 +32,15 @@
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:paddingLeft="20dp"
-                android:paddingTop="10dp"
                 android:text="hii testing this one"
                 android:textColor="@color/colorPrimary"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:paddingStart="20dp"
-                android:paddingTop="10dp"
                 android:text="TextView" />
 
             <TextView

@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-package com.instify.android.helpers;
+package com.instify.android.service;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.instify.android.app.AppConfig;
+import com.instify.android.app.AppController;
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
-
-    private static final String TAG = "MyFirebaseIIDService";
+    private static final String TAG = MyFirebaseInstanceIDService.class.getSimpleName();
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -37,12 +40,22 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+
+        // Log the token
         Log.d(TAG, "Refreshed token: " + refreshedToken);
 
-        // TODO: Implement this method to send any registration to your app's servers.
-        // Once a token is generated, we subscribe to topic.
+        // Saving reg id to shared preferences
+        storeRegIdInPref(refreshedToken);
+
         FirebaseMessaging.getInstance().subscribeToTopic(AppConfig.TOPIC_GLOBAL);
+
+        // sending reg id to your server
         sendRegistrationToServer(refreshedToken);
+
+        // Notify UI that registration has completed, so the progress indicator can be hidden.
+        Intent registrationComplete = new Intent(AppConfig.REGISTRATION_COMPLETE);
+        registrationComplete.putExtra("token", refreshedToken);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
     }
     // [END refresh_token]
 
@@ -55,6 +68,11 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        // Add custom implementation, as needed.
+        // sending gcm token to server
+        Log.e(TAG, "sendRegistrationToServer: " + token);
+    }
+
+    private void storeRegIdInPref(String token) {
+        AppController.getInstance().getPrefManager().setRegId(token);
     }
 }

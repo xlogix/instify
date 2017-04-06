@@ -2,7 +2,6 @@ package com.instify.android.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 
 import com.instify.android.utils.Theme;
 
@@ -31,10 +30,9 @@ public class PreferenceManager {
 
     // All Shared Preferences Keys
     private static final String KEY_NOTIFICATIONS = "notifications";
+    private static final String REG_ID = "reg_id";
     private static final String IS_FIRST_RUN = "is_first_run";
     private static final String IS_DARK_THEME = "is_dark_theme";
-    private static final String USER_REGNO = "user_regNo";
-    private static final String USER_PASSWORD = "user_password";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
 
     // Constructor
@@ -81,6 +79,19 @@ public class PreferenceManager {
     }
 
     /**
+     * Save the registration ID of the user
+     *
+     * @return void
+     */
+    public String getRegId() {
+        return mPrefs.getString(REG_ID, "reg_id");
+    }
+
+    public void setRegId(String regId) {
+        editor.putString(REG_ID, regId);
+    }
+
+    /**
      * Check if the user is running the app for the first time. Used to check if Intro Activities should be showed.
      *
      * @return boolean value, true or false
@@ -93,6 +104,11 @@ public class PreferenceManager {
         editor.putBoolean(IS_FIRST_RUN, firstRun).apply();
     }
 
+    /**
+     * Check if the user is running the app for the first time. Used to check if Intro Activities should be showed.
+     *
+     * @return boolean value, true or false
+     */
     public void setLogin(boolean isLoggedIn) {
         editor.putBoolean(KEY_IS_LOGGED_IN, isLoggedIn);
         // commit changes

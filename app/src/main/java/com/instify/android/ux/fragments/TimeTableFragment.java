@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
@@ -76,13 +77,14 @@ public class TimeTableFragment extends Fragment {
 
     String userRegNo;
     String userPass;
-    boolean clicked = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_time_table, container, false);
-        // Initialize Swipe Refresh Layout
+        // Taking control of the menu options
+        setHasOptionsMenu(true);
+        // Initialize SwipeRefreshLayout
         mSwipeRefreshLayout = (SwipeRefreshLayout)
                 rootView.findViewById(R.id.swipe_refresh_layout_time_table);
         // Set color scheme
@@ -392,6 +394,12 @@ public class TimeTableFragment extends Fragment {
         };
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.removeGroup(R.id.main_menu_group);
+        super.onPrepareOptionsMenu(menu);
     }
 
     private void showRefreshing() {

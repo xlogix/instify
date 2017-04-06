@@ -13,14 +13,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatTextView
-            style="@style/TextAppearance.AppCompat.Large"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Welcome!"
-            android:textSize="28sp" />
-
         <com.google.android.gms.common.SignInButton
             android:id="@+id/button_google_login"
             android:layout_width="match_parent"

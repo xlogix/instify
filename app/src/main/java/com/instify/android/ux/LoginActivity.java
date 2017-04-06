@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -28,12 +29,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DatabaseReference;
 import com.instify.android.R;
 import com.instify.android.app.AppConfig;
 import com.instify.android.app.AppController;
 import com.instify.android.helpers.SQLiteHandler;
-import com.instify.android.models.UserDataFirebase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -111,6 +110,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Setup SupportActionBar
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.view_custom_action_bar);
 
         // Views
         mRegNoField = (AutoCompleteTextView) findViewById(R.id.field_regNo);

@@ -99,7 +99,6 @@
 
         <activity
             android:name=".ux.LoginActivity"
-            android:label="@string/title_activity_login"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize" />
 
@@ -163,19 +162,20 @@
             android:parentActivityName=".ux.MainActivity" />
 
         <service
-            android:name=".helpers.MyFirebaseDownloadService"
+            android:name=".service.MyFirebaseDownloadService"
             android:exported="false" />
         <service
-            android:name=".helpers.MyFirebaseUploadService"
+            android:name=".service.MyFirebaseUploadService"
             android:exported="false" />
 
-        <service android:name=".helpers.MyFirebaseInstanceIDService">
+        <!-- Firebase Notifications -->
+        <service android:name=".service.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-        <service android:name=".helpers.MyFirebaseMessagingService">
+        <service android:name=".service.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -190,5 +190,6 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorPrimary" />
+        <!-- ./Firebase Notifications -->
     </application>
 </manifest>

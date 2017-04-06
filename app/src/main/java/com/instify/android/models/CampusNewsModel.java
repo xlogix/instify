@@ -1,5 +1,7 @@
 package com.instify.android.models;
 
+import com.klinker.android.link_builder.LinkBuilder;
+
 /**
  * Created by arjun on 26/12/16.
  */

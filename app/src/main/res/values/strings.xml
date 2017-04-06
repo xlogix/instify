@@ -10,7 +10,6 @@
 
     <string name="title_activity_intro">Thanks for downloading!</string>
     <string name="title_activity_splash">Made with &#10084; by Fnplus</string>
-    <string name="title_activity_login">Login Here</string>
     <string name="title_activity_register">Register Yourself</string>
     <string name="title_activity_chat">Discuss</string>
     <string name="title_activity_profile">Your Profile</string>

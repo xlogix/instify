@@ -9,18 +9,18 @@ import java.util.Calendar;
  * Created by Arjun Mahishi on 18-Dec-16.
  */
 
-public class UserDataFirebase {
+public class FirebaseUserDataModel {
 
     public String name, regNo, email, dept, image;
     public boolean cr;
 
-    public UserDataFirebase() {
+    public FirebaseUserDataModel() {
     }
 
     /**
      * Constructor for a new user
      */
-    public UserDataFirebase(String name, String email, String image, String regno, String dept) {
+    public FirebaseUserDataModel(String name, String email, String image, String regno, String dept) {
 
         this.name = name;
         this.regNo = regno;

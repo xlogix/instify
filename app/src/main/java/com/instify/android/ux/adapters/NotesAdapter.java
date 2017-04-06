@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.instify.android.R;
-import com.instify.android.models.notes;
+import com.instify.android.models.NotesModel;
 import com.instify.android.ux.NotesSubjectFilesActivity;
 
 import java.util.Collections;
@@ -26,13 +26,13 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private Context context;
     private LayoutInflater inflater;
-    List<notes> data = Collections.emptyList();
+    List<NotesModel> data = Collections.emptyList();
     ImageLoader imageLoader;
 
     //NetworkImageView imageView;
     //   NetworkImageView imageView;
     // create constructor to initialize context and data sent from MainActivity
-    public NotesAdapter(Context context, List<notes> data) {
+    public NotesAdapter(Context context, List<NotesModel> data) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.data = data;
@@ -52,7 +52,7 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         // Get current position of item in RecyclerView to bind data and assign values from list
         MyHolder myHolder = (MyHolder) holder;
-        notes current = data.get(position);
+        NotesModel current = data.get(position);
         myHolder.textFishName.setText(current.fishName);
         myHolder.textType.setText(current.catName);
 //        myHolder.textSize.setText("REG-NO: " + current.sizeName);

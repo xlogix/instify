@@ -25,8 +25,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.instify.android.R;
-import com.instify.android.helpers.MyFirebaseDownloadService;
-import com.instify.android.helpers.MyFirebaseUploadService;
+import com.instify.android.service.MyFirebaseDownloadService;
+import com.instify.android.service.MyFirebaseUploadService;
 
 import java.io.File;
 import java.util.List;

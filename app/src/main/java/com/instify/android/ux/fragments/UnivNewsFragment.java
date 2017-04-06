@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -61,12 +62,14 @@ public class UnivNewsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_university_news, container, false);
-
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_university);
+        // Taking control of the menu options
+        setHasOptionsMenu(true);
+        // Initialize SwipeRefreshLayout
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.red_primary, R.color.black, R.color.google_blue_900);
 
         // Setting up recycle view
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_university);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -193,6 +196,12 @@ public class UnivNewsFragment extends Fragment {
                 mTextViewSnip = (TextView) view.findViewById(R.id.univ_news_snip);
             }
         }
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.removeGroup(R.id.main_menu_group);
+        super.onPrepareOptionsMenu(menu);
     }
 
     private void showRefreshing() {
