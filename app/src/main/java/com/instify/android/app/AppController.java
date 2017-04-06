@@ -8,8 +8,14 @@ import android.app.Application;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.android.volley.Cache;
+import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +42,10 @@ public class AppController extends Application {
 
     public FirebaseAnalytics mFirebaseAnalytics;
 
+    private RequestQueue requestQueue;
+
+    private ImageLoader imageLoader;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -61,20 +71,20 @@ public class AppController extends Application {
         // Normal app init code...
     }
 
-    public RequestQueue getRequestQueue() {
-        if (mRequestQueue == null) {
-            mRequestQueue = Volley.newRequestQueue(getApplicationContext());
-        }
-
-        return mRequestQueue;
-    }
-
     public PreferenceManager getPrefManager() {
         if (mPrefs == null) {
             mPrefs = new PreferenceManager(this);
         }
 
         return mPrefs;
+    }
+
+    public RequestQueue getRequestQueue() {
+        if (mRequestQueue == null) {
+            mRequestQueue = Volley.newRequestQueue(getApplicationContext());
+        }
+
+        return mRequestQueue;
     }
 
     public <T> void addToRequestQueue(Request<T> req, String tag) {
@@ -85,6 +95,20 @@ public class AppController extends Application {
     public <T> void addToRequestQueue(Request<T> req) {
         req.setTag(TAG);
         getRequestQueue().add(req);
+    }
+
+    public RequestQueue getCustomRequestQueue() {
+        if (requestQueue == null) {
+            Cache cache = new DiskBasedCache(getCacheDir(), 10 * 1024 * 1024);
+            Network network = new BasicNetwork(new HurlStack());
+            requestQueue = new RequestQueue(cache, network);
+            requestQueue.start();
+        }
+        return requestQueue;
+    }
+
+    public ImageLoader getImageLoader() {
+        return imageLoader;
     }
 
     public void cancelPendingRequests(Object tag) {

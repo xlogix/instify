@@ -46,6 +46,11 @@ public class UploadNewsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.upload_news);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         // UI elements //
         newsTitle = (EditText) findViewById(R.id.news_title);
         newsDescription = (EditText) findViewById(R.id.news_description);
@@ -158,27 +163,35 @@ public class UploadNewsActivity extends AppCompatActivity {
         return (!newsTitle.getText().toString().equals("") && !newsDescription.getText().toString().equals(""));
     }
 
-    private int getIntYear(String strYear){
+    private int getIntYear(String strYear) {
         int intYear;
-        switch(strYear){
-            case "First": return 1;
-            case "Second": return 2;
-            case "Third" : return 3;
-            case "Fourth" : return 4;
-            default: return -1;
+        switch (strYear) {
+            case "First":
+                return 1;
+            case "Second":
+                return 2;
+            case "Third":
+                return 3;
+            case "Fourth":
+                return 4;
+            default:
+                return -1;
         }
     }
 
-    private String getRefString(){
-        switch(newsLevelRadio.getCheckedRadioButtonId()){
-            case R.id.campusUploadUniv: return "all";
-            case R.id.campusUploadDept: return dept.getSelectedItem().toString() + "/all";
+    private String getRefString() {
+        switch (newsLevelRadio.getCheckedRadioButtonId()) {
+            case R.id.campusUploadUniv:
+                return "all";
+            case R.id.campusUploadDept:
+                return dept.getSelectedItem().toString() + "/all";
             case R.id.campusUploadClass: {
                 return dept.getSelectedItem().toString() +
                         "/" + getIntYear(classYear.getSelectedItem().toString()) +
                         "/" + classSec.getSelectedItem().toString();
             }
-            default: return "all";
+            default:
+                return "all";
         }
     }
 }

@@ -250,7 +250,6 @@ public class TimeTableFragment extends Fragment {
                         // Declare Hash map for all headers and their corresponding values
                         HashMap<String, ArrayList<String>> childArrayList = new HashMap<>();
 
-                        // JSONObject user = jObj.getJSONObject("Monday");
                         JSONArray monday = jObj.getJSONArray("monday");
                         Integer i;
 

@@ -14,21 +14,22 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.AppCompatTextView
+            style="@style/TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:text="Welcome!"
-            android:textSize="28sp"
-            android:layout_gravity="center_horizontal"/>
+            android:textSize="28sp" />
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/button_google_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
             android:layout_marginBottom="16dp"
+            android:layout_marginTop="48dp"
             android:visibility="visible" />
 
-        <include layout="@layout/fragment_divider"/>
+        <include layout="@layout/fragment_divider" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

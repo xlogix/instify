@@ -81,18 +81,22 @@ dependencies {
     // CRASH (ONLY FOR RELEASE)
     releaseCompile 'com.google.firebase:firebase-crash:10.2.0'
 
-    // IMAGE LOAD
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    // IMAGE AND LOADING
     compile 'de.hdodenhof:circleimageview:2.1.0'
-
     compile 'com.android.volley:volley:1.0.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'pub.devrel:easypermissions:0.3.0'
+
+    // WEB VIEW
     compile 'com.thefinestartist:finestwebview:1.2.7'
 
     // LOGGING
     compile 'com.jakewharton.timber:timber:4.5.1'
     compile 'com.google.firebase:firebase-core:10.2.0'
     compile 'com.google.firebase:firebase-config:10.2.0'
+
+    // SERVICE
+    compile 'net.gotev:uploadservice:3.2.3'
 
     // BIND VIEWS
     compile 'com.jakewharton:butterknife:8.5.1'

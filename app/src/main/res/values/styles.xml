@@ -14,9 +14,27 @@
 
     <style name="AppTheme.NoActionBarTransparent" parent="AppTheme.NoActionBar"></style>
 
-    <style name="AppTheme.AppBarOverlay" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+        <item name="android:windowBackground">@color/colorPrimary</item>
+
+        <item name="colorControlNormal">@color/iron</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="android:textColorHint">@color/iron</item>
+
+        <item name="colorButtonNormal">@color/colorPrimaryDark</item>
+        <item name="android:colorButtonNormal">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="AppTheme.Dark.Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/white</item>
+        <item name="android:textColorPrimary">@color/iron</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
 
     <!-- By default, the tab created by TabLayout sets the textAllCaps property to be true, which prevents ImageSpans from being rendered.
     You can override this behavior by changing the tabTextAppearance property. -->
@@ -28,13 +46,4 @@
         <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
     </style>
 
-    <style name="dialogFragmentAnimation">
-        <item name="android:windowEnterAnimation">@anim/slide_in_appear</item>
-        <item name="android:windowExitAnimation">@anim/slide_away_disappear</item>
-    </style>
-
-    <style name="alertDialogAnimation">
-        <item name="android:windowEnterAnimation">@anim/abc_fade_in</item>
-        <item name="android:windowExitAnimation">@anim/abc_fade_out</item>
-    </style>
 </resources>

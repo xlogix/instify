@@ -14,6 +14,8 @@ public class AppConfig {
     public static String URL_GETTT = "https://hashbird.com/gogrit.in/workspace/srm-api/get-ptt.php";
     // Server fee details URL
     public static String URL_FEE = "https://hashbird.com/gogrit.in/workspace/srm-api/fee_details.php";
+    // Server file details URL
+    public static String URL_FILES = "https://hashbird.com/gogrit.in/workspace/srm-api/getfiles.php";
 
     public static final String INSTANCE_ID_TOKEN_RETRIEVED = "iid_token_retrieved";
     public static final String FRIENDLY_MSG_LENGTH = "friendly_msg_length";

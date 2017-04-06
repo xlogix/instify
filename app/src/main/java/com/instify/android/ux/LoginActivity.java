@@ -67,8 +67,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private GoogleApiClient mGoogleApiClient;
     // [declare_auth_listener]
     public FirebaseAuth.AuthStateListener mAuthStateListener;
-    // [declare_database_reference]
-    private DatabaseReference mFirebaseDatabase;
 
     // [START on_start_add_listener]
     @Override
@@ -232,7 +230,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void intentLoginToMain() {
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
-        overridePendingTransition(R.anim.slide_away_disappear, R.anim.slide_in_appear);
+        overridePendingTransition(R.anim.left_to_right_start, R.anim.right_to_left_start);
     }
 
     // [START sign_in_with_email]

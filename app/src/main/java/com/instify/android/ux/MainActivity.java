@@ -1,16 +1,11 @@
 package com.instify.android.ux;
 
-import android.Manifest;
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -25,7 +20,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
@@ -48,11 +42,8 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -68,26 +59,18 @@ import com.instify.android.ux.fragments.CampNewsFragment;
 import com.instify.android.ux.fragments.NotesFragment;
 import com.instify.android.ux.fragments.TimeTableFragment;
 import com.instify.android.ux.fragments.UnivNewsFragment;
-import com.theartofdev.edmodo.cropper.CropImage;
 import com.thefinestartist.finestwebview.FinestWebView;
 
-import java.util.List;
-
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.AppSettingsDialog;
-import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
 
 /**
  * Created by Abhish3k on 3/1/2016. Main Activity
  */
 
-public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
+public class MainActivity extends AppCompatActivity {
 
     /* Play Services Request required to check if Google Services is installed or not */
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    // Permission code for Camera and Gallery Permission
-    private static final int RC_CAMERA_AND_GALLERY_PERM = 123;
     // Get the name of the tag variable
     private static final String TAG = MainActivity.class.getSimpleName();
     private DrawerLayout drawerLayout;
@@ -101,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     // Set Firebase User
     FirebaseUser mFirebaseUser;
+    // Set Database Reference
     DatabaseReference dbRef, userRef;
     SQLiteHandler db = new SQLiteHandler(this);
 
@@ -237,9 +221,40 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             setupDrawerContent(navView);
         }
 
+        // Inflate header view
         headerView = navView.inflateHeaderView(R.layout.nav_header_main);
-        // Initialize other views in Nav bar
-        setupHeaderView();
+        /* [START] Setup Header View */
+
+        navImageView = (ImageView) headerView.findViewById(R.id.nav_drawer_user_photo);
+        navTextView = (TextView) headerView.findViewById(R.id.nav_drawer_header_text);
+
+        // Download the image from ERP
+        // new DownloadImage(navImageView).execute(db.getUserDetails().get("dept"));
+
+        if (mFirebaseUser != null) {
+            try {
+                // Set profile picture from Firebase account
+                Glide.with(this)
+                        .load(mFirebaseUser.getPhotoUrl().toString()).placeholder(R.drawable.default_pic_face)
+                        .crossFade()
+                        .fitCenter()
+                        .into(navImageView);
+            } catch (Exception e) {
+                Timber.d(e);
+            }
+        }
+
+        navTextView.setText(db.getUserDetails().get("name"));
+
+        // Click listeners
+        navImageView.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View view) {
+                startActivity(new Intent(MainActivity.this, ProfilePictureFullScreenActivity.class));
+                // promptProfileChanger();
+            }
+        });
+        /* [END] Setup Header View **/
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -306,38 +321,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
     }
 
-    public void setupHeaderView() {
-        // Views
-        navImageView = (ImageView) headerView.findViewById(R.id.nav_drawer_user_photo);
-        navTextView = (TextView) headerView.findViewById(R.id.nav_drawer_header_text);
-
-        // Download the image from ERP
-        // new DownloadImage(navImageView).execute(db.getUserDetails().get("dept"));
-
-        if (mFirebaseUser != null) {
-            try {
-                // Set profile picture from Firebase account
-                Glide.with(this)
-                        .load(mFirebaseUser.getPhotoUrl().toString()).placeholder(R.drawable.default_pic_face)
-                        .crossFade()
-                        .into(navImageView);
-            } catch (Exception e) {
-                Timber.d(e);
-            }
-        }
-
-        navTextView.setText(db.getUserDetails().get("name"));
-
-        // Click listeners
-        navImageView.setOnClickListener(new OnSingleClickListener() {
-            @Override
-            public void onSingleClick(View view) {
-                startActivity(new Intent(MainActivity.this, ProfilePictureFullScreenActivity.class));
-                // promptProfileChanger();
-            }
-        });
-    }
-
     /**
      * Load a new interstitial ad asynchronously.
      */
@@ -377,80 +360,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
-    }
-
-    private void promptProfileChanger() {
-        final CharSequence[] items = {"Take Photo or Choose from Gallery", "Remove Picture", "Cancel"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle("Profile Photo");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("Take Photo or Choose from Gallery")) {
-                    // Open Camera
-                    getPicture();
-                } else if (items[item].equals("Remove Picture")) {
-                    navImageView.setImageResource(R.drawable.default_pic_face);
-                    getSharedPreferences("userData", MODE_PRIVATE).edit().putString("PicPath", null).apply();
-                } else if (items[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    @AfterPermissionGranted(RC_CAMERA_AND_GALLERY_PERM)
-    public void getPicture() {
-        if (EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            // Have permission, do the thing!
-            CropImage.startPickImageActivity(this);
-
-        } else {
-            // Ask for one permission
-            EasyPermissions.requestPermissions(this, getString(R.string.rationale_camera),
-                    RC_CAMERA_AND_GALLERY_PERM, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // handle result of pick image chooser
-        if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            Uri imageUri = CropImage.getPickImageResultUri(this, data);
-
-            // Start CropImage Activity
-            startCropImageActivity(imageUri);
-            // Set the image to Nav View
-            navImageView.setImageURI(imageUri);
-
-            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                    .setDisplayName(mFirebaseUser.getEmail())
-                    .setPhotoUri(Uri.parse(imageUri.toString()))
-                    .build();
-
-            mFirebaseUser.updateProfile(profileUpdates)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Log.d(TAG, "User profile updated.");
-                                Toast.makeText(MainActivity.this, "Successfully updated", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-
-        } else if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
-            // Do something after user returned from app settings screen, like showing a Toast.
-            Toast.makeText(this, R.string.returned_from_app_settings_to_activity, Toast.LENGTH_SHORT)
-                    .show();
-        }
-    }
-
-    private void startCropImageActivity(Uri imageUri) {
-        CropImage.activity(imageUri)
-                .start(this);
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -701,31 +610,4 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
 
     }
-
-    // [START] EasyPermissions Default Functions
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // EasyPermissions handles the request result.
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> perms) {
-        // Some permissions have been granted
-        Log.d(TAG, "onPermissionsGranted:" + requestCode + ":" + perms.size());
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> perms) {
-        // Some permissions have been denied
-        Log.d(TAG, "onPermissionsDenied:" + requestCode + ":" + perms.size());
-
-        // (Optional) Check whether the user denied any permissions and checked "NEVER ASK AGAIN."
-        // This will display a dialog directing them to enable the permission in app settings.
-        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-            new AppSettingsDialog.Builder(this).build().show();
-        }
-    }
-    // [END] EasyPermission Default Functions
 }
