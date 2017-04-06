@@ -1,14 +1,18 @@
 package com.instify.android.ux.fragments;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,13 +26,10 @@ import com.instify.android.R;
 import com.instify.android.app.AppConfig;
 import com.instify.android.app.AppController;
 import com.instify.android.helpers.SQLiteHandler;
-import com.instify.android.ux.adapters.ListExpandableAdapter;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,8 +57,11 @@ public class AttendanceFragment extends Fragment {
     }
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private ExpandableListView expListView;
+//    private ExpandableListView expListView;
+    private CardView attdCards;
     private TextView updatedAt;
+    private SimpleStringRecyclerViewAdapter mAdapter;
+    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,8 +73,12 @@ public class AttendanceFragment extends Fragment {
         mSwipeRefreshLayout = (SwipeRefreshLayout)
                 rootView.findViewById(R.id.swipe_refresh_layout_attendance);
         // [LAYOUT LIST] Expand list view
-        expListView = (ExpandableListView) rootView.findViewById(R.id.expListView);
-        updatedAt = (TextView) rootView.findViewById(R.id.textDate);
+//        expListView = (ExpandableListView) rootView.findViewById(R.id.expListView);
+        attdCards = (CardView) rootView.findViewById(R.id.attdCard);
+//        updatedAt = (TextView) rootView.findViewById(R.id.textDate);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.attdRecycle);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // Fetch the attendance
         AttendanceFragment.AsyncGetAttendance dataObj = new AttendanceFragment.AsyncGetAttendance();
@@ -115,108 +123,9 @@ public class AttendanceFragment extends Fragment {
                     // Handle UI
                     hideRefreshing();
 
-                    // Check for error node in json
-                    if (!error) {
-                        ListExpandableAdapter expListAdapter;
+                    mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), jObj);
+                    recyclerView.setAdapter(mAdapter);
 
-                        // declare array List for all headers in list
-                        ArrayList<String> headersArrayList = new ArrayList<>();
-
-                        // Declare Hash map for all headers and their corresponding values
-                        HashMap<String, ArrayList<String>> childArrayList = new HashMap<>();
-
-                        JSONArray user = jObj.getJSONArray("subjects");
-                        JSONObject updated = jObj.getJSONObject("updated");
-
-                        int i;
-                        double ar[], br[];
-                        ar = new double[20];
-                        br = new double[20];
-
-                        // Set the text
-                        updatedAt.setText(updated.toString());
-
-                        for (i = 0; i < user.length(); i++) {
-                            // Create an object of Att class
-                            Att obj = new Att();
-
-                            String name = user.getString(i);
-                            JSONObject subs = jObj.getJSONObject(user.getString(i));
-
-                            ArrayList<String> daysOfWeekArrayList = new ArrayList<>();
-                            headersArrayList.add(name + "-" + subs.getString("sub-desc") + " (" + subs.getString("avg-attd") + "%)");
-
-                            daysOfWeekArrayList.add("MAX-HOURS: " + subs.getString("max-hrs"));
-                            daysOfWeekArrayList.add("ATTENDED-HOURS: " + subs.getString("attd-hrs"));
-                            daysOfWeekArrayList.add("ABSENT-HOURS: " + subs.getString("abs-hrs"));
-                            daysOfWeekArrayList.add("OD/ML PERCENTAGE: " + subs.getString("od-hrs"));
-                            daysOfWeekArrayList.add("PERCENTAGE: " + subs.getString("avg-attd") + "%");
-
-                            ar[i] = Double.parseDouble(subs.getString("attd-hrs"));
-                            br[i] = Double.parseDouble(subs.getString("max-hrs"));
-                            // Variable declaration
-                            double tempa = ar[i];
-                            double tempb = br[i];
-
-                            double resultA = obj.attnCalc(tempa, tempb);
-                            double resultB = obj.predict();
-                            daysOfWeekArrayList.add("TOTAL HOUR(S) FOR >= 75% :  " + resultA);
-                            daysOfWeekArrayList.add("MAY TAKE LEAVE FOR NEXT: " + resultB + " CONSECUTIVE HOUR(S)");
-
-                            childArrayList.put(name + "-" + subs.getString("sub-desc") + " " + subs.getString("avg-attd") + "%", daysOfWeekArrayList);
-                        }
-
-                        expListAdapter = new ListExpandableAdapter(getContext(), headersArrayList, childArrayList);
-
-                        expListView.setAdapter(expListAdapter);
-
-                        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-
-                            @Override
-                            public boolean onChildClick(ExpandableListView parent, View v,
-                                                        int groupPosition, int childPosition, long id) {
-                                return false;
-                            }
-                        });
-
-                        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-
-                            @Override
-                            public boolean onGroupClick(ExpandableListView parent, View v,
-                                                        int groupPosition, long id) {
-
-                                return false;
-                            }
-                        });
-                        expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-
-                            @Override
-                            public void onGroupCollapse(int groupPosition) {
-
-                            }
-                        });
-
-                        final ExpandableListView finalExpListView = expListView;
-                        expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-                            int previousGroup = -1;
-
-                            @Override
-                            public void onGroupExpand(int groupPosition) {
-
-                                if (groupPosition != previousGroup)
-                                    finalExpListView.collapseGroup(previousGroup);
-                                previousGroup = groupPosition;
-                            }
-                        });
-
-                    } else {
-                        // Update UI
-                        hideRefreshing();
-                        // Error in login. Get the error message
-                        String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(getContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
-                    }
                 } catch (JSONException e) {
                     // Update UI
                     hideRefreshing();
@@ -256,10 +165,58 @@ public class AttendanceFragment extends Fragment {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        menu.removeGroup(R.id.main_menu_group);
-        super.onPrepareOptionsMenu(menu);
+
+    public static class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<AttendanceFragment.SimpleStringRecyclerViewAdapter.ViewHolder> {
+        private Context mContext;
+        private JSONObject attdObj;
+        private String subjectCode;
+
+        // Constructor
+        private SimpleStringRecyclerViewAdapter(Context context, JSONObject attdObj) {
+            mContext = context;
+            this.attdObj = attdObj;
+        }
+
+        @Override
+        public AttendanceFragment.SimpleStringRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.card_view_attendance, parent, false);
+            return new AttendanceFragment.SimpleStringRecyclerViewAdapter.ViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final AttendanceFragment.SimpleStringRecyclerViewAdapter.ViewHolder holder, int position) {
+            try {
+                subjectCode = attdObj.getJSONArray("subjects").getString(position);
+                holder.mTextViewTitle.setText(attdObj.getJSONObject(subjectCode).getString("sub-desc"));
+                holder.mTextViewPercent.setText(attdObj.getJSONObject(subjectCode).getString("avg-attd") + "%");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            try{
+                return attdObj.getJSONArray("subjects").length();
+            }catch(JSONException e){
+                Toast.makeText(mContext, "Problem with json", Toast.LENGTH_SHORT).show();
+                return 0;
+            }
+        }
+
+        public static class ViewHolder extends RecyclerView.ViewHolder {
+            private final View mView;
+            private final TextView mTextViewTitle, mTextViewPercent;
+
+            private ViewHolder(View view) {
+                super(view);
+                mView = view;
+                mTextViewTitle = (TextView) view.findViewById(R.id.attdSubjectName);
+                mTextViewPercent = (TextView) view.findViewById(R.id.attdSubjectPercent);
+            }
+        }
     }
 
     private void showRefreshing() {
