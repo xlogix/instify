@@ -2,46 +2,74 @@ package com.instify.android.ux;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.annotation.VisibleForTesting;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v7.app.AppCompatActivity;
 
+import com.google.android.gms.ads.AdView;
 import com.instify.android.R;
 
 /**
  * Created by Abhish3k on 15-03-2017.
  */
 
-public class TestPerformanceActivity extends Fragment {
-
-    public TestPerformanceActivity() {
-    }
-
-    public static TestPerformanceActivity newInstance() {
-        TestPerformanceActivity frag = new TestPerformanceActivity();
-        Bundle args = new Bundle();
-        frag.setArguments(args);
-        return frag;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
+public class TestPerformanceActivity extends AppCompatActivity {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private AdView mAdView;
 
+    // [START add_lifecycle_methods]
+
+    /**
+     * Called when leaving the activity
+     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_time_table, container, false);
+    public void onPause() {
+        if (mAdView != null) {
+            mAdView.pause();
+        }
+        super.onPause();
+    }
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout)
-                rootView.findViewById(R.id.swipe_refresh_layout_time_table);
+    /**
+     * Called when returning to the activity
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAdView != null) {
+            mAdView.resume();
+        }
+    }
 
-        return rootView;
+    /**
+     * Called before the activity is destroyed
+     */
+    @Override
+    public void onDestroy() {
+        if (mAdView != null) {
+            mAdView.destroy();
+            finish();
+        }
+        super.onDestroy();
+    }
+    // [END add_lifecycle_methods]
+
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_test_performance);
+
+        // Setup SupportActionBar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @VisibleForTesting
+    AdView getAdView() {
+        return mAdView;
     }
 
 

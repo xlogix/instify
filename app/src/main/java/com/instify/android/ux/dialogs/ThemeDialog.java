@@ -26,7 +26,7 @@ public class ThemeDialog extends DialogFragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
-        final View layout = inflater.inflate(R.layout.dialog_theme, container, false);
+        final View layout = inflater.inflate(R.layout.view_dialog_theme, container, false);
         layout.findViewById(R.id.blue_theme).setOnClickListener(this);
         layout.findViewById(R.id.indigo_theme).setOnClickListener(this);
         layout.findViewById(R.id.green_theme).setOnClickListener(this);

@@ -29,7 +29,7 @@
             android:layout_marginTop="48dp"
             android:visibility="visible" />
 
-        <include layout="@layout/fragment_divider" />
+        <include layout="@layout/view_divider" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

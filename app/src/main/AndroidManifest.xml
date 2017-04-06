@@ -141,6 +141,11 @@
             android:parentActivityName=".ux.MainActivity" />
 
         <activity
+            android:name=".ux.TestPerformanceActivity"
+            android:label="Future Update"
+            android:parentActivityName=".ux.MainActivity" />
+
+        <activity
             android:name=".ux.AboutActivity"
             android:label="@string/app_name"
             android:parentActivityName=".ux.MainActivity" />

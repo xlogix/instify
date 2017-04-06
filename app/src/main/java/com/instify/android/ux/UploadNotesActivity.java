@@ -76,14 +76,14 @@ public class UploadNotesActivity extends AppCompatActivity implements View.OnCli
         // Spinner 1
         final Spinner spinnerSubjects = (Spinner) findViewById(R.id.spinner_subjects);
         ArrayAdapter<String> adapterSubjects = new ArrayAdapter<>(this,
-                R.layout.spinner_item, Subjects);
+                R.layout.view_spinner_item, Subjects);
         adapterSubjects.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSubjects.setAdapter(adapterSubjects);
 
         // Spinner 2
         final Spinner spinnerChapters = (Spinner) findViewById(R.id.spinner_chapters);
         ArrayAdapter<String> adapterChapters = new ArrayAdapter<>(this,
-                R.layout.spinner_item, Chapters);
+                R.layout.view_spinner_item, Chapters);
         adapterChapters.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerChapters.setAdapter(adapterChapters);
 
