@@ -11,25 +11,94 @@
     app:contentPadding="6dp"
     card_view:cardCornerRadius="4dp">
 
+    <RelativeLayout
+        android:id="@+id/attdOne"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:id="@+id/attdMain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/attdSubjectName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Java programming"
-                android:textSize="25dp"/>
-
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/attdSubjectPercent"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/attdSubjectName"
                 android:text="89.0%"
-                android:textSize="40dp"/>
+                android:layout_below="@+id/attdSubjectName"
+                android:textSize="40sp"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:id="@+id/attdSubjectName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PROGRAMMING WITH JAVA"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"/>
 
         </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/attdExpand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_expand_more_black_24dp" />
+
+            <RelativeLayout
+                android:id="@+id/attdExtra"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_below="@+id/attdMain">
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:id="@+id/attdMaxHours"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:id="@+id/attdAttendHours"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/attdMaxHours"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:id="@+id/attdAbsentHours"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/attdAttendHours"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:id="@+id/attdOdPercent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/attdAbsentHours"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:id="@+id/attdMin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/attdOdPercent"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:id="@+id/attdBuffer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/attdMin"/>
+
+            </RelativeLayout>
+
+    </RelativeLayout>
 
     </android.support.v7.widget.CardView>

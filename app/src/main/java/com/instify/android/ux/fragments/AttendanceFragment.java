@@ -1,10 +1,13 @@
 package com.instify.android.ux.fragments;
 
 import android.content.Context;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.BoolRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +59,60 @@ public class AttendanceFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+
+    class Att {
+
+        private double pre;
+        private double ttl;
+        double main_attendance;
+        //Variables
+        int count = 0, num = 1, denom = 1;
+        int countp = 0, deno = 1;
+
+        public Att(){}
+
+        //****************************************************************************
+        public double attnCalc(double present, double total) {
+            pre = present;
+            ttl = total;
+            main_attendance = pre / ttl * 100;
+
+            while (true) {
+
+                double current_attendance = ((present + num) / (total + denom)) * 100;
+                num++;
+                denom++;
+
+                if (current_attendance > 75) {
+                    break;
+                }
+                count++;
+            }
+            return count;
+        }
+
+        //****************************************************************************
+        public double predict() {
+
+            if (main_attendance > 75) {
+                while (deno <= 1000) {
+
+                    double predicted_attendance = ((pre) / (ttl + deno)) * 100;
+                    if (predicted_attendance >= 75) {
+                        countp++;
+                    }
+                    deno++;
+                }
+            }
+            return countp;
+        }
+        //****************************************************************************
+        public double getBuffer(double present, double total){
+            this.attnCalc(present, total);
+            return this.predict();
+        }
     }
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -166,7 +225,7 @@ public class AttendanceFragment extends Fragment {
     }
 
 
-    public static class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<AttendanceFragment.SimpleStringRecyclerViewAdapter.ViewHolder> {
+    public class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<AttendanceFragment.SimpleStringRecyclerViewAdapter.ViewHolder> {
         private Context mContext;
         private JSONObject attdObj;
         private String subjectCode;
@@ -186,10 +245,43 @@ public class AttendanceFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final AttendanceFragment.SimpleStringRecyclerViewAdapter.ViewHolder holder, int position) {
+
             try {
+                Att attObj = new Att();
                 subjectCode = attdObj.getJSONArray("subjects").getString(position);
+                holder.attdExtra.setVisibility(View.GONE);
                 holder.mTextViewTitle.setText(attdObj.getJSONObject(subjectCode).getString("sub-desc"));
                 holder.mTextViewPercent.setText(attdObj.getJSONObject(subjectCode).getString("avg-attd") + "%");
+                holder.attdMax.setText("Maximum hours: " + attdObj.getJSONObject(subjectCode).getString("max-hrs"));
+                holder.attdAttend.setText("Attended hours: " + attdObj.getJSONObject(subjectCode).getString("attd-hrs"));
+                holder.attdAbsent.setText("Absent hours: " + attdObj.getJSONObject(subjectCode).getString("abs-hrs"));
+                holder.attdOd.setText("OD/ML: " + attdObj.getJSONObject(subjectCode).getString("od-hrs"));
+                holder.attdMin.setText("Hours required for minimum attendance: " + (int) attObj.attnCalc(
+                        Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("attd-hrs")),
+                        Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("max-hrs"))
+                ));
+                holder.attdBuffer.setText("Happy hours: " + (int) attObj.getBuffer(
+                        Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("attd-hrs")),
+                        Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("max-hrs"))
+                ));
+                holder.attdCard.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(holder.toggle){
+                            holder.attdExtra.setVisibility(View.GONE);
+                            holder.attdExpand.setVisibility(View.VISIBLE);
+                            holder.toggle = false;
+                        }else{
+                            holder.attdExtra.setVisibility(View.VISIBLE);
+                            holder.attdExpand.setVisibility(View.GONE);
+                            holder.toggle = true;
+                        }
+                    }
+                });
+
+                if(Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("avg-attd")) <= 75.0){
+                    holder.mTextViewPercent.setTextColor(getResources().getColor(R.color.red_primary));
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -206,15 +298,30 @@ public class AttendanceFragment extends Fragment {
             }
         }
 
-        public static class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
             private final View mView;
-            private final TextView mTextViewTitle, mTextViewPercent;
+            private final AppCompatTextView mTextViewTitle, mTextViewPercent, attdMax, attdAbsent,
+                    attdAttend, attdOd, attdBuffer, attdMin;
+            private final RelativeLayout attdExtra;
+            private final CardView attdCard;
+            private final ImageView attdExpand;
+            private Boolean toggle;
 
             private ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mTextViewTitle = (TextView) view.findViewById(R.id.attdSubjectName);
-                mTextViewPercent = (TextView) view.findViewById(R.id.attdSubjectPercent);
+                attdCard = (CardView) view.findViewById(R.id.attdCard);
+                mTextViewTitle = (AppCompatTextView) view.findViewById(R.id.attdSubjectName);
+                mTextViewPercent = (AppCompatTextView) view.findViewById(R.id.attdSubjectPercent);
+                attdMax = (AppCompatTextView) view.findViewById(R.id.attdMaxHours);
+                attdAbsent = (AppCompatTextView) view.findViewById(R.id.attdAbsentHours);
+                attdAttend = (AppCompatTextView) view.findViewById(R.id.attdAttendHours);
+                attdOd = (AppCompatTextView) view.findViewById(R.id.attdOdPercent);
+                attdBuffer = (AppCompatTextView) view.findViewById(R.id.attdBuffer);
+                attdMin = (AppCompatTextView) view.findViewById(R.id.attdMin);
+                attdExtra = (RelativeLayout) view.findViewById(R.id.attdExtra);
+                attdExpand = (ImageView) view.findViewById(R.id.attdExpand);
+                toggle = false;
             }
         }
     }
@@ -229,50 +336,4 @@ public class AttendanceFragment extends Fragment {
             mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    class Att {
-
-        private double pre;
-        private double ttl;
-        double main_attendance;
-        //Variables
-        int count = 0, num = 1, denom = 1;
-        int countp = 0, deno = 1;
-
-        //****************************************************************************
-        private double attnCalc(double present, double total) {
-            pre = present;
-            ttl = total;
-            main_attendance = pre / ttl * 100;
-
-            while (true) {
-
-                double current_attendance = ((present + num) / (total + denom)) * 100;
-                num++;
-                denom++;
-
-                if (current_attendance > 75) {
-                    break;
-                }
-                count++;
-            }
-            return count;
-        }
-
-        //****************************************************************************
-        private double predict() {
-
-            if (main_attendance > 75) {
-                while (deno <= 1000) {
-
-                    double predicted_attendance = ((pre) / (ttl + deno)) * 100;
-                    if (predicted_attendance >= 75) {
-                        countp++;
-                    }
-                    deno++;
-                }
-            }
-            return countp;
-        }
-        //****************************************************************************
-    }
 }
