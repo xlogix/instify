@@ -36,6 +36,7 @@
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
 
+
         </RelativeLayout>
 
         <ImageView

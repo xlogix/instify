@@ -130,7 +130,7 @@ public class AttendanceFragment extends Fragment {
                     hideRefreshing();
                     // JSON error
                     e.printStackTrace();
-                    Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Check your network connection", Toast.LENGTH_LONG).show();
                 }
             }
         }, new Response.ErrorListener() {
@@ -219,8 +219,10 @@ public class AttendanceFragment extends Fragment {
                     }
                 });
 
-                if (Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("avg-attd")) <= 75.0) {
-                    holder.mTextViewPercent.setTextColor(getResources().getColor(R.color.red_primary));
+                if (Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("avg-attd")) < 76.0) {
+                    holder.mTextViewPercent.setTextColor(getResources().getColor(R.color.red_accent));
+                }else if(Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("avg-attd")) >= 90.0){
+                    holder.mTextViewPercent.setTextColor(getResources().getColor(R.color.green_accent));
                 }
 
             } catch (JSONException e) {
