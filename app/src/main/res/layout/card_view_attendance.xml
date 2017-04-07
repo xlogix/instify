@@ -46,7 +46,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_expand_more_black_24dp" />
+            android:src="@drawable/ic_expand_more" />
 
         <RelativeLayout
             android:id="@+id/attdExtra"

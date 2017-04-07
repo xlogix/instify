@@ -209,11 +209,11 @@ public class AttendanceFragment extends Fragment {
                     public void onClick(View v) {
                         if (holder.toggle) {
                             holder.attdExtra.setVisibility(View.GONE);
-                            holder.attdExpand.setVisibility(View.VISIBLE);
+                            holder.attdExpand.setImageResource(R.drawable.ic_expand_more);
                             holder.toggle = false;
                         } else {
                             holder.attdExtra.setVisibility(View.VISIBLE);
-                            holder.attdExpand.setVisibility(View.GONE);
+                            holder.attdExpand.setImageResource(R.drawable.ic_expand_less);
                             holder.toggle = true;
                         }
                     }
