@@ -1,10 +1,8 @@
 package com.instify.android.ux.fragments;
 
 import android.content.Context;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.BoolRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatTextView;
@@ -13,7 +11,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -61,62 +58,8 @@ public class AttendanceFragment extends Fragment {
         super.onDestroy();
     }
 
-
-    class Att {
-
-        private double pre;
-        private double ttl;
-        double main_attendance;
-        //Variables
-        int count = 0, num = 1, denom = 1;
-        int countp = 0, deno = 1;
-
-        public Att(){}
-
-        //****************************************************************************
-        public double attnCalc(double present, double total) {
-            pre = present;
-            ttl = total;
-            main_attendance = pre / ttl * 100;
-
-            while (true) {
-
-                double current_attendance = ((present + num) / (total + denom)) * 100;
-                num++;
-                denom++;
-
-                if (current_attendance > 75) {
-                    break;
-                }
-                count++;
-            }
-            return count;
-        }
-
-        //****************************************************************************
-        public double predict() {
-
-            if (main_attendance > 75) {
-                while (deno <= 1000) {
-
-                    double predicted_attendance = ((pre) / (ttl + deno)) * 100;
-                    if (predicted_attendance >= 75) {
-                        countp++;
-                    }
-                    deno++;
-                }
-            }
-            return countp;
-        }
-        //****************************************************************************
-        public double getBuffer(double present, double total){
-            this.attnCalc(present, total);
-            return this.predict();
-        }
-    }
-
     private SwipeRefreshLayout mSwipeRefreshLayout;
-//    private ExpandableListView expListView;
+    //    private ExpandableListView expListView;
     private CardView attdCards;
     private TextView updatedAt;
     private SimpleStringRecyclerViewAdapter mAdapter;
@@ -131,10 +74,7 @@ public class AttendanceFragment extends Fragment {
         // Initialize SwipeRefreshLayout
         mSwipeRefreshLayout = (SwipeRefreshLayout)
                 rootView.findViewById(R.id.swipe_refresh_layout_attendance);
-        // [LAYOUT LIST] Expand list view
-//        expListView = (ExpandableListView) rootView.findViewById(R.id.expListView);
         attdCards = (CardView) rootView.findViewById(R.id.attdCard);
-//        updatedAt = (TextView) rootView.findViewById(R.id.textDate);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.attdRecycle);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -225,7 +165,7 @@ public class AttendanceFragment extends Fragment {
     }
 
 
-    public class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<AttendanceFragment.SimpleStringRecyclerViewAdapter.ViewHolder> {
+    class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<AttendanceFragment.SimpleStringRecyclerViewAdapter.ViewHolder> {
         private Context mContext;
         private JSONObject attdObj;
         private String subjectCode;
@@ -260,18 +200,18 @@ public class AttendanceFragment extends Fragment {
                         Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("attd-hrs")),
                         Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("max-hrs"))
                 ));
-                holder.attdBuffer.setText("Happy hours: " + (int) attObj.getBuffer(
+                holder.attdBuffer.setText("Happy hour(s): " + (int) attObj.getBuffer(
                         Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("attd-hrs")),
                         Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("max-hrs"))
                 ));
                 holder.attdCard.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(holder.toggle){
+                        if (holder.toggle) {
                             holder.attdExtra.setVisibility(View.GONE);
                             holder.attdExpand.setVisibility(View.VISIBLE);
                             holder.toggle = false;
-                        }else{
+                        } else {
                             holder.attdExtra.setVisibility(View.VISIBLE);
                             holder.attdExpand.setVisibility(View.GONE);
                             holder.toggle = true;
@@ -279,7 +219,7 @@ public class AttendanceFragment extends Fragment {
                     }
                 });
 
-                if(Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("avg-attd")) <= 75.0){
+                if (Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("avg-attd")) <= 75.0) {
                     holder.mTextViewPercent.setTextColor(getResources().getColor(R.color.red_primary));
                 }
 
@@ -290,9 +230,9 @@ public class AttendanceFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            try{
+            try {
                 return attdObj.getJSONArray("subjects").length();
-            }catch(JSONException e){
+            } catch (JSONException e) {
                 Toast.makeText(mContext, "Problem with json", Toast.LENGTH_SHORT).show();
                 return 0;
             }
@@ -326,6 +266,61 @@ public class AttendanceFragment extends Fragment {
         }
     }
 
+    class Att {
+
+        private double pre;
+        private double ttl;
+        double main_attendance;
+        //Variables
+        int count = 0, num = 1, denom = 1;
+        int countp = 0, deno = 1;
+
+        public Att() {
+        }
+
+        //****************************************************************************
+        public double attnCalc(double present, double total) {
+            pre = present;
+            ttl = total;
+            main_attendance = pre / ttl * 100;
+
+            while (true) {
+
+                double current_attendance = ((present + num) / (total + denom)) * 100;
+                num++;
+                denom++;
+
+                if (current_attendance > 75) {
+                    break;
+                }
+                count++;
+            }
+            return count;
+        }
+
+        //****************************************************************************
+        public double predict() {
+
+            if (main_attendance > 75) {
+                while (deno <= 1000) {
+
+                    double predicted_attendance = ((pre) / (ttl + deno)) * 100;
+                    if (predicted_attendance >= 75) {
+                        countp++;
+                    }
+                    deno++;
+                }
+            }
+            return countp;
+        }
+
+        //****************************************************************************
+        public double getBuffer(double present, double total) {
+            this.attnCalc(present, total);
+            return this.predict();
+        }
+    }
+
     private void showRefreshing() {
         if (!mSwipeRefreshLayout.isRefreshing())
             mSwipeRefreshLayout.setRefreshing(true);
@@ -335,5 +330,4 @@ public class AttendanceFragment extends Fragment {
         if (mSwipeRefreshLayout.isRefreshing())
             mSwipeRefreshLayout.setRefreshing(false);
     }
-
 }

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="4dp"
-    app:contentPadding="4dp"
+    app:contentPadding="6dp"
     card_view:cardCornerRadius="4dp">
 
     <LinearLayout
@@ -30,6 +30,19 @@
             android:layout_gravity="end"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:textColor="@color/colorAccent" />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/google_blue_500" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/campusDescription"

@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.instify.android.R;
 import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.List;
 
@@ -46,6 +47,8 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
     // [START initialize_auth]
     private FirebaseUser mFirebaseUser;
     // [END initialize_auth]
+    private CropImageView mCropImageView;
+    private Uri mCropImageUri;
     // Declare AdView
     private AdView mAdView;
 
@@ -101,7 +104,6 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
                     // Get the picture from camera or storage
                     getPicture();
                 } else if (items[item].equals("Remove Picture")) {
-
 
                 } else if (items[item].equals("Cancel")) {
                     dialog.dismiss();

@@ -2,7 +2,6 @@ package com.instify.android.ux.fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -68,7 +67,6 @@ public class TimeTableFragment extends Fragment {
     }
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
     private RecyclerView mRecyclerView;
     private TimeLineAdapter mTimeLineAdapter;
     private ExpandableListView expListView;
@@ -167,7 +165,7 @@ public class TimeTableFragment extends Fragment {
 
         final String[] mTimeValues = new String[]{date + " 08:00", date + " 09:10", date + " 10:05", date + " 11:00", date + " 12:55", date + " 13:50", date + " 14:45"};
 
-        /**
+        /*
          * Method to make json object request where json response is dynamic
          * */
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, endpoint, null,
@@ -233,7 +231,7 @@ public class TimeTableFragment extends Fragment {
 
             @Override
             public void onResponse(String response) {
-                Timber.d("Login Response: " + response.toString());
+                Timber.d("Login Response: " + response);
                 // Handle UI
                 hideRefreshing();
 
@@ -287,7 +285,7 @@ public class TimeTableFragment extends Fragment {
                         // For Thursday
                         JSONArray thursday = jObj.getJSONArray("thursday");
                         headersArrayList.add("THURSDAY");
-                        ArrayList<String> thursdayList = new ArrayList<String>();
+                        ArrayList<String> thursdayList = new ArrayList<>();
                         for (i = 0; i < thursday.length(); i++) {
                             String name = thursday.getString(i);
                             thursdayList.add("HOUR " + (i + 1) + " - " + name);
@@ -297,7 +295,7 @@ public class TimeTableFragment extends Fragment {
                         // For Friday
                         JSONArray friday = jObj.getJSONArray("friday");
                         headersArrayList.add("FRIDAY");
-                        ArrayList<String> fridayList = new ArrayList<String>();
+                        ArrayList<String> fridayList = new ArrayList<>();
                         for (i = 0; i < friday.length(); i++) {
                             String name = friday.getString(i);
                             fridayList.add("HOUR " + (i + 1) + " - " + name);

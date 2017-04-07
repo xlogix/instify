@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/tools"
     android:id="@+id/attdCard"
@@ -25,18 +23,18 @@
                 android:id="@+id/attdSubjectPercent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="89.0%"
                 android:layout_below="@+id/attdSubjectName"
-                android:textSize="40sp"/>
+                android:text="89.0%"
+                android:textSize="40sp" />
 
             <android.support.v7.widget.AppCompatTextView
-                style="@style/TextAppearance.AppCompat.Medium"
                 android:id="@+id/attdSubjectName"
+                style="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PROGRAMMING WITH JAVA"
                 android:textColor="@color/colorPrimary"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
         </RelativeLayout>
 
@@ -49,56 +47,53 @@
             android:layout_centerVertical="true"
             android:src="@drawable/ic_expand_more_black_24dp" />
 
-            <RelativeLayout
-                android:id="@+id/attdExtra"
+        <RelativeLayout
+            android:id="@+id/attdExtra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/attdMain"
+            android:visibility="gone">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/attdMaxHours"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/attdAttendHours"
+                style="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_below="@+id/attdMain">
+                android:layout_below="@id/attdMaxHours" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:id="@+id/attdMaxHours"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/attdAbsentHours"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/attdAttendHours" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:id="@+id/attdAttendHours"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/attdMaxHours"/>
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/attdOdPercent"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/attdAbsentHours" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:id="@+id/attdAbsentHours"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/attdAttendHours"/>
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/attdMin"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/attdOdPercent" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:id="@+id/attdOdPercent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/attdAbsentHours"/>
-
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:id="@+id/attdMin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/attdOdPercent"/>
-
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:id="@+id/attdBuffer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/attdMin"/>
-
-            </RelativeLayout>
-
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/attdBuffer"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/attdMin" />
+        </RelativeLayout>
     </RelativeLayout>
-
-    </android.support.v7.widget.CardView>
+</android.support.v7.widget.CardView>
