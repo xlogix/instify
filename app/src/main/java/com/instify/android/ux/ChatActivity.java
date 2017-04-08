@@ -113,7 +113,7 @@ public class ChatActivity extends AppCompatActivity {
         // Get data
         if (mFirebaseUser != null) {
             try {
-                mUsername = mFirebaseUser.getEmail();
+                mUsername = mFirebaseUser.getDisplayName();
                 if (mFirebaseUser.getPhotoUrl() != null) {
                     mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
                 } else {

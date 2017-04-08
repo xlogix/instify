@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
                 // Set profile picture from Firebase account
                 Glide.with(this)
                         .load(mFirebaseUser.getPhotoUrl().toString()).placeholder(R.drawable.default_pic_face)
-                        .crossFade()
+                        .dontAnimate()
                         .centerCrop()
                         .priority(Priority.HIGH)
                         .into(navImageView);

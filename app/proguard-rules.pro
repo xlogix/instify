@@ -30,8 +30,6 @@
 
 -keep class com.commonsware.cwac.** { *; }
 
--keep class com.github.mikephil.charting.** { *; }
-
 -keep class android.support.v4.** {  *; }
 
 -keep class android.support.v7.internal.** { *; }

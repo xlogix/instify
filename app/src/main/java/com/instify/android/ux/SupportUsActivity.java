@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.instify.android.R;
 
 /**
@@ -16,6 +18,9 @@ import com.instify.android.R;
  */
 
 public class SupportUsActivity extends AppCompatActivity {
+
+    // Declare AdView
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,5 +37,48 @@ public class SupportUsActivity extends AppCompatActivity {
                 Toast.makeText(SupportUsActivity.this, "Text copied to clipboard", Toast.LENGTH_SHORT).show();
             }
         });
+
+        // [START load_banner_ad]
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+        // [END load_banner_ad]
     }
+
+    // [START add_lifecycle_methods]
+
+    /**
+     * Called when leaving the activity
+     */
+    @Override
+    public void onPause() {
+        if (mAdView != null) {
+            mAdView.pause();
+        }
+        super.onPause();
+    }
+
+    /**
+     * Called when returning to the activity
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAdView != null) {
+            mAdView.resume();
+        }
+    }
+
+    /**
+     * Called before the activity is destroyed
+     */
+    @Override
+    public void onDestroy() {
+        if (mAdView != null) {
+            mAdView.destroy();
+            finish();
+        }
+        super.onDestroy();
+    }
+    // [END add_lifecycle_methods]
 }
