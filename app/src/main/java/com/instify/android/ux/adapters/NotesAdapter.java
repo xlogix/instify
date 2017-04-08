@@ -23,14 +23,10 @@ import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-
     private Context context;
     private LayoutInflater inflater;
     List<NotesModel> data = Collections.emptyList();
-    ImageLoader imageLoader;
 
-    //NetworkImageView imageView;
-    //   NetworkImageView imageView;
     // create constructor to initialize context and data sent from MainActivity
     public NotesAdapter(Context context, List<NotesModel> data) {
         this.context = context;
@@ -86,12 +82,9 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             textFishName = (TextView) itemView.findViewById(R.id.title);
             textType = (TextView) itemView.findViewById(R.id.code);
 
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    //  Toast.makeText(context, textFishName.getText().toString(), Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(context, NotesSubjectFilesActivity.class);
                     intent.putExtra("subject", textFishName.getText().toString());

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -35,9 +36,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.github.clans.fab.FloatingActionMenu;
+import com.github.javiersantos.appupdater.AppUpdater;
+import com.github.javiersantos.appupdater.enums.Display;
+import com.github.javiersantos.appupdater.enums.UpdateFrom;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
@@ -68,20 +73,15 @@ import timber.log.Timber;
  */
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final String TAG = MainActivity.class.getSimpleName();
     /* Play Services Request required to check if Google Services is installed or not */
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    // Get the name of the tag variable
-    private static final String TAG = MainActivity.class.getSimpleName();
     private DrawerLayout drawerLayout;
     private ViewPager mViewPager;
-    private ImageView navImageView;
-    private TextView navTextView;
-
+    public FloatingActionButton mSharedFab;
+    public FloatingActionMenu mSharedMenu;
     // Initialize Ad
-    private AdView mAdView;
     private InterstitialAd mInterstitialAd;
-
     // Set Firebase User
     FirebaseUser mFirebaseUser;
     // Set Database Reference
@@ -131,9 +131,6 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public void onPause() {
-        if (mAdView != null) {
-            mAdView.pause();
-        }
         super.onPause();
     }
 
@@ -146,9 +143,6 @@ public class MainActivity extends AppCompatActivity {
         // Ensures that user didn't un-install Google Play Services required for Firebase related tasks.
         checkPlayServices();
 
-        if (mAdView != null) {
-            mAdView.resume();
-        }
         // Checks if the device is connected to the internet
         if (isDeviceOnline()) {
             Timber.d(TAG, "Device is online.");
@@ -162,9 +156,6 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public void onDestroy() {
-        if (mAdView != null) {
-            mAdView.destroy();
-        }
         super.onDestroy();
     }
     // [END add_lifecycle_methods]
@@ -175,6 +166,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
+
+        AppUpdater appUpdater = new AppUpdater(this)
+                .setDisplay(Display.SNACKBAR)
+                .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
+                .showEvery(5)
+                .showAppUpdated(true);
+        appUpdater.start();
 
         // Get the current logged-in user
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -225,8 +223,8 @@ public class MainActivity extends AppCompatActivity {
         headerView = navView.inflateHeaderView(R.layout.nav_header_main);
         /* [START] Setup Header View */
 
-        navImageView = (ImageView) headerView.findViewById(R.id.nav_drawer_user_photo);
-        navTextView = (TextView) headerView.findViewById(R.id.nav_drawer_header_text);
+        ImageView navImageView = (ImageView) headerView.findViewById(R.id.nav_drawer_user_photo);
+        TextView navTextView = (TextView) headerView.findViewById(R.id.nav_drawer_header_text);
 
         // Download the image from ERP
         // new DownloadImage(navImageView).execute(db.getUserDetails().get("dept"));
@@ -237,13 +235,15 @@ public class MainActivity extends AppCompatActivity {
                 Glide.with(this)
                         .load(mFirebaseUser.getPhotoUrl().toString()).placeholder(R.drawable.default_pic_face)
                         .crossFade()
-                        .fitCenter()
+                        .centerCrop()
+                        .priority(Priority.HIGH)
                         .into(navImageView);
             } catch (Exception e) {
                 Timber.d(e);
+                Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
             }
         }
-
+        // Set the name
         navTextView.setText(db.getUserDetails().get("name"));
 
         // Click listeners
@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
         // Set the default tab as Campus Portal
         mViewPager.setCurrentItem(1);
         // Prevent fragments from destroying themselves
-        mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setOffscreenPageLimit(5);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -275,6 +275,18 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
+                switch (position) {
+                    case 1:
+                        mSharedFab.show();
+                        break;
+                    case 3:
+                        mSharedFab.hide();
+                        mSharedMenu.setVisibility(View.VISIBLE);
+                    default:
+                        mSharedFab.hide();
+                        mSharedMenu.setVisibility(View.GONE);
+                        break;
+                }
             }
 
             @Override
@@ -289,9 +301,7 @@ public class MainActivity extends AppCompatActivity {
         // Check if Google Play Services is installed or not
         checkPlayServices();
 
-        if (mFirebaseUser != null && AppController.getInstance().getPrefManager().isLoggedIn()) {
-            // User is signed in
-            Timber.d(TAG, "onAuthStateChanged:signed_in:" + mFirebaseUser.getUid());
+        if (mFirebaseUser != null) {
 
             dbRef = FirebaseDatabase.getInstance().getReference();
             userRef = dbRef.child("users").child(mFirebaseUser.getUid());
@@ -319,6 +329,10 @@ public class MainActivity extends AppCompatActivity {
             homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(homeIntent);
         }
+
+        // Declare Views
+        mSharedFab = (FloatingActionButton) findViewById(R.id.shared_fab);
+        mSharedMenu = (FloatingActionMenu) findViewById(R.id.shared_menu);
     }
 
     /**

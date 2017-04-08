@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -54,7 +55,7 @@ public class SplashActivity extends Activity {
                 if (AppController.getInstance().getPrefManager().getIsFirstRun()) {
                     startActivity(new Intent(SplashActivity.this, IntroActivity.class));
                     finish();
-                } else if (mFirebaseUser == null && AppController.getInstance().getPrefManager().isLoggedIn()) {
+                } else if (mFirebaseUser == null) {
                     Timber.d("Pass to auth activity");
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                     finish();

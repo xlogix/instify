@@ -24,8 +24,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-
--keep public class * implements com.bumptech.glide.module.GlideModule
+-dontwarn okio.**
 
 -keep class com.commonsware.cwac.** { *; }
 
@@ -40,3 +39,19 @@
 -keep class android.support.v7.** { *; }
 
 -keep interface android.support.v7.** { *; }
+
+-assumenosideeffects class android.util.Log {
+     public static boolean isLoggable(java.lang.String, int);
+     public static int v(...);
+     public static int i(...);
+     public static int w(...);
+     public static int d(...);
+     public static int e(...);
+}
+
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+

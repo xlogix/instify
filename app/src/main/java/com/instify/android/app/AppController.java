@@ -42,10 +42,6 @@ public class AppController extends Application {
 
     public FirebaseAnalytics mFirebaseAnalytics;
 
-    private RequestQueue requestQueue;
-
-    private ImageLoader imageLoader;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -54,6 +50,13 @@ public class AppController extends Application {
         if (BuildConfig.DEBUG) {
             // Plant Tiber debug tree
             Timber.plant(new Timber.DebugTree());
+            // Initialise Leak Canary
+            if (LeakCanary.isInAnalyzerProcess(this)) {
+                // This process is dedicated to LeakCanary for heap analysis.
+                // You should not init your app in this process.
+                return;
+            }
+            LeakCanary.install(this);
         } else {
             // Obtain the FirebaseAnalytics
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -62,13 +65,6 @@ public class AppController extends Application {
             /*Fabric.with(this, new Crashlytics());
             Timber.plant(new CrashReportingTree());*/
         }
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        LeakCanary.install(this);
-        // Normal app init code...
     }
 
     public PreferenceManager getPrefManager() {
@@ -95,20 +91,6 @@ public class AppController extends Application {
     public <T> void addToRequestQueue(Request<T> req) {
         req.setTag(TAG);
         getRequestQueue().add(req);
-    }
-
-    public RequestQueue getCustomRequestQueue() {
-        if (requestQueue == null) {
-            Cache cache = new DiskBasedCache(getCacheDir(), 10 * 1024 * 1024);
-            Network network = new BasicNetwork(new HurlStack());
-            requestQueue = new RequestQueue(cache, network);
-            requestQueue.start();
-        }
-        return requestQueue;
-    }
-
-    public ImageLoader getImageLoader() {
-        return imageLoader;
     }
 
     public void cancelPendingRequests(Object tag) {

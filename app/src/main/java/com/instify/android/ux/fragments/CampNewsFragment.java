@@ -25,6 +25,7 @@ import com.instify.android.R;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.CampusNewsModel;
 import com.instify.android.ux.ChatActivity;
+import com.instify.android.ux.MainActivity;
 import com.instify.android.ux.UploadNewsActivity;
 import com.klinker.android.link_builder.Link;
 import com.klinker.android.link_builder.LinkBuilder;
@@ -38,14 +39,6 @@ import java.util.regex.Pattern;
  */
 
 public class CampNewsFragment extends Fragment {
-
-    RecyclerView recyclerView;
-
-    // Firebase Declarations
-    DatabaseReference newsRef;
-    FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder> fAdapterAll;
-    FirebaseUser currentUser;
-    String userRegNo, userDept, pathAll, pathDept, pathSec;
 
     // Default Constructor
     public CampNewsFragment() {
@@ -63,14 +56,18 @@ public class CampNewsFragment extends Fragment {
         super.onDestroy();
     }
 
+    RecyclerView recyclerView;
+    // Firebase Declarations
+    DatabaseReference newsRef;
+    FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder> fAdapterAll;
+    String userRegNo, userDept, pathAll, pathDept, pathSec;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_campus_news, container, false);
         // Tell the fragment that it can access the menu items
         setHasOptionsMenu(true);
-
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         // Recycler view set up //
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_campus_news);
@@ -79,8 +76,7 @@ public class CampNewsFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // FAB //
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        ((MainActivity) getActivity()).mSharedFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent uploadNews = new Intent(getContext(), UploadNewsActivity.class);
@@ -128,75 +124,7 @@ public class CampNewsFragment extends Fragment {
                 });
             }
         };
-
-
         recyclerView.setAdapter(fAdapterAll);
-    }
-
-    private List<Link> getExampleLinks() {
-        List<Link> links = new ArrayList<>();
-
-        // match the numbers that I created
-        Link numbers = new Link(Pattern.compile("[0-9]+"));
-        numbers.setTextColor(Color.parseColor("#FF9800"));
-        numbers.setOnClickListener(new Link.OnClickListener() {
-            @Override
-            public void onClick(String clickedText) {
-                showToast("Clicked: " + clickedText);
-            }
-        });
-
-        // action on a long click instead of a short click
-        Link longClickHere = new Link("here");
-        longClickHere.setTextColor(Color.parseColor("#259B24"));
-        longClickHere.setOnLongClickListener(new Link.OnLongClickListener() {
-            @Override
-            public void onLongClick(String clickedText) {
-                showToast("You long clicked. Nice job.");
-            }
-        });
-
-        // underlined
-        Link yes = new Link("Yes");
-        yes.setUnderlined(true);
-        yes.setTextColor(Color.parseColor("#FFEB3B"));
-
-        // not underlined
-        Link no = new Link("No");
-        no.setUnderlined(false);
-        no.setTextColor(Color.parseColor("#FFEB3B"));
-
-        // bold
-        Link bold = new Link("bold");
-        bold.setBold(true);
-        bold.setTextColor(Color.parseColor("#FF0000"));
-
-        // prepended text
-        Link prepend = new Link("prepended");
-        prepend.setPrependedText("(!)");
-
-        Link appended = new Link("appended");
-        appended.setAppendedText("(!)");
-
-        // add the links to the list
-        links.add(numbers);
-        links.add(longClickHere);
-        links.add(yes);
-        links.add(no);
-        links.add(bold);
-        links.add(prepend);
-        links.add(appended);
-
-        return links;
-    }
-
-    private void openLink(String link) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-        startActivity(browserIntent);
-    }
-
-    private void showToast(String text) {
-        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
     }
 
     public static class CampusViewHolder extends RecyclerView.ViewHolder {

@@ -4,20 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000"
-    android:orientation="vertical">
+    android:paddingTop="16dp">
 
-    <android.support.v7.widget.AppCompatImageButton
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/fullimg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="Your Profile Image" />
+        android:layout_width="192dp"
+        android:layout_height="192dp"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="Your Profile Image"
+        android:src="@drawable/default_pic_face" />
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         ads:adSize="SMART_BANNER"
         ads:adUnitId="@string/banner_ad_unit_id" />
 

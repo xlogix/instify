@@ -3,6 +3,7 @@ package com.instify.android.ux.fragments;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatTextView;
@@ -11,6 +12,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -28,6 +30,7 @@ import com.instify.android.R;
 import com.instify.android.app.AppConfig;
 import com.instify.android.app.AppController;
 import com.instify.android.helpers.SQLiteHandler;
+import com.instify.android.ux.MainActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,6 +77,7 @@ public class AttendanceFragment extends Fragment {
         // Initialize SwipeRefreshLayout
         mSwipeRefreshLayout = (SwipeRefreshLayout)
                 rootView.findViewById(R.id.swipe_refresh_layout_attendance);
+
         attdCards = (CardView) rootView.findViewById(R.id.attdCard);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.attdRecycle);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
@@ -103,7 +107,6 @@ public class AttendanceFragment extends Fragment {
     }
 
     private void getAttendance() {
-
         // Handle UI
         showRefreshing();
 
@@ -117,7 +120,7 @@ public class AttendanceFragment extends Fragment {
             public void onResponse(String response) {
                 try {
                     JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
+                    Boolean error = jObj.getBoolean("error");
 
                     // Handle UI
                     hideRefreshing();
@@ -196,7 +199,7 @@ public class AttendanceFragment extends Fragment {
                 holder.attdAttend.setText("Attended hours: " + attdObj.getJSONObject(subjectCode).getString("attd-hrs"));
                 holder.attdAbsent.setText("Absent hours: " + attdObj.getJSONObject(subjectCode).getString("abs-hrs"));
                 holder.attdOd.setText("OD/ML: " + attdObj.getJSONObject(subjectCode).getString("od-hrs"));
-                holder.attdMin.setText("Hours required for minimum attendance: " + (int) attObj.attnCalc(
+                holder.attdMin.setText("Hours required for min. attendance: " + (int) attObj.attnCalc(
                         Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("attd-hrs")),
                         Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("max-hrs"))
                 ));
@@ -221,7 +224,7 @@ public class AttendanceFragment extends Fragment {
 
                 if (Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("avg-attd")) < 76.0) {
                     holder.mTextViewPercent.setTextColor(getResources().getColor(R.color.red_accent));
-                }else if(Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("avg-attd")) >= 90.0){
+                } else if (Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("avg-attd")) >= 90.0) {
                     holder.mTextViewPercent.setTextColor(getResources().getColor(R.color.green_accent));
                 }
 
@@ -268,7 +271,7 @@ public class AttendanceFragment extends Fragment {
         }
     }
 
-    class Att {
+    private class Att {
 
         private double pre;
         private double ttl;
@@ -277,11 +280,11 @@ public class AttendanceFragment extends Fragment {
         int count = 0, num = 1, denom = 1;
         int countp = 0, deno = 1;
 
-        public Att() {
+        private Att() {
         }
 
         //****************************************************************************
-        public double attnCalc(double present, double total) {
+        private double attnCalc(double present, double total) {
             pre = present;
             ttl = total;
             main_attendance = pre / ttl * 100;
@@ -301,7 +304,7 @@ public class AttendanceFragment extends Fragment {
         }
 
         //****************************************************************************
-        public double predict() {
+        private double predict() {
 
             if (main_attendance > 75) {
                 while (deno <= 1000) {
@@ -317,10 +320,16 @@ public class AttendanceFragment extends Fragment {
         }
 
         //****************************************************************************
-        public double getBuffer(double present, double total) {
+        private double getBuffer(double present, double total) {
             this.attnCalc(present, total);
             return this.predict();
         }
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.removeGroup(R.id.main_menu_group);
+        super.onPrepareOptionsMenu(menu);
     }
 
     private void showRefreshing() {

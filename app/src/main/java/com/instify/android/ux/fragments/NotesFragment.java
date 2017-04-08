@@ -63,10 +63,9 @@ public class NotesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_notes, container, false);
         // Taking control of the menu options
         setHasOptionsMenu(true);
-        // Initialize SwipeRefreshLayout
+        // Initialize Views
         mSwipeRefreshLayout = (SwipeRefreshLayout)
                 rootView.findViewById(R.id.swipe_refresh_layout_notes);
-
         mRVFish = (RecyclerView) rootView.findViewById(R.id.recycler_view_notes);
 
         getSubs();
@@ -81,7 +80,6 @@ public class NotesFragment extends Fragment {
     }
 
     private void getSubs() {
-
         // Handle UI
         showRefreshing();
 

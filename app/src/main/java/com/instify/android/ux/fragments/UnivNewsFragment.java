@@ -34,7 +34,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class UnivNewsFragment extends Fragment {
-
     private String TAG = UnivNewsFragment.class.getSimpleName();
 
     public UnivNewsFragment() {

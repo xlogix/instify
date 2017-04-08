@@ -6,11 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.vipulasri.timelineview.TimelineView;
 import com.instify.android.R;
 import com.instify.android.models.OrderStatus;
-import com.instify.android.models.TimeLineViewHolder;
 import com.instify.android.models.TimeTableModel;
 import com.instify.android.utils.DateTimeUtils;
 import com.instify.android.utils.VectorDrawableUtils;
@@ -20,6 +20,23 @@ import java.util.List;
 /**
  * Created by Abhish3k on 14-03-2017.
  */
+
+class TimeLineViewHolder extends RecyclerView.ViewHolder {
+
+    TextView mDate;
+    TextView mMessage;
+    TimelineView mTimelineView;
+
+    public TimeLineViewHolder(View itemView, int viewType) {
+        super(itemView);
+
+        mDate = (TextView) itemView.findViewById(R.id.text_timeline_date);
+        mMessage = (TextView) itemView.findViewById(R.id.text_timeline_title);
+        mTimelineView = (TimelineView) itemView.findViewById(R.id.time_marker);
+
+        mTimelineView.initLine(viewType);
+    }
+}
 
 public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> {
 
@@ -43,7 +60,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> {
         mContext = parent.getContext();
         mLayoutInflater = LayoutInflater.from(mContext);
 
-        View view = mLayoutInflater.inflate(mWithLinePadding ? R.layout.item_timeline_line_padding : R.layout.card_view_time_table, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.card_view_time_table, parent, false);
 
         return new TimeLineViewHolder(view, viewType);
     }

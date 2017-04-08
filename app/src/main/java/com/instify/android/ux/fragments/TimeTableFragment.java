@@ -50,6 +50,7 @@ import timber.log.Timber;
  */
 
 public class TimeTableFragment extends Fragment {
+    private String TAG = TimeTableFragment.class.getSimpleName();
 
     public TimeTableFragment() {
     }
@@ -371,7 +372,7 @@ public class TimeTableFragment extends Fragment {
                 Timber.e("Login Error: " + error.getMessage());
                 // Handle UI
                 hideRefreshing();
-                Toast.makeText(getContext(),
+                Toast.makeText(getActivity(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
             }
         }) {

@@ -8,8 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/post_announcement_text"
@@ -76,7 +75,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Class" />
-
         </RadioGroup>
 
         <Spinner
@@ -84,18 +82,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/campusUploadRadioGroup"
-            android:layout_marginTop="@dimen/activity_vertical_margin">
-
-        </Spinner>
+            android:layout_marginTop="@dimen/activity_vertical_margin" />
 
         <Spinner
             android:id="@+id/campusUploadClassYearSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/campusUploadDeptSpinner"
-            android:layout_marginTop="@dimen/activity_vertical_margin">
-
-        </Spinner>
+            android:layout_marginTop="@dimen/activity_vertical_margin" />
 
         <Spinner
             android:id="@+id/campusUploadClassSecSpinner"
@@ -104,9 +98,7 @@
             android:layout_below="@+id/campusUploadDeptSpinner"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_toEndOf="@+id/campusUploadClassYearSpinner"
-            android:layout_toRightOf="@+id/campusUploadClassYearSpinner">
-
-        </Spinner>
+            android:layout_toRightOf="@+id/campusUploadClassYearSpinner" />
 
         <Button
             android:id="@+id/post"
@@ -115,7 +107,6 @@
             android:layout_below="@+id/campusUploadClassYearSpinner"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@color/colorPrimaryLight"
             android:text="Post" />
     </RelativeLayout>
 </ScrollView>

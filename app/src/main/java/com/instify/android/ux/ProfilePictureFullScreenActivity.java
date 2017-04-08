@@ -2,21 +2,22 @@ package com.instify.android.ux;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,9 +26,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.instify.android.R;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
+import com.soundcloud.android.crop.Crop;
 
+import java.io.File;
 import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -39,16 +40,16 @@ import pub.devrel.easypermissions.EasyPermissions;
  */
 
 public class ProfilePictureFullScreenActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
-
     private static final String TAG = ProfilePictureFullScreenActivity.class.getSimpleName();
 
+    public static final String ANDROID_RESOURCE = "android.resource://";
+    public static final String FORWARD_SLASH = "/";
     // Permission code for Camera and Gallery Permission
     private static final int RC_CAMERA_AND_GALLERY_PERM = 123;
     // [START initialize_auth]
     private FirebaseUser mFirebaseUser;
     // [END initialize_auth]
-    private CropImageView mCropImageView;
-    private Uri mCropImageUri;
+    private ImageView userImage;
     // Declare AdView
     private AdView mAdView;
 
@@ -66,20 +67,21 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
         }
 
         // Declare Img Button
-        ImageButton userImage = (ImageButton) findViewById(R.id.fullimg);
+        userImage = (ImageView) findViewById(R.id.fullimg);
 
+        // Checks if the user didn't remove the image
         // Put the picture into the image View
         Glide.with(this)
-                .load(mFirebaseUser.getPhotoUrl()).placeholder(R.drawable.default_pic_face)
-                .crossFade()
-                .fitCenter()
+                .load(mFirebaseUser.getPhotoUrl())
+                .dontAnimate()
+                .centerCrop()
+                .priority(Priority.HIGH)
                 .into(userImage);
 
         // AdMob ad unit IDs are not currently stored inside the google-services.json file.
         // Developers using AdMob can store them as custom values in a string resource file or
         // simply use constants. Note that the ad units used here are configured to return only test
         // ads, and should not be used outside this sample.
-
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
@@ -104,7 +106,13 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
                     // Get the picture from camera or storage
                     getPicture();
                 } else if (items[item].equals("Remove Picture")) {
-
+                    // Set image
+                    userImage.setImageResource(R.drawable.default_pic_face);
+                    // Send to server
+                    sendToServer(resIdToUri(ProfilePictureFullScreenActivity.this,
+                            R.drawable.default_pic_face));
+                    // Restart the activity
+                    recreate();
                 } else if (items[item].equals("Cancel")) {
                     dialog.dismiss();
                 }
@@ -115,11 +123,10 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
 
     @TargetApi(Build.VERSION_CODES.M)
     @AfterPermissionGranted(RC_CAMERA_AND_GALLERY_PERM)
-    public void getPicture() {
+    private void getPicture() {
         if (EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             // Have permission, do the thing!
-            CropImage.startPickImageActivity(this);
-
+            Crop.pickImage(this);
         } else {
             // Ask for one permission
             EasyPermissions.requestPermissions(this, getString(R.string.rationale_camera),
@@ -127,49 +134,53 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
         }
     }
 
+    private static Uri resIdToUri(Context context, int resId) {
+        return Uri.parse(ANDROID_RESOURCE + context.getPackageName()
+                + FORWARD_SLASH + resId);
+    }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         // handle result of pick image chooser
-        if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
-
-                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                        .setDisplayName(mFirebaseUser.getDisplayName())
-                        .setPhotoUri(Uri.parse(resultUri.toString()))
-                        .build();
-
-                mFirebaseUser.updateProfile(profileUpdates)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Log.d(TAG, "User profile updated.");
-                                    Toast.makeText(ProfilePictureFullScreenActivity.this, "Successfully updated", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-                Toast.makeText(this, "Error cropping the image", Toast.LENGTH_SHORT).show();
-            }
-
-        } else if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
-            // Do something after user returned from app settings screen, like showing a Toast.
-            Toast.makeText(this, R.string.returned_from_app_settings_to_activity, Toast.LENGTH_SHORT)
-                    .show();
+        if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
+            beginCrop(data.getData());
+        } else if (requestCode == Crop.REQUEST_CROP) {
+            handleCrop(resultCode, data);
         }
     }
 
-    private void startCropImageActivity(Uri imageUri) {
-        CropImage.activity(imageUri)
-                .start(this);
+    private void beginCrop(Uri source) {
+        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
+        Crop.of(source, destination).asSquare().start(this);
     }
 
-    @VisibleForTesting
-    AdView getAdView() {
-        return mAdView;
+    private void handleCrop(int resultCode, Intent result) {
+        if (resultCode == RESULT_OK) {
+            userImage.setImageURI(Crop.getOutput(result));
+            // Send to Server
+            sendToServer(Crop.getOutput(result));
+            // Restart the activity
+            recreate();
+        } else if (resultCode == Crop.RESULT_ERROR) {
+            Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void sendToServer(Uri received) {
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(mFirebaseUser.getDisplayName())
+                .setPhotoUri(Uri.parse(received.toString()))
+                .build();
+
+        mFirebaseUser.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User profile updated.");
+                            Toast.makeText(ProfilePictureFullScreenActivity.this, "Successfully updated", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     // [START add_lifecycle_methods]

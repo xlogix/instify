@@ -63,9 +63,7 @@
             android:screenOrientation="sensor"
             android:theme="@style/FinestWebViewTheme.Light" />
 
-        <activity
-            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat" />
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 
         <!-- [START add_activity_config_changes] -->
         <activity

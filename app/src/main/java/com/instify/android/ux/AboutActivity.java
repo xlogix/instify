@@ -1,8 +1,6 @@
 package com.instify.android.ux;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
@@ -20,6 +18,7 @@ import mehdi.sakout.aboutpage.Element;
  */
 
 public class AboutActivity extends AppCompatActivity {
+    private String TAG = AboutActivity.class.getSimpleName();
 
     @Override
     public void onBackPressed() {
