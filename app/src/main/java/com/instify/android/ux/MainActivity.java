@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         } else {
             this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show();
 
             new Handler().postDelayed(new Runnable() {
 
@@ -167,11 +167,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
 
+        // Declare Views
+        mSharedFab = (FloatingActionButton) findViewById(R.id.shared_fab);
+        mSharedMenu = (FloatingActionMenu) findViewById(R.id.shared_menu);
+
         AppUpdater appUpdater = new AppUpdater(this)
-                .setDisplay(Display.SNACKBAR)
+                .setDisplay(Display.DIALOG)
                 .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
-                .showEvery(5)
-                .showAppUpdated(true);
+                .showEvery(5);
         appUpdater.start();
 
         // Get the current logged-in user
@@ -284,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
                         mSharedMenu.setVisibility(View.VISIBLE);
                     default:
                         mSharedFab.hide();
-                        mSharedMenu.setVisibility(View.GONE);
+                        mSharedMenu.setVisibility(View.INVISIBLE);
                         break;
                 }
             }
@@ -329,10 +332,6 @@ public class MainActivity extends AppCompatActivity {
             homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(homeIntent);
         }
-
-        // Declare Views
-        mSharedFab = (FloatingActionButton) findViewById(R.id.shared_fab);
-        mSharedMenu = (FloatingActionMenu) findViewById(R.id.shared_menu);
     }
 
     /**

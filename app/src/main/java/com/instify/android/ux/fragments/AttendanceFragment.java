@@ -199,11 +199,11 @@ public class AttendanceFragment extends Fragment {
                 holder.attdAttend.setText("Attended hours: " + attdObj.getJSONObject(subjectCode).getString("attd-hrs"));
                 holder.attdAbsent.setText("Absent hours: " + attdObj.getJSONObject(subjectCode).getString("abs-hrs"));
                 holder.attdOd.setText("OD/ML: " + attdObj.getJSONObject(subjectCode).getString("od-hrs"));
-                holder.attdMin.setText("Hours required for min. attendance: " + (int) attObj.attnCalc(
+                holder.attdMin.setText("Hour(s) required for min. attendance: " + (int) attObj.attnCalc(
                         Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("attd-hrs")),
                         Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("max-hrs"))
                 ));
-                holder.attdBuffer.setText("Happy hour(s): " + (int) attObj.getBuffer(
+                holder.attdBuffer.setText("Hour(s) available to take leave : " + (int) attObj.getBuffer(
                         Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("attd-hrs")),
                         Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("max-hrs"))
                 ));

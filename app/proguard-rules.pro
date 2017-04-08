@@ -26,6 +26,8 @@
 
 -dontwarn okio.**
 
+-optimizations !field/removal/writeonly,!field/marking/private,!class/merging/*,!code/allocation/variable
+
 -keep class com.commonsware.cwac.** { *; }
 
 -keep class com.github.mikephil.charting.** { *; }
