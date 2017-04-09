@@ -37,56 +37,15 @@ import timber.log.Timber;
 public class FeePaymentHistoryActivity extends AppCompatActivity {
     private static final String TAG = FeePaymentHistoryActivity.class.getSimpleName();
 
+    private SQLiteHandler db = new SQLiteHandler(this);
     private ProgressDialog mProgressDialog;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private SQLiteHandler db = new SQLiteHandler(this);
-
     // Declare AdView
     private AdView mAdView;
 
     String tag_string_req = "req_fee";
-
-    // [START add_lifecycle_methods]
-
-    /**
-     * Called when leaving the activity
-     */
-    @Override
-    public void onPause() {
-        if (mAdView != null) {
-            mAdView.pause();
-        }
-        super.onPause();
-    }
-
-    /**
-     * Called when returning to the activity
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mAdView != null) {
-            mAdView.resume();
-        }
-    }
-
-    /**
-     * Called before the activity is destroyed
-     */
-    @Override
-    public void onDestroy() {
-        // Destroy Volley's instance
-        AppController.getInstance().cancelPendingRequests(tag_string_req);
-        // Handle AdView
-        if (mAdView != null) {
-            mAdView.destroy();
-            finish();
-        }
-        super.onDestroy();
-    }
-    // [END add_lifecycle_methods]
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,11 +60,7 @@ public class FeePaymentHistoryActivity extends AppCompatActivity {
         // Declare Views
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
-        // AdMob ad unit IDs are not currently stored inside the google-services.json file.
-        // Developers using AdMob can store them as custom values in a string resource file or
-        // simply use constants. Note that the ad units used here are configured to return only test
-        // ads, and should not be used outside this sample.
-
+        // [START load_banner_ad]
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
@@ -208,6 +163,46 @@ public class FeePaymentHistoryActivity extends AppCompatActivity {
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
+
+    // [START add_lifecycle_methods]
+
+    /**
+     * Called when leaving the activity
+     */
+    @Override
+    public void onPause() {
+        if (mAdView != null) {
+            mAdView.pause();
+        }
+        super.onPause();
+    }
+
+    /**
+     * Called when returning to the activity
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAdView != null) {
+            mAdView.resume();
+        }
+    }
+
+    /**
+     * Called before the activity is destroyed
+     */
+    @Override
+    public void onDestroy() {
+        // Destroy Volley's instance
+        AppController.getInstance().cancelPendingRequests(tag_string_req);
+        // Handle AdView
+        if (mAdView != null) {
+            mAdView.destroy();
+            finish();
+        }
+        super.onDestroy();
+    }
+    // [END add_lifecycle_methods]
 
     public void showProgressDialog() {
         if (mProgressDialog == null) {

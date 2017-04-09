@@ -180,7 +180,6 @@ public class NotesFragment extends Fragment {
                 return params;
             }
         };
-
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }

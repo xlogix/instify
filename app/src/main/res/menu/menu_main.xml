@@ -40,21 +40,18 @@
     <item
         android:id="@+id/action_account"
         android:checked="false"
-        android:icon="@drawable/ic_attendance_white"
         android:orderInCategory="3"
         android:title="My Profile" />
 
     <item
         android:id="@+id/action_settings"
         android:checked="false"
-        android:icon="@drawable/ic_menu_slideshow"
         android:orderInCategory="4"
         android:title="@string/nav_settings" />
 
     <item
         android:id="@+id/action_logout"
         android:checked="false"
-        android:icon="@drawable/ic_person_black_24dp"
         android:orderInCategory="5"
         android:title="@string/nav_logout" />
 </menu>

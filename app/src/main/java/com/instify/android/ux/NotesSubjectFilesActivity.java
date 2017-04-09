@@ -23,9 +23,9 @@ import com.instify.android.R;
 import com.instify.android.app.AppConfig;
 import com.instify.android.app.AppController;
 import com.instify.android.helpers.SQLiteHandler;
-import com.instify.android.ux.adapters.NotesFileAdapter;
 import com.instify.android.models.NotesFileModel;
 import com.instify.android.ux.adapters.ListExpandableAdapter;
+import com.instify.android.ux.adapters.NotesFileAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,8 +42,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
 
     RecyclerView mRVFish;
     SearchView searchView = null;
-    LinearLayout l;
-
+    LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,15 +50,13 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notes_subject_files);
         setTitle(Html.fromHtml("<small>" + getIntent().getStringExtra("code") + "</small>"));
 
-        l = (LinearLayout) findViewById(R.id.pos);
+        linearLayout = (LinearLayout) findViewById(R.id.pos);
         mRVFish = (RecyclerView) findViewById(R.id.recycler_view_notes);
 
-        getnotes(getIntent().getStringExtra("code"));
-
+        getNotes(getIntent().getStringExtra("code"));
     }
 
-
-    private void getnotes(final String subjectcode) {
+    private void getNotes(final String subjectCode) {
 
         // Handle UI
         // showRefreshing();
@@ -98,7 +95,6 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
 //                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
 //                        recyclerView.setLayoutManager(mLayoutManager);
 //                        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
 
                         for (int i = 0; i < user.length(); i++) {
                             JSONObject json_data = user.getJSONObject(i);
@@ -143,16 +139,11 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
                         //   hideRefreshing();
                         // Error in login. Get the error message
 //                        String errorMsg = user.getString("error_msg");
-//                        Toast.makeText(getApplicationContext(),
-//                                errorMsg, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     // Update UI
                     //    hideRefreshing();
-                    // JSON error
-//                    e.printStackTrace();
-//                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    l.setVisibility(View.VISIBLE);
+                    linearLayout.setVisibility(View.VISIBLE);
                 }
             }
         }, new Response.ErrorListener() {
@@ -174,15 +165,13 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
 
                 params.put("regno", regNo);
                 //  params.put("pass", pass);
-                params.put("subject", subjectcode);
+                params.put("subject", subjectCode);
                 return params;
             }
         };
-
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -201,19 +190,15 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
             searchView.setIconified(true);
         }
 
-        MenuItem enai = menu.findItem(R.id.noti);
+        MenuItem enai = menu.findItem(R.id.action_add_note);
 
         enai.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-
                 Intent intent = new Intent(getApplicationContext(), NotesUploadActivity.class);
                 intent.putExtra("code", getIntent().getStringExtra("code"));
-
                 startActivity(intent);
-
                 return true;
-
             }
         });
         return true;
@@ -221,9 +206,6 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         return super.onOptionsItemSelected(item);
     }
-
-
 }

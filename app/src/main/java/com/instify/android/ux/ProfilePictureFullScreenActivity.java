@@ -1,12 +1,10 @@
 package com.instify.android.ux;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -53,6 +51,43 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
     // Declare AdView
     private AdView mAdView;
 
+    // [START add_lifecycle_methods]
+
+    /**
+     * Called when leaving the activity
+     */
+    @Override
+    public void onPause() {
+        if (mAdView != null) {
+            mAdView.pause();
+        }
+        super.onPause();
+    }
+
+    /**
+     * Called when returning to the activity
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAdView != null) {
+            mAdView.resume();
+        }
+    }
+
+    /**
+     * Called before the activity is destroyed
+     */
+    @Override
+    public void onDestroy() {
+        if (mAdView != null) {
+            mAdView.destroy();
+            finish();
+        }
+        super.onDestroy();
+    }
+    // [END add_lifecycle_methods]
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_screen_profile_picture);
@@ -95,6 +130,30 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
         });
     }
 
+    private static Uri resIdToUri(Context context, int resId) {
+        return Uri.parse(ANDROID_RESOURCE + context.getPackageName()
+                + FORWARD_SLASH + resId);
+    }
+
+    // Send the file to server
+    private void sendToServer(Uri received) {
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(mFirebaseUser.getDisplayName())
+                .setPhotoUri(Uri.parse(received.toString()))
+                .build();
+
+        mFirebaseUser.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User profile updated.");
+                            Toast.makeText(ProfilePictureFullScreenActivity.this, "Successfully updated", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
     private void promptProfileChanger() {
         final CharSequence[] items = {"Take Photo or Choose from Gallery", "Remove Picture", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(ProfilePictureFullScreenActivity.this);
@@ -121,10 +180,10 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
         builder.show();
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     @AfterPermissionGranted(RC_CAMERA_AND_GALLERY_PERM)
     private void getPicture() {
-        if (EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        String[] perms = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(this, perms)) {
             // Have permission, do the thing!
             Crop.pickImage(this);
         } else {
@@ -134,17 +193,17 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
         }
     }
 
-    private static Uri resIdToUri(Context context, int resId) {
-        return Uri.parse(ANDROID_RESOURCE + context.getPackageName()
-                + FORWARD_SLASH + resId);
-    }
-
+    // [START] Cropping functions
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // handle result of pick image chooser
         if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
             beginCrop(data.getData());
         } else if (requestCode == Crop.REQUEST_CROP) {
             handleCrop(resultCode, data);
+        } else if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
+            // Do something after user returned from app settings screen, like showing a Toast.
+            Toast.makeText(this, R.string.returned_from_app_settings_to_activity, Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 
@@ -164,61 +223,7 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
             Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
-    private void sendToServer(Uri received) {
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(mFirebaseUser.getDisplayName())
-                .setPhotoUri(Uri.parse(received.toString()))
-                .build();
-
-        mFirebaseUser.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "User profile updated.");
-                            Toast.makeText(ProfilePictureFullScreenActivity.this, "Successfully updated", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-
-    // [START add_lifecycle_methods]
-
-    /**
-     * Called when leaving the activity
-     */
-    @Override
-    public void onPause() {
-        if (mAdView != null) {
-            mAdView.pause();
-        }
-        super.onPause();
-    }
-
-    /**
-     * Called when returning to the activity
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mAdView != null) {
-            mAdView.resume();
-        }
-    }
-
-    /**
-     * Called before the activity is destroyed
-     */
-    @Override
-    public void onDestroy() {
-        if (mAdView != null) {
-            mAdView.destroy();
-            finish();
-        }
-        super.onDestroy();
-    }
-    // [END add_lifecycle_methods]
+    // [END] Cropping functions
 
     // [START] EasyPermissions Default Functions
     @Override
