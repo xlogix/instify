@@ -108,12 +108,13 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+
         } else if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
+
         } else {
             this.doubleBackToExitPressedOnce = true;
             Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show();
-
             new Handler().postDelayed(new Runnable() {
 
                 @Override
@@ -142,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         // Ensures that user didn't un-install Google Play Services required for Firebase related tasks.
         checkPlayServices();
-
         // Checks if the device is connected to the internet
         if (isDeviceOnline()) {
             Timber.d(TAG, "Device is online.");
@@ -158,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
     }
-    // [END add_lifecycle_methods]
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -340,7 +339,7 @@ public class MainActivity extends AppCompatActivity {
     // [START request_new_interstitial]
     private void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("11408151BC4116DE6AD4B6BFC1B34457")
+                //.addTestDevice("11408151BC4116DE6AD4B6BFC1B34457")
                 .build();
 
         mInterstitialAd.loadAd(adRequest);

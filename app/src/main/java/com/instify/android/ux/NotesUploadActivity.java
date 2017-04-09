@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.instify.android.R;
 import com.instify.android.app.AppConfig;
-import com.instify.android.helpers.NotesFilePathHelper;
 import com.instify.android.helpers.SQLiteHandler;
 
 import net.gotev.uploadservice.MultipartUploadRequest;

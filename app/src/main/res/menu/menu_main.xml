@@ -21,17 +21,17 @@
                 <item
                     android:id="@+id/filter_by_class"
                     android:checked="false"
-                    android:title="Filter By Class"
+                    android:title="Filter by Class"
                     app:showAsAction="never" />
                 <item
                     android:id="@+id/filter_by_department"
                     android:checked="false"
-                    android:title="Filter By Department"
+                    android:title="Filter by Department"
                     app:showAsAction="never" />
                 <item
                     android:id="@+id/filter_by_university"
                     android:checked="false"
-                    android:title="All"
+                    android:title="Filter by University"
                     app:showAsAction="never" />
             </menu>
         </item>

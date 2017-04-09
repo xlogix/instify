@@ -18,7 +18,8 @@
             android:id="@+id/textView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="*please note that the file you are posting will be visible to your class people with your name. so please don't post inappropriate content in this section." />
+            android:text="Please note that the file you are posting will be visible to your class with your name. So, please don't post inappropriate content in this section."
+            android:textSize="16sp" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

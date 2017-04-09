@@ -25,7 +25,7 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private Context context;
     private LayoutInflater inflater;
-    List<NotesModel> data = Collections.emptyList();
+    private List<NotesModel> data = Collections.emptyList();
 
     // create constructor to initialize context and data sent from MainActivity
     public NotesAdapter(Context context, List<NotesModel> data) {
@@ -71,10 +71,7 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView textFishName;
-        TextView textSize;
         TextView textType;
-        TextView textPrice;
-        NetworkImageView imageView;
 
         // create constructor to get widget reference
         public MyHolder(View itemView) {
