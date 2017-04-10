@@ -35,7 +35,7 @@ public class AboutActivity extends AppCompatActivity {
                 .isRTL(false)
                 .setDescription("Instify is an (add content here)\n\nDevelopers : Abhishek, Arjun and Somnath\n\nSepcial thanks to : Chandan Singh, Ankur, Trishansh")
                 .setImage(R.drawable.background)
-                .addItem(new Element().setTitle("Version 1.1.0"))
+                .addItem(new Element().setTitle("Version 1.1.2"))
                 .addGroup("Connect with us")
                 .addEmail("abhishekuniyal09@gmail.com")
                 .addWebsite("https://www.fnplus.xyz/")
