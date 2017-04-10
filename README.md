@@ -24,8 +24,6 @@ It's also on Google Play:
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
-    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
 
     <!-- Dangerous permissions, access must be requested at runtime -->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -49,4 +47,4 @@ It's also on Google Play:
         android:required="false" />
     <uses-feature
         android:name="android.hardware.camera.autofocus"
-        android:required="true" />
+        android:required="false" />
