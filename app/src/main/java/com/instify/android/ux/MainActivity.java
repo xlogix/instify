@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     public FloatingActionMenu mSharedMenu;
     // Initialize Ad
     private InterstitialAd mInterstitialAd;
+    private CoordinatorLayout coordinatorLayout;
     // Set Firebase User
     FirebaseUser mFirebaseUser;
     // Set Database Reference
@@ -163,6 +165,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id
+                .coordinatorLayout);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
 
@@ -173,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
         AppUpdater appUpdater = new AppUpdater(this)
                 .setDisplay(Display.DIALOG)
                 .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
-                .showEvery(5);
+                .showEvery(2);
         appUpdater.start();
 
         // Get the current logged-in user
@@ -186,18 +192,38 @@ public class MainActivity extends AppCompatActivity {
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
 
+        // TODO : Remove test device before release
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("11408151BC4116DE6AD4B6BFC1B34457")
+                .build();
+
+        // Load ads into Interstitial Ads
+        mInterstitialAd.loadAd(adRequest);
+
         // [START create_interstitial_ad_listener]
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
                 // Add your method here
+                Toast.makeText(getApplicationContext(),
+                        "Thanks for supporting us! :)",
+                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onAdLoaded() {
+                Timber.w(TAG, "onAdLoaded: (Should display Snackbar)");
                 // Ad received, ready to display
                 mInterstitialAd.isLoaded();
-                mInterstitialAd.show();
+                // Delay function
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        // Show a snack bar to notify the user
+                        Snackbar.make(coordinatorLayout, "An ad is going to be loaded in 2 seconds", Snackbar.LENGTH_LONG);
+                        // Show the ad
+                        mInterstitialAd.show();
+                    }
+                }, 10000);
             }
 
             @Override
@@ -205,6 +231,12 @@ public class MainActivity extends AppCompatActivity {
                 // See https://goo.gl/sCZj0H for possible error codes.
                 Timber.w(TAG, "onAdFailedToLoad:" + i);
             }
+
+            @Override
+            public void onAdOpened() {
+                Timber.w(TAG, "onAdOpened: Add was opened");
+            }
+
         });
         // [END create_interstitial_ad_listener]
 
@@ -339,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
     // [START request_new_interstitial]
     private void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder()
-                //.addTestDevice("11408151BC4116DE6AD4B6BFC1B34457")
+                .addTestDevice("11408151BC4116DE6AD4B6BFC1B34457")
                 .build();
 
         mInterstitialAd.loadAd(adRequest);

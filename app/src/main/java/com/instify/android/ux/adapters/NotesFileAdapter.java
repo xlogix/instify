@@ -27,9 +27,6 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private Context context;
     private LayoutInflater inflater;
     List<NotesFileModel> data = Collections.emptyList();
-    // [START initialize_auth]
-    private FirebaseUser mFirebaseUser;
-    // [END initialize_auth]
     // ImageLoader imageLoader;
     SQLiteHandler db;
 
@@ -45,8 +42,6 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflate View
         View view = inflater.inflate(R.layout.card_view_notes_files_in_subjects, parent, false);
-        // Set current user
-        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         // Set adapter
         NotesFileAdapter.MyHolder holder = new NotesFileAdapter.MyHolder(view);
         return holder;
@@ -115,16 +110,10 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         myHolder.notetime.setText(current.notetime);
         myHolder.noteurl.setText(current.notefile);
         myHolder.author.setText(current.noteposter);
-        /*String url = "https://hashbird.com/gogrit.in/workspace/srm-api/studentImages/" + current.noteregno + ".jpg";
-        imageLoader = CustomVolleyRequest.getInstance(context).getImageLoader();
-        imageLoader.get(url, ImageLoader.getImageListener(myHolder.imageView,
-                R.mipmap.ic_launcher, android.R.drawable
-                        .ic_dialog_alert));
-         myHolder.imageView.setImageUrl(url, imageLoader);*/
 
         // Put the picture into the image View
         Glide.with(context)
-                .load(mFirebaseUser.getPhotoUrl())
+                .load("https://hashbird.com/gogrit.in/workspace/srm-api/studentImages/" + current.noteregno + ".jpg")
                 .dontAnimate()
                 .centerCrop()
                 .priority(Priority.HIGH)
