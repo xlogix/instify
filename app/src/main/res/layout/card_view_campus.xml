@@ -18,6 +18,7 @@
             android:id="@+id/campusTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autoLink="all"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimary"
             android:textSize="22sp"
@@ -49,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:autoLink="all"
             android:textColor="@color/black"
             android:textSize="18sp" />
     </LinearLayout>

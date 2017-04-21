@@ -100,30 +100,13 @@ public class NotesFragment extends Fragment {
 
                     // Check for error node in json
                     if (!error) {
-
                         List<NotesModel> notes = new ArrayList<>();
-                        // Declare Hash map for all headers and their corresponding values
-                        HashMap<String, ArrayList<String>> childArrayList = new HashMap<>();
 
-                        // expListView = (ExpandableListView)findViewById(R.id.expListView);
                         JSONArray user = jObj.getJSONArray("subjects");
 
-                        int i;
-//                        mAdapter = new NotesAdapter(notes);
-//                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-//                        recyclerView.setLayoutManager(mLayoutManager);
-//                        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-
-                        for (i = 0; i < user.length(); i++) {
+                        for (int i = 0; i < user.length(); i++) {
                             String name = user.getString(i);
                             JSONObject subs = jObj.getJSONObject(user.getString(i));
-
-
-//                            notes movie = notes(subs.getString("sub-desc"));
-//                            notes.add(movie);
-                            //   notes obj = new notes(subs.getString("sub-desc"));
-
 
                             NotesModel fishData = new NotesModel();
                             fishData.fishName = subs.getString("sub-desc");
@@ -133,8 +116,7 @@ public class NotesFragment extends Fragment {
                             // fishData.image = "https://hashbird.com/gogrit.in/workspace/srm-api/studentImages/" + json_data.getString("registration").trim() + ".jpg";
                             notes.add(fishData);
 
-                            //  Toast.makeText(getContext(),user.getString(i)+" - "+subs.getString("sub-desc"),Toast.LENGTH_SHORT).show();
-                            // Create an object of Att class
+                            //  Toast.makeText(getContext(),user.getString(i)+" - "+subs.getString("sub-desc"),Toast.LENGTH_SHORT).show()
                         }
 
                         mAdapter = new NotesAdapter(getContext(), notes);

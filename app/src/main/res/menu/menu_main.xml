@@ -21,7 +21,7 @@
                 <item
                     android:id="@+id/filter_by_class"
                     android:checked="false"
-                    android:title="Filter by Class"
+                    android:title="Filter by Section"
                     app:showAsAction="never" />
                 <item
                     android:id="@+id/filter_by_department"

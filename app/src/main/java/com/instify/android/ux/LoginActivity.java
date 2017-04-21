@@ -75,6 +75,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
     // [END on_start_add_listener]
 
+    // [START on_resume_add_listener]
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAuth.addAuthStateListener(mAuthStateListener);
+    }
+    // [END on_resume_add_listener]
+
     // [START on_stop_remove_listener]
     @Override
     public void onStop() {
