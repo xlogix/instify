@@ -1,7 +1,5 @@
 package com.instify.android.app;
 
-import java.util.Calendar;
-
 /**
  * Created by Abhish3k on 1/8/2017.
  */
