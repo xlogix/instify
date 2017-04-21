@@ -123,6 +123,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        //Check Login State
+        if (AppController.getInstance().getPrefManager().isLoggedIn())
+        {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+        }
 
         // Setup SupportActionBar
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -162,17 +168,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // [END initialize_auth]
 
         // [START auth_state_listener]
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Timber.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    Timber.d(TAG, "onAuthStateChanged:signed_out");
-                }
+        mAuthStateListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                // User is signed in
+                Timber.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+            } else {
+                // User is signed out
+                Timber.d(TAG, "onAuthStateChanged:signed_out");
             }
         };
         // [END auth_state_listener]
@@ -365,6 +368,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     u.getErrorMsg(), Toast.LENGTH_LONG).show();
                         }
                     } else {
+                        AppController.getInstance().getPrefManager().setLogin(false);
                         hideProgressDialog();
                         Toast.makeText(LoginActivity.this,
                                 u.getErrorMsg(), Toast.LENGTH_LONG).show();
