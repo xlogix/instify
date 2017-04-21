@@ -25,13 +25,13 @@ import timber.log.Timber;
 public class AppController extends Application {
     public static final String TAG = AppController.class.getSimpleName();
 
-    private RequestQueue mRequestQueue;
-
-    private static AppController mInstance;
-
     public static synchronized AppController getInstance() {
         return mInstance;
     }
+
+    private RequestQueue mRequestQueue;
+
+    private static AppController mInstance;
 
     private PreferenceManager mPrefs;
 
