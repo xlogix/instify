@@ -49,9 +49,14 @@ android {
         exclude 'META-INF/NOTICE'
         exclude 'LICENSE.txt'
     }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
     // `return void` removes the lint error: `Not all execution paths return a value`.
     return void
 }
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -85,13 +90,25 @@ dependencies {
     // WEB VIEW
     compile 'com.thefinestartist:finestwebview:1.2.7'
 
-    // LOGGING
+    // MISC
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+
+    // LOGGING/DEBUG
     compile 'com.jakewharton.timber:timber:4.5.1'
     compile 'com.google.firebase:firebase-core:10.2.1'
     compile 'com.google.firebase:firebase-config:10.2.1'
 
     // SERVICE
     compile 'net.gotev:uploadservice:3.2.3'
+
+    // NETWORK
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+    compile 'com.facebook.stetho:stetho:1.5.0'
+    compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+    compile 'com.squareup.okhttp3:okhttp:3.7.0'
+    compile 'com.google.code.gson:gson:2.7'
 
     // STORAGE FIREBASE
     compile 'com.google.firebase:firebase-storage:10.2.1'
@@ -128,3 +145,4 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'me.tatarka.retrolambda'

@@ -8,15 +8,10 @@ import android.app.Application;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.android.volley.Cache;
-import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.facebook.stetho.Stetho;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.instify.android.BuildConfig;
@@ -42,6 +37,7 @@ public class AppController extends Application {
 
     public FirebaseAnalytics mFirebaseAnalytics;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -57,6 +53,10 @@ public class AppController extends Application {
                 return;
             }
             LeakCanary.install(this);
+            // Initialise Stetho
+            Stetho.initializeWithDefaults(this);
+
+
         } else {
             // Obtain the FirebaseAnalytics
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -65,6 +65,7 @@ public class AppController extends Application {
             /*Fabric.with(this, new Crashlytics());
             Timber.plant(new CrashReportingTree());*/
         }
+
     }
 
     public PreferenceManager getPrefManager() {

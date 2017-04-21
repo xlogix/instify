@@ -32,7 +32,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.instify.android.R;
 import com.instify.android.app.AppConfig;
 import com.instify.android.app.AppController;
+import com.instify.android.helpers.RetrofitBuilder;
+import com.instify.android.helpers.RetrofitInterface;
 import com.instify.android.helpers.SQLiteHandler;
+import com.instify.android.models.UserModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +43,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
 import timber.log.Timber;
 
 /**
@@ -334,6 +339,51 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+    private void attemptErploginRetrofit(final String regNo, final String password) {
+        if (!validateForm()) {
+            return;
+        }
+
+        // Start showing the progress dialog
+        showProgressDialog();
+        RetrofitInterface client = RetrofitBuilder.createService(RetrofitInterface.class);
+        Call<UserModel> call = client.Login(regNo, password);
+        call.enqueue(new Callback<UserModel>() {
+            @Override
+            public void onResponse(Call<UserModel> call, retrofit2.Response<UserModel> response) {
+                if (response.isSuccessful()) {
+                    UserModel u = response.body();
+                    if (!u.getError()) {
+                        AppController.getInstance().getPrefManager().setLogin(true);
+                        //ToDo  Pass the object usermodel as arguments to adduser
+                        db.addUser(u.getName(), u.getEmail(), u.getFolioNo(), u.getImage(), password, u.getRegno(), u.getDept());
+                        hideProgressDialog();
+                        // Take the user to the main activity
+                        intentLoginToMain();
+                        if (mAuth.getCurrentUser() != null) {
+                            Toast.makeText(LoginActivity.this,
+                                    u.getErrorMsg(), Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        hideProgressDialog();
+                        Toast.makeText(LoginActivity.this,
+                                u.getErrorMsg(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserModel> call, Throwable t) {
+                Timber.e(TAG, "Login Error: " + t.getMessage());
+                Toast.makeText(LoginActivity.this,
+                        t.getMessage(), Toast.LENGTH_LONG).show();
+                // Got an error, hide the Progress bar
+                hideProgressDialog();
+            }
+        });
+
+    }
+
     private boolean validateForm() {
         boolean valid = true;
 
@@ -362,7 +412,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.action_login) {
-            attemptERPLogin(mRegNoField.getText().toString(), mPasswordField.getText().toString());
+            attemptErploginRetrofit(mRegNoField.getText().toString(), mPasswordField.getText().toString());
         } else if (i == R.id.button_google_login) {
             signInWithGoogle();
         }
