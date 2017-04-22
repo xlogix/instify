@@ -25,6 +25,11 @@ import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.NativeExpressAdView;
+import com.google.android.gms.ads.formats.NativeAdView;
 import com.instify.android.R;
 import com.instify.android.app.AppController;
 import com.thefinestartist.finestwebview.FinestWebView;
@@ -32,6 +37,8 @@ import com.thefinestartist.finestwebview.FinestWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import timber.log.Timber;
 
 public class UnivNewsFragment extends Fragment {
     private String TAG = UnivNewsFragment.class.getSimpleName();
@@ -90,23 +97,20 @@ public class UnivNewsFragment extends Fragment {
 
     public void makeJSONRequest() {
         JsonObjectRequest req = new JsonObjectRequest(endpoint, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, response.toString());
-                        try {
-                            JSONArray newsItems = response.getJSONArray("newsItems");
-                            mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), newsItems);
-                            // UI
-                            hideRefreshing();
-                            // Setting the adapter
-                            recyclerView.setAdapter(mAdapter);
-                        } catch (JSONException e) {
-                            Log.e(TAG, "Json parsing error: " + e.getMessage());
-                            Toast.makeText(getContext(), "JSON Parsing error", Toast.LENGTH_LONG).show();
-                        }
-                        mAdapter.notifyDataSetChanged();
+                response -> {
+                    Timber.d(TAG, response.toString());
+                    try {
+                        JSONArray newsItems = response.getJSONArray("newsItems");
+                        mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), newsItems);
+                        // UI
+                        hideRefreshing();
+                        // Setting the adapter
+                        recyclerView.setAdapter(mAdapter);
+                    } catch (JSONException e) {
+                        Log.e(TAG, "Json parsing error: " + e.getMessage());
+                        Toast.makeText(getContext(), "JSON Parsing error", Toast.LENGTH_LONG).show();
                     }
+                    mAdapter.notifyDataSetChanged();
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -122,10 +126,12 @@ public class UnivNewsFragment extends Fragment {
         AppController.getInstance().addToRequestQueue(req);
     }
 
-    public static class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
+    public static class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+        private static final int AD_TYPE = 1;
+        private static final int CONTENT_TYPE = 0;
         private Context mContext;
         private JSONArray newsArray;
-
+        AdRequest request;
         // Constructor
         private SimpleStringRecyclerViewAdapter(Context context, JSONArray newsArray) {
             mContext = context;
@@ -133,49 +139,85 @@ public class UnivNewsFragment extends Fragment {
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.card_view_univ, parent, false);
-            return new ViewHolder(itemView);
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            RecyclerView.ViewHolder viewHolder = null;
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            if (viewType == AD_TYPE)
+            {
+                View v = inflater.inflate(R.layout.card_view_univad, parent, false);
+                viewHolder = new AdViewHolder(v);
+
+
+
+
+            }
+            else
+            {
+                View v = inflater.inflate(R.layout.card_view_univ, parent, false);
+                viewHolder = new ViewHolder(v);
+
+            }
+            return viewHolder;
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            try {
-                holder.mTextViewTitle.setText(newsArray.getJSONObject(holder.getAdapterPosition()).getString("title"));
-                holder.mTextViewSnip.setText(newsArray.getJSONObject(holder.getAdapterPosition()).getString("snip"));
-                holder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        try {
-                            new FinestWebView.Builder(v.getContext()).theme(R.style.FinestWebViewTheme)
-                                    .titleDefault("News Update")
-                                    .showUrl(false)
-                                    .statusBarColorRes(R.color.colorPrimaryDark)
-                                    .toolbarColorRes(R.color.colorPrimary)
-                                    .titleColorRes(R.color.finestWhite)
-                                    .urlColorRes(R.color.colorPrimaryLight)
-                                    .iconDefaultColorRes(R.color.finestWhite)
-                                    .progressBarColorRes(R.color.finestWhite)
-                                    .stringResCopiedToClipboard(R.string.copied_to_clipboard)
-                                    .stringResCopiedToClipboard(R.string.copied_to_clipboard)
-                                    .stringResCopiedToClipboard(R.string.copied_to_clipboard)
-                                    .updateTitleFromHtml(true)
-                                    .swipeRefreshColorRes(R.color.colorPrimaryDark)
-                                    .menuSelector(R.drawable.selector_light_theme)
-                                    .menuTextGravity(Gravity.CENTER)
-                                    .menuTextPaddingRightRes(R.dimen.defaultMenuTextPaddingLeft)
-                                    .dividerHeight(0)
-                                    .gradientDivider(false)
-                                    .setCustomAnimations(R.anim.slide_up, R.anim.hold, R.anim.hold, R.anim.slide_down)
-                                    .show(newsArray.getJSONObject(holder.getAdapterPosition()).getString("link"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+        public int getItemViewType(int position) {
+            if (position % 5 == 0)
+                return AD_TYPE;
+            return CONTENT_TYPE;
+
+        }
+
+        @Override
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+            int viewType = getItemViewType(position);
+            switch (viewType) {
+                case AD_TYPE:
+
+                    //....
+
+                    break;
+                case CONTENT_TYPE:
+
+                    try {
+                        ViewHolder viewHolder = (ViewHolder) holder;
+                        viewHolder.mTextViewTitle.setText(newsArray.getJSONObject(viewHolder.getAdapterPosition()).getString("title"));
+                        viewHolder.mTextViewSnip.setText(newsArray.getJSONObject(viewHolder.getAdapterPosition()).getString("snip"));
+                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    new FinestWebView.Builder(v.getContext()).theme(R.style.FinestWebViewTheme)
+                                            .titleDefault("News Update")
+                                            .showUrl(false)
+                                            .statusBarColorRes(R.color.colorPrimaryDark)
+                                            .toolbarColorRes(R.color.colorPrimary)
+                                            .titleColorRes(R.color.finestWhite)
+                                            .urlColorRes(R.color.colorPrimaryLight)
+                                            .iconDefaultColorRes(R.color.finestWhite)
+                                            .progressBarColorRes(R.color.finestWhite)
+                                            .stringResCopiedToClipboard(R.string.copied_to_clipboard)
+                                            .stringResCopiedToClipboard(R.string.copied_to_clipboard)
+                                            .stringResCopiedToClipboard(R.string.copied_to_clipboard)
+                                            .updateTitleFromHtml(true)
+                                            .swipeRefreshColorRes(R.color.colorPrimaryDark)
+                                            .menuSelector(R.drawable.selector_light_theme)
+                                            .menuTextGravity(Gravity.CENTER)
+                                            .menuTextPaddingRightRes(R.dimen.defaultMenuTextPaddingLeft)
+                                            .dividerHeight(0)
+                                            .gradientDivider(false)
+                                            .setCustomAnimations(R.anim.slide_up, R.anim.hold, R.anim.hold, R.anim.slide_down)
+                                            .show(newsArray.getJSONObject(viewHolder.getAdapterPosition()).getString("link"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                });
-            } catch (JSONException e) {
-                e.printStackTrace();
+                    break;
+                default:
             }
         }
 
@@ -194,6 +236,23 @@ public class UnivNewsFragment extends Fragment {
                 mTextViewTitle = (TextView) view.findViewById(R.id.univ_news_title);
                 mTextViewSnip = (TextView) view.findViewById(R.id.univ_news_snip);
             }
+        }
+        public static class AdViewHolder extends RecyclerView.ViewHolder {
+            private final View mView;
+            private final NativeExpressAdView mAdview;
+
+            private AdViewHolder(View view) {
+                super(view);
+                mView = view;
+
+                mAdview = (NativeExpressAdView) mView.findViewById(R.id.adView);
+
+                AdRequest request = new AdRequest.Builder()
+                .addTestDevice("D5D7845C51D6296F84D6CCC3544B1261")
+                        .build();
+                mAdview.loadAd(request);
+            }
+
         }
     }
 

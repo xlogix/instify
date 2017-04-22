@@ -28,14 +28,11 @@ public class SupportUsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_support_us);
 
         final TextView phoneNumber = (TextView) findViewById(R.id.copy);
-        phoneNumber.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Phone Number : ", "9962892900");
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(SupportUsActivity.this, "Text copied to clipboard", Toast.LENGTH_SHORT).show();
-            }
+        phoneNumber.setOnClickListener(v -> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("Phone Number : ", "9962892900");
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(SupportUsActivity.this, "Text copied to clipboard", Toast.LENGTH_SHORT).show();
         });
 
         // [START load_banner_ad]
