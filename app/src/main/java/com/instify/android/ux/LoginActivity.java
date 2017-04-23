@@ -310,16 +310,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
 
             }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Timber.e(TAG, "Login Error: " + error.getMessage());
-                Toast.makeText(LoginActivity.this,
-                        error.getMessage(), Toast.LENGTH_LONG).show();
-                // Got an error, hide the Progress bar
-                hideProgressDialog();
-            }
+        }, error -> {
+            Timber.e(TAG, "Login Error: " + error.getMessage());
+            Toast.makeText(LoginActivity.this,
+                    error.getMessage(), Toast.LENGTH_LONG).show();
+            // Got an error, hide the Progress bar
+            hideProgressDialog();
         }) {
 
             @Override

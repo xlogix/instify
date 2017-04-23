@@ -1,10 +1,14 @@
 package com.instify.android.helpers;
 
+
 import com.instify.android.models.UserModel;
+import com.instify.android.models.NewsItemModelList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 /**
@@ -17,4 +21,7 @@ public interface RetrofitInterface {
     Call<UserModel> Login(
             @Field("regno") String username,
             @Field("pass") String password);
+    @GET("univ-news.php")
+    Call<NewsItemModelList> GetUnivNews();
+
 }

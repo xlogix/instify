@@ -23,16 +23,27 @@ import android.widget.Toast;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.NativeExpressAdView;
 import com.instify.android.R;
 import com.instify.android.app.AppController;
+import com.instify.android.helpers.RetrofitBuilder;
+import com.instify.android.helpers.RetrofitInterface;
+import com.instify.android.models.NewsItemModel;
+import com.instify.android.models.NewsItemModelList;
 import com.thefinestartist.finestwebview.FinestWebView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import timber.log.Timber;
 
 public class UnivNewsFragment extends Fragment {
@@ -78,16 +89,94 @@ public class UnivNewsFragment extends Fragment {
         showRefreshing();
 
         // Make the request!
-        makeJSONRequest();
+        makeJSONRequestRetrofit();
 
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                showRefreshing();
-                makeJSONRequest();
-            }
+        mSwipeRefreshLayout.setOnRefreshListener(() -> {
+            showRefreshing();
+            makeJSONRequestRetrofit();
         });
         return rootView;
+    }
+
+    public void makeJSONRequestRetrofit() {
+        RetrofitInterface client = RetrofitBuilder.createService(RetrofitInterface.class);
+        Call<NewsItemModelList> call = client.GetUnivNews();
+        call.enqueue(new Callback<NewsItemModelList>() {
+            @Override
+            public void onResponse(Call<NewsItemModelList> call, Response<NewsItemModelList> response) {
+                if (response.isSuccessful()) {
+
+                    List<Object> news = new ArrayList<>();
+                    news.addAll(response.body().getNewsItems());
+                    for (int i = 0; i < news.size(); i += 5) {
+                        final NativeExpressAdView n = new NativeExpressAdView(getContext());
+
+                        news.add(i, n);
+
+                    }
+                    loadNativeExpressAd(0, news);
+
+
+                    mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), news);
+
+                    // UI
+                    hideRefreshing();
+                    mAdapter.notifyDataSetChanged();
+                    // Setting the adapter
+                    recyclerView.setAdapter(mAdapter);
+                } else {
+                    Toast.makeText(getContext(), "Error Receiving University News", Toast.LENGTH_LONG).show();
+                    hideRefreshing();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NewsItemModelList> call, Throwable t) {
+                Toast.makeText(getContext(), "Failed to Receive University News", Toast.LENGTH_LONG).show();
+                hideRefreshing();
+            }
+        });
+    }
+
+    private void loadNativeExpressAd(final int index, List<Object> mRecyclerViewItems) {
+
+        if (index >= mRecyclerViewItems.size()) {
+            return;
+        }
+
+        Object item = mRecyclerViewItems.get(index);
+        if (!(item instanceof NativeExpressAdView)) {
+            throw new ClassCastException("Expected item at index " + index + " to be a Native"
+                    + " Express ad.");
+        }
+
+        final NativeExpressAdView adView = (NativeExpressAdView) item;
+
+        // Set an AdListener on the NativeExpressAdView to wait for the previous Native Express ad
+        // to finish loading before loading the next ad in the items list.
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                // The previous Native Express ad loaded successfully, call this method again to
+                // load the next ad in the items list.
+                loadNativeExpressAd(index + 5, mRecyclerViewItems);
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // The previous Native Express ad failed to load. Call this method again to load
+                // the next ad in the items list.
+                Log.e("MainActivity", "The previous Native Express ad failed to load. Attempting to"
+                        + " load the next Native Express ad in the items list.");
+                loadNativeExpressAd(index + 5, mRecyclerViewItems);
+            }
+        });
+
+        // Load the Native Express ad.
+        adView.setAdUnitId(getString(R.string.native_express_ad_unit_id));
+        adView.setAdSize(new AdSize(320, 150));
+        adView.loadAd(new AdRequest.Builder().build());
     }
 
     public void makeJSONRequest() {
@@ -96,7 +185,9 @@ public class UnivNewsFragment extends Fragment {
                     Timber.d(TAG, response.toString());
                     try {
                         JSONArray newsItems = response.getJSONArray("newsItems");
-                        mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), newsItems);
+
+//                        mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), newsItems);
+
                         // UI
                         hideRefreshing();
                         // Setting the adapter
@@ -122,11 +213,11 @@ public class UnivNewsFragment extends Fragment {
         private static final int AD_TYPE = 1;
         private static final int CONTENT_TYPE = 0;
         private Context mContext;
-        private JSONArray newsArray;
+        private List<Object> newsArray;
         AdRequest request;
 
         // Constructor
-        private SimpleStringRecyclerViewAdapter(Context context, JSONArray newsArray) {
+        private SimpleStringRecyclerViewAdapter(Context context, List<Object> newsArray) {
             mContext = context;
             this.newsArray = newsArray;
         }
@@ -157,53 +248,70 @@ public class UnivNewsFragment extends Fragment {
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
             int viewType = getItemViewType(position);
             switch (viewType) {
-                case AD_TYPE:
-                    AdViewHolder viewHolderAd = (AdViewHolder) holder;
-                    viewHolderAd.mAdview.setHapticFeedbackEnabled(true);
-                    break;
+
                 case CONTENT_TYPE:
-                    try {
-                        ViewHolder viewHolder = (ViewHolder) holder;
-                        viewHolder.mTextViewTitle.setText(newsArray.getJSONObject(viewHolder.getAdapterPosition()).getString("title"));
-                        viewHolder.mTextViewSnip.setText(newsArray.getJSONObject(viewHolder.getAdapterPosition()).getString("snip"));
-                        viewHolder.mView.setOnClickListener(v -> {
-                            try {
-                                new FinestWebView.Builder(v.getContext()).theme(R.style.FinestWebViewTheme)
-                                        .titleDefault("News Update")
-                                        .showUrl(false)
-                                        .statusBarColorRes(R.color.colorPrimaryDark)
-                                        .toolbarColorRes(R.color.colorPrimary)
-                                        .titleColorRes(R.color.finestWhite)
-                                        .urlColorRes(R.color.colorPrimaryLight)
-                                        .iconDefaultColorRes(R.color.finestWhite)
-                                        .progressBarColorRes(R.color.finestWhite)
-                                        .stringResCopiedToClipboard(R.string.copied_to_clipboard)
-                                        .stringResCopiedToClipboard(R.string.copied_to_clipboard)
-                                        .stringResCopiedToClipboard(R.string.copied_to_clipboard)
-                                        .updateTitleFromHtml(true)
-                                        .swipeRefreshColorRes(R.color.colorPrimaryDark)
-                                        .menuSelector(R.drawable.selector_light_theme)
-                                        .menuTextGravity(Gravity.CENTER)
-                                        .menuTextPaddingRightRes(R.dimen.defaultMenuTextPaddingLeft)
-                                        .dividerHeight(0)
-                                        .gradientDivider(false)
-                                        .setCustomAnimations(R.anim.slide_up, R.anim.hold, R.anim.hold, R.anim.slide_down)
-                                        .show(newsArray.getJSONObject(viewHolder.getAdapterPosition()).getString("link"));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        });
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+
+                    ViewHolder viewHolder = (ViewHolder) holder;
+                    NewsItemModel m = (NewsItemModel) newsArray.get(position);
+                    viewHolder.mTextViewTitle.setText(m.getTitle());
+                    viewHolder.mTextViewSnip.setText(m.getSnip());
+                    viewHolder.mView.setOnClickListener(v -> {
+
+                        new FinestWebView.Builder(v.getContext()).theme(R.style.FinestWebViewTheme)
+                                .titleDefault("News Update")
+                                .showUrl(false)
+                                .statusBarColorRes(R.color.colorPrimaryDark)
+                                .toolbarColorRes(R.color.colorPrimary)
+                                .titleColorRes(R.color.finestWhite)
+                                .urlColorRes(R.color.colorPrimaryLight)
+                                .iconDefaultColorRes(R.color.finestWhite)
+                                .progressBarColorRes(R.color.finestWhite)
+                                .stringResCopiedToClipboard(R.string.copied_to_clipboard)
+                                .stringResCopiedToClipboard(R.string.copied_to_clipboard)
+                                .stringResCopiedToClipboard(R.string.copied_to_clipboard)
+                                .updateTitleFromHtml(true)
+                                .swipeRefreshColorRes(R.color.colorPrimaryDark)
+                                .menuSelector(R.drawable.selector_light_theme)
+                                .menuTextGravity(Gravity.CENTER)
+                                .menuTextPaddingRightRes(R.dimen.defaultMenuTextPaddingLeft)
+                                .dividerHeight(0)
+                                .gradientDivider(false)
+                                .setCustomAnimations(R.anim.slide_up, R.anim.hold, R.anim.hold, R.anim.slide_down)
+                                .show(m.getLink());
+
+                    });
+
                     break;
+                case AD_TYPE:
+                    //Fall Through
                 default:
+                    AdViewHolder nativeExpressHolder =
+                            (AdViewHolder) holder;
+                    NativeExpressAdView adView =
+                            (NativeExpressAdView) newsArray.get(position);
+                    ViewGroup adCardView = (ViewGroup) nativeExpressHolder.itemView;
+                    // The NativeExpressAdViewHolder recycled by the RecyclerView may be a different
+                    // instance than the one used previously for this position. Clear the
+                    // NativeExpressAdViewHolder of any subviews in case it has a different
+                    // AdView associated with it, and make sure the AdView for this position doesn't
+                    // already have a parent of a different recycled NativeExpressAdViewHolder.
+                    if (adCardView.getChildCount() > 0) {
+                        adCardView.removeAllViews();
+                    }
+                    if (adView.getParent() != null) {
+                        ((ViewGroup) adView.getParent()).removeView(adView);
+                    }
+
+                    // Add the Native Express ad to the native express ad view.
+                    adCardView.addView(adView);
+
+                    break;
             }
         }
 
         @Override
         public int getItemCount() {
-            return newsArray.length();
+            return newsArray.size();
         }
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -219,18 +327,10 @@ public class UnivNewsFragment extends Fragment {
         }
 
         public static class AdViewHolder extends RecyclerView.ViewHolder {
-            private final View mView;
-            private final NativeExpressAdView mAdview;
+
 
             private AdViewHolder(View view) {
                 super(view);
-                mView = view;
-
-                mAdview = (NativeExpressAdView) mView.findViewById(R.id.adView);
-                AdRequest request = new AdRequest.Builder()
-                        .addTestDevice("D5D7845C51D6296F84D6CCC3544B1261")
-                        .build();
-                mAdview.loadAd(request);
             }
         }
     }
