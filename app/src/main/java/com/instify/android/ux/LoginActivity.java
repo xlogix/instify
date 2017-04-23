@@ -365,8 +365,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     u.getErrorMsg(), Toast.LENGTH_LONG).show();
                         }
                     } else {
+                        // Set the login to false again
                         AppController.getInstance().getPrefManager().setLogin(false);
+                        // Handle UI
                         hideProgressDialog();
+                        //
                         Toast.makeText(LoginActivity.this,
                                 u.getErrorMsg(), Toast.LENGTH_LONG).show();
                     }
