@@ -175,7 +175,7 @@ public class UnivNewsFragment extends Fragment {
 
         // Load the Native Express ad.
         adView.setAdUnitId(getString(R.string.native_express_ad_unit_id));
-        adView.setAdSize(new AdSize(320, 150));
+        adView.setAdSize(new AdSize(300, 150));
         adView.loadAd(new AdRequest.Builder().build());
     }
 
