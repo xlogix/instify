@@ -1,11 +1,16 @@
 <resources>
     <string name="app_name" translatable="false">Instify</string>
 
-    <string name="banner_ad_unit_test_id">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="banner_ad_unit_id">ca-app-pub-1515135859021344/6954228116</string>
+    <string name="all_ad_app_id" translatable="false">ca-app-pub-1515135859021344~5949146511</string>
 
-    <string name="interstitial_ad_unit_test_id">ca-app-pub-3940256099942544/1033173712</string>
-    <string name="interstitial_ad_unit_id">ca-app-pub-1515135859021344/1379346114</string>
+    <string name="banner_ad_unit_test_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-1515135859021344/6954228116</string>
+
+    <string name="interstitial_ad_unit_test_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-1515135859021344/1379346114</string>
+
+    <string name="native_express_ad_unit_id" translatable="false">ca-app-pub-1515135859021344/7869970911</string>
+
     <string name="copy_right">Copyrights © %1$d</string>
 
     <string name="title_activity_intro">Thanks for downloading!</string>

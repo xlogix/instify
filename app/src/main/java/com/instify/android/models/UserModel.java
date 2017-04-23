@@ -12,48 +12,63 @@ public class UserModel {
     @SerializedName("name")
     @Expose
     private String name;
+
     @SerializedName("regno")
     @Expose
     private String regno;
+
     @SerializedName("course")
     @Expose
     private String course;
+
     @SerializedName("dept")
     @Expose
     private String dept;
+
     @SerializedName("studentid")
     @Expose
     private String studentid;
+
     @SerializedName("folio_no")
     @Expose
     private String folioNo;
+
     @SerializedName("semester")
     @Expose
     private Integer semester;
+
     @SerializedName("year")
     @Expose
     private Integer year;
+
     @SerializedName("email")
     @Expose
     private String email;
+
     @SerializedName("dob")
     @Expose
     private String dob;
+
     @SerializedName("sex")
     @Expose
     private String sex;
+
     @SerializedName("address")
     @Expose
     private String address;
+
     @SerializedName("pincode")
     @Expose
     private String pincode;
+
     @SerializedName("image")
     @Expose
     private String image;
+
     @SerializedName("error_msg")
     @Expose
     private String errorMsg;
+
     @SerializedName("error")
     @Expose
     private Boolean error;

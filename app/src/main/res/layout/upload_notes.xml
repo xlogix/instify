@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fillViewport="true"
-            android:scrollbars="vertical"
-            tools:context=".ux.UploadNotesActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true"
+    android:scrollbars="vertical"
+    tools:context=".ux.UploadNotesActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:text="Select Subject: "
             android:textColor="#000000"
-            android:textSize="24sp"/>
+            android:textSize="24sp" />
 
         <Spinner
             android:id="@+id/spinner_subjects"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:padding="10dp"
-            android:scrollbarSize="12dp"/>
+            android:scrollbarSize="12dp" />
 
         <Spinner
             android:id="@+id/spinner_chapters"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:padding="10dp"
-            android:scrollbarSize="12dp"/>
+            android:scrollbarSize="12dp" />
 
 
         <LinearLayout
@@ -54,13 +54,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/fab_margin"
                 android:text="@string/take_photo_prompt"
-                android:textSize="24sp"/>
+                android:textSize="24sp" />
 
             <Button
                 android:id="@+id/button_camera"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:filterTouchesWhenObscured="true" android:text="@string/camera_button_text"/>
+                android:filterTouchesWhenObscured="true"
+                android:text="@string/camera_button_text" />
 
         </LinearLayout>
 
@@ -78,13 +79,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/fab_margin"
                 android:layout_marginTop="@dimen/fab_margin"
-                android:text="@string/label_download"/>
+                android:text="@string/label_download" />
 
             <Button
                 android:id="@+id/button_download"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:filterTouchesWhenObscured="true" android:text="@string/download"/>
+                android:filterTouchesWhenObscured="true"
+                android:text="@string/download" />
         </LinearLayout>
 
     </LinearLayout>

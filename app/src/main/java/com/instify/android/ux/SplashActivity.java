@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,9 +18,6 @@ import com.instify.android.app.AppController;
 import timber.log.Timber;
 
 public class SplashActivity extends Activity {
-
-    // Firebase instance variables
-    private FirebaseUser mFirebaseUser;
 
     /**
      * layoutIntroScreen is faded using animations to get LayoutContent
@@ -41,7 +37,7 @@ public class SplashActivity extends Activity {
         //layoutContent = findViewById(R.id.splash_content);
         layoutIntroScreen = findViewById(R.id.splash_content);
         // Obtain the current logged in user
-        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         // Splash screen timer
         final int SPLASH_TIME_OUT = 1000;
@@ -55,15 +51,15 @@ public class SplashActivity extends Activity {
                 if (AppController.getInstance().getPrefManager().getIsFirstRun()) {
                     startActivity(new Intent(SplashActivity.this, IntroActivity.class));
                     finish();
+                } else if (mFirebaseUser != null && AppController.getInstance().getPrefManager().isLoggedIn()) {
+                    Timber.d("Pass to main activity");
+                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                    finish();
                 } else {
                     Timber.d("Pass to auth activity");
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-                    finish();}
-//                } else {
-//                    Timber.d("Pass to main activity");
-//                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
-//                    finish();
-//                }
+                    finish();
+                }
             }
         }, SPLASH_TIME_OUT);
     }

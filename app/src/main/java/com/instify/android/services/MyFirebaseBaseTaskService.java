@@ -1,4 +1,4 @@
-package com.instify.android.service;
+package com.instify.android.services;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;

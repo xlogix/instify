@@ -55,8 +55,6 @@ public class AppController extends Application {
             LeakCanary.install(this);
             // Initialise Stetho
             Stetho.initializeWithDefaults(this);
-
-
         } else {
             // Obtain the FirebaseAnalytics
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -65,7 +63,6 @@ public class AppController extends Application {
             /*Fabric.with(this, new Crashlytics());
             Timber.plant(new CrashReportingTree());*/
         }
-
     }
 
     public PreferenceManager getPrefManager() {
@@ -107,6 +104,8 @@ public class AppController extends Application {
         // Delete database
         SQLiteHandler sqLiteHandler = new SQLiteHandler(this);
         sqLiteHandler.deleteUsers();
+        // Set First Run to true
+        AppController.getInstance().getPrefManager().setIsFirstRun(true);
         // Launch the intro activity
         Intent intent = new Intent(this, IntroActivity.class);
         // Closing all the Activities & Add new Flag to start new Activity

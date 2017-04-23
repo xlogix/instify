@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         // Initialize Mobile Ads (AdWords)
-        MobileAds.initialize(getApplicationContext(), "ca-app-pub-1515135859021344~5949146511");
+        MobileAds.initialize(getApplicationContext(), getString(R.string.all_ad_app_id));
 
         // [START instantiate_interstitial_ad]
         mInterstitialAd = new InterstitialAd(this);

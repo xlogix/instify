@@ -123,12 +123,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //Check Login State
-        if (AppController.getInstance().getPrefManager().isLoggedIn())
-        {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            finish();
-        }
 
         // Setup SupportActionBar
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -349,6 +343,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         // Start showing the progress dialog
         showProgressDialog();
+
         RetrofitInterface client = RetrofitBuilder.createService(RetrofitInterface.class);
         Call<UserModel> call = client.Login(regNo, password);
         call.enqueue(new Callback<UserModel>() {
@@ -358,8 +353,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     UserModel u = response.body();
                     if (!u.getError()) {
                         AppController.getInstance().getPrefManager().setLogin(true);
+
                         //ToDo  Pass the object usermodel as arguments to adduser
                         db.addUser(u.getName(), u.getEmail(), u.getFolioNo(), u.getImage(), password, u.getRegno(), u.getDept());
+
                         hideProgressDialog();
                         // Take the user to the main activity
                         intentLoginToMain();

@@ -109,16 +109,16 @@ public class PreferenceManager {
      *
      * @return boolean value, true or false
      */
+    public boolean isLoggedIn() {
+        return mPrefs.getBoolean(KEY_IS_LOGGED_IN, false);
+    }
+
     public void setLogin(boolean isLoggedIn) {
         editor.putBoolean(KEY_IS_LOGGED_IN, isLoggedIn);
         // commit changes
         editor.commit();
 
         Timber.d("User login session modified!");
-    }
-
-    public boolean isLoggedIn() {
-        return mPrefs.getBoolean(KEY_IS_LOGGED_IN, false);
     }
 
     /**

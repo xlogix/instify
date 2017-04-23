@@ -160,20 +160,20 @@
             android:parentActivityName=".ux.MainActivity" />
 
         <service
-            android:name=".service.MyFirebaseDownloadService"
+            android:name=".services.MyFirebaseDownloadService"
             android:exported="false" />
         <service
-            android:name=".service.MyFirebaseUploadService"
+            android:name=".services.MyFirebaseUploadService"
             android:exported="false" />
 
         <!-- Firebase Notifications -->
-        <service android:name=".service.MyFirebaseInstanceIDService">
+        <service android:name=".services.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-        <service android:name=".service.MyFirebaseMessagingService">
+        <service android:name=".services.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
