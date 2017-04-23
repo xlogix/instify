@@ -1,5 +1,4 @@
-package com.instify.android.helpers;
-
+package com.instify.android.interfaces;
 
 import com.instify.android.models.UserModel;
 import com.instify.android.models.NewsItemModelList;

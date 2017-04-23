@@ -30,7 +30,7 @@ import com.google.android.gms.ads.NativeExpressAdView;
 import com.instify.android.R;
 import com.instify.android.app.AppController;
 import com.instify.android.helpers.RetrofitBuilder;
-import com.instify.android.helpers.RetrofitInterface;
+import com.instify.android.interfaces.RetrofitInterface;
 import com.instify.android.models.NewsItemModel;
 import com.instify.android.models.NewsItemModelList;
 import com.thefinestartist.finestwebview.FinestWebView;
@@ -116,7 +116,7 @@ public class UnivNewsFragment extends Fragment {
                     }
                     loadNativeExpressAd(0, news);
 
-
+                    // Set adapter
                     mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), news);
 
                     // UI
@@ -227,7 +227,7 @@ public class UnivNewsFragment extends Fragment {
             RecyclerView.ViewHolder viewHolder = null;
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             if (viewType == AD_TYPE) {
-                View v = inflater.inflate(R.layout.card_view_univ_with_ad, parent, false);
+                View v = inflater.inflate(R.layout.card_view_with_ad, parent, false);
                 viewHolder = new AdViewHolder(v);
             } else {
                 View v = inflater.inflate(R.layout.card_view_univ, parent, false);
