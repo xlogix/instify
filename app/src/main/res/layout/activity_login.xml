@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_animate"
     android:fillViewport="true"
+    android:fitsSystemWindows="true"
     android:padding="@dimen/activity_vertical_margin"
     tools:context=".ux.LoginActivity">
 
@@ -25,6 +26,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:background="@drawable/circle_background"
+            android:contentDescription="@string/login_image_description"
             android:padding="20dp"
             android:src="@drawable/background"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -44,7 +46,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_google_login" />
-
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/action_login"
@@ -74,7 +75,6 @@
             android:layout_marginRight="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:visibility="visible"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -86,7 +86,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginLeft="16dp"
-
             android:layout_marginRight="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
@@ -110,7 +109,6 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/textInputLayout"
             android:layout_width="0dp"
-
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginLeft="16dp"
@@ -138,7 +136,6 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="7dp"
             android:layout_marginEnd="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
@@ -149,7 +146,6 @@
             android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/action_login" />

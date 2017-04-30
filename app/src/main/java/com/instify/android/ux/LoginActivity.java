@@ -1,5 +1,6 @@
 package com.instify.android.ux;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
@@ -8,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ScrollView;
@@ -55,7 +57,6 @@ import timber.log.Timber;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener,
         GoogleApiClient.OnConnectionFailedListener {
-
     private static final String TAG = LoginActivity.class.getSimpleName();
 
     /**
@@ -129,16 +130,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        // Set the status bar as translucent
+        setStatusBarTranslucent(true);
 
+        // Setup animation
         AnimationDrawable animationDrawable = (AnimationDrawable) mScrollView.getBackground();
-
         animationDrawable.setEnterFadeDuration(2500);
         animationDrawable.setExitFadeDuration(2500);
-
         animationDrawable.start();
-        // Setup SupportActionBar
-//        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-//        getSupportActionBar().setCustomView(R.layout.view_custom_action_bar);
 
         // Views
         mRegNoField = (AutoCompleteTextView) findViewById(R.id.field_regNo);
@@ -185,6 +184,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         };
         // [END auth_state_listener]
+    }
+
+    // Set the status bar translucent(works only after API 19)
+    @TargetApi(19)
+    protected void setStatusBarTranslucent(boolean makeTranslucent) {
+        if (makeTranslucent) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
     }
 
     // [START signin]
@@ -344,7 +353,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-    private void attemptErploginRetrofit(final String regNo, final String password) {
+    private void attemptErpLoginRetrofit(final String regNo, final String password) {
         if (!validateForm()) {
             return;
         }
@@ -424,7 +433,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.action_login) {
-            attemptErploginRetrofit(mRegNoField.getText().toString(), mPasswordField.getText().toString());
+            attemptErpLoginRetrofit(mRegNoField.getText().toString(), mPasswordField.getText().toString());
         } else if (i == R.id.button_google_login) {
             signInWithGoogle();
         }

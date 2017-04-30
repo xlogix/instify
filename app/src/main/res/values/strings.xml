@@ -82,10 +82,11 @@
 
     <!-- Login Activity -->
     <string name="hint_email">Your Email</string>
+    <string name="login_image_description">Instify\'s logo image</string>
     <string name="hint_password">ERP\'s Password</string>
     <string name="hint_regNo">Registration Number</string>
     <string name="email">Email</string>
-    <string name="and">And</string>
+    <string name="and">AND</string>
     <string name="auth_failed">Authentication Failed. Try Again.</string>
     <string name="auth_success">Authentication Successful!</string>
     <string name="action_sign_in">Login</string>
