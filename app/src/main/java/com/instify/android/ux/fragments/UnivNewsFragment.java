@@ -224,7 +224,7 @@ public class UnivNewsFragment extends Fragment {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            RecyclerView.ViewHolder viewHolder = null;
+            RecyclerView.ViewHolder viewHolder;
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             if (viewType == AD_TYPE) {
                 View v = inflater.inflate(R.layout.card_view_with_ad, parent, false);
@@ -248,9 +248,7 @@ public class UnivNewsFragment extends Fragment {
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
             int viewType = getItemViewType(position);
             switch (viewType) {
-
                 case CONTENT_TYPE:
-
                     ViewHolder viewHolder = (ViewHolder) holder;
                     NewsItemModel m = (NewsItemModel) newsArray.get(position);
                     viewHolder.mTextViewTitle.setText(m.getTitle());
@@ -278,12 +276,10 @@ public class UnivNewsFragment extends Fragment {
                                 .gradientDivider(false)
                                 .setCustomAnimations(R.anim.slide_up, R.anim.hold, R.anim.hold, R.anim.slide_down)
                                 .show(m.getLink());
-
                     });
-
                     break;
                 case AD_TYPE:
-                    //Fall Through
+                    // Fall Through
                 default:
                     AdViewHolder nativeExpressHolder =
                             (AdViewHolder) holder;
@@ -304,7 +300,6 @@ public class UnivNewsFragment extends Fragment {
 
                     // Add the Native Express ad to the native express ad view.
                     adCardView.addView(adView);
-
                     break;
             }
         }
