@@ -97,7 +97,7 @@
 
         <activity
             android:name=".ux.LoginActivity"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme.NoActionBarTransparent"
             android:windowSoftInputMode="adjustResize" />
 
         <activity

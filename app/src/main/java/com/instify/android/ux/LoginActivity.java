@@ -2,14 +2,15 @@ package com.instify.android.ux;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -32,8 +33,8 @@ import com.instify.android.R;
 import com.instify.android.app.AppConfig;
 import com.instify.android.app.AppController;
 import com.instify.android.helpers.RetrofitBuilder;
-import com.instify.android.interfaces.RetrofitInterface;
 import com.instify.android.helpers.SQLiteHandler;
+import com.instify.android.interfaces.RetrofitInterface;
 import com.instify.android.models.UserModel;
 
 import org.json.JSONException;
@@ -42,6 +43,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import timber.log.Timber;
@@ -59,6 +62,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * Id to identity GOOGLE_SIGN_IN request
      */
     private static final int RC_GOOGLE_SIGN_IN = 9001;
+    @BindView(R.id.scrollView)
+    ScrollView mScrollView;
 
     private ProgressDialog mProgressDialog;
     private AutoCompleteTextView mRegNoField;
@@ -122,10 +127,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
 
+
+        AnimationDrawable animationDrawable = (AnimationDrawable) mScrollView.getBackground();
+
+        animationDrawable.setEnterFadeDuration(2500);
+        animationDrawable.setExitFadeDuration(2500);
+
+        animationDrawable.start();
         // Setup SupportActionBar
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.view_custom_action_bar);
+//        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+//        getSupportActionBar().setCustomView(R.layout.view_custom_action_bar);
 
         // Views
         mRegNoField = (AutoCompleteTextView) findViewById(R.id.field_regNo);

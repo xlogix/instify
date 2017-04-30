@@ -80,5 +80,12 @@
     <style name="ThemeDialogText">
         <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
     </style>
+    <style name="EditTextTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+    </style>
 
 </resources>

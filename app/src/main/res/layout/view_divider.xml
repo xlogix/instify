@@ -11,7 +11,7 @@
         android:layout_height="1dp"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:background="@color/google_blue_500" />
+        android:background="@color/white" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:text="@string/and"
-        android:textColor="@color/google_blue_500"
+        android:textColor="@color/white"
         android:textSize="16sp" />
 
     <TextView
@@ -27,5 +27,5 @@
         android:layout_height="1dp"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:background="@color/google_blue_500" />
+        android:background="@color/white" />
 </LinearLayout>
