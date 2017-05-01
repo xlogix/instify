@@ -5,16 +5,13 @@
     android:layout_height="@dimen/nav_header_height"
     android:gravity="bottom">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/nav_header" />
+
 
     <LinearLayout
         android:id="@+id/navigation_drawer_list_header_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/gradientnavheader"
         android:gravity="center"
         android:orientation="vertical">
 

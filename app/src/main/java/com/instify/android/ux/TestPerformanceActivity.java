@@ -1,14 +1,39 @@
 package com.instify.android.ux;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.VisibleForTesting;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.instify.android.R;
+import com.instify.android.helpers.RetrofitBuilder;
+import com.instify.android.helpers.SQLiteHandler;
+import com.instify.android.interfaces.RetrofitInterface;
+import com.instify.android.models.SubjectModel;
+import com.instify.android.models.TestPerformanceModel;
+import com.instify.android.models.TestPerformanceResponseModel;
+import com.instify.android.ux.adapters.TestPerformanceAdapterParent;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
 
 /**
  * Created by Abhish3k on 15-03-2017.
@@ -16,84 +41,127 @@ import com.instify.android.R;
 
 public class TestPerformanceActivity extends AppCompatActivity {
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private AdView mAdView;
-
-    // [START add_lifecycle_methods]
-
-    /**
-     * Called when leaving the activity
-     */
-    @Override
-    public void onPause() {
-        if (mAdView != null) {
-            mAdView.pause();
-        }
-        super.onPause();
-    }
-
-    /**
-     * Called when returning to the activity
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mAdView != null) {
-            mAdView.resume();
-        }
-    }
-
-    /**
-     * Called before the activity is destroyed
-     */
-    @Override
-    public void onDestroy() {
-        if (mAdView != null) {
-            mAdView.destroy();
-            finish();
-        }
-        super.onDestroy();
-    }
-    // [END add_lifecycle_methods]
-
+    @BindView(R.id.nav_drawer_user_photo)
+    CircleImageView mNavDrawerUserPhoto;
+    @BindView(R.id.nav_drawer_header_text)
+    TextView mNavDrawerHeaderText;
+    @BindView(R.id.recycler_view_test_performance)
+    RecyclerView mRecyclerViewTestPerformance;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.toolbar_layout)
+    CollapsingToolbarLayout mToolbarLayout;
+    @BindView(R.id.app_bar)
+    AppBarLayout mAppBar;
+    SQLiteHandler db = new SQLiteHandler(this);
+    private FirebaseUser mFirebaseUser;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_performance);
+        ButterKnife.bind(this);
+        mRecyclerViewTestPerformance.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerViewTestPerformance.setHasFixedSize(true);
+        setSupportActionBar(mToolbar);
+        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (mFirebaseUser != null) {
+            try {
+                // Set profile picture from Firebase account
+                Glide.with(this)
+                        .load(mFirebaseUser.getPhotoUrl().toString()).placeholder(R.drawable.default_pic_face)
+                        .dontAnimate()
+                        .centerCrop()
+                        .priority(Priority.HIGH)
+                        .into(mNavDrawerUserPhoto);
+            } catch (Exception e) {
+                Timber.d(e);
+                Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }
 
-        mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        // Set the name
+        mNavDrawerHeaderText.setText(db.getUserDetails().get("name"));
 
         // Setup SupportActionBar
         if (getSupportActionBar() != null) {
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    mToolbarLayout.setTitle("Test Performance");
+                    isShow = true;
+                } else if (isShow) {
+                    mToolbarLayout.setTitle(" ");//carefull there should a space between double quote otherwise it wont work
+                    isShow = false;
+                }
+            }
+        });
+
+        AttemptJson();
+
     }
 
-    @VisibleForTesting
-    AdView getAdView() {
-        return mAdView;
+
+    void AttemptJson() {
+
+        RetrofitInterface client = RetrofitBuilder.createService(RetrofitInterface.class);
+        Call<TestPerformanceResponseModel> call = client.GetTestPerformance(db.getUserDetails().get("token"), db.getUserDetails().get("created_at"));
+//        showRefreshing();
+        call.enqueue(new Callback<TestPerformanceResponseModel>() {
+            @Override
+            public void onResponse(Call<TestPerformanceResponseModel> call, Response<TestPerformanceResponseModel> response) {
+                TestPerformanceResponseModel t = response.body();
+                if (response.isSuccessful()) {
+//                    hideRefreshing();
+                    //TODO Create Adapter here When api is Complete
+                } else {
+                    //fake data
+                    List<SubjectModel> l = new ArrayList<>();
+                    l.add(new SubjectModel("15cs201", "Programming In Java", "3.2/5.0"));
+                    l.add(new SubjectModel("15cs203", "Programming In Python", "3.2/5.0"));
+                    l.add(new SubjectModel("15se201", "Programming In Js", "3.2/5.0"));
+                    List<TestPerformanceModel> l2 = new ArrayList<>();
+                    l2.add(new TestPerformanceModel("CT-1", l));
+                    l2.add(new TestPerformanceModel("CT-2", l));
+                    l2.add(new TestPerformanceModel("Viva", l));
+                    l2.add(new TestPerformanceModel("Record", l));
+                    TestPerformanceAdapterParent test = new TestPerformanceAdapterParent(l2, TestPerformanceActivity.this);
+                    mRecyclerViewTestPerformance.setAdapter(test);
+//                    hideRefreshing();
+                    Snackbar.make(findViewById(android.R.id.content), "Sync Failed", Snackbar.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TestPerformanceResponseModel> call, Throwable t) {
+                List<SubjectModel> l = new ArrayList<SubjectModel>();
+                l.add(new SubjectModel("15cs201", "Programming In Java", "3.2/5.0"));
+                l.add(new SubjectModel("15cs203", "Programming In Python", "3.2/5.0"));
+                l.add(new SubjectModel("15se201", "Programming In Js", "3.2/5.0"));
+                List<TestPerformanceModel> l2 = new ArrayList<TestPerformanceModel>();
+                l2.add(new TestPerformanceModel("CT-1", l));
+                l2.add(new TestPerformanceModel("CT-2", l));
+                l2.add(new TestPerformanceModel("Viva", l));
+                l2.add(new TestPerformanceModel("Record", l));
+                TestPerformanceAdapterParent test = new TestPerformanceAdapterParent(l2, TestPerformanceActivity.this);
+                mRecyclerViewTestPerformance.setAdapter(test);
+//                hideRefreshing();
+
+                Snackbar.make(findViewById(android.R.id.content), "Sync Failed", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
 
-    private class AttemptJson extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-            // Call the function
-            return "";
-        }
-    }
-
-    private void showRefreshing() {
-        if (!mSwipeRefreshLayout.isRefreshing())
-            mSwipeRefreshLayout.setRefreshing(true);
-    }
-
-    private void hideRefreshing() {
-        if (mSwipeRefreshLayout.isRefreshing())
-            mSwipeRefreshLayout.setRefreshing(false);
-    }
 }

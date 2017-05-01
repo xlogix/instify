@@ -1,8 +1,8 @@
 package com.instify.android.interfaces;
 
-import com.instify.android.models.UserModel;
 import com.instify.android.models.NewsItemModelList;
-import java.util.List;
+import com.instify.android.models.TestPerformanceResponseModel;
+import com.instify.android.models.UserModel;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -22,5 +22,10 @@ public interface RetrofitInterface {
             @Field("pass") String password);
     @GET("univ-news.php")
     Call<NewsItemModelList> GetUnivNews();
+
+    @FormUrlEncoded
+    @POST("get-tesperformance.php")
+    Call<TestPerformanceResponseModel> GetTestPerformance(@Field("regno") String username,
+                                                          @Field("pass") String password);
 
 }

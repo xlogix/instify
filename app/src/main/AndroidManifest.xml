@@ -1,43 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.instify.android">
+          package="com.instify.android">
 
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
         android:normalScreens="true"
-        android:smallScreens="true" />
+        android:smallScreens="true"/>
 
     <!-- Normal permissions, access automatically granted to app -->
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <!-- Dangerous permissions, access must be requested at runtime -->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <!-- FCM (Firebase Cloud Messaging) for all build types configuration -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <!-- self-defined permission prevents other apps to hijack PNs -->
     <permission
         android:name="${applicationId}.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
+        android:protectionLevel="signature"/>
+
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE"/>
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false" />
+        android:required="false"/>
     <uses-feature
         android:name="android.hardware.camera.front"
-        android:required="false" />
+        android:required="false"/>
     <uses-feature
         android:name="android.hardware.camera.autofocus"
-        android:required="false" />
+        android:required="false"/>
 
-    <application xmlns:tools="http://schemas.android.com/tools"
+    <application
+        xmlns:tools="http://schemas.android.com/tools"
         android:name=".app.AppController"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
@@ -51,25 +53,23 @@
         <!-- Support for expanded screen aspect ratio of 18:9 like Samsung Galaxy S8 -->
         <meta-data
             android:name="android.max_aspect"
-            android:value="2.1" />
-
+            android:value="2.1"/>
         <meta-data
             android:name="firebase_analytics_collection_enabled"
-            android:value="false" />
+            android:value="false"/>
 
         <activity
             android:name="com.thefinestartist.finestwebview.FinestWebViewActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor"
-            android:theme="@style/FinestWebViewTheme.Light" />
-
-        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+            android:theme="@style/FinestWebViewTheme.Light"/>
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity"/>
 
         <!-- [START add_activity_config_changes] -->
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-            android:theme="@android:style/Theme.Translucent" />
+            android:theme="@android:style/Theme.Translucent"/>
         <!-- [END add_activity_config_changes] -->
 
         <activity
@@ -77,117 +77,111 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="instify" />
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <data android:scheme="instify"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ux.IntroActivity"
             android:label="@string/title_activity_intro"
-            android:theme="@style/AppTheme.NoActionBar" />
-
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ux.LoginActivity"
             android:theme="@style/AppTheme.NoActionBarTransparent"
-            android:windowSoftInputMode="adjustResize" />
-
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".ux.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBarTransparent" />
-
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ux.ProfileActivity"
-            android:label="@string/title_activity_profile" />
-
+            android:label="@string/title_activity_profile"/>
         <activity
             android:name=".ux.ProfilePictureFullScreenActivity"
-            android:parentActivityName=".ux.MainActivity" />
-
+            android:parentActivityName=".ux.MainActivity"/>
         <activity
             android:name=".ux.ChatActivity"
-            android:label="@string/title_activity_chat" />
-
+            android:label="@string/title_activity_chat"/>
         <activity
             android:name=".ux.FeePaymentHistoryActivity"
             android:label="@string/title_activity_fee_payment_history"
-            android:parentActivityName=".ux.MainActivity" />
-
+            android:parentActivityName=".ux.MainActivity"/>
         <activity
             android:name=".ux.SupportUsActivity"
             android:label="@string/title_activity_support_us"
-            android:parentActivityName=".ux.MainActivity" />
-
+            android:parentActivityName=".ux.MainActivity"/>
         <activity
             android:name=".ux.UploadNotesActivity"
             android:label="@string/title_activity_upload_notes"
-            android:parentActivityName=".ux.MainActivity" />
-
+            android:parentActivityName=".ux.MainActivity"/>
         <activity
             android:name=".ux.UploadNewsActivity"
             android:label="@string/title_activity_upload_campus"
-            android:parentActivityName=".ux.MainActivity" />
-
-        <activity
-            android:name=".ux.TestPerformanceActivity"
-            android:label="Future Update"
-            android:parentActivityName=".ux.MainActivity" />
-
+            android:parentActivityName=".ux.MainActivity"/>
         <activity
             android:name=".ux.AboutActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".ux.MainActivity" />
-
+            android:parentActivityName=".ux.MainActivity"/>
         <activity
             android:name=".ux.SettingsActivity"
-            android:label="Settings" />
-
+            android:label="Settings"/>
         <activity
             android:name=".ux.NotesSubjectFilesActivity"
-            android:parentActivityName=".ux.MainActivity" />
-
+            android:parentActivityName=".ux.MainActivity"/>
         <activity
             android:name=".ux.NotesUploadActivity"
-            android:parentActivityName=".ux.MainActivity" />
+            android:parentActivityName=".ux.MainActivity"/>
 
         <service
             android:name=".services.MyFirebaseDownloadService"
-            android:exported="false" />
+            android:exported="false"/>
         <service
             android:name=".services.MyFirebaseUploadService"
-            android:exported="false" />
+            android:exported="false"/>
 
         <!-- Firebase Notifications -->
         <service android:name=".services.MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
-
         <service android:name=".services.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-        See README(https://goo.gl/l4GJaQ) for more. -->
+        <!--
+        Set custom default icon. This is used when no icon is set for incoming notification messages.
+        See README(https://goo.gl/l4GJaQ) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_notification_white" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+            android:resource="@drawable/ic_notification_white"/>
+        <!--
+             Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorPrimary" />
+            android:resource="@color/colorPrimary"/>
         <!-- ./Firebase Notifications -->
+        <activity
+            android:name=".ux.TestPerformanceActivity"
+            android:label="@string/title_activity_test_performance"
+            android:parentActivityName=".ux.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.instify.android.ux.MainActivity"/>
+        </activity>
     </application>
+
 </manifest>
