@@ -19,13 +19,8 @@ import com.instify.android.R;
 import com.instify.android.helpers.RetrofitBuilder;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.interfaces.RetrofitInterface;
-import com.instify.android.models.SubjectModel;
-import com.instify.android.models.TestPerformanceModel;
 import com.instify.android.models.TestPerformanceResponseModel;
 import com.instify.android.ux.adapters.TestPerformanceAdapterParent;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -122,20 +117,14 @@ public class TestPerformanceActivity extends AppCompatActivity {
                 TestPerformanceResponseModel t = response.body();
                 if (response.isSuccessful()) {
 //                    hideRefreshing();
+                    TestPerformanceAdapterParent test = new TestPerformanceAdapterParent(t.getTestPerformance(), TestPerformanceActivity.this);
+                    mRecyclerViewTestPerformance.setAdapter(test);
+                    Snackbar.make(findViewById(android.R.id.content), "Sync Successful", Snackbar.LENGTH_SHORT).show();
+
                     //TODO Create Adapter here When api is Complete
                 } else {
-                    //fake data
-                    List<SubjectModel> l = new ArrayList<>();
-                    l.add(new SubjectModel("15cs201", "Programming In Java", "3.2/5.0"));
-                    l.add(new SubjectModel("15cs203", "Programming In Python", "3.2/5.0"));
-                    l.add(new SubjectModel("15se201", "Programming In Js", "3.2/5.0"));
-                    List<TestPerformanceModel> l2 = new ArrayList<>();
-                    l2.add(new TestPerformanceModel("CT-1", l));
-                    l2.add(new TestPerformanceModel("CT-2", l));
-                    l2.add(new TestPerformanceModel("Viva", l));
-                    l2.add(new TestPerformanceModel("Record", l));
-                    TestPerformanceAdapterParent test = new TestPerformanceAdapterParent(l2, TestPerformanceActivity.this);
-                    mRecyclerViewTestPerformance.setAdapter(test);
+
+
 //                    hideRefreshing();
                     Snackbar.make(findViewById(android.R.id.content), "Sync Failed", Snackbar.LENGTH_SHORT).show();
 
@@ -144,17 +133,7 @@ public class TestPerformanceActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<TestPerformanceResponseModel> call, Throwable t) {
-                List<SubjectModel> l = new ArrayList<SubjectModel>();
-                l.add(new SubjectModel("15cs201", "Programming In Java", "3.2/5.0"));
-                l.add(new SubjectModel("15cs203", "Programming In Python", "3.2/5.0"));
-                l.add(new SubjectModel("15se201", "Programming In Js", "3.2/5.0"));
-                List<TestPerformanceModel> l2 = new ArrayList<TestPerformanceModel>();
-                l2.add(new TestPerformanceModel("CT-1", l));
-                l2.add(new TestPerformanceModel("CT-2", l));
-                l2.add(new TestPerformanceModel("Viva", l));
-                l2.add(new TestPerformanceModel("Record", l));
-                TestPerformanceAdapterParent test = new TestPerformanceAdapterParent(l2, TestPerformanceActivity.this);
-                mRecyclerViewTestPerformance.setAdapter(test);
+
 //                hideRefreshing();
 
                 Snackbar.make(findViewById(android.R.id.content), "Sync Failed", Snackbar.LENGTH_SHORT).show();

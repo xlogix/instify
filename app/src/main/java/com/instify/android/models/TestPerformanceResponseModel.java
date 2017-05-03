@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TestPerformanceResponseModel {
 
-    @SerializedName("Test-Performance")
+    @SerializedName("test-performance")
     @Expose
     private List<TestPerformanceModel> testPerformance = null;
 
