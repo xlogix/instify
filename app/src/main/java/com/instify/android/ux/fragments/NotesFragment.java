@@ -87,58 +87,54 @@ public class NotesFragment extends Fragment {
         String tag_string_req = "req_attendance";
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_ATTENDANCE, new Response.Listener<String>() {
+                AppConfig.URL_ATTENDANCE, response -> {
+            try {
+                JSONObject jObj = new JSONObject(response);
+                boolean error = jObj.getBoolean("error");
 
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
+                // Handle UI
+                hideRefreshing();
 
-                    // Handle UI
-                    hideRefreshing();
+                // Check for error node in json
+                if (!error) {
+                    List<NotesModel> notes = new ArrayList<>();
 
-                    // Check for error node in json
-                    if (!error) {
-                        List<NotesModel> notes = new ArrayList<>();
+                    JSONArray user = jObj.getJSONArray("subjects");
 
-                        JSONArray user = jObj.getJSONArray("subjects");
+                    for (int i = 0; i < user.length(); i++) {
+                        String name = user.getString(i);
+                        JSONObject subs = jObj.getJSONObject(user.getString(i));
 
-                        for (int i = 0; i < user.length(); i++) {
-                            String name = user.getString(i);
-                            JSONObject subs = jObj.getJSONObject(user.getString(i));
+                        NotesModel fishData = new NotesModel();
+                        fishData.fishName = subs.getString("sub-desc");
+                        fishData.catName = name;
+                        //fishData.sizeName = json_data.getString("registration").trim();
+                        //fishData.price = json_data.getString("ID");
+                        // fishData.image = "https://hashbird.com/gogrit.in/workspace/srm-api/studentImages/" + json_data.getString("registration").trim() + ".jpg";
+                        notes.add(fishData);
 
-                            NotesModel fishData = new NotesModel();
-                            fishData.fishName = subs.getString("sub-desc");
-                            fishData.catName = name;
-                            //fishData.sizeName = json_data.getString("registration").trim();
-                            //fishData.price = json_data.getString("ID");
-                            // fishData.image = "https://hashbird.com/gogrit.in/workspace/srm-api/studentImages/" + json_data.getString("registration").trim() + ".jpg";
-                            notes.add(fishData);
-
-                            //  Toast.makeText(getContext(),user.getString(i)+" - "+subs.getString("sub-desc"),Toast.LENGTH_SHORT).show()
-                        }
-
-                        mAdapter = new NotesAdapter(getContext(), notes);
-                        mRVFish.setAdapter(mAdapter);
-                        mRVFish.setLayoutManager(new LinearLayoutManager(getContext()));
-
-                    } else {
-                        // Update UI
-                        hideRefreshing();
-                        // Error in login. Get the error message
-                        String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(getContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
+                        //  Toast.makeText(getContext(),user.getString(i)+" - "+subs.getString("sub-desc"),Toast.LENGTH_SHORT).show()
                     }
-                } catch (JSONException e) {
+
+                    mAdapter = new NotesAdapter(getContext(), notes);
+                    mRVFish.setAdapter(mAdapter);
+                    mRVFish.setLayoutManager(new LinearLayoutManager(getContext()));
+
+                } else {
                     // Update UI
                     hideRefreshing();
-                    // JSON error
-                    e.printStackTrace();
-                    Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    // Error in login. Get the error message
+                    String errorMsg = jObj.getString("error_msg");
+                    Toast.makeText(getContext(),
+                            errorMsg, Toast.LENGTH_LONG).show();
                 }
-            }
+            } catch (JSONException e) {
+                        // Update UI
+                        hideRefreshing();
+                // JSON error
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
         }, new Response.ErrorListener() {
 
             @Override

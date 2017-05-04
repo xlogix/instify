@@ -28,6 +28,11 @@ import com.instify.android.ux.UploadNewsActivity;
 
 public class CampNewsFragment extends Fragment {
 
+    RecyclerView recyclerView;
+    // Firebase Declarations
+    DatabaseReference newsRef;
+    FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder> fAdapterAll;
+    String userRegNo, userDept, pathAll, pathDept, pathSec;
     // Default Constructor
     public CampNewsFragment() {
     }
@@ -43,12 +48,6 @@ public class CampNewsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
     }
-
-    RecyclerView recyclerView;
-    // Firebase Declarations
-    DatabaseReference newsRef;
-    FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder> fAdapterAll;
-    String userRegNo, userDept, pathAll, pathDept, pathSec;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -102,32 +101,14 @@ public class CampNewsFragment extends Fragment {
                 holder.campusTitle.setText(model.title);
                 holder.campusAuthor.setText(model.author);
                 holder.campusDescription.setText(model.description);
-                holder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
-                        launchChat.putExtra("refPath", path + "/" + fAdapterAll.getRef(position).getKey());
-                        startActivity(launchChat);
-                    }
+                holder.mView.setOnClickListener(view -> {
+                    Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
+                    launchChat.putExtra("refPath", path + "/" + fAdapterAll.getRef(position).getKey());
+                    startActivity(launchChat);
                 });
             }
         };
         recyclerView.setAdapter(fAdapterAll);
-    }
-
-    public static class CampusViewHolder extends RecyclerView.ViewHolder {
-        public View mView;
-        public TextView campusTitle;
-        public TextView campusDescription;
-        public TextView campusAuthor;
-
-        public CampusViewHolder(View v) {
-            super(v);
-            mView = v;
-            campusTitle = (TextView) v.findViewById(R.id.campusTitle);
-            campusAuthor = (TextView) v.findViewById(R.id.campusAuthor);
-            campusDescription = (TextView) v.findViewById(R.id.campusDescription);
-        }
     }
 
     @Override
@@ -149,5 +130,20 @@ public class CampNewsFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static class CampusViewHolder extends RecyclerView.ViewHolder {
+        public View mView;
+        public TextView campusTitle;
+        public TextView campusDescription;
+        public TextView campusAuthor;
+
+        public CampusViewHolder(View v) {
+            super(v);
+            mView = v;
+            campusTitle = (TextView) v.findViewById(R.id.campusTitle);
+            campusAuthor = (TextView) v.findViewById(R.id.campusAuthor);
+            campusDescription = (TextView) v.findViewById(R.id.campusDescription);
+        }
     }
 }

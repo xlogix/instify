@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 import com.instify.android.R;
 import com.instify.android.models.NotesModel;
 import com.instify.android.ux.NotesSubjectFilesActivity;
@@ -30,14 +28,14 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     // create constructor to initialize context and data sent from MainActivity
     public NotesAdapter(Context context, List<NotesModel> data) {
         this.context = context;
-        inflater = LayoutInflater.from(context);
+
         this.data = data;
     }
 
     // Inflate the layout when ViewHolder created
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.card_view_notes_subjects, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_notes_subjects, parent, false);
         return new MyHolder(view);
     }
 

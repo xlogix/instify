@@ -96,7 +96,7 @@ public class ListExpandableAdapter extends BaseExpandableListAdapter {
 
         TextView textViewHeader = (TextView) convertView
                 .findViewById(R.id.textViewHeader);
-        convertView.setBackgroundResource(R.color.light_blue_500);
+//        convertView.setBackgroundResource(R.color.white);
         textViewHeader.setText(headerTitle);
 
         return convertView;

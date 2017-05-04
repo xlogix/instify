@@ -55,5 +55,9 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" />
+    <include
 
+        layout="@layout/placeholder_chatempty"
+        android:visibility="gone"
+    />
 </RelativeLayout>

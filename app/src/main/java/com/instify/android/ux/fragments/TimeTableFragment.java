@@ -1,5 +1,6 @@
 package com.instify.android.ux.fragments;
 
+import android.app.DatePickerDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,13 +12,13 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.instify.android.R;
@@ -35,6 +36,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,6 +44,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 import timber.log.Timber;
 
 /**
@@ -50,8 +56,20 @@ import timber.log.Timber;
  */
 
 public class TimeTableFragment extends Fragment {
+    @BindView(R.id.calendarbutton)
+    ImageButton mCalendarbutton;
+    @BindView(R.id.currentdate)
+    TextView mCurrentdate;
+    Unbinder unbinder;
+    String userRegNo;
+    String userPass;
     private String TAG = TimeTableFragment.class.getSimpleName();
-
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private RecyclerView mRecyclerView;
+    private TimeLineAdapter mTimeLineAdapter;
+    private ExpandableListView expListView;
+    private List<TimeTableModel> mDataList = new ArrayList<>();
+    private boolean mWithLinePadding;
     public TimeTableFragment() {
     }
 
@@ -62,32 +80,38 @@ public class TimeTableFragment extends Fragment {
         return frag;
     }
 
+    @OnClick(R.id.calendarbutton)
+    void showcalendar() {
+        Calendar c = Calendar.getInstance();
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                getContext(), null, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView mRecyclerView;
-    private TimeLineAdapter mTimeLineAdapter;
-    private ExpandableListView expListView;
-    private List<TimeTableModel> mDataList = new ArrayList<>();
-    private boolean mWithLinePadding;
-
-    String userRegNo;
-    String userPass;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_time_table, container, false);
         // Taking control of the menu options
+        unbinder = ButterKnife.bind(this, rootView);
         setHasOptionsMenu(true);
         // Initialize SwipeRefreshLayout
         mSwipeRefreshLayout = (SwipeRefreshLayout)
                 rootView.findViewById(R.id.swipe_refresh_layout_time_table);
         // Set color scheme
         mSwipeRefreshLayout.setColorSchemeResources(R.color.red_primary, R.color.black, R.color.google_blue_900);
+
+        Date date = new Date();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMMM dd, yyyy", Locale.getDefault());
+
+        mCurrentdate.setText(sdf.format(date));
 
         /*// Declare elements of TimeLine view
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewTimeTable);
@@ -126,13 +150,11 @@ public class TimeTableFragment extends Fragment {
         final AttemptJson dataObj = new AttemptJson();
         dataObj.doInBackground();
 
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                showRefreshing();
-                dataObj.doInBackground();
-            }
+        mSwipeRefreshLayout.setOnRefreshListener(() -> {
+            showRefreshing();
+            dataObj.doInBackground();
         });
+
 
         return rootView;
     }
@@ -141,14 +163,10 @@ public class TimeTableFragment extends Fragment {
         return new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
     }
 
-    private class AttemptJson extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-            // Get data for both the views
-            getTimeTable();
-            return "";
-        }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private void getData() {
@@ -170,48 +188,42 @@ public class TimeTableFragment extends Fragment {
          * Method to make json object request where json response is dynamic
          * */
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, endpoint, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            // Hide the Progress Dialog
-                            hideRefreshing();
-                            // Clear the list
-                            mDataList.clear();
-                            // Handle response
-                            String msg = "";
-                            Iterator<String> it = response.keys();
-                            while (it.hasNext()) {
-                                String key = it.next();
-                                if (response.get(key) instanceof JSONArray) {
-                                    JSONArray array = response.getJSONArray(key);
-                                    int size = array.length();
-                                    // [TRY] Fix the card overlap issue
-                                    mTimeLineAdapter.notifyItemRangeRemoved(0, size);
-                                    for (int i = 0; i < size; i++) {
-                                        msg += "Hour " + (i + 1) + " : " + array.get(i) + "\n";
-                                        mDataList.add(new TimeTableModel(array.get(i).toString(), mTimeValues[i], OrderStatus.INACTIVE));
-                                    }
-                                    // Notify the adapter that data has been retrieved.
-                                    mTimeLineAdapter.notifyDataSetChanged();
-                                } else {
-                                    msg = key + ":" + response.getString(key);
-                                    Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+                response -> {
+                    try {
+                        // Hide the Progress Dialog
+                        hideRefreshing();
+                        // Clear the list
+                        mDataList.clear();
+                        // Handle response
+                        String msg = "";
+                        Iterator<String> it = response.keys();
+                        while (it.hasNext()) {
+                            String key = it.next();
+                            if (response.get(key) instanceof JSONArray) {
+                                JSONArray array = response.getJSONArray(key);
+                                int size = array.length();
+                                // [TRY] Fix the card overlap issue
+                                mTimeLineAdapter.notifyItemRangeRemoved(0, size);
+                                for (int i = 0; i < size; i++) {
+                                    msg += "Hour " + (i + 1) + " : " + array.get(i) + "\n";
+                                    mDataList.add(new TimeTableModel(array.get(i).toString(), mTimeValues[i], OrderStatus.INACTIVE));
                                 }
+                                // Notify the adapter that data has been retrieved.
+                                mTimeLineAdapter.notifyDataSetChanged();
+                            } else {
+                                msg = key + ":" + response.getString(key);
+                                Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
                             }
-                        } catch (JSONException e) {
-                            Timber.d("JSON error : ", "Object DataSet is Incorrect");
-                            e.printStackTrace();
                         }
+                    } catch (JSONException e) {
+                        Timber.d("JSON error : ", "Object DataSet is Incorrect");
+                        e.printStackTrace();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Timber.e("Error: " + error.getMessage());
-                // Handle UI
-                hideRefreshing();
-                Toast.makeText(getContext(), "Error Receiving Data", Toast.LENGTH_LONG).show();
-            }
+                }, error -> {
+            Timber.e("Error: " + error.getMessage());
+            // Handle UI
+            hideRefreshing();
+            Toast.makeText(getContext(), "Error Receiving Data", Toast.LENGTH_LONG).show();
         });
 
         int socketTimeout = 10000;  // 10 seconds - change to what you want
@@ -228,153 +240,126 @@ public class TimeTableFragment extends Fragment {
         showRefreshing();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_GETTT, new Response.Listener<String>() {
+                AppConfig.URL_GETTT, response -> {
+            Timber.d("Login Response: " + response);
+            // Handle UI
+            hideRefreshing();
 
-            @Override
-            public void onResponse(String response) {
-                Timber.d("Login Response: " + response);
-                // Handle UI
-                hideRefreshing();
+            try {
+                JSONObject jObj = new JSONObject(response);
+                boolean error = jObj.getBoolean("error");
 
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
+                // Check for error node in json
+                if (!error) {
 
-                    // Check for error node in json
-                    if (!error) {
+                    ListExpandableAdapter adapter;
 
-                        ListExpandableAdapter adapter;
+                    // declare array List for all headers in list
+                    ArrayList<String> headersArrayList = new ArrayList<>();
 
-                        // declare array List for all headers in list
-                        ArrayList<String> headersArrayList = new ArrayList<>();
+                    // Declare Hash map for all headers and their corresponding values
+                    HashMap<String, ArrayList<String>> childArrayList = new HashMap<>();
 
-                        // Declare Hash map for all headers and their corresponding values
-                        HashMap<String, ArrayList<String>> childArrayList = new HashMap<>();
+                    JSONArray monday = jObj.getJSONArray("monday");
+                    Integer i;
 
-                        JSONArray monday = jObj.getJSONArray("monday");
-                        Integer i;
-
-                        // For Monday
-                        ArrayList<String> mondayList = new ArrayList<>();
-                        headersArrayList.add("MONDAY");
-                        for (i = 0; i < monday.length(); i++) {
-                            String name = monday.getString(i);
-                            mondayList.add("HOUR " + (i + 1) + " - " + name);
-                        }
-                        childArrayList.put("MONDAY", mondayList);
-
-                        // For Tuesday
-                        JSONArray tuesday = jObj.getJSONArray("tuesday");
-                        headersArrayList.add("TUESDAY");
-                        ArrayList<String> tuesdayList = new ArrayList<>();
-                        for (i = 0; i < tuesday.length(); i++) {
-                            String name = tuesday.getString(i);
-                            tuesdayList.add("HOUR " + (i + 1) + " - " + name);
-                        }
-                        childArrayList.put("TUESDAY", tuesdayList);
-
-                        // For Wednesday
-                        JSONArray wednesday = jObj.getJSONArray("wednesday");
-                        headersArrayList.add("WEDNESDAY");
-                        ArrayList<String> wednesdayList = new ArrayList<>();
-                        for (i = 0; i < wednesday.length(); i++) {
-                            String name = wednesday.getString(i);
-                            wednesdayList.add("HOUR " + (i + 1) + " - " + name);
-                        }
-                        childArrayList.put("WEDNESDAY", wednesdayList);
-
-                        // For Thursday
-                        JSONArray thursday = jObj.getJSONArray("thursday");
-                        headersArrayList.add("THURSDAY");
-                        ArrayList<String> thursdayList = new ArrayList<>();
-                        for (i = 0; i < thursday.length(); i++) {
-                            String name = thursday.getString(i);
-                            thursdayList.add("HOUR " + (i + 1) + " - " + name);
-                        }
-                        childArrayList.put("THURSDAY", thursdayList);
-
-                        // For Friday
-                        JSONArray friday = jObj.getJSONArray("friday");
-                        headersArrayList.add("FRIDAY");
-                        ArrayList<String> fridayList = new ArrayList<>();
-                        for (i = 0; i < friday.length(); i++) {
-                            String name = friday.getString(i);
-                            fridayList.add("HOUR " + (i + 1) + " - " + name);
-                        }
-                        childArrayList.put("FRIDAY", fridayList);
-
-
-                        adapter = new ListExpandableAdapter(getContext(), headersArrayList, childArrayList);
-
-                        expListView.setAdapter(adapter);
-
-                        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-
-                            @Override
-                            public boolean onChildClick(ExpandableListView parent, View v,
-                                                        int groupPosition, int childPosition, long id) {
-                                return false;
-                            }
-                        });
-
-                        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-
-                            @Override
-                            public boolean onGroupClick(ExpandableListView parent, View v,
-                                                        int groupPosition, long id) {
-
-                                return false;
-                            }
-                        });
-                        expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-
-                            @Override
-                            public void onGroupCollapse(int groupPosition) {
-
-                            }
-                        });
-
-                        final ExpandableListView finalExpListView = expListView;
-                        expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-                            int previousGroup = -1;
-
-                            @Override
-                            public void onGroupExpand(int groupPosition) {
-
-                                if (groupPosition != previousGroup)
-                                    finalExpListView.collapseGroup(previousGroup);
-                                previousGroup = groupPosition;
-
-                            }
-                        });
-
-                    } else {
-                        //Handle UI
-                        hideRefreshing();
-                        // Error in login. Get the error message
-                        String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(getContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
+                    // For Monday
+                    ArrayList<String> mondayList = new ArrayList<>();
+                    headersArrayList.add("MONDAY");
+                    for (i = 0; i < monday.length(); i++) {
+                        String name = monday.getString(i);
+                        mondayList.add("HOUR " + (i + 1) + " - " + name);
                     }
-                } catch (JSONException e) {
-                    // Handle UI
+                    childArrayList.put("MONDAY", mondayList);
+
+                    // For Tuesday
+                    JSONArray tuesday = jObj.getJSONArray("tuesday");
+                    headersArrayList.add("TUESDAY");
+                    ArrayList<String> tuesdayList = new ArrayList<>();
+                    for (i = 0; i < tuesday.length(); i++) {
+                        String name = tuesday.getString(i);
+                        tuesdayList.add("HOUR " + (i + 1) + " - " + name);
+                    }
+                    childArrayList.put("TUESDAY", tuesdayList);
+
+                    // For Wednesday
+                    JSONArray wednesday = jObj.getJSONArray("wednesday");
+                    headersArrayList.add("WEDNESDAY");
+                    ArrayList<String> wednesdayList = new ArrayList<>();
+                    for (i = 0; i < wednesday.length(); i++) {
+                        String name = wednesday.getString(i);
+                        wednesdayList.add("HOUR " + (i + 1) + " - " + name);
+                    }
+                    childArrayList.put("WEDNESDAY", wednesdayList);
+
+                    // For Thursday
+                    JSONArray thursday = jObj.getJSONArray("thursday");
+                    headersArrayList.add("THURSDAY");
+                    ArrayList<String> thursdayList = new ArrayList<>();
+                    for (i = 0; i < thursday.length(); i++) {
+                        String name = thursday.getString(i);
+                        thursdayList.add("HOUR " + (i + 1) + " - " + name);
+                    }
+                    childArrayList.put("THURSDAY", thursdayList);
+
+                    // For Friday
+                    JSONArray friday = jObj.getJSONArray("friday");
+                    headersArrayList.add("FRIDAY");
+                    ArrayList<String> fridayList = new ArrayList<>();
+                    for (i = 0; i < friday.length(); i++) {
+                        String name = friday.getString(i);
+                        fridayList.add("HOUR " + (i + 1) + " - " + name);
+                    }
+                    childArrayList.put("FRIDAY", fridayList);
+
+
+                    adapter = new ListExpandableAdapter(getContext(), headersArrayList, childArrayList);
+
+                    expListView.setAdapter(adapter);
+
+                    expListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> false);
+
+                    expListView.setOnGroupClickListener((parent, v, groupPosition, id) -> false);
+                    expListView.setOnGroupCollapseListener(groupPosition -> {
+
+                    });
+
+                    final ExpandableListView finalExpListView = expListView;
+                    expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+                        int previousGroup = -1;
+
+                        @Override
+                        public void onGroupExpand(int groupPosition) {
+
+                            if (groupPosition != previousGroup)
+                                finalExpListView.collapseGroup(previousGroup);
+                            previousGroup = groupPosition;
+
+                        }
+                    });
+
+                } else {
+                    //Handle UI
                     hideRefreshing();
-                    // JSON error
-                    e.printStackTrace();
-                    Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    // Error in login. Get the error message
+                    String errorMsg = jObj.getString("error_msg");
+                    Toast.makeText(getContext(),
+                            errorMsg, Toast.LENGTH_LONG).show();
                 }
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Timber.e("Login Error: " + error.getMessage());
+            } catch (JSONException e) {
                 // Handle UI
                 hideRefreshing();
-                Toast.makeText(getActivity(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+                // JSON error
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
+
+        }, error -> {
+            Timber.e("Login Error: " + error.getMessage());
+            // Handle UI
+            hideRefreshing();
+            Toast.makeText(getActivity(),
+                    error.getMessage(), Toast.LENGTH_LONG).show();
         }) {
 
             @Override
@@ -409,6 +394,16 @@ public class TimeTableFragment extends Fragment {
     private void hideRefreshing() {
         if (mSwipeRefreshLayout.isRefreshing())
             mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    private class AttemptJson extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            // Get data for both the views
+            getTimeTable();
+            return "";
+        }
     }
 }
 

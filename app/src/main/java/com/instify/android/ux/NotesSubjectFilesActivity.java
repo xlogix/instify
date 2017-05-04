@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.instify.android.R;
 import com.instify.android.app.AppConfig;
@@ -146,14 +145,10 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
                     linearLayout.setVisibility(View.VISIBLE);
                 }
             }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Timber.e("Network Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
-            }
+        }, error -> {
+            Timber.e("Network Error: " + error.getMessage());
+            Toast.makeText(getApplicationContext(),
+                    error.getMessage(), Toast.LENGTH_LONG).show();
         }) {
             @Override
             protected Map<String, String> getParams() {

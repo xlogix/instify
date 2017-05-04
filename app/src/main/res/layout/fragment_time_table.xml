@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:fab="http://schemas.android.com/tools"
     android:id="@+id/swipe_refresh_layout_time_table"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -18,7 +19,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <!-- <android.support.v7.widget.RecyclerView
                      android:id="@+id/recyclerViewTimeTable"
@@ -28,14 +29,42 @@
                      android:padding="10dp"
                      android:visibility="visible" />-->
 
+                <android.support.v7.widget.CardView android:id="@+id/cardView"
+                                                    android:layout_width="match_parent"
+
+                                                    android:layout_height="wrap_content">
+
+                    <RelativeLayout android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content">
+                        <ImageButton android:id="@+id/calendarbutton"
+                                     android:layout_width="45dp"
+                                     android:layout_height="45dp"
+                                     android:layout_margin="8dp"
+                                     android:background="?selectableItemBackgroundBorderless"
+                                     android:scaleType="fitXY"
+                                     app:srcCompat="@drawable/ic_calendar"
+                        />
+                        <TextView android:id="@+id/currentdate"
+                                  android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:layout_centerVertical="true"
+                                  android:layout_toRightOf="@+id/calendarbutton"
+                                  android:gravity="center"
+                                  android:text="May 19,2017 Friday"
+                                  android:textSize="20sp"
+                        />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
                 <ExpandableListView
                     android:id="@+id/expListView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="visible" />
+                    android:layout_below="@+id/cardView"
+
+                    android:visibility="visible"/>
+
             </RelativeLayout>
         </android.support.v4.widget.NestedScrollView>
-
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/shared_menu"
             android:layout_width="wrap_content"

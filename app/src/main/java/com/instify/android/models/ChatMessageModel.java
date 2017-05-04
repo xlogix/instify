@@ -1,6 +1,8 @@
 package com.instify.android.models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Abhish3k on 7/2/2016. // Using Firebase Database
@@ -74,5 +76,19 @@ public class ChatMessageModel {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    public String getdatefromstamp() {
+        Date date = new Date(time);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
+
+        return simpleDateFormat.format(date);
+    }
+
+    public String gettimefromstamp() {
+        Date date = new Date(time);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.UK);
+
+        return simpleDateFormat.format(date);
     }
 }

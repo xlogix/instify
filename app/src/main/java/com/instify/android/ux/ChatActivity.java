@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -49,6 +50,8 @@ import com.instify.android.models.ChatMessageModel;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import timber.log.Timber;
 
@@ -58,38 +61,20 @@ import timber.log.Timber;
 
 public class ChatActivity extends AppCompatActivity {
 
-    /**
-     * Another class to display the chat items in the UI
-     */
-    public static class MessageViewHolder extends RecyclerView.ViewHolder {
-        public TextView messageTextView;
-        public ImageView messageImageView;
-        public TextView messengerTextView;
-        public CircleImageView messengerImageView;
-
-        public MessageViewHolder(View v) {
-            super(v);
-            messageTextView = (TextView) itemView.findViewById(R.id.messageTextView);
-            messageImageView = (ImageView) itemView.findViewById(R.id.messageImageView);
-            messengerTextView = (TextView) itemView.findViewById(R.id.messengerTextView);
-            messengerImageView = (CircleImageView) itemView.findViewById(R.id.messengerImageView);
-        }
-    }
-
-    private static final int REQUEST_IMAGE = 1;
-    private static final String TAG = "ChatActivity";
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 100;
     public static final String ANONYMOUS = "anonymous";
-    public static String MESSAGES_CHILD = "messages";
+    private static final int REQUEST_IMAGE = 1;
+    private static final String TAG = "ChatActivity";
     private static final String MESSAGE_SENT_EVENT = "message_sent";
     private static final String MESSAGE_URL = "http://friendlychat.firebase.google.com/message/";
     private static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
-
+    public static String MESSAGES_CHILD = "messages";
+    @BindView(R.id.placeholder)
+    LinearLayout mPlaceholder;
+    String refPath;
     private String mUsername;
     private String mPhotoUrl;
     private Button mSendButton;
-    String refPath;
-
     private RecyclerView mMessageRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -104,6 +89,7 @@ public class ChatActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        ButterKnife.bind(this);
 
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mUsername = ANONYMOUS;
@@ -153,7 +139,11 @@ public class ChatActivity extends AppCompatActivity {
 
                 mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                 if (friendlyMessage.getText() != null) {
+
                     viewHolder.messageTextView.setText(friendlyMessage.getText());
+                    viewHolder.messageDateTextView.setText(friendlyMessage.getdatefromstamp());
+                    viewHolder.messageTimeTextView.setText(friendlyMessage.gettimefromstamp());
+
                     viewHolder.messageTextView.setVisibility(TextView.VISIBLE);
                     viewHolder.messageImageView.setVisibility(ImageView.GONE);
                 } else {
@@ -162,18 +152,15 @@ public class ChatActivity extends AppCompatActivity {
                         StorageReference storageReference = FirebaseStorage.getInstance()
                                 .getReferenceFromUrl(imageUrl);
                         storageReference.getDownloadUrl().addOnCompleteListener(
-                                new OnCompleteListener<Uri>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Uri> task) {
-                                        if (task.isSuccessful()) {
-                                            String downloadUrl = task.getResult().toString();
-                                            Glide.with(viewHolder.messageImageView.getContext())
-                                                    .load(downloadUrl)
-                                                    .into(viewHolder.messageImageView);
-                                        } else {
-                                            Timber.w(TAG, "Getting download url was not successful.",
-                                                    task.getException());
-                                        }
+                                task -> {
+                                    if (task.isSuccessful()) {
+                                        String downloadUrl = task.getResult().toString();
+                                        Glide.with(viewHolder.messageImageView.getContext())
+                                                .load(downloadUrl)
+                                                .into(viewHolder.messageImageView);
+                                    } else {
+                                        Timber.w(TAG, "Getting download url was not successful.",
+                                                task.getException());
                                     }
                                 });
                     } else {
@@ -192,6 +179,7 @@ public class ChatActivity extends AppCompatActivity {
                 } else {
                     Glide.with(ChatActivity.this)
                             .load(friendlyMessage.getPhotoUrl())
+                            .placeholder(R.drawable.ic_account_circle_black_36dp)
                             .into(viewHolder.messengerImageView);
                 }
 
@@ -202,6 +190,19 @@ public class ChatActivity extends AppCompatActivity {
 
                 // log a view action on it
                 FirebaseUserActions.getInstance().end(getMessageViewAction(friendlyMessage));
+            }
+
+            @Override
+            public int getItemCount() {
+                //Hide Progress Bar When no items
+                if (super.getItemCount() == 0) {
+                    mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    mPlaceholder.setVisibility(View.VISIBLE);
+                } else {
+                    mPlaceholder.setVisibility(View.GONE);
+                }
+                return super.getItemCount();
+
             }
         };
 
@@ -217,6 +218,7 @@ public class ChatActivity extends AppCompatActivity {
                         (positionStart >= (friendlyMessageCount - 1) && lastVisiblePosition == (positionStart - 1))) {
                     mMessageRecyclerView.scrollToPosition(positionStart);
                 }
+
             }
         });
 
@@ -256,8 +258,12 @@ public class ChatActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.toString().trim().length() > 0) {
                     mSendButton.setEnabled(true);
+                    mSendButton.setBackgroundColor(ContextCompat.getColor(ChatActivity.this, R.color.colorPrimary));
+                    mSendButton.setTextColor(ContextCompat.getColor(ChatActivity.this, R.color.white));
                 } else {
                     mSendButton.setEnabled(false);
+                    mSendButton.setBackgroundColor(ContextCompat.getColor(ChatActivity.this, R.color.white));
+                    mSendButton.setTextColor(ContextCompat.getColor(ChatActivity.this, R.color.colorPrimary));
                 }
             }
 
@@ -267,16 +273,13 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         mSendButton = (Button) findViewById(R.id.sendButton);
-        mSendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ChatMessageModel friendlyMessage = new ChatMessageModel(mMessageEditText.getText().toString(),
-                        mUsername,
-                        mPhotoUrl, null);
-                mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(friendlyMessage);
-                mMessageEditText.setText("");
-                mFirebaseAnalytics.logEvent(MESSAGE_SENT_EVENT, null);
-            }
+        mSendButton.setOnClickListener(view -> {
+            ChatMessageModel friendlyMessage = new ChatMessageModel(mMessageEditText.getText().toString(),
+                    mUsername,
+                    mPhotoUrl, null);
+            mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(friendlyMessage);
+            mMessageEditText.setText("");
+            mFirebaseAnalytics.logEvent(MESSAGE_SENT_EVENT, null);
         });
     }
 
@@ -364,5 +367,28 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    /**
+     * Another class to display the chat items in the UI
+     */
+    public static class MessageViewHolder extends RecyclerView.ViewHolder {
+        public TextView messageTextView;
+        public ImageView messageImageView;
+        public TextView messengerTextView;
+        public TextView messageDateTextView;
+        public TextView messageTimeTextView;
+        public CircleImageView messengerImageView;
+
+
+        public MessageViewHolder(View v) {
+            super(v);
+            messageTextView = (TextView) itemView.findViewById(R.id.messageTextView);
+            messageImageView = (ImageView) itemView.findViewById(R.id.messageimage);
+            messengerTextView = (TextView) itemView.findViewById(R.id.messengerTextView);
+            messageDateTextView = (TextView) itemView.findViewById(R.id.messagedat);
+            messageTimeTextView = (TextView) itemView.findViewById(R.id.messagetimeTextView);
+            messengerImageView = (CircleImageView) itemView.findViewById(R.id.messengerImageView);
+        }
     }
 }
