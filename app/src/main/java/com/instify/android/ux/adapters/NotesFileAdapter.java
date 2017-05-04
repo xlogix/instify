@@ -13,8 +13,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.instify.android.R;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.NotesFileModel;
@@ -41,7 +39,7 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflate View
-        View view = inflater.inflate(R.layout.card_view_notes_files_in_subjects, parent, false);
+        View view = inflater.inflate(R.layout.card_view_notes_subjects_item, parent, false);
         // Set adapter
         NotesFileAdapter.MyHolder holder = new NotesFileAdapter.MyHolder(view);
         return holder;

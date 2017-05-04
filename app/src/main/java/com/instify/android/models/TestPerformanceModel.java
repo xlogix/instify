@@ -16,9 +16,9 @@ public class TestPerformanceModel {
     private String name;
     @SerializedName("subjects")
     @Expose
-    private List<SubjectModel> subjects = null;
+    private List<SubjectsModel> subjects = null;
 
-    public TestPerformanceModel(String name, List<SubjectModel> subjects) {
+    public TestPerformanceModel(String name, List<SubjectsModel> subjects) {
         this.name = name;
         this.subjects = subjects;
     }
@@ -31,11 +31,11 @@ public class TestPerformanceModel {
         this.name = name;
     }
 
-    public List<SubjectModel> getSubjects() {
+    public List<SubjectsModel> getSubjects() {
         return subjects;
     }
 
-    public void setSubjects(List<SubjectModel> subjects) {
+    public void setSubjects(List<SubjectsModel> subjects) {
         this.subjects = subjects;
     }
 }

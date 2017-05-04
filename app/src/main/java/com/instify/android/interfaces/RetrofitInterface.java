@@ -21,6 +21,7 @@ public interface RetrofitInterface {
     Call<UserModel> Login(
             @Field("regno") String username,
             @Field("pass") String password);
+
     @GET("univ-news.php")
     Call<NewsItemModelList> GetUnivNews();
 
@@ -28,5 +29,4 @@ public interface RetrofitInterface {
     @GET("get-marks.php")
     Call<TestPerformanceResponseModel> GetTestPerformance(@Query("regno") String username,
                                                           @Query("pass") String password);
-
 }

@@ -22,5 +22,4 @@ public class TestPerformanceResponseModel {
     public void setTestPerformance(List<TestPerformanceModel> testPerformance) {
         this.testPerformance = testPerformance;
     }
-
 }

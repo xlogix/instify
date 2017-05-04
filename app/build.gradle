@@ -84,7 +84,7 @@ dependencies {
     // IMAGE AND LOADING
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.android.volley:volley:1.0.0'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.github.bumptech.glide:glide:3.8.0'
     compile 'pub.devrel:easypermissions:0.3.1'
 
     // WEB VIEW
@@ -108,7 +108,7 @@ dependencies {
     compile 'com.facebook.stetho:stetho:1.5.0'
     compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     compile 'com.squareup.okhttp3:okhttp:3.7.0'
-    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.google.code.gson:gson:2.8.0'
 
     // STORAGE FIREBASE
     compile 'com.google.firebase:firebase-storage:10.2.1'
@@ -139,9 +139,9 @@ dependencies {
     })
 
     // TEST MEMORY LEAK
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }

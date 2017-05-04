@@ -29,6 +29,7 @@
     <string name="title_activity_chat">Discuss</string>
     <string name="title_activity_profile">Your Profile</string>
     <string name="title_activity_fee_payment_history">Fee Payment History</string>
+    <string name="title_activity_test_performance">Your Scores</string>
     <string name="title_activity_support_us">App is free but server is not!</string>
     <string name="title_activity_upload_notes">Post a new Note</string>
     <string name="title_activity_upload_campus">Post a new Update</string>
@@ -227,7 +228,7 @@
         <item>3</item>
     </string-array>
 
-    <string-array name="multi_select_list_preference_default_value"/>
+    <string-array name="multi_select_list_preference_default_value" />
 
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
@@ -235,7 +236,6 @@
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="title_activity_test_performance"></string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

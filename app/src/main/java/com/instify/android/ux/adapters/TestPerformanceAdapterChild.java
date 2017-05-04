@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.instify.android.R;
-import com.instify.android.models.SubjectModel;
+import com.instify.android.models.SubjectsModel;
 
 import java.util.List;
 
@@ -19,9 +19,9 @@ import butterknife.ButterKnife;
  */
 
 public class TestPerformanceAdapterChild extends RecyclerView.Adapter<TestPerformanceAdapterChild.ViewHolder> {
-    private List<SubjectModel> myItems;
+    private List<SubjectsModel> myItems;
 
-    public TestPerformanceAdapterChild(List<SubjectModel> items) {
+    public TestPerformanceAdapterChild(List<SubjectsModel> items) {
         myItems = items;
 
     }
@@ -47,7 +47,7 @@ public class TestPerformanceAdapterChild extends RecyclerView.Adapter<TestPerfor
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        public SubjectModel item;
+        public SubjectsModel item;
         @BindView(R.id.title)
         TextView mTitle;
         @BindView(R.id.code)
@@ -62,7 +62,7 @@ public class TestPerformanceAdapterChild extends RecyclerView.Adapter<TestPerfor
 
         }
 
-        public void setData(SubjectModel item) {
+        public void setData(SubjectsModel item) {
             this.item = item;
             mTitle.setText(item.getNAME());
             mCode.setText(item.getCODE());

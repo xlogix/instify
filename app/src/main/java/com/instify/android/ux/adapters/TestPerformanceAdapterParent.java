@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.instify.android.R;
-import com.instify.android.models.SubjectModel;
+import com.instify.android.models.SubjectsModel;
 import com.instify.android.models.TestPerformanceModel;
 
 import java.util.List;
@@ -51,7 +51,7 @@ public class TestPerformanceAdapterParent extends RecyclerView.Adapter<TestPerfo
         initChildLayoutManager(holder.mToprecyc, myItems.get(position).getSubjects());
     }
 
-    private void initChildLayoutManager(RecyclerView rv_child, List<SubjectModel> childData) {
+    private void initChildLayoutManager(RecyclerView rv_child, List<SubjectsModel> childData) {
         LinearLayoutManager manager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
 //        manager.setOrientation(LinearLayoutManager.VERTICAL);
         rv_child.setLayoutManager(manager);

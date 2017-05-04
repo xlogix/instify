@@ -1,10 +1,5 @@
 package com.instify.android.models;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
-
-import java.util.Calendar;
-
 /**
  * Created by Arjun Mahishi on 18-Dec-16.
  */

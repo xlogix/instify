@@ -7,7 +7,7 @@ package com.instify.android.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class SubjectModel {
+public class SubjectsModel {
     @SerializedName("CODE")
     @Expose
     private String cODE;
@@ -18,7 +18,7 @@ public class SubjectModel {
     @Expose
     private String mARKS;
 
-    public SubjectModel(String cODE, String nAME, String ARKS) {
+    public SubjectsModel(String cODE, String nAME, String ARKS) {
         this.cODE = cODE;
         this.nAME = nAME;
         mARKS = ARKS;

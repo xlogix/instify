@@ -28,5 +28,4 @@ public class CampusNewsModel {
         this.dept = dept;
         this.sec = sec;
     }
-
 }

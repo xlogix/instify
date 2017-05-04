@@ -5,13 +5,11 @@
     android:layout_height="@dimen/nav_header_height"
     android:gravity="bottom">
 
-
-
     <LinearLayout
         android:id="@+id/navigation_drawer_list_header_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradientnavheader"
+        android:background="@drawable/gradient_nav_header"
         android:gravity="center"
         android:orientation="vertical">
 

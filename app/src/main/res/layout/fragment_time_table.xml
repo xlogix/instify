@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipe_refresh_layout_time_table"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -34,5 +35,62 @@
                     android:visibility="visible" />
             </RelativeLayout>
         </android.support.v4.widget.NestedScrollView>
+
+        <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/shared_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:visibility="invisible"
+            fab:menu_animationDelayPerItem="0"
+            fab:menu_colorNormal="#FFB805"
+            fab:menu_colorPressed="#F2AB00"
+            fab:menu_colorRipple="#D99200"
+            fab:menu_labels_hideAnimation="@anim/jump_to_down"
+            fab:menu_labels_showAnimation="@anim/jump_from_down"
+            fab:menu_labels_style="@style/MenuLabelsStyle"
+            fab:menu_shadowColor="#444">
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab1"
+                style="@style/MenuButtonsStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_edit"
+                fab:fab_label="Monday" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab2"
+                style="@style/MenuButtonsStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_edit"
+                fab:fab_label="Tuesday" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab3"
+                style="@style/MenuButtonsStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_edit"
+                fab:fab_label="Wednesday" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab4"
+                style="@style/MenuButtonsStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_edit"
+                fab:fab_label="Thursday" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab5"
+                style="@style/MenuButtonsStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_edit"
+                fab:fab_label="Friday" />
+        </com.github.clans.fab.FloatingActionMenu>
     </android.support.design.widget.CoordinatorLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

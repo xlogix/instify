@@ -2,6 +2,7 @@ package com.instify.android.ux;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -79,11 +80,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private DrawerLayout drawerLayout;
     private ViewPager mViewPager;
+
     public FloatingActionButton mSharedFab;
     public FloatingActionMenu mSharedMenu;
-    // Initialize Ad
-    private InterstitialAd mInterstitialAd;
-    private CoordinatorLayout coordinatorLayout;
+
     // Set Firebase User
     FirebaseUser mFirebaseUser;
     // Set Database Reference
@@ -166,15 +166,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id
-                .coordinatorLayout);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
 
         // Declare Views
         mSharedFab = (FloatingActionButton) findViewById(R.id.shared_fab);
-        mSharedMenu = (FloatingActionMenu) findViewById(R.id.shared_menu);
 
         AppUpdater appUpdater = new AppUpdater(this)
                 .setDisplay(Display.DIALOG)
@@ -187,58 +183,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize Mobile Ads (AdWords)
         MobileAds.initialize(getApplicationContext(), getString(R.string.all_ad_app_id));
-
-        // [START instantiate_interstitial_ad]
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
-
-        // TODO : Remove test device before release
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("11408151BC4116DE6AD4B6BFC1B34457")
-                .build();
-
-        // Load ads into Interstitial Ads
-        mInterstitialAd.loadAd(adRequest);
-
-        // [START create_interstitial_ad_listener]
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                // Add your method here
-                Toast.makeText(getApplicationContext(),
-                        "Thanks for supporting us! :)",
-                        Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onAdLoaded() {
-                Timber.w(TAG, "onAdLoaded: (Should display Snackbar)");
-                // Ad received, ready to display
-                mInterstitialAd.isLoaded();
-                // Delay function
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        // Show a snack bar to notify the user
-                        Snackbar.make(coordinatorLayout, "An ad is going to be loaded in 2 seconds", Snackbar.LENGTH_LONG);
-                        // Show the ad
-                        mInterstitialAd.show();
-                    }
-                }, 10000);
-            }
-
-            @Override
-            public void onAdFailedToLoad(int i) {
-                // See https://goo.gl/sCZj0H for possible error codes.
-                Timber.w(TAG, "onAdFailedToLoad:" + i);
-            }
-
-            @Override
-            public void onAdOpened() {
-                Timber.w(TAG, "onAdOpened: Add was opened");
-            }
-
-        });
-        // [END create_interstitial_ad_listener]
 
         // Drawer Layout
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -315,10 +259,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 3:
                         mSharedFab.hide();
-                        mSharedMenu.setVisibility(View.VISIBLE);
                     default:
                         mSharedFab.hide();
-                        mSharedMenu.setVisibility(View.INVISIBLE);
                         break;
                 }
             }
@@ -331,6 +273,30 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mTabLayout.setupWithViewPager(mViewPager);
+
+        /*mTabLayout.setOnTabSelectedListener(
+                new TabLayout.ViewPagerOnTabSelectedListener(mViewPager) {
+
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        super.onTabSelected(tab);
+                        int tabIconColor = ContextCompat.getColor(getParent(), R.color.white);
+                        tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
+                    }
+
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+                        super.onTabUnselected(tab);
+                        int tabIconColor = ContextCompat.getColor(getParent(), R.color.white);
+                        tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
+                    }
+
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {
+                        super.onTabReselected(tab);
+                    }
+                }
+        );*/
 
         // Check if Google Play Services is installed or not
         checkPlayServices();
@@ -364,19 +330,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(homeIntent);
         }
     }
-
-    /**
-     * Load a new interstitial ad asynchronously.
-     */
-    // [START request_new_interstitial]
-    private void requestNewInterstitial() {
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("11408151BC4116DE6AD4B6BFC1B34457")
-                .build();
-
-        mInterstitialAd.loadAd(adRequest);
-    }
-    // [END request_new_interstitial]
 
     /**
      * Check the device to make sure it has the Google Play Services APK. If
@@ -522,11 +475,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void FeekartWebView() {
-
         // Fetching the login details from the database
         SQLiteHandler db = new SQLiteHandler(this);
         String regNo = db.getUserDetails().get("token");
         String pass = db.getUserDetails().get("created_at");
+
         // Notify the user about the app's features
         Toast.makeText(this, "Instify will automatically log you in!", Toast.LENGTH_LONG).show();
 
