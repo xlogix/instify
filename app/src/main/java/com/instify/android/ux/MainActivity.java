@@ -2,7 +2,6 @@ package com.instify.android.ux;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -10,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -43,9 +41,6 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.github.javiersantos.appupdater.AppUpdater;
 import com.github.javiersantos.appupdater.enums.Display;
 import com.github.javiersantos.appupdater.enums.UpdateFrom;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -78,23 +73,18 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     /* Play Services Request required to check if Google Services is installed or not */
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private DrawerLayout drawerLayout;
-    private ViewPager mViewPager;
-
     public FloatingActionButton mSharedFab;
     public FloatingActionMenu mSharedMenu;
-
+    public FirebaseUserDataModel userInfoObject;
     // Set Firebase User
     FirebaseUser mFirebaseUser;
     // Set Database Reference
     DatabaseReference dbRef, userRef;
     SQLiteHandler db = new SQLiteHandler(this);
-
-    public FirebaseUserDataModel userInfoObject;
     boolean doubleBackToExitPressedOnce = false;
-
     View headerView;
-
+    private DrawerLayout drawerLayout;
+    private ViewPager mViewPager;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -273,30 +263,29 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mTabLayout.setupWithViewPager(mViewPager);
+//        mTabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(MainActivity.this, R.color.white));
 
-        /*mTabLayout.setOnTabSelectedListener(
-                new TabLayout.ViewPagerOnTabSelectedListener(mViewPager) {
-
-                    @Override
-                    public void onTabSelected(TabLayout.Tab tab) {
-                        super.onTabSelected(tab);
-                        int tabIconColor = ContextCompat.getColor(getParent(), R.color.white);
-                        tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
-                    }
-
-                    @Override
-                    public void onTabUnselected(TabLayout.Tab tab) {
-                        super.onTabUnselected(tab);
-                        int tabIconColor = ContextCompat.getColor(getParent(), R.color.white);
-                        tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
-                    }
-
-                    @Override
-                    public void onTabReselected(TabLayout.Tab tab) {
-                        super.onTabReselected(tab);
-                    }
-                }
-        );*/
+//        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+//            @Override
+//            public void onTabSelected(TabLayout.Tab tab) {
+//
+//                int tabIconColor = ContextCompat.getColor(MainActivity.this, R.color.white);
+//                tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
+//            }
+//
+//            @Override
+//            public void onTabUnselected(TabLayout.Tab tab) {
+//                int tabIconColor = ContextCompat.getColor(MainActivity.this, R.color.white);
+//                tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
+//            }
+//
+//            @Override
+//            public void onTabReselected(TabLayout.Tab tab) {
+//
+//            }
+//        }
+//
+//        );
 
         // Check if Google Play Services is installed or not
         checkPlayServices();
@@ -558,6 +547,13 @@ public class MainActivity extends AppCompatActivity {
         static final int TAB_TIME_TABLE = 2;
         static final int TAB_NOTES = 3;
         static final int TAB_UNIVERSITY_NEWS = 4;
+        private int[] imageResId = {
+                R.drawable.ic_attendance_white,
+                R.drawable.ic_campus_news_white,
+                R.drawable.ic_time_table_white,
+                R.drawable.ic_notes_white,
+                R.drawable.ic_univ_news_white
+        };
 
         private SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -586,14 +582,6 @@ public class MainActivity extends AppCompatActivity {
         public int getCount() {
             return NUM_TABS;
         }
-
-        private int[] imageResId = {
-                R.drawable.ic_attendance_white,
-                R.drawable.ic_campus_news_white,
-                R.drawable.ic_time_table_white,
-                R.drawable.ic_notes_white,
-                R.drawable.ic_univ_news_white
-        };
 
         @Override
         public CharSequence getPageTitle(int position) {
