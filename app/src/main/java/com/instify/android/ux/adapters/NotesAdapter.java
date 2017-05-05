@@ -22,13 +22,11 @@ import java.util.List;
 public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private LayoutInflater inflater;
     private List<NotesModel> data = Collections.emptyList();
 
-    // create constructor to initialize context and data sent from MainActivity
+    // Create constructor to initialize context and data sent from MainActivity
     public NotesAdapter(Context context, List<NotesModel> data) {
         this.context = context;
-
         this.data = data;
     }
 
@@ -58,34 +56,30 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     }
 
-    // return total item from List
+    // Get total item from List
     @Override
     public int getItemCount() {
         return data.size();
     }
 
-
-    class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView textFishName;
         TextView textType;
 
         // create constructor to get widget reference
-        public MyHolder(View itemView) {
+        private MyHolder(View itemView) {
             super(itemView);
             textFishName = (TextView) itemView.findViewById(R.id.title);
             textType = (TextView) itemView.findViewById(R.id.code);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(context, NotesSubjectFilesActivity.class);
+                intent.putExtra("subject", textFishName.getText().toString());
+                intent.putExtra("code", textType.getText().toString());
 
-                    Intent intent = new Intent(context, NotesSubjectFilesActivity.class);
-                    intent.putExtra("subject", textFishName.getText().toString());
-                    intent.putExtra("code", textType.getText().toString());
+                context.startActivity(intent);
 
-                    context.startActivity(intent);
-                }
             });
         }
 

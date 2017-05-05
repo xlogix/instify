@@ -45,7 +45,6 @@
             android:layout_gravity="bottom"
             android:enabled="false"
             android:text="@string/msg_send" />
-
     </LinearLayout>
 
     <ProgressBar
@@ -55,9 +54,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" />
-    <include
 
-        layout="@layout/placeholder_chatempty"
-        android:visibility="gone"
-    />
+    <include
+        layout="@layout/placeholder_chat_is_empty"
+        android:visibility="gone" />
 </RelativeLayout>

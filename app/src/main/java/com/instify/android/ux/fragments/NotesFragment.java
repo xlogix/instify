@@ -82,7 +82,6 @@ public class NotesFragment extends Fragment {
     private void getSubs() {
         // Handle UI
         showRefreshing();
-
         // Tag used to cancel the request
         String tag_string_req = "req_attendance";
 
@@ -136,7 +135,6 @@ public class NotesFragment extends Fragment {
                 Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
         }, new Response.ErrorListener() {
-
             @Override
             public void onErrorResponse(VolleyError error) {
                 Timber.e("Network Error: " + error.getMessage());

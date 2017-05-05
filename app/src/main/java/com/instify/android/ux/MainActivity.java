@@ -299,7 +299,6 @@ public class MainActivity extends AppCompatActivity {
             userRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
                     // Collecting users data to use through out the app
                     userInfoObject = dataSnapshot.getValue(FirebaseUserDataModel.class);
                 }
@@ -593,6 +592,5 @@ public class MainActivity extends AppCompatActivity {
             sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             return sb;
         }
-
     }
 }

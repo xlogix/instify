@@ -41,7 +41,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageView2"
             card_view:layout_constraintLeft_creator="1"
-            card_view:layout_constraintRight_creator="1"/>
+            card_view:layout_constraintRight_creator="1" />
 
         <TextView
             android:id="@+id/campusAuthor"
@@ -75,7 +75,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
             card_view:layout_constraintLeft_creator="1"
-            card_view:layout_constraintRight_creator="1"/>
+            card_view:layout_constraintRight_creator="1" />
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -92,7 +92,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/campusAuthor"
             card_view:layout_constraintLeft_creator="1"
-            card_view:layout_constraintRight_creator="1"/>
+            card_view:layout_constraintRight_creator="1" />
 
         <ImageButton
             android:id="@+id/imageButton2"
@@ -106,8 +106,7 @@
             app:layout_constraintTop_toBottomOf="@+id/campusDescription"
             app:srcCompat="@drawable/ic_share_black_24dp"
             card_view:layout_constraintBottom_creator="1"
-            card_view:layout_constraintTop_creator="1"
-        />
+            card_view:layout_constraintTop_creator="1" />
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -123,6 +122,6 @@
             app:layout_constraintTop_toBottomOf="@+id/campusDescription"
             app:srcCompat="@drawable/ic_mode_comment_black_24dp"
             card_view:layout_constraintBottom_creator="1"
-            card_view:layout_constraintTop_creator="1"/>
+            card_view:layout_constraintTop_creator="1" />
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

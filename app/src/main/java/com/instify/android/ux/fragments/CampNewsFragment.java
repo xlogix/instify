@@ -33,6 +33,7 @@ public class CampNewsFragment extends Fragment {
     DatabaseReference newsRef;
     FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder> fAdapterAll;
     String userRegNo, userDept, pathAll, pathDept, pathSec;
+
     // Default Constructor
     public CampNewsFragment() {
     }

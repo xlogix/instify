@@ -30,7 +30,7 @@
     <string name="title_activity_profile">Your Profile</string>
     <string name="title_activity_fee_payment_history">Fee Payment History</string>
     <string name="title_activity_test_performance">Your Scores</string>
-    <string name="title_activity_support_us">App is free but server is not!</string>
+    <string name="title_activity_support_us">:)</string>
     <string name="title_activity_upload_notes">Post a new Note</string>
     <string name="title_activity_upload_campus">Post a new Update</string>
 
