@@ -11,4 +11,7 @@
     <item
         android:drawable="@drawable/gradient_login_4"
         android:duration="2500" />
+    <item
+        android:drawable="@drawable/gradient_login_5"
+        android:duration="2500" />
 </animation-list>

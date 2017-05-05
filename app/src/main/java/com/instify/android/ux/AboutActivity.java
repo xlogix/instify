@@ -34,8 +34,8 @@ public class AboutActivity extends AppCompatActivity {
         View aboutPage = new AboutPage(this)
                 .isRTL(false)
                 .setDescription("Instify is an (add content here)\n\nDevelopers : Abhishek, Arjun and Somnath\n\nSepcial thanks to : Chandan Singh, Ankur, Trishansh")
-                .setImage(R.drawable.background)
-                .addItem(new Element().setTitle("Version 1.1.2"))
+                .setImage(R.drawable.ic_logo_96dp)
+                .addItem(new Element().setTitle("Version 1.2.0"))
                 .addGroup("Connect with us")
                 .addEmail("abhishekuniyal09@gmail.com")
                 .addWebsite("https://www.fnplus.xyz/")
@@ -54,12 +54,8 @@ public class AboutActivity extends AppCompatActivity {
         copyRightsElement.setIconDrawable(R.drawable.about_icon_copy_right);
         copyRightsElement.setIconTint(R.color.about_item_icon_color);
         copyRightsElement.setGravity(Gravity.CENTER);
-        copyRightsElement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(AboutActivity.this, copyrights, Toast.LENGTH_SHORT).show();
-            }
-        });
+        copyRightsElement.setOnClickListener(v ->
+                Toast.makeText(AboutActivity.this, copyrights, Toast.LENGTH_SHORT).show());
         return copyRightsElement;
     }
 }
