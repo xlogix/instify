@@ -43,7 +43,7 @@
     <style name="AppTheme.NoActionBarTransparent" parent="AppTheme.NoActionBar">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@color/transparent</item>
-        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">false</item>
     </style>
 
 </resources>

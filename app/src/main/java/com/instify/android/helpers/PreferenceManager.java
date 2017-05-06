@@ -3,7 +3,7 @@ package com.instify.android.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.instify.android.utils.Theme;
+import com.instify.android.app.Themes;
 
 import timber.log.Timber;
 
@@ -70,11 +70,11 @@ public class PreferenceManager {
      *
      * @return theme name value
      */
-    public Theme getCurrentTheme(Context context) {
-        return Theme.valueOf(mPrefs.getString("app_theme", Theme.Blue.name()));
+    public Themes getCurrentTheme(Context context) {
+        return Themes.valueOf(mPrefs.getString("app_theme", Themes.Blue.name()));
     }
 
-    public void setCurrentTheme(Theme currentTheme) {
+    public void setCurrentTheme(Themes currentTheme) {
         editor.putString("app_theme", currentTheme.name());
     }
 

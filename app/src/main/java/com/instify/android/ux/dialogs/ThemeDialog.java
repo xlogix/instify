@@ -12,7 +12,7 @@ import android.view.Window;
 
 import com.instify.android.R;
 import com.instify.android.app.AppController;
-import com.instify.android.utils.Theme;
+import com.instify.android.app.Themes;
 import com.instify.android.ux.MainActivity;
 
 /**
@@ -53,39 +53,39 @@ public class ThemeDialog extends DialogFragment implements View.OnClickListener 
     @Override
     public void onClick(View v) {
 
-        Theme theme;
+        Themes theme;
         switch (v.getId()) {
             case R.id.blue_theme:
-                theme = Theme.Blue;
+                theme = Themes.Blue;
                 break;
             case R.id.indigo_theme:
-                theme = Theme.Indigo;
+                theme = Themes.Indigo;
                 break;
             case R.id.green_theme:
-                theme = Theme.Green;
+                theme = Themes.Green;
                 break;
             case R.id.red_theme:
-                theme = Theme.Red;
+                theme = Themes.Red;
                 break;
             case R.id.blue_grey_theme:
-                theme = Theme.BlueGrey;
+                theme = Themes.BlueGrey;
                 break;
             case R.id.black_theme:
-                theme = Theme.Black;
+                theme = Themes.Black;
                 break;
 
             case R.id.orange_theme:
-                theme = Theme.Orange;
+                theme = Themes.Orange;
                 break;
 
             case R.id.purple_theme:
-                theme = Theme.Purple;
+                theme = Themes.Purple;
                 break;
             case R.id.pink_theme:
-                theme = Theme.Pink;
+                theme = Themes.Pink;
                 break;
             default:
-                theme = Theme.Blue;
+                theme = Themes.Blue;
                 break;
         }
 

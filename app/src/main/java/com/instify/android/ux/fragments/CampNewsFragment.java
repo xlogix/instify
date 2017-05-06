@@ -64,13 +64,10 @@ public class CampNewsFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // FAB //
-        ((MainActivity) getActivity()).mSharedFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent uploadNews = new Intent(getContext(), UploadNewsActivity.class);
-                uploadNews.putExtra("userDept", userDept);
-                startActivity(uploadNews);
-            }
+        ((MainActivity) getActivity()).mSharedFab.setOnClickListener(v -> {
+            Intent uploadNews = new Intent(getContext(), UploadNewsActivity.class);
+            uploadNews.putExtra("userDept", userDept);
+            startActivity(uploadNews);
         });
 
         // Student details from dB //
@@ -84,7 +81,7 @@ public class CampNewsFragment extends Fragment {
         pathSec = "campusNews/dept/" + userDept + "/all";
 
         showNews(pathAll);
-
+        // Return the root view //
         return rootView;
     }
 

@@ -119,7 +119,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * Storing user details in database
+     * Storing time-table in database
      */
     public boolean create_tt(String day, String h1, String h2, String h3, String h4, String h5, String h6, String h7) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -172,5 +172,4 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         Log.d(TAG, "Deleted all user info from sqlite");
     }
-
 }

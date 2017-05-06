@@ -1,10 +1,10 @@
-package com.instify.android.utils;
+package com.instify.android.app;
 
 /**
  * Created by Abhish3k on 13/01/2017.
  */
 
-public enum Theme {
+public enum Themes {
     Blue,
 
     Indigo,

@@ -3,18 +3,16 @@ package com.instify.android.ux;
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.Toast;
@@ -73,8 +71,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     ScrollView mScrollView;
 
     private ProgressDialog mProgressDialog;
-    private AutoCompleteTextView mRegNoField;
-    private EditText mPasswordField;
+    private EditText mRegNoField, mPasswordField;
     private SQLiteHandler db;
     // [declare_auth]
     public FirebaseAuth mAuth;
@@ -137,7 +134,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         ButterKnife.bind(this);
 
         // Set the status bar as translucent
-        setStatusBarTranslucent(true);
+        // setStatusBarTranslucent(true);
 
         // Setup animation
         AnimationDrawable animationDrawable = (AnimationDrawable) mScrollView.getBackground();
@@ -146,7 +143,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         animationDrawable.start();
 
         // Views
-        mRegNoField = (AutoCompleteTextView) findViewById(R.id.field_regNo);
+        mRegNoField = (EditText) findViewById(R.id.field_regNo);
         mPasswordField = (EditText) findViewById(R.id.field_password);
 
         // Buttons
@@ -174,14 +171,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
                         .tintTarget(true)                   // Whether to tint the target view's color
                         .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
-                        .targetRadius(60),                  // Specify the target radius (in dp)
-                new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
-                    @Override
-                    public void onTargetClick(TapTargetView view) {
-                        super.onTargetClick(view);      // This call is optional
-                        Toast.makeText(LoginActivity.this, "You're cool!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        .targetRadius(60));                  // Specify the target radius (in dp)
 
         // [START config_signin]
         // Configure Google Sign In
