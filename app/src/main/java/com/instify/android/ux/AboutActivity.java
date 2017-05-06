@@ -33,7 +33,8 @@ public class AboutActivity extends AppCompatActivity {
 
         View aboutPage = new AboutPage(this)
                 .isRTL(false)
-                .setDescription("Instify is an (add content here)\n\nDevelopers : Abhishek, Arjun and Somnath\n\nSepcial thanks to : Chandan Singh, Ankur, Trishansh")
+                .setDescription("This app is developed by : Abhishek Uniyal, Arjun Mahishi, Chandan Singh, Vijay Krishna and Somnath" +
+                        "\n\nSepcial thanks to : Ankur, Trishansh")
                 .setImage(R.drawable.ic_logo_96dp)
                 .addItem(new Element().setTitle("Version 1.2.0"))
                 .addGroup("Connect with us")
