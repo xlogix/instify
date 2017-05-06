@@ -25,6 +25,7 @@
 #-renamesourcefileattribute SourceFile
 
 -dontwarn okio.**
+-dontwarn retrofit2.Platform$Java8
 
 -optimizations !field/removal/writeonly,!field/marking/private,!class/merging/*,!code/allocation/variable
 
