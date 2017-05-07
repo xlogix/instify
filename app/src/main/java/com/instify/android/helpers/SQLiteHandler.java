@@ -10,11 +10,10 @@ import android.util.Log;
 import com.instify.android.models.UserModel;
 
 public class SQLiteHandler extends SQLiteOpenHelper {
-
-    // Time Table
-    public static final String TABLE_TIME_TABLE = "time_table";
-    private static final String TAG = SQLiteHandler.class.getSimpleName();
     // All Static variables
+    // Time Table
+    private static final String TABLE_TIME_TABLE = "time_table";
+    private static final String TAG = SQLiteHandler.class.getSimpleName();
     // Database Version
     private static final int DATABASE_VERSION = 1;
     // Database Name
@@ -30,7 +29,6 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String KEY_REGNO = "regno";
     private static final String KEY_DEPT = "dept";
     private static final String KEY_CREATED_AT = "created_at";
-
 
     // Time Table Columns names
     private static final String COL_0 = "id";
@@ -79,7 +77,6 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         Log.d(TAG, "Database tables created");
     }
-
     /**
      * Storing user details in database
      */
@@ -109,11 +106,10 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         values.put(KEY_NAME, userModel.getName()); // Name
         values.put(KEY_EMAIL, userModel.getEmail()); // Email
         values.put(KEY_UID, userModel.getUid()); // Firebase uid
-        values.put(KEY_TOKEN, userModel.getToken());//Erp Token
-        values.put(KEY_REGNO, userModel.getRegno());//Erp Regno
-        values.put(KEY_DEPT, userModel.getDept());// Created At
-        values.put(KEY_CREATED_AT, userModel.getImage());//User Profile Pic
-
+        values.put(KEY_TOKEN, userModel.getToken()); //Erp Token
+        values.put(KEY_REGNO, userModel.getRegno()); //Erp Regno
+        values.put(KEY_DEPT, userModel.getDept()); // Created At
+        values.put(KEY_CREATED_AT, userModel.getImage()); //User Profile Pic
 
         // Inserting Row
         long id = db.insert(TABLE_USER, null, values);
@@ -184,7 +180,6 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         // Create tables again
         onCreate(db);
     }
-
     /**
      * Re crate database Delete all tables and create them again
      */

@@ -183,7 +183,6 @@ public class UploadNewsActivity extends AppCompatActivity {
     }
 
     private int getIntYear(String strYear) {
-        int intYear;
         switch (strYear) {
             case "First":
                 return 1;

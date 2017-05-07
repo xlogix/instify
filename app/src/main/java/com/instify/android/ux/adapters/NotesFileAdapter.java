@@ -22,9 +22,9 @@ import java.util.List;
 
 public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    List<NotesFileModel> data = Collections.emptyList();
+    private List<NotesFileModel> data = Collections.emptyList();
     // ImageLoader imageLoader;
-    SQLiteHandler db;
+    private SQLiteHandler db;
     private Context context;
     private LayoutInflater inflater;
 
@@ -115,11 +115,8 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
             });
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
+            itemView.setOnClickListener(v -> {
+                // Do something
             });
         }
 
@@ -129,5 +126,4 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         }
     }
-
 }

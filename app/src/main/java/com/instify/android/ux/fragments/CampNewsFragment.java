@@ -94,7 +94,6 @@ public class CampNewsFragment extends Fragment {
 
     private void showNews(final String path) {
 
-
         newsRef = FirebaseDatabase.getInstance().getReference().child(path);
         fAdapterAll = new FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder>(
                 CampusNewsModel.class,
@@ -107,11 +106,13 @@ public class CampNewsFragment extends Fragment {
                 holder.mCampusTitle.setText(model.title);
                 holder.mCampusAuthor.setText(model.author);
                 holder.mCampusDescription.setText(model.description);
-                holder.mView.setOnClickListener(view -> {
+                // Set click action for Comment button
+                holder.mImageButton.setOnClickListener(view -> {
                     Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
                     launchChat.putExtra("refPath", path + "/" + fAdapterAll.getRef(position).getKey());
                     startActivity(launchChat);
                 });
+                // Set click action for Share button
                 holder.mImageButton2.setOnClickListener(view -> {
                     SQLiteHandler db = new SQLiteHandler(getContext());
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -121,13 +122,9 @@ public class CampNewsFragment extends Fragment {
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
                     startActivity(Intent.createChooser(sharingIntent, "Share this topic on"));
                 });
-                holder.mImageButton.setOnClickListener(view -> {
-                    Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
-                    launchChat.putExtra("refPath", path + "/" + fAdapterAll.getRef(position).getKey());
-                    startActivity(launchChat);
-                });
             }
         };
+        // Finally, set the adapter
         recyclerView.setAdapter(fAdapterAll);
     }
 
@@ -167,14 +164,10 @@ public class CampNewsFragment extends Fragment {
         @BindView(R.id.imageButton)
         ImageButton mImageButton;
 
-
         public CampusViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
             mView = v;
-
         }
     }
-
-
 }

@@ -9,6 +9,5 @@
     app:contentPadding="4dp"
     card_view:cardCornerRadius="4dp">
 
-
 </android.support.v7.widget.CardView>
 

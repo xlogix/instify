@@ -8,8 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -36,10 +34,10 @@ import timber.log.Timber;
 
 public class FeePaymentHistoryActivity extends AppCompatActivity {
     private static final String TAG = FeePaymentHistoryActivity.class.getSimpleName();
+
     String tag_string_req = "req_fee";
     private SQLiteHandler db = new SQLiteHandler(this);
     private ProgressDialog mProgressDialog;
-    private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     // Declare AdView
@@ -56,7 +54,7 @@ public class FeePaymentHistoryActivity extends AppCompatActivity {
         }
 
         // Declare Views
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
         // [START load_banner_ad]
         mAdView = (AdView) findViewById(R.id.adView);
@@ -79,7 +77,7 @@ public class FeePaymentHistoryActivity extends AppCompatActivity {
 
     private ArrayList<FeePaymentHistoryModel> getDataSet() {
         ArrayList results = new ArrayList<>();
-        for (int index = 0; index < 0; index++) {
+        for (int index = 0; index > 0; index++) {
             FeePaymentHistoryModel obj = new FeePaymentHistoryModel("12-1-17 " + index,
                     "Secondary " + index, "Secondary " + index);
             results.add(index, obj);
@@ -90,58 +88,52 @@ public class FeePaymentHistoryActivity extends AppCompatActivity {
 
     public void getFeeDetails() {
 
+        // Update UI
         showProgressDialog();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_FEE, new Response.Listener<String>() {
+                AppConfig.URL_FEE, response -> {
+            // Log the event
+            Timber.d(TAG, "Login Response: " + response);
+            // Update UI
+            hideProgressDialog();
 
-            @Override
-            public void onResponse(String response) {
-                Timber.d(TAG, "Login Response: " + response);
-                hideProgressDialog();
+            try {
+                JSONObject jObj = new JSONObject(response);
+                boolean error = jObj.getBoolean("error");
+                // Check for error node in json
+                if (!error) {
 
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
+                    JSONArray user = jObj.getJSONArray("subjects");
 
-                    // Check for error node in json
-                    if (!error) {
+                    for (int index = 0; index < user.length(); index++) {
+                        //  String name = user.getString(index);
+                        JSONObject subs = jObj.getJSONObject(user.getString(index));
+                        FeePaymentHistoryModel obj = new FeePaymentHistoryModel(subs.getString("Date"),
+                                subs.getString("Narration"), subs.getString("Amount"));
 
-                        JSONArray user = jObj.getJSONArray("subjects");
-
-                        for (int index = 0; index < user.length(); index++) {
-                            //  String name = user.getString(index);
-                            JSONObject subs = jObj.getJSONObject(user.getString(index));
-                            FeePaymentHistoryModel obj = new FeePaymentHistoryModel(subs.getString("Date"),
-                                    subs.getString("Narration"), subs.getString("Amount"));
-
-                            ((FeePaymentHistoryAdapter) mAdapter).addItem(obj, index);
-                        }
-
-                    } else {
-                        // Error in login. Get the error message
-                        String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
+                        ((FeePaymentHistoryAdapter) mAdapter).addItem(obj, index);
                     }
-                } catch (JSONException e) {
-                    // JSON error
-                    e.printStackTrace();
-                    // Disable the progress dialog
-                    hideProgressDialog();
-                    // Notify user
-                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                } else {
+                    // Error in login. Get the error message
+                    String errorMsg = jObj.getString("error_msg");
+                    Toast.makeText(getApplicationContext(),
+                            errorMsg, Toast.LENGTH_LONG).show();
                 }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Timber.e(TAG, "Login Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+            } catch (JSONException e) {
+                // JSON error
+                e.printStackTrace();
+                // Disable the progress dialog
                 hideProgressDialog();
+                // Notify user
+                Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
+        }, error -> {
+            Timber.e(TAG, "Login Error: " + error.getMessage());
+            Toast.makeText(getApplicationContext(),
+                    error.getMessage(), Toast.LENGTH_LONG).show();
+            // Update UI
+            hideProgressDialog();
         }) {
 
             @Override

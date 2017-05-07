@@ -187,14 +187,11 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
 
         MenuItem enai = menu.findItem(R.id.action_add_note);
 
-        enai.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(getApplicationContext(), NotesUploadActivity.class);
-                intent.putExtra("code", getIntent().getStringExtra("code"));
-                startActivity(intent);
-                return true;
-            }
+        enai.setOnMenuItemClickListener(item -> {
+            Intent intent = new Intent(getApplicationContext(), NotesUploadActivity.class);
+            intent.putExtra("code", getIntent().getStringExtra("code"));
+            startActivity(intent);
+            return true;
         });
         return true;
     }

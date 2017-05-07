@@ -63,8 +63,7 @@ public class TestPerformanceActivity extends AppCompatActivity {
             public void onResponse(Call<TestPerformanceResponseModel> call, Response<TestPerformanceResponseModel> response) {
                 TestPerformanceResponseModel t = response.body();
                 if (response.isSuccessful()) {
-                    // Update UI (keeping it minimal)
-                    // Snackbars are only shown when loading fails
+                    // Update UI, Snackbar is only shown when loading fails (keeping it minimal)
                     hideRefreshing();
 
                     TestPerformanceAdapterParent test = new TestPerformanceAdapterParent(t.getTestPerformance(), TestPerformanceActivity.this);

@@ -71,10 +71,10 @@ import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
+
     /* Play Services Request required to check if Google Services is installed or not */
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public FloatingActionButton mSharedFab;
-    public FloatingActionMenu mSharedMenu;
     public FirebaseUserDataModel userInfoObject;
     // Set Firebase User
     FirebaseUser mFirebaseUser;

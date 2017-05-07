@@ -7,8 +7,7 @@ package com.instify.android.models;
 public class CampusNewsModel {
 
     public String title, description, author, dept, sec;
-
-    public int level;
+    private int level;
 
     public CampusNewsModel() {
     }
@@ -19,7 +18,7 @@ public class CampusNewsModel {
         this.author = snap.author;
     }
 
-    public CampusNewsModel(String title, String description, String author, int level) {
+    public CampusNewsModel(String title, String description, String author, Integer level) {
         this.title = title;
         this.description = description;
         this.author = author;
@@ -31,7 +30,6 @@ public class CampusNewsModel {
         this.description = d;
         this.author = user;
         this.level = level;
-
         this.dept = dept;
         this.sec = sec;
     }

@@ -60,7 +60,6 @@ import timber.log.Timber;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener,
         GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = LoginActivity.class.getSimpleName();
-
     /**
      * Id to identity GOOGLE_SIGN_IN request
      */
@@ -71,6 +70,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public FirebaseAuth.AuthStateListener mAuthStateListener;
     @BindView(R.id.scrollView)
     ScrollView mScrollView;
+    // Root View
+    private View systemUIView;
     private ProgressDialog mProgressDialog;
     private EditText mRegNoField, mPasswordField;
     private SQLiteHandler db;
@@ -132,6 +133,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         // Set the status bar as translucent
         // setStatusBarTranslucent(true);
+
+        // hide the native android navigation and status bar
+        systemUIView = getWindow().getDecorView();
+        hideSystemUI();
+
+        if (android.os.Build.VERSION.SDK_INT >= 19) {
+            getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(
+                    visibility -> {
+                        if (visibility == 0) {
+                            hideSystemUI();
+                        }
+                    });
+        }
 
         // Setup animation
         AnimationDrawable animationDrawable = (AnimationDrawable) mScrollView.getBackground();
@@ -203,6 +217,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         };
         // [END auth_state_listener]
+    }
+
+    @TargetApi(19)
+    public void hideSystemUI() {
+        systemUIView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
     // Set the status bar translucent(works only after API 19)

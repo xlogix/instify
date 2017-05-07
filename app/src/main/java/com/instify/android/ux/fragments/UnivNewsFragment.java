@@ -118,7 +118,6 @@ public class UnivNewsFragment extends Fragment {
                     news.addAll(response.body().getNewsItems());
                     for (int i = 0; i < news.size(); i += 5) {
                         final NativeExpressAdView n = new NativeExpressAdView(getContext());
-
                         news.add(i, n);
 
                     }
@@ -251,7 +250,6 @@ public class UnivNewsFragment extends Fragment {
     public static class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private static final int AD_TYPE = 1;
         private static final int CONTENT_TYPE = 0;
-        AdRequest request;
         private Context mContext;
         private List<Object> newsArray;
 
@@ -337,11 +335,13 @@ public class UnivNewsFragment extends Fragment {
                     NativeExpressAdView adView =
                             (NativeExpressAdView) newsArray.get(position);
                     ViewGroup adCardView = (ViewGroup) nativeExpressHolder.itemView;
+
                     // The NativeExpressAdViewHolder recycled by the RecyclerView may be a different
                     // instance than the one used previously for this position. Clear the
                     // NativeExpressAdViewHolder of any subviews in case it has a different
                     // AdView associated with it, and make sure the AdView for this position doesn't
                     // already have a parent of a different recycled NativeExpressAdViewHolder.
+
                     if (adCardView.getChildCount() > 0) {
                         adCardView.removeAllViews();
                     }
@@ -383,13 +383,9 @@ public class UnivNewsFragment extends Fragment {
         }
 
         public static class AdViewHolder extends RecyclerView.ViewHolder {
-
-
             private AdViewHolder(View view) {
                 super(view);
             }
         }
-
-
     }
 }

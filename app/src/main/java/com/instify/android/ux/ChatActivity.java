@@ -387,7 +387,7 @@ public class ChatActivity extends AppCompatActivity {
             messageImageView = (ImageView) itemView.findViewById(R.id.messageimage);
             messengerTextView = (TextView) itemView.findViewById(R.id.messengerTextView);
             messageDateTextView = (TextView) itemView.findViewById(R.id.messagedat);
-            messageTimeTextView = (TextView) itemView.findViewById(R.id.messagetimeTextView);
+            messageTimeTextView = (TextView) itemView.findViewById(R.id.message_time_textView);
             messengerImageView = (CircleImageView) itemView.findViewById(R.id.messengerImageView);
         }
     }
