@@ -58,6 +58,7 @@ public class UnivNewsFragment extends Fragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private SimpleStringRecyclerViewAdapter mAdapter;
     private RecyclerView recyclerView;
+    private List<Object> news = new ArrayList<>();
 
     public UnivNewsFragment() {
     }
@@ -86,7 +87,8 @@ public class UnivNewsFragment extends Fragment {
 
         // Setting up recycle view
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_university);
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // Make it look like something is happening
@@ -99,6 +101,9 @@ public class UnivNewsFragment extends Fragment {
             showRefreshing();
             makeJSONRequestRetrofit();
         });
+
+        mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), news);
+        recyclerView.setAdapter(mAdapter);
         return rootView;
     }
 
@@ -109,8 +114,7 @@ public class UnivNewsFragment extends Fragment {
             @Override
             public void onResponse(Call<NewsItemModelList> call, Response<NewsItemModelList> response) {
                 if (response.isSuccessful()) {
-
-                    List<Object> news = new ArrayList<>();
+                    news.clear();
                     news.addAll(response.body().getNewsItems());
                     for (int i = 0; i < news.size(); i += 5) {
                         final NativeExpressAdView n = new NativeExpressAdView(getContext());
@@ -118,16 +122,12 @@ public class UnivNewsFragment extends Fragment {
                         news.add(i, n);
 
                     }
-                    loadNativeExpressAd(0, news);
-
-                    // Set adapter
-                    mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), news);
-
                     // UI
                     hideRefreshing();
+                    setUpAndLoadNativeExpressAds();
                     mAdapter.notifyDataSetChanged();
                     // Setting the adapter
-                    recyclerView.setAdapter(mAdapter);
+
                 } else {
                     Toast.makeText(getContext(), "Error Receiving University News", Toast.LENGTH_LONG).show();
                     hideRefreshing();
@@ -142,13 +142,34 @@ public class UnivNewsFragment extends Fragment {
         });
     }
 
-    private void loadNativeExpressAd(final int index, List<Object> mRecyclerViewItems) {
+    private void setUpAndLoadNativeExpressAds() {
+        // Use a Runnable to ensure that the RecyclerView has been laid out before setting the
+        // ad size for the Native Express ad. This allows us to set the Native Express ad's
+        // width to match the full width of the RecyclerView.
+        recyclerView.post(() -> {
+            final float scale = getContext().getResources().getDisplayMetrics().density;
+            // Set the ad size and ad unit ID for each Native Express ad in the items list.
+            for (int i = 0; i <= news.size(); i += 5) {
+                final NativeExpressAdView adView =
+                        (NativeExpressAdView) news.get(i);
 
-        if (index >= mRecyclerViewItems.size()) {
+                AdSize adSize = new AdSize(300, 150);
+                adView.setAdSize(adSize);
+                adView.setAdUnitId(getString(R.string.native_express_ad_unit_id));
+            }
+
+            // Load the first Native Express ad in the items list.
+            loadNativeExpressAd(0);
+        });
+    }
+
+    private void loadNativeExpressAd(final int index) {
+
+        if (index >= news.size()) {
             return;
         }
 
-        Object item = mRecyclerViewItems.get(index);
+        Object item = news.get(index);
         if (!(item instanceof NativeExpressAdView)) {
             throw new ClassCastException("Expected item at index " + index + " to be a Native"
                     + " Express ad.");
@@ -164,7 +185,7 @@ public class UnivNewsFragment extends Fragment {
                 super.onAdLoaded();
                 // The previous Native Express ad loaded successfully, call this method again to
                 // load the next ad in the items list.
-                loadNativeExpressAd(index + 5, mRecyclerViewItems);
+                loadNativeExpressAd(index + 5);
             }
 
             @Override
@@ -173,14 +194,12 @@ public class UnivNewsFragment extends Fragment {
                 // the next ad in the items list.
                 Log.e("MainActivity", "The previous Native Express ad failed to load. Attempting to"
                         + " load the next Native Express ad in the items list.");
-                loadNativeExpressAd(index + 5, mRecyclerViewItems);
+                loadNativeExpressAd(index + 5);
             }
         });
 
-        // Load the Native Express ad.
-        adView.setAdUnitId(getString(R.string.native_express_ad_unit_id));
-        adView.setAdSize(new AdSize(300, 150));
-        adView.loadAd(new AdRequest.Builder().build());
+        adView.loadAd(new AdRequest.Builder().addTestDevice("D5D7845C51D6296F84D6CCC3544B1261").build());
+
     }
 
     public void makeJSONRequest() {

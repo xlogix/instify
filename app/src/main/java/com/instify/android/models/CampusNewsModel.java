@@ -8,7 +8,7 @@ public class CampusNewsModel {
 
     public String title, description, author, dept, sec;
 
-    public int level, year;
+    public int level;
 
     public CampusNewsModel() {
     }
@@ -19,12 +19,19 @@ public class CampusNewsModel {
         this.author = snap.author;
     }
 
-    public CampusNewsModel(String t, String d, int level, int year, String dept, String sec, String user) {
+    public CampusNewsModel(String title, String description, String author, int level) {
+        this.title = title;
+        this.description = description;
+        this.author = author;
+        this.level = level;
+    }
+
+    public CampusNewsModel(String t, String d, int level, String dept, String sec, String user) {
         this.title = t;
         this.description = d;
         this.author = user;
         this.level = level;
-        this.year = year;
+
         this.dept = dept;
         this.sec = sec;
     }

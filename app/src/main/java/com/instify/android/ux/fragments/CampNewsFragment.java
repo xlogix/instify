@@ -26,6 +26,7 @@ import com.instify.android.ux.UploadNewsActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * Created by Abhish3k on 2/23/2016.
@@ -68,17 +69,18 @@ public class CampNewsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        // Student details from dB //
+        SQLiteHandler db = new SQLiteHandler(getContext());
+        userRegNo = db.getUserDetails().getRegno();
+        userDept = db.getUserDetails().getDept().replace(".", "-");
+        Timber.d("CampNewsFrag", userDept);
+
         // FAB //
         ((MainActivity) getActivity()).mSharedFab.setOnClickListener(v -> {
             Intent uploadNews = new Intent(getContext(), UploadNewsActivity.class);
             uploadNews.putExtra("userDept", userDept);
             startActivity(uploadNews);
         });
-
-        // Student details from dB //
-        SQLiteHandler db = new SQLiteHandler(getContext());
-        userRegNo = db.getUserDetails().getRegno();
-        userDept = db.getUserDetails().getDept().replace(".", "-");
 
         // Paths //
         pathAll = "campusNews/all";
@@ -119,13 +121,10 @@ public class CampNewsFragment extends Fragment {
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
                     startActivity(Intent.createChooser(sharingIntent, "Share this topic on"));
                 });
-                holder.mImageButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
-                        launchChat.putExtra("refPath", path + "/" + fAdapterAll.getRef(position).getKey());
-                        startActivity(launchChat);
-                    }
+                holder.mImageButton.setOnClickListener(view -> {
+                    Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
+                    launchChat.putExtra("refPath", path + "/" + fAdapterAll.getRef(position).getKey());
+                    startActivity(launchChat);
                 });
             }
         };
