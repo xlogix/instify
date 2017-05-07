@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -21,6 +23,9 @@ import com.instify.android.models.CampusNewsModel;
 import com.instify.android.ux.ChatActivity;
 import com.instify.android.ux.MainActivity;
 import com.instify.android.ux.UploadNewsActivity;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by Abhish3k on 2/23/2016.
@@ -87,6 +92,7 @@ public class CampNewsFragment extends Fragment {
 
     private void showNews(final String path) {
 
+
         newsRef = FirebaseDatabase.getInstance().getReference().child(path);
         fAdapterAll = new FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder>(
                 CampusNewsModel.class,
@@ -96,13 +102,30 @@ public class CampNewsFragment extends Fragment {
 
             @Override
             protected void populateViewHolder(CampusViewHolder holder, CampusNewsModel model, final int position) {
-                holder.campusTitle.setText(model.title);
-                holder.campusAuthor.setText(model.author);
-                holder.campusDescription.setText(model.description);
+                holder.mCampusTitle.setText(model.title);
+                holder.mCampusAuthor.setText(model.author);
+                holder.mCampusDescription.setText(model.description);
                 holder.mView.setOnClickListener(view -> {
                     Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
                     launchChat.putExtra("refPath", path + "/" + fAdapterAll.getRef(position).getKey());
                     startActivity(launchChat);
+                });
+                holder.mImageButton2.setOnClickListener(view -> {
+                    SQLiteHandler db = new SQLiteHandler(getContext());
+                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                    sharingIntent.setType("text/plain");
+                    String shareBodyText = "'" + model.title.toUpperCase() + "'," + "\n" + model.description + "\n\n" + db.getUserDetails().getName() + " has shared a topic with you from Instify https://goo.gl/YRSMJa";
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, db.getUserDetails().getName() + " has shared a topic with you from Instify");
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
+                    startActivity(Intent.createChooser(sharingIntent, "Share this topic on"));
+                });
+                holder.mImageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
+                        launchChat.putExtra("refPath", path + "/" + fAdapterAll.getRef(position).getKey());
+                        startActivity(launchChat);
+                    }
                 });
             }
         };
@@ -132,16 +155,27 @@ public class CampNewsFragment extends Fragment {
 
     public static class CampusViewHolder extends RecyclerView.ViewHolder {
         public View mView;
-        public TextView campusTitle;
-        public TextView campusDescription;
-        public TextView campusAuthor;
+        @BindView(R.id.imageView2)
+        ImageView mImageView2;
+        @BindView(R.id.campusTitle)
+        TextView mCampusTitle;
+        @BindView(R.id.campusAuthor)
+        TextView mCampusAuthor;
+        @BindView(R.id.campusDescription)
+        TextView mCampusDescription;
+        @BindView(R.id.imageButton2)
+        ImageButton mImageButton2;
+        @BindView(R.id.imageButton)
+        ImageButton mImageButton;
+
 
         public CampusViewHolder(View v) {
             super(v);
+            ButterKnife.bind(this, v);
             mView = v;
-            campusTitle = (TextView) v.findViewById(R.id.campusTitle);
-            campusAuthor = (TextView) v.findViewById(R.id.campusAuthor);
-            campusDescription = (TextView) v.findViewById(R.id.campusDescription);
+
         }
     }
+
+
 }

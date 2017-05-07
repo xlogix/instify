@@ -5,6 +5,7 @@ package com.instify.android.ux.fragments;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,6 +18,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +33,7 @@ import com.google.android.gms.ads.NativeExpressAdView;
 import com.instify.android.R;
 import com.instify.android.app.AppController;
 import com.instify.android.helpers.RetrofitBuilder;
+import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.interfaces.RetrofitInterface;
 import com.instify.android.models.NewsItemModel;
 import com.instify.android.models.NewsItemModelList;
@@ -41,13 +45,19 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
 public class UnivNewsFragment extends Fragment {
+    private static final String endpoint = "https://hashbird.com/gogrit.in/workspace/srm-api/univ-news.php";
     private String TAG = UnivNewsFragment.class.getSimpleName();
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private SimpleStringRecyclerViewAdapter mAdapter;
+    private RecyclerView recyclerView;
 
     public UnivNewsFragment() {
     }
@@ -63,12 +73,6 @@ public class UnivNewsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
     }
-
-    private static final String endpoint = "https://hashbird.com/gogrit.in/workspace/srm-api/univ-news.php";
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private SimpleStringRecyclerViewAdapter mAdapter;
-    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -209,12 +213,28 @@ public class UnivNewsFragment extends Fragment {
         AppController.getInstance().addToRequestQueue(req);
     }
 
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.removeGroup(R.id.main_menu_group);
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    private void showRefreshing() {
+        if (!mSwipeRefreshLayout.isRefreshing())
+            mSwipeRefreshLayout.setRefreshing(true);
+    }
+
+    private void hideRefreshing() {
+        if (mSwipeRefreshLayout.isRefreshing())
+            mSwipeRefreshLayout.setRefreshing(false);
+    }
+
     public static class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private static final int AD_TYPE = 1;
         private static final int CONTENT_TYPE = 0;
+        AdRequest request;
         private Context mContext;
         private List<Object> newsArray;
-        AdRequest request;
 
         // Constructor
         private SimpleStringRecyclerViewAdapter(Context context, List<Object> newsArray) {
@@ -251,8 +271,20 @@ public class UnivNewsFragment extends Fragment {
                 case CONTENT_TYPE:
                     ViewHolder viewHolder = (ViewHolder) holder;
                     NewsItemModel m = (NewsItemModel) newsArray.get(position);
-                    viewHolder.mTextViewTitle.setText(m.getTitle());
-                    viewHolder.mTextViewSnip.setText(m.getSnip());
+                    viewHolder.mUnivNewsTitle.setText(m.getTitle());
+                    viewHolder.mUnivNewsSnip.setText(m.getSnip());
+                    viewHolder.mImageButton2.setOnClickListener(view -> {
+                        SQLiteHandler db = new SQLiteHandler(mContext);
+                        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                        sharingIntent.setType("text/plain");
+                        String shareBodyText = "'" + m.getTitle().toUpperCase() + "'," + "\n" + m.getSnip() + "\n" + m.getLink() + "\n" + db.getUserDetails().getName() + " has shared a topic with you from Instify https://goo.gl/YRSMJa";
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, db.getUserDetails().getName() + " has shared a topic with you from Instify");
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
+                        mContext.startActivity(Intent.createChooser(sharingIntent, "Share this topic on"));
+                    });
+                    viewHolder.mImageButton.setOnClickListener(view -> {
+//                           //ToDo Comments for Univ News
+                    });
                     viewHolder.mView.setOnClickListener(v -> {
 
                         new FinestWebView.Builder(v.getContext()).theme(R.style.FinestWebViewTheme)
@@ -309,15 +341,25 @@ public class UnivNewsFragment extends Fragment {
             return newsArray.size();
         }
 
+
         public static class ViewHolder extends RecyclerView.ViewHolder {
             private final View mView;
-            private final TextView mTextViewTitle, mTextViewSnip;
+            @BindView(R.id.imageView2)
+            ImageView mImageView2;
+            @BindView(R.id.univ_news_title)
+            TextView mUnivNewsTitle;
+            @BindView(R.id.univ_news_snip)
+            TextView mUnivNewsSnip;
+            @BindView(R.id.imageButton2)
+            ImageButton mImageButton2;
+            @BindView(R.id.imageButton)
+            ImageButton mImageButton;
 
             private ViewHolder(View view) {
                 super(view);
+                ButterKnife.bind(this, view);
                 mView = view;
-                mTextViewTitle = (TextView) view.findViewById(R.id.univ_news_title);
-                mTextViewSnip = (TextView) view.findViewById(R.id.univ_news_snip);
+
             }
         }
 
@@ -328,21 +370,7 @@ public class UnivNewsFragment extends Fragment {
                 super(view);
             }
         }
-    }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        menu.removeGroup(R.id.main_menu_group);
-        super.onPrepareOptionsMenu(menu);
-    }
 
-    private void showRefreshing() {
-        if (!mSwipeRefreshLayout.isRefreshing())
-            mSwipeRefreshLayout.setRefreshing(true);
-    }
-
-    private void hideRefreshing() {
-        if (mSwipeRefreshLayout.isRefreshing())
-            mSwipeRefreshLayout.setRefreshing(false);
     }
 }
