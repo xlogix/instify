@@ -173,8 +173,8 @@ public class TimeTableFragment extends Fragment {
 
         // Fetch details from the database
         SQLiteHandler db = new SQLiteHandler(getContext());
-        userRegNo = db.getUserDetails().get("token");
-        userPass = db.getUserDetails().get("created_at");
+        userRegNo = db.getUserDetails().getRegno();
+        userPass = db.getUserDetails().getToken();
 
         // Set the end point with the acquired credentials
         String endpoint = "http://instify.herokuapp.com/api/time-table/?regno="
@@ -367,8 +367,8 @@ public class TimeTableFragment extends Fragment {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
                 SQLiteHandler db = new SQLiteHandler(getContext());
-                String unm = db.getUserDetails().get("token");
-                String pass = db.getUserDetails().get("created_at");
+                String unm = db.getUserDetails().getRegno();
+                String pass = db.getUserDetails().getToken();
 
                 params.put("regno", unm);
                 params.put("pass", pass);

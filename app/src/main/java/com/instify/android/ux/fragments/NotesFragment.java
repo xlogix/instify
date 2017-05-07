@@ -147,8 +147,8 @@ public class NotesFragment extends Fragment {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
                 SQLiteHandler db = new SQLiteHandler(getContext());
-                String regNo = db.getUserDetails().get("token");
-                String pass = db.getUserDetails().get("created_at");
+                String regNo = db.getUserDetails().getRegno();
+                String pass = db.getUserDetails().getToken();
 
                 params.put("regno", regNo);
                 params.put("pass", pass);

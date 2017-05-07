@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         // Set the name
-        navTextView.setText(db.getUserDetails().get("name"));
+        navTextView.setText(db.getUserDetails().getName());
 
         // Click listeners
         navImageView.setOnClickListener(new OnSingleClickListener() {
@@ -465,8 +465,8 @@ public class MainActivity extends AppCompatActivity {
     private void FeekartWebView() {
         // Fetching the login details from the database
         SQLiteHandler db = new SQLiteHandler(this);
-        String regNo = db.getUserDetails().get("token");
-        String pass = db.getUserDetails().get("created_at");
+        String regNo = db.getUserDetails().getRegno();
+        String pass = db.getUserDetails().getToken();
 
         // Notify the user about the app's features
         Toast.makeText(this, "Instify will automatically log you in!", Toast.LENGTH_LONG).show();

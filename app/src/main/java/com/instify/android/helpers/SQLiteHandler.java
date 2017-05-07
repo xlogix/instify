@@ -7,34 +7,30 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.util.HashMap;
+import com.instify.android.models.UserModel;
 
 public class SQLiteHandler extends SQLiteOpenHelper {
 
+    // Time Table
+    public static final String TABLE_TIME_TABLE = "time_table";
     private static final String TAG = SQLiteHandler.class.getSimpleName();
-
     // All Static variables
     // Database Version
     private static final int DATABASE_VERSION = 1;
-
     // Database Name
     private static final String DATABASE_NAME = "srmerp";
-
     // Login table name
     private static final String TABLE_USER = "user";
-
-    // Time Table
-    public static final String TABLE_TIME_TABLE = "time_table";
-
     // Login Table Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_UID = "uid";
-    private static final String KEY_CREATED_AT = "created_at";
     private static final String KEY_TOKEN = "token";
     private static final String KEY_REGNO = "regno";
     private static final String KEY_DEPT = "dept";
+    private static final String KEY_CREATED_AT = "created_at";
+
 
     // Time Table Columns names
     private static final String COL_0 = "id";
@@ -54,15 +50,31 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_USER + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_EMAIL + " TEXT UNIQUE," + KEY_UID + " TEXT," + KEY_TOKEN + " TEXT," + KEY_REGNO + " TEXT," + KEY_DEPT + " TEXT,"
+        String CREATE_LOGIN_TABLE = "CREATE TABLE "
+                + TABLE_USER + "("
+                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + KEY_NAME + " TEXT,"
+                + KEY_EMAIL + " TEXT UNIQUE,"
+                + KEY_UID + " TEXT,"
+                + KEY_TOKEN + " TEXT,"
+                + KEY_REGNO + " TEXT,"
+                + KEY_DEPT + " TEXT,"
                 + KEY_CREATED_AT + " TEXT" + ")";
         db.execSQL(CREATE_LOGIN_TABLE);
 
-        String CREATE_TIME_TABLE = "CREATE TABLE " + TABLE_TIME_TABLE + " (" + COL_0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COL_1 + " TEXT, " + COL_2 + " TEXT, " + COL_3 + " TEXT, " + COL_4 + " TEXT, "
-                + COL_5 + " TEXT, " + COL_6 + " TEXT, " + COL_7 + " TEXT, " + COL_8 + " TEXT)";
+        String CREATE_TIME_TABLE =
+                "CREATE TABLE "
+                        + TABLE_TIME_TABLE
+                        + " ("
+                        + COL_0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        + COL_1 + " TEXT, "
+                        + COL_2 + " TEXT, "
+                        + COL_3 + " TEXT, "
+                        + COL_4 + " TEXT, "
+                        + COL_5 + " TEXT, "
+                        + COL_6 + " TEXT, "
+                        + COL_7 + " TEXT, "
+                        + COL_8 + " TEXT )";
         db.execSQL(CREATE_TIME_TABLE);
 
         Log.d(TAG, "Database tables created");
@@ -90,11 +102,32 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         Log.d(TAG, "New user inserted into sqlite: " + id);
     }
 
+    public void addUser(UserModel userModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, userModel.getName()); // Name
+        values.put(KEY_EMAIL, userModel.getEmail()); // Email
+        values.put(KEY_UID, userModel.getUid()); // Firebase uid
+        values.put(KEY_TOKEN, userModel.getToken());//Erp Token
+        values.put(KEY_REGNO, userModel.getRegno());//Erp Regno
+        values.put(KEY_DEPT, userModel.getDept());// Created At
+        values.put(KEY_CREATED_AT, userModel.getImage());//User Profile Pic
+
+
+        // Inserting Row
+        long id = db.insert(TABLE_USER, null, values);
+        db.close(); // Closing database connection
+
+        Log.d(TAG, "New user inserted into sqlite: " + id);
+    }
+
     /**
      * Getting user data from database
      */
-    public HashMap<String, String> getUserDetails() {
-        HashMap<String, String> user = new HashMap<>();
+
+    public UserModel getUserDetails() {
+        UserModel userModel = new UserModel();
         String selectQuery = "SELECT  * FROM " + TABLE_USER;
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -102,20 +135,15 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         // Move to first row
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
-            user.put("name", cursor.getString(1));
-            user.put("email", cursor.getString(2));
-            user.put("uid", cursor.getString(3));
-            user.put("created_at", cursor.getString(4));
-            user.put("token", cursor.getString(5));
-            user.put("regno", cursor.getString(6));
-            user.put("dept", cursor.getString(7));
+            userModel = new UserModel(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7));
+
         }
         cursor.close();
         db.close();
         // return user
-        Log.d(TAG, "Fetching user from Sqlite: " + user.toString());
+        Log.d(TAG, "Fetching user from Sqlite: " + userModel.getRegno());
 
-        return user;
+        return userModel;
     }
 
     /**
@@ -134,11 +162,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         cv.put(COL_8, h7);
         long result = db.insert(TABLE_TIME_TABLE, null, cv);
 
-        if (result == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        return result != -1;
     }
 
     /**

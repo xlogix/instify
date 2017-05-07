@@ -5,13 +5,11 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ScrollView;
@@ -67,18 +65,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * Id to identity GOOGLE_SIGN_IN request
      */
     private static final int RC_GOOGLE_SIGN_IN = 9001;
+    // [declare_auth]
+    public FirebaseAuth mAuth;
+    // [declare_auth_listener]
+    public FirebaseAuth.AuthStateListener mAuthStateListener;
     @BindView(R.id.scrollView)
     ScrollView mScrollView;
-
     private ProgressDialog mProgressDialog;
     private EditText mRegNoField, mPasswordField;
     private SQLiteHandler db;
-    // [declare_auth]
-    public FirebaseAuth mAuth;
     // [declare Google API client]
     private GoogleApiClient mGoogleApiClient;
-    // [declare_auth_listener]
-    public FirebaseAuth.AuthStateListener mAuthStateListener;
 
     // [START on_start_add_listener]
     @Override
@@ -392,9 +389,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     UserModel u = response.body();
                     if (!u.getError()) {
                         AppController.getInstance().getPrefManager().setLogin(true);
+                        if (mAuth.getCurrentUser() != null) {
+                            u.setEmail(mAuth.getCurrentUser().getEmail());
+                            u.setUid(mAuth.getCurrentUser().getUid());
+
+                        }
+                        u.setToken(password);
+
 
                         //ToDo  Pass the object usermodel as arguments to adduser
-                        db.addUser(u.getName(), u.getEmail(), u.getFolioNo(), u.getImage(), password, u.getRegno(), u.getDept());
+                        db.addUser(u);
 
                         hideProgressDialog();
                         // Take the user to the main activity

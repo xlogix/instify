@@ -72,8 +72,8 @@ public class CampNewsFragment extends Fragment {
 
         // Student details from dB //
         SQLiteHandler db = new SQLiteHandler(getContext());
-        userRegNo = db.getUserDetails().get("token");
-        userDept = db.getUserDetails().get("regno").replace(".", "-");
+        userRegNo = db.getUserDetails().getRegno();
+        userDept = db.getUserDetails().getDept().replace(".", "-");
 
         // Paths //
         pathAll = "campusNews/all";

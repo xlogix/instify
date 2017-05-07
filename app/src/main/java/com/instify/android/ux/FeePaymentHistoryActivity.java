@@ -36,7 +36,7 @@ import timber.log.Timber;
 
 public class FeePaymentHistoryActivity extends AppCompatActivity {
     private static final String TAG = FeePaymentHistoryActivity.class.getSimpleName();
-
+    String tag_string_req = "req_fee";
     private SQLiteHandler db = new SQLiteHandler(this);
     private ProgressDialog mProgressDialog;
     private RecyclerView mRecyclerView;
@@ -44,8 +44,6 @@ public class FeePaymentHistoryActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     // Declare AdView
     private AdView mAdView;
-
-    String tag_string_req = "req_fee";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,8 +149,8 @@ public class FeePaymentHistoryActivity extends AppCompatActivity {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
 
-                String unm = db.getUserDetails().get("token");
-                String pass = db.getUserDetails().get("created_at");
+                String unm = db.getUserDetails().getRegno();
+                String pass = db.getUserDetails().getToken();
                 params.put("regno", unm);
                 params.put("pass", pass);
 

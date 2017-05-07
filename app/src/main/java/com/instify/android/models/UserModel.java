@@ -13,6 +13,7 @@ public class UserModel {
     @Expose
     private String name;
 
+
     @SerializedName("regno")
     @Expose
     private String regno;
@@ -72,6 +73,39 @@ public class UserModel {
     @SerializedName("error")
     @Expose
     private Boolean error;
+
+    private String token;
+    private String uid;
+
+    public UserModel(String name, String email, String uid, String token, String regno, String dept, String image) {
+        this.name = name;
+        this.uid = uid;
+        this.token = token;
+        this.regno = regno;
+        this.dept = dept;
+        this.email = email;
+        this.image = image;
+
+    }
+
+    public UserModel() {
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public String getName() {
         return name;
@@ -200,5 +234,4 @@ public class UserModel {
     public void setError(Boolean error) {
         this.error = error;
     }
-
 }

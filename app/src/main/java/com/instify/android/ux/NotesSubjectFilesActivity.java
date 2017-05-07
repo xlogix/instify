@@ -155,7 +155,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
                 SQLiteHandler db = new SQLiteHandler(getApplicationContext());
-                String regNo = db.getUserDetails().get("token");
+                String regNo = db.getUserDetails().getRegno();
                 // String pass = db.getUserDetails().get("created_at");
 
                 params.put("regno", regNo);

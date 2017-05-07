@@ -22,11 +22,11 @@ import java.util.List;
 
 public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context context;
-    private LayoutInflater inflater;
     List<NotesFileModel> data = Collections.emptyList();
     // ImageLoader imageLoader;
     SQLiteHandler db;
+    private Context context;
+    private LayoutInflater inflater;
 
     // create constructor to initialize context and data sent from MainActivity
     public NotesFileAdapter(Context context, List<NotesFileModel> data) {
@@ -43,6 +43,40 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         // Set adapter
         NotesFileAdapter.MyHolder holder = new NotesFileAdapter.MyHolder(view);
         return holder;
+    }
+
+    // Bind data
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        // Get current position of item in RecyclerView to bind data and assign values from list
+        NotesFileAdapter.MyHolder myHolder = (NotesFileAdapter.MyHolder) holder;
+        final NotesFileModel current = data.get(position);
+        myHolder.notename.setText(current.notename);
+        myHolder.notedesc.setText(current.notedesc);
+        myHolder.notetime.setText(current.notetime);
+        myHolder.noteurl.setText(current.notefile);
+        myHolder.author.setText(current.noteposter);
+
+        // Put the picture into the image View
+        Glide.with(context)
+                .load("https://hashbird.com/gogrit.in/workspace/srm-api/studentImages/" + current.noteregno + ".jpg")
+                .dontAnimate()
+                .centerCrop()
+                .priority(Priority.HIGH)
+                .into(myHolder.imageView);
+
+        if (current.noteregno.equals(db.getUserDetails().getRegno())) {
+            myHolder.delb.setVisibility(View.VISIBLE);
+        } else {
+            myHolder.delb.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    // return total item from List
+    @Override
+    public int getItemCount() {
+        return data.size();
     }
 
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -94,40 +128,6 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public void onClick(View v) {
 
         }
-    }
-
-    // Bind data
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-        // Get current position of item in RecyclerView to bind data and assign values from list
-        NotesFileAdapter.MyHolder myHolder = (NotesFileAdapter.MyHolder) holder;
-        final NotesFileModel current = data.get(position);
-        myHolder.notename.setText(current.notename);
-        myHolder.notedesc.setText(current.notedesc);
-        myHolder.notetime.setText(current.notetime);
-        myHolder.noteurl.setText(current.notefile);
-        myHolder.author.setText(current.noteposter);
-
-        // Put the picture into the image View
-        Glide.with(context)
-                .load("https://hashbird.com/gogrit.in/workspace/srm-api/studentImages/" + current.noteregno + ".jpg")
-                .dontAnimate()
-                .centerCrop()
-                .priority(Priority.HIGH)
-                .into(myHolder.imageView);
-
-        if (current.noteregno.equals(db.getUserDetails().get("token"))) {
-            myHolder.delb.setVisibility(View.VISIBLE);
-        } else {
-            myHolder.delb.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    // return total item from List
-    @Override
-    public int getItemCount() {
-        return data.size();
     }
 
 }

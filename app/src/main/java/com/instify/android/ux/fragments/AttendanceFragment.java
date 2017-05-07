@@ -3,7 +3,6 @@ package com.instify.android.ux.fragments;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatTextView;
@@ -30,7 +29,6 @@ import com.instify.android.R;
 import com.instify.android.app.AppConfig;
 import com.instify.android.app.AppController;
 import com.instify.android.helpers.SQLiteHandler;
-import com.instify.android.ux.MainActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,6 +44,12 @@ import timber.log.Timber;
 
 public class AttendanceFragment extends Fragment {
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    //    private ExpandableListView expListView;
+    private CardView attdCards;
+    private TextView updatedAt;
+    private SimpleStringRecyclerViewAdapter mAdapter;
+    private RecyclerView recyclerView;
     public AttendanceFragment() {
     }
 
@@ -60,13 +64,6 @@ public class AttendanceFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
     }
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    //    private ExpandableListView expListView;
-    private CardView attdCards;
-    private TextView updatedAt;
-    private SimpleStringRecyclerViewAdapter mAdapter;
-    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -95,15 +92,6 @@ public class AttendanceFragment extends Fragment {
         });
 
         return rootView;
-    }
-
-    private class AsyncGetAttendance extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-            getAttendance();
-            return null;
-        }
     }
 
     private void getAttendance() {
@@ -150,8 +138,8 @@ public class AttendanceFragment extends Fragment {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
                 SQLiteHandler db = new SQLiteHandler(getContext());
-                String regNo = db.getUserDetails().get("token");
-                String pass = db.getUserDetails().get("created_at");
+                String regNo = db.getUserDetails().getRegno();
+                String pass = db.getUserDetails().getToken();
 
                 params.put("regno", regNo);
                 params.put("pass", pass);
@@ -167,6 +155,30 @@ public class AttendanceFragment extends Fragment {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.removeGroup(R.id.main_menu_group);
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    private void showRefreshing() {
+        if (!mSwipeRefreshLayout.isRefreshing())
+            mSwipeRefreshLayout.setRefreshing(true);
+    }
+
+    private void hideRefreshing() {
+        if (mSwipeRefreshLayout.isRefreshing())
+            mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    private class AsyncGetAttendance extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            getAttendance();
+            return null;
+        }
+    }
 
     class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<AttendanceFragment.SimpleStringRecyclerViewAdapter.ViewHolder> {
         private Context mContext;
@@ -273,12 +285,12 @@ public class AttendanceFragment extends Fragment {
 
     private class Att {
 
-        private double pre;
-        private double ttl;
         double main_attendance;
         //Variables
         int count = 0, num = 1, denom = 1;
         int countp = 0, deno = 1;
+        private double pre;
+        private double ttl;
 
         private Att() {
         }
@@ -324,21 +336,5 @@ public class AttendanceFragment extends Fragment {
             this.attnCalc(present, total);
             return this.predict();
         }
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        menu.removeGroup(R.id.main_menu_group);
-        super.onPrepareOptionsMenu(menu);
-    }
-
-    private void showRefreshing() {
-        if (!mSwipeRefreshLayout.isRefreshing())
-            mSwipeRefreshLayout.setRefreshing(true);
-    }
-
-    private void hideRefreshing() {
-        if (mSwipeRefreshLayout.isRefreshing())
-            mSwipeRefreshLayout.setRefreshing(false);
     }
 }

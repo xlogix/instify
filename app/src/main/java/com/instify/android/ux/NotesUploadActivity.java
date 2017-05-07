@@ -35,17 +35,14 @@ import timber.log.Timber;
 
 public class NotesUploadActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = NotesUploadActivity.class.getSimpleName();
-
+    // PERMS
+    private static final int RC_CAMERA_PERMISSION = 101;
+    private static final int RC_STORAGE_PERMISSION = 123;
     //Declaring views
     private Button buttonChoose;
     private Button buttonUpload;
     private EditText editText;
     private EditText editTextdesc;
-
-    // PERMS
-    private static final int RC_CAMERA_PERMISSION = 101;
-    private static final int RC_STORAGE_PERMISSION = 123;
-
     // URI to store the image
     private Uri mFileUri = null;
     private Uri mFilePath;
@@ -91,7 +88,7 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
                 new MultipartUploadRequest(this, uploadId, AppConfig.UPLOAD_URL)
                         .addFileToUpload(path, "pdf") //Adding file
                         .addParameter("name", name)
-                        .addParameter("regno", db.getUserDetails().get("token"))//Adding text parameter to the request
+                        .addParameter("regno", db.getUserDetails().getRegno())//Adding text parameter to the request
                         .addParameter("desc", desc)//Adding text parameter to the request
                         .addParameter("code", getIntent().getStringExtra("code"))//Adding text parameter to the request
                         .setNotificationConfig(new UploadNotificationConfig())

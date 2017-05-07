@@ -6,7 +6,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 
 import com.instify.android.R;
 import com.instify.android.helpers.RetrofitBuilder;
@@ -55,7 +54,7 @@ public class TestPerformanceActivity extends AppCompatActivity {
     void AttemptJson() {
         // Declare Retrofit
         RetrofitInterface client = RetrofitBuilder.createService(RetrofitInterface.class);
-        Call<TestPerformanceResponseModel> call = client.GetTestPerformance(db.getUserDetails().get("token"), db.getUserDetails().get("created_at"));
+        Call<TestPerformanceResponseModel> call = client.GetTestPerformance(db.getUserDetails().getRegno(), db.getUserDetails().getToken());
         // Update UI
         showRefreshing();
 
