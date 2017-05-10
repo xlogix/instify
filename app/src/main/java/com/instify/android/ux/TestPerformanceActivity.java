@@ -44,9 +44,12 @@ public class TestPerformanceActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         // Initialize SwipeRefreshLayout
         mSwipeRefreshLayout.setColorSchemeResources(R.color.red_primary, R.color.black, R.color.google_blue_900);
+        mSwipeRefreshLayout.setOnRefreshListener(this::AttemptJson);
         // Initialize Recycle View
         mRecyclerViewTestPerformance.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerViewTestPerformance.setHasFixedSize(true);
+        mRecyclerViewTestPerformance.setNestedScrollingEnabled(false);
+      
         // Call the API
         AttemptJson();
     }

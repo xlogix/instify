@@ -111,6 +111,7 @@ public class UnivNewsFragment extends Fragment {
         RetrofitInterface client = RetrofitBuilder.createService(RetrofitInterface.class);
         Call<NewsItemModelList> call = client.GetUnivNews();
         call.enqueue(new Callback<NewsItemModelList>() {
+
             @Override
             public void onResponse(Call<NewsItemModelList> call, Response<NewsItemModelList> response) {
                 if (response.isSuccessful()) {

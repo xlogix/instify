@@ -2,7 +2,6 @@ package com.instify.android.ux;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -18,8 +16,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -38,10 +34,9 @@ import pub.devrel.easypermissions.EasyPermissions;
  */
 
 public class ProfilePictureFullScreenActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
-    private static final String TAG = ProfilePictureFullScreenActivity.class.getSimpleName();
-
     public static final String ANDROID_RESOURCE = "android.resource://";
     public static final String FORWARD_SLASH = "/";
+    private static final String TAG = ProfilePictureFullScreenActivity.class.getSimpleName();
     // Permission code for Camera and Gallery Permission
     private static final int RC_CAMERA_AND_GALLERY_PERM = 123;
     // [START initialize_auth]
@@ -52,6 +47,11 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
     private AdView mAdView;
 
     // [START add_lifecycle_methods]
+
+    private static Uri resIdToUri(Context context, int resId) {
+        return Uri.parse(ANDROID_RESOURCE + context.getPackageName()
+                + FORWARD_SLASH + resId);
+    }
 
     /**
      * Called when leaving the activity
@@ -74,6 +74,7 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
             mAdView.resume();
         }
     }
+    // [END add_lifecycle_methods]
 
     /**
      * Called before the activity is destroyed
@@ -86,7 +87,6 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
         }
         super.onDestroy();
     }
-    // [END add_lifecycle_methods]
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,17 +122,7 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
         mAdView.loadAd(adRequest);
         // [END load_banner_ad]
 
-        userImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                promptProfileChanger();
-            }
-        });
-    }
-
-    private static Uri resIdToUri(Context context, int resId) {
-        return Uri.parse(ANDROID_RESOURCE + context.getPackageName()
-                + FORWARD_SLASH + resId);
+        userImage.setOnClickListener(v -> promptProfileChanger());
     }
 
     // Send the file to server
@@ -143,13 +133,10 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
                 .build();
 
         mFirebaseUser.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "User profile updated.");
-                            Toast.makeText(ProfilePictureFullScreenActivity.this, "Successfully updated", Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "User profile updated.");
+                        Toast.makeText(ProfilePictureFullScreenActivity.this, "Successfully updated", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -158,23 +145,20 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
         final CharSequence[] items = {"Take Photo or Choose from Gallery", "Remove Picture", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(ProfilePictureFullScreenActivity.this);
         builder.setTitle("Profile Photo");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("Take Photo or Choose from Gallery")) {
-                    // Get the picture from camera or storage
-                    getPicture();
-                } else if (items[item].equals("Remove Picture")) {
-                    // Set image
-                    userImage.setImageResource(R.drawable.default_pic_face);
-                    // Send to server
-                    sendToServer(resIdToUri(ProfilePictureFullScreenActivity.this,
-                            R.drawable.default_pic_face));
-                    // Restart the activity
-                    recreate();
-                } else if (items[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
+        builder.setItems(items, (dialog, item) -> {
+            if (items[item].equals("Take Photo or Choose from Gallery")) {
+                // Get the picture from camera or storage
+                getPicture();
+            } else if (items[item].equals("Remove Picture")) {
+                // Set image
+                userImage.setImageResource(R.drawable.default_pic_face);
+                // Send to server
+                sendToServer(resIdToUri(ProfilePictureFullScreenActivity.this,
+                        R.drawable.default_pic_face));
+                // Restart the activity
+                recreate();
+            } else if (items[item].equals("Cancel")) {
+                dialog.dismiss();
             }
         });
         builder.show();

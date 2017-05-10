@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.instify.android.R;
 import com.instify.android.app.AppConfig;
@@ -128,19 +126,17 @@ public class NotesFragment extends Fragment {
                             errorMsg, Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {
-                        // Update UI
-                        hideRefreshing();
+                // Update UI
+                hideRefreshing();
                 // JSON error
                 e.printStackTrace();
                 Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Timber.e("Network Error: " + error.getMessage());
-                Toast.makeText(getActivity(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
             }
+        }, error -> {
+            Timber.e("Network Error: " + error.getMessage());
+
+            Toast.makeText(getContext(),
+                    error.getMessage(), Toast.LENGTH_LONG).show();
         }) {
             @Override
             protected Map<String, String> getParams() {

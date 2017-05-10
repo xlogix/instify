@@ -8,7 +8,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -37,7 +36,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
-import com.github.clans.fab.FloatingActionMenu;
 import com.github.javiersantos.appupdater.AppUpdater;
 import com.github.javiersantos.appupdater.enums.Display;
 import com.github.javiersantos.appupdater.enums.UpdateFrom;
@@ -348,74 +346,71 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                menuItem.setChecked(true);
-                switch (menuItem.getItemId()) {
-                    case R.id.nav_attendance:
-                        mViewPager.setCurrentItem(0);
-                        break;
-                    case R.id.nav_campus_news:
-                        mViewPager.setCurrentItem(1);
-                        break;
-                    case R.id.nav_schedule:
-                        mViewPager.setCurrentItem(2);
-                        break;
-                    case R.id.nav_notes:
-                        mViewPager.setCurrentItem(3);
-                        break;
-                    case R.id.nav_univ_news:
-                        mViewPager.setCurrentItem(4);
-                        break;
-                    case R.id.nav_test_performance:
-                        startActivity(new Intent(MainActivity.this, TestPerformanceActivity.class));
-                        break;
-                    case R.id.nav_calculate_gpa:
-                        intentGPACalculator(MainActivity.this, "com.gupta.ishansh.gcmcalculator");
-                        break;
-                    case R.id.nav_feekart:
-                        FeekartWebView();
-                        break;
-                    case R.id.nav_feekart_history:
-                        startActivity(new Intent(MainActivity.this, FeePaymentHistoryActivity.class));
-                        break;
-                    case R.id.nav_send:
-                        String[] emails = {"abhishekuniyal09@gmail.com"};
-                        String subject = "I want to submit Feedback";
-                        String message = "Hi, ";
-                        Intent email = new Intent(Intent.ACTION_SENDTO);
-                        email.putExtra(Intent.EXTRA_EMAIL, emails);
-                        email.putExtra(Intent.EXTRA_SUBJECT, subject);
-                        email.putExtra(Intent.EXTRA_TEXT, message);
-                        email.setType("*/*");
-                        email.setData(Uri.parse("mailto:"));
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            menuItem.setChecked(true);
+            switch (menuItem.getItemId()) {
+                case R.id.nav_attendance:
+                    mViewPager.setCurrentItem(0);
+                    break;
+                case R.id.nav_campus_news:
+                    mViewPager.setCurrentItem(1);
+                    break;
+                case R.id.nav_schedule:
+                    mViewPager.setCurrentItem(2);
+                    break;
+                case R.id.nav_notes:
+                    mViewPager.setCurrentItem(3);
+                    break;
+                case R.id.nav_univ_news:
+                    mViewPager.setCurrentItem(4);
+                    break;
+                case R.id.nav_test_performance:
+                    startActivity(new Intent(MainActivity.this, TestPerformanceActivity.class));
+                    break;
+                case R.id.nav_calculate_gpa:
+                    intentGPACalculator(MainActivity.this, "com.gupta.ishansh.gcmcalculator");
+                    break;
+                case R.id.nav_feekart:
+                    FeekartWebView();
+                    break;
+                case R.id.nav_feekart_history:
+                    startActivity(new Intent(MainActivity.this, FeePaymentHistoryActivity.class));
+                    break;
+                case R.id.nav_send:
+                    String[] emails = {"abhishekuniyal09@gmail.com"};
+                    String subject = "I want to submit Feedback";
+                    String message = "Hi, ";
+                    Intent email = new Intent(Intent.ACTION_SENDTO);
+                    email.putExtra(Intent.EXTRA_EMAIL, emails);
+                    email.putExtra(Intent.EXTRA_SUBJECT, subject);
+                    email.putExtra(Intent.EXTRA_TEXT, message);
+                    email.setType("*/*");
+                    email.setData(Uri.parse("mailto:"));
 
-                        if (email.resolveActivity(getPackageManager()) != null) {
-                            startActivity(email);
-                        }
-                        break;
-                    case R.id.nav_share:
-                        try {
-                            Intent share = new Intent(Intent.ACTION_VIEW);
-                            share.setData(Uri.parse("market://details?id=com.instify.android"));
-                            startActivity(share);
-                        } catch (Exception e) { // Google Play is not installed
-                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.instify.android"));
-                            startActivity(intent);
-                        }
-                        break;
-                    case R.id.nav_donate_us:
-                        startActivity(new Intent(MainActivity.this, SupportUsActivity.class));
-                        break;
-                    case R.id.nav_about:
-                        startActivity(new Intent(MainActivity.this, AboutActivity.class));
-                        break;
-                }
-                drawerLayout.closeDrawers();
-                return true;
+                    if (email.resolveActivity(getPackageManager()) != null) {
+                        startActivity(email);
+                    }
+                    break;
+                case R.id.nav_share:
+                    try {
+                        Intent share = new Intent(Intent.ACTION_VIEW);
+                        share.setData(Uri.parse("market://details?id=com.instify.android"));
+                        startActivity(share);
+                    } catch (Exception e) { // Google Play is not installed
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.instify.android"));
+                        startActivity(intent);
+                    }
+                    break;
+                case R.id.nav_donate_us:
+                    startActivity(new Intent(MainActivity.this, SupportUsActivity.class));
+                    break;
+                case R.id.nav_about:
+                    startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                    break;
             }
+            drawerLayout.closeDrawers();
+            return true;
         });
     }
 
