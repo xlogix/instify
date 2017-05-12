@@ -128,7 +128,7 @@ public class AttendanceFragment extends Fragment {
                     hideRefreshing();
                     // JSON error
                     e.printStackTrace();
-                    Toast.makeText(getContext(), "Check your network connection", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "We are sorry. The ERP is misbehaving", Toast.LENGTH_LONG).show();
                 }
             }
         }, new Response.ErrorListener() {
@@ -137,7 +137,7 @@ public class AttendanceFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
                 Timber.e("Network Error: " + error.getMessage());
                 Toast.makeText(getActivity(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+                        "It's your internet :(", Toast.LENGTH_LONG).show();
             }
         }) {
             @Override
