@@ -61,6 +61,11 @@ public class AttendanceFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
     }
@@ -72,6 +77,8 @@ public class AttendanceFragment extends Fragment {
         // Taking control of the menu options
         setHasOptionsMenu(true);
         // Initialize SwipeRefreshLayout
+        //Prevent Volley Crash on Rotate
+        setRetainInstance(true);
         mSwipeRefreshLayout = (SwipeRefreshLayout)
                 rootView.findViewById(R.id.swipe_refresh_layout_attendance);
 

@@ -1,6 +1,7 @@
 package com.instify.android.ux.fragments;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -95,12 +96,19 @@ public class TimeTableFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_time_table, container, false);
         // Taking control of the menu options
         unbinder = ButterKnife.bind(this, rootView);
         setHasOptionsMenu(true);
+        //Prevent Volley Crash on Rotate
+        setRetainInstance(true);
         // Initialize SwipeRefreshLayout
         mSwipeRefreshLayout = (SwipeRefreshLayout)
                 rootView.findViewById(R.id.swipe_refresh_layout_time_table);

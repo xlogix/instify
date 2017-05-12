@@ -71,6 +71,11 @@ public class UnivNewsFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
     }
@@ -81,6 +86,8 @@ public class UnivNewsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_university_news, container, false);
         // Taking control of the menu options
         setHasOptionsMenu(true);
+        //Prevent  Crash on Rotate
+        setRetainInstance(true);
         // Initialize SwipeRefreshLayout
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.red_primary, R.color.black, R.color.google_blue_900);
@@ -153,7 +160,7 @@ public class UnivNewsFragment extends Fragment {
                 final NativeExpressAdView adView =
                         (NativeExpressAdView) news.get(i);
 
-                AdSize adSize = new AdSize(300, 150);
+                AdSize adSize = new AdSize((int) ((recyclerView.getWidth() - recyclerView.getPaddingRight() - recyclerView.getPaddingLeft() - 32) / scale), 150);
                 adView.setAdSize(adSize);
                 adView.setAdUnitId(getString(R.string.native_express_ad_unit_id));
             }
