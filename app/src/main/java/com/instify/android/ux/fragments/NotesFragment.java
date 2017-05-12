@@ -1,5 +1,6 @@
 package com.instify.android.ux.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -36,11 +37,9 @@ import timber.log.Timber;
  */
 
 public class NotesFragment extends Fragment {
-
     RecyclerView mRVFish;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private NotesAdapter mAdapter;
-
     public NotesFragment() {
     }
 
@@ -49,6 +48,11 @@ public class NotesFragment extends Fragment {
         Bundle args = new Bundle();
         frag.setArguments(args);
         return frag;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
     }
 
     @Override
@@ -62,6 +66,9 @@ public class NotesFragment extends Fragment {
         // Taking control of the menu options
         setHasOptionsMenu(true);
         // Initialize Views
+
+        //Prevent Volley Crash on Rotate
+        setRetainInstance(true);
         mSwipeRefreshLayout = (SwipeRefreshLayout)
                 rootView.findViewById(R.id.swipe_refresh_layout_notes);
         mRVFish = (RecyclerView) rootView.findViewById(R.id.recycler_view_notes);
