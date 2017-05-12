@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -16,6 +17,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -35,7 +37,6 @@ import com.google.firebase.appindexing.builders.PersonBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
@@ -45,6 +46,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.instify.android.R;
 import com.instify.android.app.AppConfig;
+import com.instify.android.helpers.SQLiteHandler;
+import com.instify.android.models.CampusNewsModel;
 import com.instify.android.models.ChatMessageModel;
 
 import java.util.HashMap;
@@ -72,6 +75,18 @@ public class ChatActivity extends AppCompatActivity {
     @BindView(R.id.placeholder)
     LinearLayout mPlaceholder;
     String refPath;
+    @BindView(R.id.imageView2)
+    ImageView mImageView2;
+    @BindView(R.id.campusTitle)
+    TextView mCampusTitle;
+    @BindView(R.id.campusAuthor)
+    TextView mCampusAuthor;
+    @BindView(R.id.campusDescription)
+    TextView mCampusDescription;
+    @BindView(R.id.imageButton2)
+    ImageButton mImageButton2;
+    @BindView(R.id.cardView)
+    CardView mCardView;
     private String mUsername;
     private String mPhotoUrl;
     private Button mSendButton;
@@ -84,6 +99,7 @@ public class ChatActivity extends AppCompatActivity {
     private FirebaseUser mFirebaseUser;
     private EditText mMessageEditText;
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
+    private CampusNewsModel model;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,6 +127,8 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         refPath = getIntent().getStringExtra("refPath");
+        model = getIntent().getParcelableExtra("CampNewsModel");
+        setdata(model);
         MESSAGES_CHILD = refPath + "/discussion";
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -258,12 +276,10 @@ public class ChatActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.toString().trim().length() > 0) {
                     mSendButton.setEnabled(true);
-                    mSendButton.setBackgroundColor(ContextCompat.getColor(ChatActivity.this, R.color.colorPrimary));
-                    mSendButton.setTextColor(ContextCompat.getColor(ChatActivity.this, R.color.white));
+
                 } else {
                     mSendButton.setEnabled(false);
-                    mSendButton.setBackgroundColor(ContextCompat.getColor(ChatActivity.this, R.color.white));
-                    mSendButton.setTextColor(ContextCompat.getColor(ChatActivity.this, R.color.colorPrimary));
+
                 }
             }
 
@@ -280,6 +296,23 @@ public class ChatActivity extends AppCompatActivity {
             mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(friendlyMessage);
             mMessageEditText.setText("");
             mFirebaseAnalytics.logEvent(MESSAGE_SENT_EVENT, null);
+        });
+    }
+
+    private void setdata(CampusNewsModel model) {
+        mCampusTitle.setText(model.title);
+        mCampusAuthor.setText(model.author);
+        mCampusDescription.setText(model.description);
+
+        // Set click action for Share button
+        mImageButton2.setOnClickListener(view -> {
+            SQLiteHandler db = new SQLiteHandler(this);
+            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            String shareBodyText = "'" + model.title.toUpperCase() + "'," + "\n" + model.description + "\n\n" + db.getUserDetails().getName() + " has shared a topic with you from Instify https://goo.gl/YRSMJa";
+            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, db.getUserDetails().getName() + " has shared a topic with you from Instify");
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
+            startActivity(Intent.createChooser(sharingIntent, "Share this topic on"));
         });
     }
 
@@ -300,14 +333,12 @@ public class ChatActivity extends AppCompatActivity {
                 .setName(mUsername)
                 .setUrl(MESSAGE_URL.concat(friendlyMessage.getId() + "/recipient"));
 
-        Indexable messageToIndex = Indexables.messageBuilder()
+        return Indexables.messageBuilder()
                 .setName(friendlyMessage.getText())
                 .setUrl(MESSAGE_URL.concat(friendlyMessage.getId()))
                 .setSender(sender)
                 .setRecipient(recipient)
                 .build();
-
-        return messageToIndex;
     }
 
     @Override
@@ -324,23 +355,19 @@ public class ChatActivity extends AppCompatActivity {
                     ChatMessageModel tempMessage = new ChatMessageModel(null, mUsername, mPhotoUrl,
                             LOADING_IMAGE_URL);
                     mFirebaseDatabaseReference.child(MESSAGES_CHILD).push()
-                            .setValue(tempMessage, new DatabaseReference.CompletionListener() {
-                                @Override
-                                public void onComplete(DatabaseError databaseError,
-                                                       DatabaseReference databaseReference) {
-                                    if (databaseError == null) {
-                                        String key = databaseReference.getKey();
-                                        StorageReference storageReference =
-                                                FirebaseStorage.getInstance()
-                                                        .getReference(mFirebaseUser.getUid())
-                                                        .child(key)
-                                                        .child(uri.getLastPathSegment());
+                            .setValue(tempMessage, (databaseError, databaseReference) -> {
+                                if (databaseError == null) {
+                                    String key = databaseReference.getKey();
+                                    StorageReference storageReference =
+                                            FirebaseStorage.getInstance()
+                                                    .getReference(mFirebaseUser.getUid())
+                                                    .child(key)
+                                                    .child(uri.getLastPathSegment());
 
-                                        putImageInStorage(storageReference, uri, key);
-                                    } else {
-                                        Timber.w(TAG, "Unable to write message to database.",
-                                                databaseError.toException());
-                                    }
+                                    putImageInStorage(storageReference, uri, key);
+                                } else {
+                                    Timber.w(TAG, "Unable to write message to database.",
+                                            databaseError.toException());
                                 }
                             });
                 }

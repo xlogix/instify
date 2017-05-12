@@ -110,7 +110,15 @@ public class CampNewsFragment extends Fragment {
                 holder.mImageButton.setOnClickListener(view -> {
                     Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
                     launchChat.putExtra("refPath", path + "/" + fAdapterAll.getRef(position).getKey());
+                    launchChat.putExtra("CampNewsModel", model);
                     startActivity(launchChat);
+//                    Pair<View, String> p1 = Pair.create(holder.mImageView2, "newstype");
+//                    Pair<View, String> p2 = Pair.create(holder.mCampusTitle, "campusTitle");
+//                    Pair<View, String> p3 = Pair.create(holder.mCampusAuthor, "campusAuthor");
+//                    Pair<View, String> p4 = Pair.create(holder.mCampusDescription, "campusDescription");
+//                    ActivityOptionsCompat options = ActivityOptionsCompat.
+//                            makeSceneTransitionAnimation(getActivity(), p1, p2, p3, p4);
+//                    startActivity(launchChat, options.toBundle());
                 });
                 // Set click action for Share button
                 holder.mImageButton2.setOnClickListener(view -> {
