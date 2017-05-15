@@ -105,13 +105,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             this.doubleBackToExitPressedOnce = true;
             Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce = false;
-                }
-            }, 2000);
+            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
         }
     }
 
@@ -217,7 +211,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSingleClick(View view) {
                 startActivity(new Intent(MainActivity.this, ProfilePictureFullScreenActivity.class));
-                // promptProfileChanger();
             }
         });
         /* [END] Setup Header View **/

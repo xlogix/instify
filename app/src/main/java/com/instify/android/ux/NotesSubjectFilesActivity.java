@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.instify.android.R;
 import com.instify.android.app.AppConfig;
@@ -64,86 +63,78 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
         String tag_string_req = "req_files";
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_FILES, new Response.Listener<String>() {
+                AppConfig.URL_FILES, response -> {
+            try {
+                JSONArray user = new JSONArray(response);
+                boolean error;// = jObj.getBoolean("error");
+                error = false;
 
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONArray user = new JSONArray(response);
-                    boolean error;// = jObj.getBoolean("error");
-                    error = false;
+                // Handle UI
+                //hideRefreshing();
 
-                    // Handle UI
-                    //hideRefreshing();
+                // Check for error node in json
+                if (!error) {
+                    ListExpandableAdapter expListAdapter;
 
-                    // Check for error node in json
-                    if (!error) {
-                        ListExpandableAdapter expListAdapter;
+                    // declare array List for all headers in list
+                    ArrayList<String> headersArrayList = new ArrayList<>();
+                    List<NotesFileModel> NotesFileModel = new ArrayList<>();
+                    // Declare Hash map for all headers and their corresponding values
+                    HashMap<String, ArrayList<String>> childArrayList = new HashMap<>();
 
-                        // declare array List for all headers in list
-                        ArrayList<String> headersArrayList = new ArrayList<>();
-                        List<NotesFileModel> NotesFileModel = new ArrayList<>();
-                        // Declare Hash map for all headers and their corresponding values
-                        HashMap<String, ArrayList<String>> childArrayList = new HashMap<>();
+                    // expListView = (ExpandableListView)findViewById(R.id.expListView);
+                    //    JSONArray user = jObj.getJSONArray(response);
 
-                        // expListView = (ExpandableListView)findViewById(R.id.expListView);
-                        //    JSONArray user = jObj.getJSONArray(response);
-
-                        //  int i;
+                    //  int i;
 //                        mAdapter = new NotesAdapter(notes);
 //                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
 //                        recyclerView.setLayoutManager(mLayoutManager);
 //                        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-                        for (int i = 0; i < user.length(); i++) {
-                            JSONObject json_data = user.getJSONObject(i);
-                            //  JSONObject subs = user.getJSONObject(user.getString(i));
+                    for (int i = 0; i < user.length(); i++) {
+                        JSONObject json_data = user.getJSONObject(i);
+                        //  JSONObject subs = user.getJSONObject(user.getString(i));
 
 
 //                            notes movie = notes(subs.getString("sub-desc"));
 //                            notes.add(movie);
-                            //   notes obj = new notes(subs.getString("sub-desc"));
+                        //   notes obj = new notes(subs.getString("sub-desc"));
 
 
-                            NotesFileModel fishData = new NotesFileModel();
-                            fishData.notename = json_data.getString("name");
-                            fishData.notedesc = json_data.getString("desc");
-                            fishData.notetime = json_data.getString("uploaded");
-                            fishData.notefile = json_data.getString("file");
-                            fishData.noteregno = json_data.getString("regno");
-                            fishData.noteposter = json_data.getString("author");
+                        NotesFileModel fishData = new NotesFileModel();
+                        fishData.notename = json_data.getString("name");
+                        fishData.notedesc = json_data.getString("desc");
+                        fishData.notetime = json_data.getString("uploaded");
+                        fishData.notefile = json_data.getString("file");
+                        fishData.noteregno = json_data.getString("regno");
+                        fishData.noteposter = json_data.getString("author");
 
-                            //fishData.sizeName = json_data.getString("registration").trim();
-                            //fishData.price = json_data.getString("ID");
-                            // fishData.image = "https://hashbird.com/gogrit.in/workspace/srm-api/studentImages/" + json_data.getString("registration").trim() + ".jpg";
-                            NotesFileModel.add(fishData);
-
-                            //  Toast.makeText(getApplicationContext(),json_data.getString("name"),Toast.LENGTH_LONG).show();
-                            //  Toast.makeText(getApplicationContext(),user.getString(i)+" - "+subs.getString("sub-desc"),Toast.LENGTH_SHORT).show();
-                            // Create an object of Att class
-                        }
-                        // Setup and Handover data to recyclerview
-                        //  mRVFish = (RecyclerView) findViewById(R.id.);
-                        NotesFileAdapter mAdapter = new NotesFileAdapter(NotesSubjectFilesActivity.this, NotesFileModel);
-                        mRVFish.setAdapter(mAdapter);
-                        mRVFish.setLayoutManager(new LinearLayoutManager(NotesSubjectFilesActivity.this));
+                        //fishData.sizeName = json_data.getString("registration").trim();
+                        //fishData.price = json_data.getString("ID");
+                        // fishData.image = "https://hashbird.com/gogrit.in/workspace/srm-api/studentImages/" + json_data.getString("registration").trim() + ".jpg";
+                        NotesFileModel.add(fishData);
+                    }
+                    // Setup and Handover data to recycler view
+                    //  mRVFish = (RecyclerView) findViewById(R.id.);
+                    NotesFileAdapter mAdapter = new NotesFileAdapter(NotesSubjectFilesActivity.this, NotesFileModel);
+                    mRVFish.setAdapter(mAdapter);
+                    mRVFish.setLayoutManager(new LinearLayoutManager(NotesSubjectFilesActivity.this));
 
 //                        mAdapter = new NotesAdapter(getApplicationContext(), notes);
 //                        mRVFish.setAdapter(mAdapter);
 //                        mRVFish.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
 
-                    } else {
-                        // Update UI
-                        //   hideRefreshing();
-                        // Error in login. Get the error message
-//                        String errorMsg = user.getString("error_msg");
-                    }
-                } catch (JSONException e) {
+                } else {
                     // Update UI
-                    //    hideRefreshing();
-                    linearLayout.setVisibility(View.VISIBLE);
+                    //   hideRefreshing();
+                    // Error in login. Get the error message
+//                        String errorMsg = user.getString("error_msg");
                 }
+            } catch (JSONException e) {
+                // Update UI
+                //    hideRefreshing();
+                linearLayout.setVisibility(View.VISIBLE);
             }
         }, error -> {
             Timber.e("Network Error: " + error.getMessage());
