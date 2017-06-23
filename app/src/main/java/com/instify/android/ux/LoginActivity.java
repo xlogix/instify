@@ -274,30 +274,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Timber.d("signInWithCredential:onComplete:" + task.isSuccessful());
+                .addOnCompleteListener(this, task -> {
+                    Timber.d("signInWithCredential:onComplete:" + task.isSuccessful());
 
-                        // Notify the user
-                        Toast.makeText(LoginActivity.this,
-                                "Successfully logged into Google. Continue with the ERP login", Toast.LENGTH_LONG).show();
-                        // Make the fields active
-                        mRegNoField.setEnabled(true);
-                        mPasswordField.setEnabled(true);
+                    // Notify the user
+                    Toast.makeText(LoginActivity.this,
+                            "Successfully logged into Google. Continue with the ERP login", Toast.LENGTH_LONG).show();
+                    // Make the fields active
+                    mRegNoField.setEnabled(true);
+                    mPasswordField.setEnabled(true);
 
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Timber.w("signInWithCredential", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        // [START_EXCLUDE]
-                        hideProgressDialog();
-                        // [END_EXCLUDE]
+                    // If sign in fails, display a message to the user. If sign in succeeds
+                    // the auth state listener will be notified and logic to handle the
+                    // signed in user can be handled in the listener.
+                    if (!task.isSuccessful()) {
+                        Timber.w("signInWithCredential", task.getException());
+                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
                     }
+                    // [START_EXCLUDE]
+                    hideProgressDialog();
+                    // [END_EXCLUDE]
                 });
     }
     // [END auth_with_google]
@@ -322,57 +319,53 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String tag_string_req = "req_login";
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_LOGIN, new Response.Listener<String>() {
+                AppConfig.URL_LOGIN, response -> {
+                    Timber.d(TAG, "Login Response: " + response);
+                    try {
+                        JSONObject jObj = new JSONObject(response);
+                        boolean error = jObj.getBoolean("error");
 
-            @Override
-            public void onResponse(String response) {
-                Timber.d(TAG, "Login Response: " + response);
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
+                        // Check for error node in json
+                        if (!error) {
+                            // User successfully logged in. Create login session
+                            AppController.getInstance().getPrefManager().setLogin(true);
 
-                    // Check for error node in json
-                    if (!error) {
-                        // User successfully logged in. Create login session
-                        AppController.getInstance().getPrefManager().setLogin(true);
+                            // Now store the user in SQLite
+                            String uid = jObj.getString("folio_no");
 
-                        // Now store the user in SQLite
-                        String uid = jObj.getString("folio_no");
+                            //   JSONObject user = jObj.getJSONObject("user");
+                            String name = jObj.getString("name");
+                            String email = jObj.getString("email");
+                            String created_at = jObj.getString("image");
+                            String regno = jObj.getString("regno");
+                            String dept = jObj.getString("dept");
 
-                        //   JSONObject user = jObj.getJSONObject("user");
-                        String name = jObj.getString("name");
-                        String email = jObj.getString("email");
-                        String created_at = jObj.getString("image");
-                        String regno = jObj.getString("regno");
-                        String dept = jObj.getString("dept");
+                            // Inserting row in users table
+                            db.addUser(name, email, uid, created_at, password, regno, dept);
 
-                        // Inserting row in users table
-                        db.addUser(name, email, uid, created_at, password, regno, dept);
+                            // Take the user to the main activity
+                            intentLoginToMain();
 
-                        // Take the user to the main activity
-                        intentLoginToMain();
+                            // Fetch the error msg
+                            String errorMsg = jObj.getString("error_msg");
+                            if (mAuth.getCurrentUser() != null) {
+                                Toast.makeText(LoginActivity.this,
+                                        errorMsg, Toast.LENGTH_LONG).show();
+                            }
 
-                        // Fetch the error msg
-                        String errorMsg = jObj.getString("error_msg");
-                        if (mAuth.getCurrentUser() != null) {
+                        } else {
+                            // Error in login. Get the error message
+                            String errorMsg = jObj.getString("error_msg");
                             Toast.makeText(LoginActivity.this,
                                     errorMsg, Toast.LENGTH_LONG).show();
                         }
-
-                    } else {
-                        // Error in login. Get the error message
-                        String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(LoginActivity.this,
-                                errorMsg, Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        // JSON error
+                        e.printStackTrace();
+                        Toast.makeText(LoginActivity.this, "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } catch (JSONException e) {
-                    // JSON error
-                    e.printStackTrace();
-                    Toast.makeText(LoginActivity.this, "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                }
 
-            }
-        }, error -> {
+                }, error -> {
             Timber.e(TAG, "Login Error: " + error.getMessage());
             Toast.makeText(LoginActivity.this,
                     error.getMessage(), Toast.LENGTH_LONG).show();

@@ -69,6 +69,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private void sendRegistrationToServer(String token) {
         // sending gcm token to server
         Log.e(TAG, "sendRegistrationToServer: " + token);
+        AppController.getInstance().getPrefManager().sentRegIdToServer(true);
     }
 
     private void storeRegIdInPref(String token) {

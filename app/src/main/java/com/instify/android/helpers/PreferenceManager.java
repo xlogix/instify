@@ -32,8 +32,8 @@ public class PreferenceManager {
     private static final String KEY_NOTIFICATIONS = "notifications";
     private static final String REG_ID = "reg_id";
     private static final String IS_FIRST_RUN = "is_first_run";
-    private static final String IS_DARK_THEME = "is_dark_theme";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
+    private static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
 
     // Constructor
     public PreferenceManager(Context context) {
@@ -42,9 +42,10 @@ public class PreferenceManager {
         editor = mPrefs.edit();
     }
 
-    public static PreferenceManager newInstance(Context context) {
-        return new PreferenceManager(context);
-    }
+    /**
+     * Handle multiple notifications froom the app
+     * @return void
+     */
 
     public String getNotifications() {
         return mPrefs.getString(KEY_NOTIFICATIONS, null);
@@ -89,6 +90,12 @@ public class PreferenceManager {
 
     public void setRegId(String regId) {
         editor.putString(REG_ID, regId);
+    }
+
+    public void sentRegIdToServer(Boolean value) {
+        editor.putBoolean(SENT_TOKEN_TO_SERVER, value);
+        // commit changes
+        editor.commit();
     }
 
     /**

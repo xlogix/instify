@@ -29,8 +29,7 @@
 
 -optimizations !field/removal/writeonly,!field/marking/private,!class/merging/*,!code/allocation/variable
 
--keep class com.commonsware.cwac.** { *; }
-
+# Basic proguard configuration to support all the devices
 -keep class android.support.v4.** {  *; }
 
 -keep class android.support.v7.internal.** { *; }
@@ -41,6 +40,7 @@
 
 -keep interface android.support.v7.** { *; }
 
+# Remove unwanted logging for increased security
 -assumenosideeffects class android.util.Log {
      public static boolean isLoggable(java.lang.String, int);
      public static int v(...);
@@ -50,7 +50,9 @@
      public static int e(...);
 }
 
+# Proguard for Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.AppGlideModule
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
   **[] $VALUES;
   public *;
