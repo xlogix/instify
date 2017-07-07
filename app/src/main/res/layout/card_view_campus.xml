@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                                    xmlns:card_view="http://schemas.android.com/tools"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_margin="4dp"
-                                    app:contentPadding="6dp"
-                                    card_view:cardCornerRadius="4dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="4dp"
+    app:contentPadding="6dp"
+    card_view:cardCornerRadius="4dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
             android:transitionName="newstype"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_school"/>
+            app:srcCompat="@drawable/ic_school" />
 
         <TextView
             android:id="@+id/campusTitle"
@@ -45,7 +45,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageView2"
             card_view:layout_constraintLeft_creator="1"
-            card_view:layout_constraintRight_creator="1"/>
+            card_view:layout_constraintRight_creator="1" />
 
         <TextView
             android:id="@+id/campusAuthor"
@@ -62,7 +62,7 @@
             android:textSize="14sp"
             android:transitionName="campusAuthor"
             app:layout_constraintLeft_toRightOf="@+id/imageView2"
-            app:layout_constraintTop_toBottomOf="@+id/campusTitle"/>
+            app:layout_constraintTop_toBottomOf="@+id/campusTitle" />
 
         <TextView
             android:id="@+id/campusDescription"
@@ -85,7 +85,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
             card_view:layout_constraintLeft_creator="1"
-            card_view:layout_constraintRight_creator="1"/>
+            card_view:layout_constraintRight_creator="1" />
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -102,7 +102,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/campusAuthor"
             card_view:layout_constraintLeft_creator="1"
-            card_view:layout_constraintRight_creator="1"/>
+            card_view:layout_constraintRight_creator="1" />
 
         <ImageButton
             android:id="@+id/imageButton2"
@@ -116,7 +116,7 @@
             app:layout_constraintTop_toBottomOf="@+id/campusDescription"
             app:srcCompat="@drawable/ic_share_black_24dp"
             card_view:layout_constraintBottom_creator="1"
-            card_view:layout_constraintTop_creator="1"/>
+            card_view:layout_constraintTop_creator="1" />
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -132,6 +132,6 @@
             app:layout_constraintTop_toBottomOf="@+id/campusDescription"
             app:srcCompat="@drawable/ic_mode_comment_black_24dp"
             card_view:layout_constraintBottom_creator="1"
-            card_view:layout_constraintTop_creator="1"/>
+            card_view:layout_constraintTop_creator="1" />
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

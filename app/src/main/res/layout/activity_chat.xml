@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ScrollView
         android:id="@+id/nestedscroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/linearLayout"
-        android:fillViewport="true"
-    >
-        <RelativeLayout android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="4dp"
-                        tools:context=".ux.ChatActivity">
-            <android.support.v7.widget.CardView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:card_view="http://schemas.android.com/tools"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            tools:context=".ux.ChatActivity">
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/tools"
                 android:id="@+id/cardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -42,7 +41,7 @@
                         android:transitionName="newstype"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_school"/>
+                        app:srcCompat="@drawable/ic_school" />
 
                     <TextView
                         android:id="@+id/campusTitle"
@@ -64,7 +63,7 @@
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/imageView2"
                         card_view:layout_constraintLeft_creator="1"
-                        card_view:layout_constraintRight_creator="1"/>
+                        card_view:layout_constraintRight_creator="1" />
 
                     <TextView
                         android:id="@+id/campusAuthor"
@@ -81,7 +80,7 @@
                         android:textSize="14sp"
                         android:transitionName="campusAuthor"
                         app:layout_constraintLeft_toRightOf="@+id/imageView2"
-                        app:layout_constraintTop_toBottomOf="@+id/campusTitle"/>
+                        app:layout_constraintTop_toBottomOf="@+id/campusTitle" />
 
                     <TextView
                         android:id="@+id/campusDescription"
@@ -104,7 +103,7 @@
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
                         card_view:layout_constraintLeft_creator="1"
-                        card_view:layout_constraintRight_creator="1"/>
+                        card_view:layout_constraintRight_creator="1" />
 
                     <LinearLayout
                         android:id="@+id/linearLayout2"
@@ -121,7 +120,7 @@
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/campusAuthor"
                         card_view:layout_constraintLeft_creator="1"
-                        card_view:layout_constraintRight_creator="1"/>
+                        card_view:layout_constraintRight_creator="1" />
 
                     <ImageButton
                         android:id="@+id/imageButton2"
@@ -137,18 +136,18 @@
                         app:layout_constraintTop_toBottomOf="@+id/campusDescription"
                         app:srcCompat="@drawable/ic_share_black_24dp"
                         card_view:layout_constraintBottom_creator="1"
-                        card_view:layout_constraintTop_creator="1"/>
+                        card_view:layout_constraintTop_creator="1" />
 
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.CardView>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_trending"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
 
-        android:layout_below="@+id/cardView"
-        android:fitsSystemWindows="true"
-    />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_trending"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:layout_below="@+id/cardView"
+                android:fitsSystemWindows="true" />
 
 
             <ProgressBar
@@ -157,18 +156,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true" />
 
             <include
                 layout="@layout/placeholder_empty_chat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/cardView"
-                android:visibility="gone"
-            />
+                android:visibility="gone" />
 
         </RelativeLayout>
     </ScrollView>
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
@@ -186,7 +185,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:hint="@string/msg_edit_box"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/sendButton"
@@ -195,6 +194,6 @@
             android:layout_gravity="bottom"
             android:enabled="false"
             android:filterTouchesWhenObscured="true"
-            android:text="@string/msg_send"/>
+            android:text="@string/msg_send" />
     </LinearLayout>
 </RelativeLayout>
