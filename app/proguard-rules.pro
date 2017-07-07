@@ -23,10 +23,15 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
-
+-dontwarn retrofit.**
 -dontwarn okio.**
 -dontwarn retrofit2.Platform$Java8
-
+-keep class retrofit.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+-keepattributes Signature
+-keepattributes Exceptions
 -optimizations !field/removal/writeonly,!field/marking/private,!class/merging/*,!code/allocation/variable
 
 # Basic proguard configuration to support all the devices
