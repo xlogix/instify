@@ -37,7 +37,7 @@ import xyz.fnplus.instify.ux.adapters.NotesAdapter;
  */
 
 public class NotesFragment extends Fragment {
-    RecyclerView mRVFish;
+    private RecyclerView mRVFish;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private NotesAdapter mAdapter;
 

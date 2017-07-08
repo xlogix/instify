@@ -62,13 +62,13 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return data.size();
     }
 
-    private class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView textFishName;
         TextView textType;
 
         // create constructor to get widget reference
-        private MyHolder(View itemView) {
+        public MyHolder(View itemView) {
             super(itemView);
             textFishName = (TextView) itemView.findViewById(R.id.title);
             textType = (TextView) itemView.findViewById(R.id.code);

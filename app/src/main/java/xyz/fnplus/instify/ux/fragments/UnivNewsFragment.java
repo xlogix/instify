@@ -53,8 +53,10 @@ import xyz.fnplus.instify.models.NewsItemModel;
 import xyz.fnplus.instify.models.NewsItemModelList;
 
 public class UnivNewsFragment extends Fragment {
+    private static final String TAG = UnivNewsFragment.class.getSimpleName();
+
     private static final String endpoint = "https://hashbird.com/gogrit.in/workspace/srm-api/univ-news.php";
-    private String TAG = UnivNewsFragment.class.getSimpleName();
+
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private SimpleStringRecyclerViewAdapter mAdapter;
     private RecyclerView recyclerView;
@@ -205,7 +207,7 @@ public class UnivNewsFragment extends Fragment {
             }
         });
 
-        adView.loadAd(new AdRequest.Builder().addTestDevice("D5D7845C51D6296F84D6CCC3544B1261").build());
+        adView.loadAd(new AdRequest.Builder().addTestDevice("41838A8935E72BB91C7768E8585F1F53").build());
 
     }
 
@@ -382,11 +384,10 @@ public class UnivNewsFragment extends Fragment {
             @BindView(R.id.imageButton)
             ImageButton mImageButton;
 
-            private ViewHolder(View view) {
+            public ViewHolder(View view) {
                 super(view);
                 ButterKnife.bind(this, view);
                 mView = view;
-
             }
         }
 

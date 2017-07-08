@@ -34,13 +34,14 @@ android {
             minifyEnabled false
             shrinkResources false
             versionNameSuffix '-DEBUG'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
             minifyEnabled true
             shrinkResources false
             versionNameSuffix '-RELEASE'
             // signingConfig signingConfigs.release
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     packagingOptions {
@@ -50,8 +51,8 @@ android {
         exclude 'LICENSE.txt'
     }
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
     }
     // `return void` removes the lint error: `Not all execution paths return a value`.
     return void
@@ -104,6 +105,7 @@ dependencies {
     // NETWORK
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    // compile 'com.squareup.retrofit2:converter-java8:2.3.0'
     compile 'com.facebook.stetho:stetho:1.5.0'
     compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     compile 'com.squareup.okhttp3:okhttp:3.8.1'

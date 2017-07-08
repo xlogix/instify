@@ -22,7 +22,6 @@ public class TestPerformanceAdapterChild extends RecyclerView.Adapter<TestPerfor
 
     public TestPerformanceAdapterChild(List<SubjectsModel> items) {
         myItems = items;
-
     }
 
 
@@ -41,7 +40,6 @@ public class TestPerformanceAdapterChild extends RecyclerView.Adapter<TestPerfor
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.setData(myItems.get(position));
     }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

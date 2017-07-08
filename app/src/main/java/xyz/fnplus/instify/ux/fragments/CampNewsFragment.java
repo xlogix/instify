@@ -94,7 +94,9 @@ public class CampNewsFragment extends Fragment {
 
     private void showNews(final String path) {
 
+        // News Database reference
         newsRef = FirebaseDatabase.getInstance().getReference().child(path);
+
         fAdapterAll = new FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder>(
                 CampusNewsModel.class,
                 R.layout.card_view_campus,
@@ -102,7 +104,7 @@ public class CampNewsFragment extends Fragment {
                 newsRef) {
 
             @Override
-            protected void populateViewHolder(CampusViewHolder holder, CampusNewsModel model, final int position) {
+            public void populateViewHolder(CampusViewHolder holder, CampusNewsModel model, final int position) {
                 holder.mCampusTitle.setText(model.title);
                 holder.mCampusAuthor.setText(model.author);
                 holder.mCampusDescription.setText(model.description);

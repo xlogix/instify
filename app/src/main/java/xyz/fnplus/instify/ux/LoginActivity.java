@@ -395,11 +395,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Call<UserModel> call = client.Login(regNo, password);
         call.enqueue(new Callback<UserModel>() {
             @Override
-            public void onResponse(Call<UserModel> call, retrofit2.Response<UserModel> response) {
+            public void onResponse(@NonNull Call<UserModel> call, @NonNull retrofit2.Response<UserModel> response) {
                 if (response.isSuccessful()) {
                     UserModel u = response.body();
                     if (!u.getError()) {
+                        // Set login to true
                         AppController.getInstance().getPrefManager().setLogin(true);
+
                         if (mAuth.getCurrentUser() != null) {
                             u.setEmail(mAuth.getCurrentUser().getEmail());
                             u.setUid(mAuth.getCurrentUser().getUid());
@@ -407,8 +409,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                         u.setToken(password);
 
-
-                        //ToDo  Pass the object usermodel as arguments to adduser
+                        // TODO : Pass the object usermodel as arguments to adduser
                         db.addUser(u);
 
                         hideProgressDialog();
@@ -429,7 +430,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 }
             }
-
             @Override
             public void onFailure(Call<UserModel> call, Throwable t) {
                 Timber.e(TAG, "Login Error: " + t.getMessage());
@@ -439,7 +439,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 hideProgressDialog();
             }
         });
-
     }
 
     private boolean validateForm() {

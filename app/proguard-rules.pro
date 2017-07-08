@@ -23,15 +23,10 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
--dontwarn retrofit.**
+
 -dontwarn okio.**
--dontwarn retrofit2.Platform$Java8
--keep class retrofit.** { *; }
--keepclasseswithmembers class * {
-    @retrofit2.http.* <methods>;
-}
--keepattributes Signature
--keepattributes Exceptions
+-dontwarn javax.annotation.**
+
 -optimizations !field/removal/writeonly,!field/marking/private,!class/merging/*,!code/allocation/variable
 
 # Basic proguard configuration to support all the devices
@@ -45,6 +40,9 @@
 
 -keep interface android.support.v7.** { *; }
 
+# Keep Models of the app
+-keepclassmembers class xyz.fnplus.instify.models** { <fields>; }
+
 # Remove unwanted logging for increased security
 -assumenosideeffects class android.util.Log {
      public static boolean isLoggable(java.lang.String, int);
@@ -53,6 +51,26 @@
      public static int w(...);
      public static int d(...);
      public static int e(...);
+}
+
+# Proguard for Retrofit
+-dontwarn retrofit.**
+-dontwarn retrofit2.Platform$Java8
+-keep class retrofit.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+
+# Proguard for ButterKnife
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewBinder { *; }
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
 }
 
 # Proguard for Glide

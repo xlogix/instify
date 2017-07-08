@@ -89,7 +89,6 @@ public class ListExpandableAdapter extends BaseExpandableListAdapter {
                              View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
         if (convertView == null) {
-
             convertView = infalInflater.inflate(R.layout.list_group_header,
                     null);
         }

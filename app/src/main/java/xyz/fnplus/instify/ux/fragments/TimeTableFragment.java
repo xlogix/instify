@@ -105,8 +105,8 @@ public class TimeTableFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_time_table, container, false);
-        // Taking control of the menu options
         unbinder = ButterKnife.bind(this, rootView);
+        // Taking control of the menu options
         setHasOptionsMenu(true);
         //Prevent Volley Crash on Rotate
         setRetainInstance(true);

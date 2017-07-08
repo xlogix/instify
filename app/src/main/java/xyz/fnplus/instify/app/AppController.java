@@ -24,6 +24,7 @@ import xyz.fnplus.instify.ux.IntroActivity;
 
 public class AppController extends Application {
     public static final String TAG = AppController.class.getSimpleName();
+
     private static AppController mInstance;
     public FirebaseAnalytics mFirebaseAnalytics;
     private RequestQueue mRequestQueue;
@@ -55,8 +56,6 @@ public class AppController extends Application {
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
             // Set Analytics collection to true
             mFirebaseAnalytics.setAnalyticsCollectionEnabled(true);
-            /*Fabric.with(this, new Crashlytics());
-            Timber.plant(new CrashReportingTree());*/
         }
     }
 

@@ -30,7 +30,6 @@ public class TestPerformanceAdapterParent extends RecyclerView.Adapter<TestPerfo
         mContext = context;
     }
 
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext())
@@ -81,6 +80,4 @@ public class TestPerformanceAdapterParent extends RecyclerView.Adapter<TestPerfo
 
 
     }
-
-
 }

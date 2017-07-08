@@ -80,7 +80,7 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return data.size();
     }
 
-    class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView notename;
         TextView notedesc;
