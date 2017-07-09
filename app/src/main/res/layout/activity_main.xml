@@ -8,7 +8,6 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <include layout="@layout/tab_layout" />
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
@@ -17,6 +16,11 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:menu="@menu/drawer_layout" />
+
+    <include layout="@layout/tab_layout"
+
+    />
+
 
 </android.support.v4.widget.DrawerLayout>
 
