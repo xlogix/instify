@@ -2,6 +2,7 @@ package xyz.fnplus.instify.ux.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Keep;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,13 +14,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import timber.log.Timber;
 import xyz.fnplus.instify.R;
 import xyz.fnplus.instify.helpers.SQLiteHandler;
@@ -92,7 +91,7 @@ public class CampNewsFragment extends Fragment {
         return rootView;
     }
 
-    private void showNews(final String path) {
+    public void showNews(final String path) {
 
         // News Database reference
         newsRef = FirebaseDatabase.getInstance().getReference().child(path);
@@ -104,7 +103,7 @@ public class CampNewsFragment extends Fragment {
                 newsRef) {
 
             @Override
-            public void populateViewHolder(CampusViewHolder holder, CampusNewsModel model, final int position) {
+            @Keep public void populateViewHolder(CampusViewHolder holder, CampusNewsModel model, final int position) {
                 holder.mCampusTitle.setText(model.title);
                 holder.mCampusAuthor.setText(model.author);
                 holder.mCampusDescription.setText(model.description);
@@ -159,7 +158,7 @@ public class CampNewsFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class CampusViewHolder extends RecyclerView.ViewHolder {
+    @Keep public static class CampusViewHolder extends RecyclerView.ViewHolder {
         public View mView;
         @BindView(R.id.imageView2)
         ImageView mImageView2;
