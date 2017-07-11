@@ -7,25 +7,27 @@ android {
   dexOptions {
     javaMaxHeapSize "3g"
   }
-  /*signingConfigs {
-        release {
-            try {
-                storeFile file("android-key.jks")
-                storePassword KEYSTORE_PASSWORD
-                keyAlias KEYSTORE_ALIAS
-                keyPassword KEY_PASSWORD
-                v2SigningEnabled true
-            } catch (ex) {
-                throw new InvalidUserDataException("You should define KEYSTORE_PASSWORD, KEYSTORE_ALIAS and KEY_PASSWORD in gradle.properties." + ex)
-            }
-        }
-    }*/
+  signingConfigs {
+    release {
+      try {
+        storeFile file("fnplus-key.jks")
+        storePassword KEYSTORE_PASSWORD
+        keyAlias KEYSTORE_ALIAS
+        keyPassword KEY_PASSWORD
+        v2SigningEnabled true
+      } catch (ex) {
+        throw new InvalidUserDataException(
+            "You should define KEYSTORE_PASSWORD, KEYSTORE_ALIAS and KEY_PASSWORD in gradle.properties." +
+                ex)
+      }
+    }
+  }
   defaultConfig {
     applicationId "xyz.fnplus.instify"
     minSdkVersion 16
     targetSdkVersion 25
-    versionCode 11
-    versionName "1.2.1"
+    versionCode 13
+    versionName "1.2.3"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     vectorDrawables.useSupportLibrary = true
   }
@@ -41,7 +43,7 @@ android {
       shrinkResources false
       versionNameSuffix '-RELEASE'
       // signingConfig signingConfigs.release
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
   }
   packagingOptions {
@@ -116,7 +118,7 @@ dependencies {
   compile 'com.soundcloud.android:android-crop:1.0.1@aar'
   compile 'com.github.vipulasri:timelineview:1.0.5'
   compile 'com.github.clans:fab:1.6.4'
-  compile 'com.roughike:bottom-bar:2.3.1'
+  // compile 'com.roughike:bottom-bar:2.3.1'
   compile 'com.getkeepsafe.taptargetview:taptargetview:1.9.1'
   // UPDATER
   compile 'com.github.javiersantos:AppUpdater:2.6.1'
@@ -126,7 +128,6 @@ dependencies {
   androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
     exclude group: 'com.android.support', module: 'support-annotations'
   })
-
   // TEST MEMORY LEAK
   debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
   releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'

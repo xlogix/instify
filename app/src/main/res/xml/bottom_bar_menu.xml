@@ -2,21 +2,26 @@
   <tab
       id="@+id/nav_attendance"
       icon="@drawable/ic_attendance_white"
-      title="@string/nav_attendance"/>
+      title="@string/nav_attendance"
+      barColorWhenSelected="#5D4037"/>
   <tab
       id="@+id/nav_campus_news"
       icon="@drawable/ic_campus_news_white"
-      title="@string/nav_campus_news"/>
+      title="@string/nav_campus_news"
+      barColorWhenSelected="@color/colorAccent"/>
   <tab
       id="@+id/nav_schedule"
       icon="@drawable/ic_time_table_white"
-      title="@string/nav_schedule"/>
+      title="@string/nav_schedule"
+      barColorWhenSelected="#7B1FA2"/>
   <tab
       id="@+id/nav_notes"
       icon="@drawable/ic_notes_white"
-      title="@string/nav_notes"/>
+      title="@string/nav_notes"
+      barColorWhenSelected="#FF5252"/>
   <tab
       id="@+id/nav_univ_news"
       icon="@drawable/ic_univ_news_white"
-      title="@string/nav_univ_news"/>
+      title="@string/nav_univ_news"
+      barColorWhenSelected="#FF9800"/>
 </tabs>

@@ -11,13 +11,12 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -34,7 +33,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -51,7 +49,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.roughike.bottombar.BottomBar;
 import com.thefinestartist.finestwebview.FinestWebView;
 import timber.log.Timber;
 import xyz.fnplus.instify.R;
@@ -83,22 +80,19 @@ public class MainActivity extends AppCompatActivity {
   SQLiteHandler db = new SQLiteHandler(this);
   boolean doubleBackToExitPressedOnce = false;
   View headerView;
-  @BindView(R.id.bottomBar_Layout) BottomBar bottomBarLayout;
-
   private DrawerLayout drawerLayout;
   private ViewPager mViewPager;
   /**
-   * The {@link PagerAdapter} that will provide
+   * The {@link android.support.v4.view.PagerAdapter} that will provide
    * fragments for each of the sections. We use a
    * {@link FragmentPagerAdapter} derivative, which will keep every
    * loaded fragment in memory. If this becomes too memory intensive, it
    * may be best to switch to a
-   * {@link FragmentStatePagerAdapter}.
+   * {@link android.support.v4.app.FragmentStatePagerAdapter}.
    */
   private SectionsPagerAdapter mSectionsPagerAdapter;
 
-  @Override
-  public void onBackPressed() {
+  @Override public void onBackPressed() {
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     if (drawer.isDrawerOpen(GravityCompat.START)) {
       drawer.closeDrawer(GravityCompat.START);
@@ -116,16 +110,14 @@ public class MainActivity extends AppCompatActivity {
   /**
    * Called when leaving the activity
    */
-  @Override
-  public void onPause() {
+  @Override public void onPause() {
     super.onPause();
   }
 
   /**
    * Called when returning to the activity
    */
-  @Override
-  protected void onResume() {
+  @Override protected void onResume() {
     super.onResume();
     // Ensures that user didn't un-install Google Play Services required for Firebase related tasks.
     checkPlayServices();
@@ -141,13 +133,11 @@ public class MainActivity extends AppCompatActivity {
   /**
    * Called before the activity is destroyed
    */
-  @Override
-  public void onDestroy() {
+  @Override public void onDestroy() {
     super.onDestroy();
   }
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
@@ -158,8 +148,7 @@ public class MainActivity extends AppCompatActivity {
     // Declare Views
     mSharedFab = (FloatingActionButton) findViewById(R.id.shared_fab);
 
-    AppUpdater appUpdater = new AppUpdater(this)
-        .setDisplay(Display.DIALOG)
+    AppUpdater appUpdater = new AppUpdater(this).setDisplay(Display.DIALOG)
         .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
         .showEvery(2);
     appUpdater.start();
@@ -172,8 +161,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Drawer Layout
     drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-    ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-        this, drawerLayout, toolbar, R.string.content_description_open_navigation_drawer,
+    ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+        R.string.content_description_open_navigation_drawer,
         R.string.content_description_close_navigation_drawer);
     drawerLayout.setDrawerListener(toggle);
     toggle.syncState();
@@ -198,7 +187,8 @@ public class MainActivity extends AppCompatActivity {
       try {
         // Set profile picture from Firebase account
         Glide.with(this)
-            .load(mFirebaseUser.getPhotoUrl().toString()).placeholder(R.drawable.default_pic_face)
+            .load(mFirebaseUser.getPhotoUrl().toString())
+            .placeholder(R.drawable.default_pic_face)
             .dontAnimate()
             .centerCrop()
             .priority(Priority.HIGH)
@@ -213,8 +203,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Click listeners
     navImageView.setOnClickListener(new OnSingleClickListener() {
-      @Override
-      public void onSingleClick(View view) {
+      @Override public void onSingleClick(View view) {
         startActivity(new Intent(MainActivity.this, ProfilePictureFullScreenActivity.class));
       }
     });
@@ -237,8 +226,7 @@ public class MainActivity extends AppCompatActivity {
       public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
       }
 
-      @Override
-      public void onPageSelected(int position) {
+      @Override public void onPageSelected(int position) {
         switch (position) {
           case 1:
             mSharedFab.show();
@@ -251,32 +239,13 @@ public class MainActivity extends AppCompatActivity {
         }
       }
 
-      @Override
-      public void onPageScrollStateChanged(int state) {
+      @Override public void onPageScrollStateChanged(int state) {
 
       }
     });
-    bottomBarLayout.setOnTabSelectListener(tabId -> {
-      switch (tabId) {
-        case R.id.nav_attendance:
-          mViewPager.setCurrentItem(0);
-          break;
-        case R.id.nav_campus_news:
-          mViewPager.setCurrentItem(1);
-          break;
-        case R.id.nav_schedule:
-          mViewPager.setCurrentItem(2);
-          break;
-        case R.id.nav_notes:
-          mViewPager.setCurrentItem(3);
-          break;
-        case R.id.nav_univ_news:
-          mViewPager.setCurrentItem(4);
-          break;
-      }
-    });
-    //TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
-    //mTabLayout.setupWithViewPager(mViewPager);
+
+    TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
+    mTabLayout.setupWithViewPager(mViewPager);
     //        mTabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(MainActivity.this, R.color.white));
 
     //        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -311,14 +280,12 @@ public class MainActivity extends AppCompatActivity {
 
       // User object generation for the database - for usage in all fragments
       userRef.addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
+        @Override public void onDataChange(DataSnapshot dataSnapshot) {
           // Collecting users data to use through out the app
           userInfoObject = dataSnapshot.getValue(FirebaseUserDataModel.class);
         }
 
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
+        @Override public void onCancelled(DatabaseError databaseError) {
 
         }
       });
@@ -342,8 +309,7 @@ public class MainActivity extends AppCompatActivity {
     int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
     if (resultCode != ConnectionResult.SUCCESS) {
       if (apiAvailability.isUserResolvableError(resultCode)) {
-        apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
-            .show();
+        apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
       } else {
         Log.i(TAG, "This device is not supported.");
         finish();
@@ -354,8 +320,8 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private boolean isDeviceOnline() {
-    ConnectivityManager connMgr = (ConnectivityManager)
-        this.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+    ConnectivityManager connMgr = (ConnectivityManager) this.getApplicationContext()
+        .getSystemService(Context.CONNECTIVITY_SERVICE);
     NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
     return (networkInfo != null && networkInfo.isConnected());
   }
@@ -392,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
           startActivity(new Intent(MainActivity.this, FeePaymentHistoryActivity.class));
           break;
         case R.id.nav_send:
-          String[] emails = {"abhishekuniyal09@gmail.com"};
+          String[] emails = { "abhishekuniyal09@gmail.com" };
           String subject = "I want to submit Feedback";
           String message = "Hi, ";
           Intent email = new Intent(Intent.ACTION_SENDTO);
@@ -430,15 +396,13 @@ public class MainActivity extends AppCompatActivity {
     });
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.menu_main, menu);
     return true;
   }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
     // Handle action bar item clicks here. The action bar will
     // automatically handle clicks on the Home/Up button, so long
     // as you specify a parent activity in AndroidManifest.xml.
@@ -506,9 +470,14 @@ public class MainActivity extends AppCompatActivity {
         .webViewJavaScriptCanOpenWindowsAutomatically(true)
         .gradientDivider(false)
         .setCustomAnimations(R.anim.slide_up, R.anim.hold, R.anim.hold, R.anim.slide_down)
-        .injectJavaScript("javascript:" + "document.getElementById('accountname').value = '"
-            + regNo + "';" + "document.getElementById('password').value = '" + pass + "';" +
-            "loginform()")
+        .injectJavaScript("javascript:"
+            + "document.getElementById('accountname').value = '"
+            + regNo
+            + "';"
+            + "document.getElementById('password').value = '"
+            + pass
+            + "';"
+            + "loginform()")
         .show("http://feekart.srmuniv.ac.in/srmopp/");
   }
 
@@ -557,19 +526,15 @@ public class MainActivity extends AppCompatActivity {
     static final int TAB_NOTES = 3;
     static final int TAB_UNIVERSITY_NEWS = 4;
     private int[] imageResId = {
-        R.drawable.ic_attendance_white,
-        R.drawable.ic_campus_news_white,
-        R.drawable.ic_time_table_white,
-        R.drawable.ic_notes_white,
-        R.drawable.ic_univ_news_white
+        R.drawable.ic_attendance_white, R.drawable.ic_campus_news_white,
+        R.drawable.ic_time_table_white, R.drawable.ic_notes_white, R.drawable.ic_univ_news_white
     };
 
     private SectionsPagerAdapter(FragmentManager fm) {
       super(fm);
     }
 
-    @Override
-    public Fragment getItem(int position) {
+    @Override public Fragment getItem(int position) {
       // getItem is called to instantiate the fragment for the given page.
       // Return a PlaceholderFragment (defined as a static inner class below).
       switch (position) {
@@ -587,13 +552,11 @@ public class MainActivity extends AppCompatActivity {
       return PlaceholderFragment.newInstance(position + 1);
     }
 
-    @Override
-    public int getCount() {
+    @Override public int getCount() {
       return NUM_TABS;
     }
 
-    @Override
-    public CharSequence getPageTitle(int position) {
+    @Override public CharSequence getPageTitle(int position) {
 
       Drawable image = ContextCompat.getDrawable(getApplication(), imageResId[position]);
       image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
