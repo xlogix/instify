@@ -25,7 +25,6 @@
 #-renamesourcefileattribute SourceFile
 
 -dontwarn okio.**
--dontwarn javax.annotation.**
 
 -optimizations !field/removal/writeonly,!field/marking/private,!class/merging/*,!code/allocation/variable
 
@@ -41,7 +40,7 @@
 -keep interface android.support.v7.** { *; }
 
 # Keep Models of the app
--keepclassmembers class xyz.fnplus.instify.models** { <fields>; }
+-keepclassmembers class com.instify.android.models** { <fields>; }
 
 # Remove unwanted logging for increased security
 -assumenosideeffects class android.util.Log {
