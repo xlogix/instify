@@ -31,6 +31,8 @@
 # Basic proguard configuration to support all the devices
 -keep class android.support.v4.** {  *; }
 
+-keep interface android.support.v4.app.** { *; }
+
 -keep class android.support.v7.internal.** { *; }
 
 -keep interface android.support.v7.internal.** { *; }
@@ -38,6 +40,12 @@
 -keep class android.support.v7.** { *; }
 
 -keep interface android.support.v7.** { *; }
+
+# Allow obfuscation of android.support.v7.internal.view.menu.**
+# to avoid problem on Samsung 4.2.2 devices with appcompat v21
+# see https://code.google.com/p/android/issues/detail?id=78377
+-keep class !android.support.v7.internal.view.menu.**,android.support.** {*;}
+#-keep class android.support.v4.app.** { *; }
 
 # Keep Models of the app
 -keepclassmembers class com.instify.android.models** { <fields>; }

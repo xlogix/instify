@@ -7,19 +7,18 @@ package com.instify.android.app;
 import android.app.Application;
 import android.content.Intent;
 import android.text.TextUtils;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.facebook.stetho.Stetho;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.crash.FirebaseCrash;
 import com.instify.android.BuildConfig;
 import com.instify.android.helpers.PreferenceManager;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.ux.IntroActivity;
 import com.squareup.leakcanary.LeakCanary;
-
 import timber.log.Timber;
 
 public class AppController extends Application {
@@ -30,13 +29,9 @@ public class AppController extends Application {
     }
 
     private RequestQueue mRequestQueue;
-
     private static AppController mInstance;
-
     private PreferenceManager mPrefs;
-
     public FirebaseAnalytics mFirebaseAnalytics;
-
 
     @Override
     public void onCreate() {
@@ -60,8 +55,8 @@ public class AppController extends Application {
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
             // Set Analytics collection to true
             mFirebaseAnalytics.setAnalyticsCollectionEnabled(true);
-            /*Fabric.with(this, new Crashlytics());
-            Timber.plant(new CrashReportingTree());*/
+            // Set Crash collection to true
+            FirebaseCrash.setCrashCollectionEnabled(true);
         }
     }
 
