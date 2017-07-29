@@ -77,7 +77,7 @@ dependencies {
 
   // DATABASE
   compile 'com.google.firebase:firebase-database:11.0.2'
-  compile 'com.firebaseui:firebase-ui-database:2.1.0'
+  compile 'com.firebaseui:firebase-ui-database:2.1.1'
 
   // CRASH (ONLY FOR RELEASE)
   releaseCompile 'com.google.firebase:firebase-crash:11.0.2'

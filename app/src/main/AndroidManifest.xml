@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="xyz.fnplus.instify">
+    package="com.instify.android">
 
   <supports-screens
       android:anyDensity="true"
@@ -108,6 +108,7 @@
         android:name=".ux.ProfilePictureFullScreenActivity"
         android:parentActivityName=".ux.MainActivity"/>
     <activity
+
         android:name=".ux.ChatActivity"
         android:label="@string/title_activity_chat"/>
     <activity
