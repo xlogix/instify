@@ -1,119 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/tools"
+    android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
+    android:elevation="4dp"
     app:contentPadding="4dp"
-    card_view:cardCornerRadius="4dp">
+    android:layout_margin="4dp"
+    app:cardCornerRadius="4dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/name"
+            android:contentDescription="Your Profile Image"
+            android:padding="5dp"
+            app:srcCompat="@drawable/ic_doc" />
+
+
+        <TextView
+            android:id="@+id/datetime"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageView"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:contentDescription="Your Profile Image"
-                android:src="@drawable/default_pic_face" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/uname"
-                    android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:paddingEnd="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingStart="10dp"
-                    android:paddingTop="10dp"
-                    android:text="Chandan Singh"
-                    android:textAllCaps="true"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/datetime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:text="posted date &amp; time "
-                    android:textSize="12sp" />
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/imageView"
+            android:gravity="end"
+            android:maxLines="1"
+            android:paddingTop="5dp"
+            android:paddingRight="5dp"
+            android:text="posted date &amp; time "
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingEnd="10dp"
-            android:paddingLeft="10dp"
-            android:paddingStart="10dp"
+            android:layout_below="@id/datetime"
+            android:layout_toRightOf="@+id/imageView"
+            android:paddingEnd="5dp"
+            android:paddingLeft="5dp"
+            android:paddingStart="5dp"
             android:paddingTop="5dp"
             android:text="TextView"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_below="@id/name"
+            android:layout_toRightOf="@+id/imageView"
+            android:padding="5dp"
+            android:text="Description"
+            android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/noteurl"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="0dp"
-                android:text=""
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Description"
-                android:textSize="14sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/uname"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/desc"
+            android:layout_toLeftOf="@+id/share_button"
+            android:layout_toRightOf="@id/imageView"
 
-            <Button
-                android:id="@+id/delb"
-                android:layout_width="wrap_content"
-                android:layout_height="34dp"
-                android:layout_weight="1"
-                android:background="@color/red_accent"
-                android:text="DELETE"
-                android:textColor="#fff"
-                android:textStyle="bold" />
+            android:gravity="end"
+            android:padding="5dp"
+            android:text="Chandan Singh"
+            android:textAllCaps="true"
+            android:textSize="8sp" />
 
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="wrap_content"
-                android:layout_height="34dp"
-                android:layout_weight="1"
-                android:background="@color/colorPrimary"
-                android:elevation="13dp"
-                android:text="Download"
-                android:textColor="#fff"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </LinearLayout>
+        <ImageButton
+            android:id="@+id/share_button"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/uname"
+            android:layout_margin="5dp"
+            android:background="?selectableItemBackground"
+            app:srcCompat="@drawable/ic_share_black_24dp" />
+
+
+    </RelativeLayout>
+
 </android.support.v7.widget.CardView>

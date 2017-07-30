@@ -1,6 +1,9 @@
 package com.instify.android.ux;
 
 import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -8,19 +11,31 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
 import com.instify.android.R;
 import com.instify.android.app.AppConfig;
 import com.instify.android.helpers.SQLiteHandler;
+import com.instify.android.models.NotesFileModel;
+import com.instify.android.services.MyFirebaseDownloadService;
+import com.instify.android.services.MyFirebaseUploadService;
+
 import java.io.File;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.UUID;
 import net.gotev.uploadservice.MultipartUploadRequest;
 import net.gotev.uploadservice.UploadNotificationConfig;
@@ -32,9 +47,6 @@ import timber.log.Timber;
 public class NotesUploadActivity extends AppCompatActivity implements View.OnClickListener {
   private static final String TAG = NotesUploadActivity.class.getSimpleName();
 
-  // PERMS
-  private static final int RC_CAMERA_PERMISSION = 101;
-  private static final int RC_STORAGE_PERMISSION = 123;
   //Declaring views
   private Button buttonChoose;
   private Button buttonUpload;
@@ -42,29 +54,66 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
   private EditText editTextdesc;
   // URI to store the image
   private Uri mFileUri = null;
+  private Uri mDownloadUrl;
   private Uri mFilePath;
   private SearchView searchView = null;
-
+  private String mSubjectcode;
+  private String mFiletype;
+  private BroadcastReceiver mBroadcastReceiver;
+  private ProgressDialog mProgressDialog;
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_post_notes);
     setTitle(Html.fromHtml("<small>POST TO- " + getIntent().getStringExtra("code") + "</small>"));
 
     // Initializing views
-    buttonChoose = (Button) findViewById(R.id.buttonChoose);
     buttonUpload = (Button) findViewById(R.id.buttonUpload);
     editText = (EditText) findViewById(R.id.editTextName);
     editTextdesc = (EditText) findViewById(R.id.desc);
+    mFilePath=Uri.parse(getIntent().getExtras().getString("fileuri"));
+    mSubjectcode=getIntent().getExtras().getString("code");
+    mFiletype=getIntent().getExtras().getString("filetype");
+
 
     // Setting Click Listeners
-    buttonChoose.setOnClickListener(this);
-    buttonUpload.setOnClickListener(this);
-  }
 
+    buttonUpload.setOnClickListener(this);
+    // Download receiver
+    mBroadcastReceiver = new BroadcastReceiver() {
+      @Override
+      public void onReceive(Context context, Intent intent) {
+        Log.d(TAG, "onReceive:" + intent);
+        hideProgressDialog();
+
+        switch (intent.getAction()) {
+          case MyFirebaseUploadService.UPLOAD_COMPLETED:
+          case MyFirebaseUploadService.UPLOAD_ERROR:
+            onUploadResultIntent(intent);
+            break;
+        }
+      }
+    };
+  }
+  private void onUploadResultIntent(Intent intent) {
+    // Got a new intent from MyUploadService with a success or failure
+    mDownloadUrl = intent.getParcelableExtra(MyFirebaseUploadService.EXTRA_DOWNLOAD_URL);
+    mFileUri = intent.getParcelableExtra(MyFirebaseUploadService.EXTRA_FILE_URI);
+    if (mDownloadUrl!=null){
+    SQLiteHandler db = new SQLiteHandler(this);
+    NotesFileModel nfm = new NotesFileModel(editText.getText().toString(), mDownloadUrl.toString(), editTextdesc.getText().toString(), getCurrentTime(), db.getUserDetails().getName(), db.getUserDetails().getRegno(),mFiletype,getUnixtime());
+    DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("notes").child(mSubjectcode).push();
+    ref.setValue(nfm);
+
+    finish();
+    }
+
+
+  }
   /*
   * This is the method responsible for pdf upload
   * We need the full pdf path and the name for the pdf in this method
   * */
+  /*
   public void uploadMultipart() {
     // Getting name for the image
     String name = editText.getText().toString().trim();
@@ -101,6 +150,7 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
       }
     }
   }
+  */
 
   // Get Current Time for naming the file
   public String getCurrentTime() {
@@ -109,106 +159,65 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
         Calendar.YEAR) + " " + c.get(Calendar.HOUR) + "-" + c.get(Calendar.MINUTE) + "-" + c.get(
         Calendar.SECOND);
   }
-
-  // Method to show file chooser
-  private void showFileChooser() {
-    final CharSequence[] items = { "Choose from Storage", "Cancel" };
-    AlertDialog.Builder builder = new AlertDialog.Builder(NotesUploadActivity.this);
-    builder.setTitle("Select File");
-    builder.setItems(items, new DialogInterface.OnClickListener() {
-      @Override public void onClick(DialogInterface dialog, int item) {
-        if (items[item].equals("Take Photo")) {
-          // Request the permission
-          requestCameraPermission();
-        } else if (items[item].equals("Choose from Storage")) {
-          // Request the permission
-          requestStoragePermission();
-        } else if (items[item].equals("Cancel")) {
-          dialog.dismiss();
-        }
-      }
-    });
-    builder.show();
+  public long getUnixtime()
+  {
+    Calendar c = Calendar.getInstance();
+    return c.getTimeInMillis();
   }
 
-  // Requesting permission
-  @AfterPermissionGranted(RC_CAMERA_PERMISSION) private void requestCameraPermission() {
-    String[] perms = { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE };
-    if (EasyPermissions.hasPermissions(this, perms)) {
-      // Choose file storage location
-      String mPathName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Instify/";
-      File path = new File(mPathName);
-      // Check
-      boolean isDirectoryCreated = path.exists();
-      if (!isDirectoryCreated) {
-        isDirectoryCreated = path.mkdir();
-      }
-      if (isDirectoryCreated) {
-        mPathName += getCurrentTime() + ".jpg";
-        File filePath = new File(mPathName);
-        // Log it
-        Timber.d(TAG, "File address :" + filePath);
-        // Assign it
-        mFileUri = Uri.fromFile(filePath);
-        // Get Intent
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mFileUri);
-        startActivityForResult(takePictureIntent, RC_CAMERA_PERMISSION);
-      }
-    } else {
-      // Ask for one permission
-      EasyPermissions.requestPermissions(this, getString(R.string.rationale_camera),
-          RC_CAMERA_PERMISSION, perms);
-    }
-  }
-
-  // Requesting permission
-  @AfterPermissionGranted(RC_STORAGE_PERMISSION) private void requestStoragePermission() {
-    if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-      // Have permission, do the thing!
-      Intent intent = new Intent();
-      intent.setType("*/*");
-      intent.setAction(Intent.ACTION_GET_CONTENT);
-      startActivityForResult(Intent.createChooser(intent, "Complete action using... "),
-          RC_STORAGE_PERMISSION);
-    } else {
-      // Ask for one permission
-      EasyPermissions.requestPermissions(this, getString(R.string.rationale_camera),
-          RC_STORAGE_PERMISSION, Manifest.permission.READ_EXTERNAL_STORAGE);
-    }
-  }
-
-  // Handling the image chooser activity result
-  @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    if (requestCode == RC_CAMERA_PERMISSION && resultCode == RESULT_OK) {
-      mFilePath = data.getData();
-      buttonChoose.setText("SELECTED");
-    } else if (requestCode == RC_STORAGE_PERMISSION && resultCode == RESULT_OK) {
-      mFilePath = data.getData();
-      buttonChoose.setText("SELECTED");
-    } else if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
-      // Do something after user returned from app settings screen, like showing a Toast.
-      Toast.makeText(this, R.string.returned_from_app_settings_to_activity, Toast.LENGTH_SHORT)
-          .show();
-    }
-  }
-
-  // [START] EasyPermissions Default Functions
-  @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-      @NonNull int[] grantResults) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    // EasyPermissions handles the request result.
-    EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-  }
-  // [END] EasyPermission Default Functions
 
   @Override public void onClick(View v) {
-    if (v == buttonChoose) {
-      showFileChooser();
-    }
+//    if (v == buttonChoose) {
+//      showFileChooser();
+//    }
     if (v == buttonUpload) {
-      uploadMultipart();
+      if (TextUtils.isEmpty(editText.getText().toString()) || TextUtils.isEmpty(editTextdesc.getText().toString())) {
+        Toast.makeText(this, "Field Cant be empty!!", Toast.LENGTH_SHORT).show();
+      } else {
+        showProgressDialog();
+        uploadFromUri(mFilePath);
+
+
+      }
+    }
+  }
+  // [START upload_from_uri]
+  private void uploadFromUri(Uri fileUri) {
+    Log.d(TAG, "uploadFromUri:src:" + fileUri.toString());
+
+    // Save the File URI
+    mFileUri = fileUri;
+
+    // Start MyUploadService to upload the file, so that the file is uploaded
+    // even if this Activity is killed or put in the background
+    startService(new Intent(this, MyFirebaseUploadService.class)
+            .putExtra(MyFirebaseUploadService.EXTRA_FILE_URI, fileUri)
+            .putExtra("storage_loc",mSubjectcode)
+            .setAction(MyFirebaseUploadService.ACTION_UPLOAD));
+
+
+  }
+
+  @Override
+  protected void onStart() {
+    super.onStart();
+    LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
+    manager.registerReceiver(mBroadcastReceiver, MyFirebaseUploadService.getIntentFilter());
+  }
+  private void showProgressDialog() {
+    if (mProgressDialog == null) {
+      mProgressDialog = new ProgressDialog(this);
+      mProgressDialog.setMessage("Uploading...");
+      mProgressDialog.setIndeterminate(true);
+    }
+
+    mProgressDialog.show();
+  }
+
+  private void hideProgressDialog() {
+    if (mProgressDialog != null && mProgressDialog.isShowing()) {
+      mProgressDialog.dismiss();
     }
   }
 }
+

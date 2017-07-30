@@ -68,7 +68,8 @@ public class MyFirebaseUploadService extends MyFirebaseBaseTaskService {
         Log.d(TAG, "onStartCommand:" + intent + ":" + startId);
         if (ACTION_UPLOAD.equals(intent.getAction())) {
             Uri fileUri = intent.getParcelableExtra(EXTRA_FILE_URI);
-            uploadFromUri(fileUri);
+            String path=intent.getStringExtra("storage_loc");
+            uploadFromUri(fileUri,path);
         }
 
         return START_REDELIVER_INTENT;
@@ -76,7 +77,7 @@ public class MyFirebaseUploadService extends MyFirebaseBaseTaskService {
     // [END upload_from_uri]
 
     // [START upload_from_uri]
-    private void uploadFromUri(final Uri fileUri) {
+    private void uploadFromUri(final Uri fileUri,final String path) {
         Log.d(TAG, "uploadFromUri:src:" + fileUri.toString());
 
         // [START_EXCLUDE]
@@ -86,36 +87,28 @@ public class MyFirebaseUploadService extends MyFirebaseBaseTaskService {
 
         // [START get_child_ref]
         // Get a reference to store file at photos/<FILENAME>.jpg
-        final StorageReference photoRef = mStorageRef.child("photos")
+        final StorageReference photoRef = mStorageRef.child("notes").child(path)
                 .child(fileUri.getLastPathSegment());
         // [END get_child_ref]
 
         // Upload file to Firebase Storage
         Log.d(TAG, "uploadFromUri:dst:" + photoRef.getPath());
         photoRef.putFile(fileUri).
-                addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                        showProgressNotification(getString(R.string.progress_uploading),
-                                taskSnapshot.getBytesTransferred(),
-                                taskSnapshot.getTotalByteCount());
-                    }
-                })
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Upload succeeded
-                        Log.d(TAG, "uploadFromUri:onSuccess");
+                addOnProgressListener(taskSnapshot -> showProgressNotification(getString(R.string.progress_uploading),
+                        taskSnapshot.getBytesTransferred(),
+                        taskSnapshot.getTotalByteCount()))
+                .addOnSuccessListener(taskSnapshot -> {
+                    // Upload succeeded
+                    Log.d(TAG, "uploadFromUri:onSuccess");
 
-                        // Get the public download URL
-                        Uri downloadUri = taskSnapshot.getMetadata().getDownloadUrl();
+                    // Get the public download URL
+                    Uri downloadUri = taskSnapshot.getMetadata().getDownloadUrl();
 
-                        // [START_EXCLUDE]
-                        broadcastUploadFinished(downloadUri, fileUri);
-                        showUploadFinishedNotification(downloadUri, fileUri);
-                        taskCompleted();
-                        // [END_EXCLUDE]
-                    }
+                    // [START_EXCLUDE]
+                    broadcastUploadFinished(downloadUri, fileUri);
+                    showUploadFinishedNotification(downloadUri, fileUri);
+                    taskCompleted();
+                    // [END_EXCLUDE]
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override

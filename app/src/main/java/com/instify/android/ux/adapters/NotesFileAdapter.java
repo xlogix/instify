@@ -3,11 +3,15 @@ package com.instify.android.ux.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -53,25 +57,9 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         // Get current position of item in RecyclerView to bind data and assign values from list
         NotesFileAdapter.MyHolder myHolder = (NotesFileAdapter.MyHolder) holder;
         final NotesFileModel current = data.get(position);
-        myHolder.notename.setText(current.notename);
-        myHolder.notedesc.setText(current.notedesc);
-        myHolder.notetime.setText(current.notetime);
-        myHolder.noteurl.setText(current.notefile);
-        myHolder.author.setText(current.noteposter);
+        myHolder.setdatatoview(current);
 
-        // Put the picture into the image View
-        Glide.with(context)
-                .load("https://hashbird.com/gogrit.in/workspace/srm-api/studentImages/" + current.noteregno + ".jpg")
-                .dontAnimate()
-                .centerCrop()
-                .priority(Priority.HIGH)
-                .into(myHolder.imageView);
 
-        if (current.noteregno.equals(db.getUserDetails().getRegno())) {
-            myHolder.delb.setVisibility(View.VISIBLE);
-        } else {
-            myHolder.delb.setVisibility(View.INVISIBLE);
-        }
     }
 
     // return total item from List
@@ -80,51 +68,68 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return data.size();
     }
 
-    public class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class MyHolder extends RecyclerView.ViewHolder {
 
         TextView notename;
         TextView notedesc;
-        TextView notefile;
         TextView notetime;
-        TextView noteurl;
         TextView author;
-        Button down;
-        Button delb;
         //TextView textPrice;
         ImageView imageView;
+        ImageButton shareButton;
+        String link;
+       public CardView cv;
 
         // create constructor to get widget reference
         public MyHolder(final View itemView) {
             super(itemView);
+            cv=(CardView)itemView.findViewById(R.id.cardView);
             notename = (TextView) itemView.findViewById(R.id.name);
             notedesc = (TextView) itemView.findViewById(R.id.desc);
             notetime = (TextView) itemView.findViewById(R.id.datetime);
             author = (TextView) itemView.findViewById(R.id.uname);
-            noteurl = (TextView) itemView.findViewById(R.id.noteurl);
-            down = (Button) itemView.findViewById(R.id.button3);
-            delb = (Button) itemView.findViewById(R.id.delb);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
-            db = new SQLiteHandler(context);
-            down.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Uri uri = Uri.parse(noteurl.getText().toString()); // missing 'http://' will cause crashed
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    context.startActivity(intent);
-
-                }
-            });
-
-            itemView.setOnClickListener(v -> {
-                // Do something
-            });
-        }
-
-        // Click event for all items
-        @Override
-        public void onClick(View v) {
+            shareButton = (ImageButton) itemView.findViewById(R.id.share_button);
 
         }
+
+        public void setdatatoview(NotesFileModel current) {
+            notename.setText(current.notename);
+            notedesc.setText(current.notedesc);
+            long now = System.currentTimeMillis();
+            notetime.setText(DateUtils.getRelativeTimeSpanString(current.getUnixtime(), now, DateUtils.DAY_IN_MILLIS));
+            author.setText(current.noteposter);
+            shareButton.setOnClickListener(v -> {
+                //TODO SHare Link via text
+            });
+            switch (current.notetype) {
+                case "doc":
+                    imageView.setImageResource(R.drawable.ic_doc);
+                    break;
+                case "pdf":
+                    imageView.setImageResource(R.drawable.ic_pdf);
+                    break;
+                case "audio":
+                    imageView.setImageResource(R.drawable.ic_music_player);
+                    break;
+                case "video":
+                    imageView.setImageResource(R.drawable.ic_video_camera);
+                    break;
+                case "image":
+                    imageView.setImageResource(R.drawable.ic_image);
+                    break;
+                case "other":
+                    imageView.setImageResource(R.drawable.ic_attach_file_black_24dp);
+                    break;
+                default:
+                    imageView.setImageResource(R.drawable.ic_attach_file_black_24dp);
+            }
+
+            link = current.getNotefile();
+
+        }
+
+
+
     }
 }

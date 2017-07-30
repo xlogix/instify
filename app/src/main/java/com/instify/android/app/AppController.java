@@ -6,6 +6,7 @@ package com.instify.android.app;
 
 import android.app.Application;
 import android.content.Intent;
+import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,7 +22,8 @@ import com.instify.android.ux.IntroActivity;
 import com.squareup.leakcanary.LeakCanary;
 import timber.log.Timber;
 
-public class AppController extends Application {
+public class AppController extends MultiDexApplication
+{
   public static final String TAG = AppController.class.getSimpleName();
 
   private static AppController mInstance;
