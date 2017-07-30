@@ -108,7 +108,6 @@
         android:name=".ux.ProfilePictureFullScreenActivity"
         android:parentActivityName=".ux.MainActivity"/>
     <activity
-
         android:name=".ux.ChatActivity"
         android:label="@string/title_activity_chat"/>
     <activity

@@ -49,8 +49,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.thefinestartist.finestwebview.FinestWebView;
-import timber.log.Timber;
 import com.instify.android.R;
 import com.instify.android.app.AppController;
 import com.instify.android.helpers.SQLiteHandler;
@@ -61,6 +59,8 @@ import com.instify.android.ux.fragments.CampNewsFragment;
 import com.instify.android.ux.fragments.NotesFragment;
 import com.instify.android.ux.fragments.TimeTableFragment;
 import com.instify.android.ux.fragments.UnivNewsFragment;
+import com.thefinestartist.finestwebview.FinestWebView;
+import timber.log.Timber;
 
 /**
  * Created by Abhish3k on 3/1/2016. Main Activity
@@ -169,31 +169,24 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navView = (NavigationView) findViewById(R.id.navigation_view);
     setupDrawerContent(navView);
     drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
-      @Override
-      public void onDrawerSlide(View drawerView, float slideOffset) {
+      @Override public void onDrawerSlide(View drawerView, float slideOffset) {
 
       }
 
-      @Override
-      public void onDrawerOpened(View drawerView) {
+      @Override public void onDrawerOpened(View drawerView) {
         navView.bringToFront();
       }
 
-      @Override
-      public void onDrawerClosed(View drawerView) {
+      @Override public void onDrawerClosed(View drawerView) {
 
       }
 
-      @Override
-      public void onDrawerStateChanged(int newState) {
+      @Override public void onDrawerStateChanged(int newState) {
 
       }
     });
 
     toggle.syncState();
-
-
-
 
     // Inflate header view
     headerView = navView.inflateHeaderView(R.layout.nav_header_main);
@@ -588,5 +581,4 @@ public class MainActivity extends AppCompatActivity {
       return sb;
     }
   }
-
 }
