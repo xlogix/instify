@@ -28,14 +28,14 @@ public class AboutActivity extends AppCompatActivity {
 
     View aboutPage = new AboutPage(this).isRTL(false)
         .setDescription(
-            "This app is developed by : Abhishek Uniyal, Arjun Mahishi, Chandan Singh, Vijay Krishna and Somnath"
+            "This app is developed by : Abhishek Uniyal, Arjun Mahishi, Somnath, Chandan Singh and Vijay Krishna"
                 + "\n\nSepcial thanks to : Ankur, Trishansh")
         .setImage(R.drawable.ic_logo_96dp)
-        .addItem(new Element().setTitle("Version 1.2.0"))
+        .addItem(new Element().setTitle("Version 1.3.0"))
         .addGroup("Connect with us")
         .addEmail("abhishekuniyal09@gmail.com")
         .addWebsite("https://www.fnplus.xyz/")
-        .addFacebook("https://www.facebook.com/fnplus.xyz")
+        .addFacebook("https://www.facebook.com/fnplusofficial")
         .addYoutube("https://youtu.be/RMDjTWrylOk")
         .addPlayStore("https://play.google.com/store/apps/details?id=com.instify.android")
         .addItem(getCopyRightsElement())
