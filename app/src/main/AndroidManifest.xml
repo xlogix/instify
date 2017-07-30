@@ -23,7 +23,6 @@
   <permission
       android:name="${applicationId}.permission.C2D_MESSAGE"
       android:protectionLevel="signature"/>
-
   <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE"/>
 
   <!-- Declare features required by the app -->
@@ -56,6 +55,10 @@
     <!-- Disable Analytics collection to false by default -->
     <meta-data
         android:name="firebase_analytics_collection_enabled"
+        android:value="false"/>
+    <!-- Disable Crash reporting to false by default -->
+    <meta-data
+        android:name="firebase_crash_collection_enabled"
         android:value="false"/>
     <!-- Declare default WebView Activity -->
     <activity
@@ -183,5 +186,4 @@
     <!-- ./Firebase Notifications -->
 
   </application>
-
 </manifest>

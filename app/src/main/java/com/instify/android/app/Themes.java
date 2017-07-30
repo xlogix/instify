@@ -5,21 +5,21 @@ package com.instify.android.app;
  */
 
 public enum Themes {
-    Blue,
+  Blue,
 
-    Indigo,
+  Indigo,
 
-    Green,
+  Green,
 
-    Red,
+  Red,
 
-    BlueGrey,
+  BlueGrey,
 
-    Black,
+  Black,
 
-    Purple,
+  Purple,
 
-    Orange,
+  Orange,
 
-    Pink
+  Pink
 }
