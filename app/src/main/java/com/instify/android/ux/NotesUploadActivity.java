@@ -87,7 +87,6 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
 
         switch (intent.getAction()) {
           case MyFirebaseUploadService.UPLOAD_COMPLETED:
-          case MyFirebaseUploadService.UPLOAD_ERROR:
             onUploadResultIntent(intent);
             break;
         }
@@ -103,7 +102,7 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
     NotesFileModel nfm = new NotesFileModel(editText.getText().toString(), mDownloadUrl.toString(), editTextdesc.getText().toString(), getCurrentTime(), db.getUserDetails().getName(), db.getUserDetails().getRegno(),mFiletype,getUnixtime());
     DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("notes").child(mSubjectcode).push();
     ref.setValue(nfm);
-
+      stopService(intent);
     finish();
     }
 
@@ -194,6 +193,7 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
             .putExtra(MyFirebaseUploadService.EXTRA_FILE_URI, fileUri)
             .putExtra("storage_loc",mSubjectcode)
             .setAction(MyFirebaseUploadService.ACTION_UPLOAD));
+
 
 
   }
