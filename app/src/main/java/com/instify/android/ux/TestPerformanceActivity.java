@@ -6,18 +6,20 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import com.instify.android.R;
 import com.instify.android.helpers.RetrofitBuilder;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.interfaces.RetrofitInterface;
 import com.instify.android.models.TestPerformanceResponseModel;
 import com.instify.android.ux.adapters.TestPerformanceAdapterParent;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Abhish3k on 15-03-2017.
@@ -25,75 +27,111 @@ import com.instify.android.ux.adapters.TestPerformanceAdapterParent;
 
 public class TestPerformanceActivity extends AppCompatActivity {
 
-    @BindView(R.id.recycler_view_test_performance)
-    RecyclerView mRecyclerViewTestPerformance;
-    @BindView(R.id.swipe_refresh_layout_test_performance)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-    private SQLiteHandler db = new SQLiteHandler(this);
+  @BindView(R.id.recycler_view_test_performance)
+  RecyclerView mRecyclerViewTestPerformance;
+  @BindView(R.id.swipe_refresh_layout_test_performance)
+  SwipeRefreshLayout mSwipeRefreshLayout;
+  @BindView(R.id.errormessage) TextView errormessage;
+  @BindView(R.id.placeholder_error) LinearLayout placeholderError;
+  private SQLiteHandler db = new SQLiteHandler(this);
 
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_performance);
-        // Setup SupportActionBar
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_test_performance);
+    // Setup SupportActionBar
+    if (getSupportActionBar() != null) {
+      getSupportActionBar().setHomeButtonEnabled(true);
+      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+    // Bind the Views
+    ButterKnife.bind(this);
+    // Initialize SwipeRefreshLayout
+    mSwipeRefreshLayout.setColorSchemeResources(R.color.red_primary, R.color.black,
+        R.color.google_blue_900);
+    mSwipeRefreshLayout.setOnRefreshListener(this::AttemptJson);
+    // Initialize Recycle View
+    mRecyclerViewTestPerformance.setLayoutManager(new LinearLayoutManager(this));
+    mRecyclerViewTestPerformance.setHasFixedSize(true);
+    mRecyclerViewTestPerformance.setNestedScrollingEnabled(false);
+
+    // Call the API
+    AttemptJson();
+  }
+
+  void AttemptJson() {
+    // Declare Retrofit
+    RetrofitInterface client = RetrofitBuilder.createService(RetrofitInterface.class);
+    Call<TestPerformanceResponseModel> call =
+        client.GetTestPerformance(db.getUserDetails().getRegno(), db.getUserDetails().getToken());
+    // Update UI
+    showRefreshing();
+
+    call.enqueue(new Callback<TestPerformanceResponseModel>() {
+      @Override
+      public void onResponse(Call<TestPerformanceResponseModel> call,
+          Response<TestPerformanceResponseModel> response) {
+        TestPerformanceResponseModel t = response.body();
+        if (response.isSuccessful()) {
+          // Update UI, Snackbar is only shown when loading fails (keeping it minimal)
+          hideRefreshing();
+
+          TestPerformanceAdapterParent test =
+              new TestPerformanceAdapterParent(t.getTestPerformance(),
+                  TestPerformanceActivity.this);
+          if (test.getItemCount() == 0) {
+            showErrorPlaceholder("No Data in Erp To display");
+          } else {
+            hidePlaceHolder();
+          }
+          mRecyclerViewTestPerformance.setAdapter(test);
+          // TODO : Create Adapter here When api is Complete
+        } else {
+          // Update UI
+          hideRefreshing();
+          showErrorPlaceholder("Sync Failed");
+          Snackbar.make(findViewById(android.R.id.content), "Sync Failed", Snackbar.LENGTH_SHORT)
+              .show();
         }
-        // Bind the Views
-        ButterKnife.bind(this);
-        // Initialize SwipeRefreshLayout
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.red_primary, R.color.black, R.color.google_blue_900);
-        mSwipeRefreshLayout.setOnRefreshListener(this::AttemptJson);
-        // Initialize Recycle View
-        mRecyclerViewTestPerformance.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerViewTestPerformance.setHasFixedSize(true);
-        mRecyclerViewTestPerformance.setNestedScrollingEnabled(false);
+      }
 
-        // Call the API
-        AttemptJson();
-    }
-
-    void AttemptJson() {
-        // Declare Retrofit
-        RetrofitInterface client = RetrofitBuilder.createService(RetrofitInterface.class);
-        Call<TestPerformanceResponseModel> call = client.GetTestPerformance(db.getUserDetails().getRegno(), db.getUserDetails().getToken());
+      @Override
+      public void onFailure(Call<TestPerformanceResponseModel> call, Throwable t) {
         // Update UI
-        showRefreshing();
+        hideRefreshing();
+        showErrorPlaceholder("Sync Failed");
+        Snackbar.make(findViewById(android.R.id.content), "Sync Failed", Snackbar.LENGTH_SHORT)
+            .show();
+      }
+    });
+  }
 
-        call.enqueue(new Callback<TestPerformanceResponseModel>() {
-            @Override
-            public void onResponse(Call<TestPerformanceResponseModel> call, Response<TestPerformanceResponseModel> response) {
-                TestPerformanceResponseModel t = response.body();
-                if (response.isSuccessful()) {
-                    // Update UI, Snackbar is only shown when loading fails (keeping it minimal)
-                    hideRefreshing();
-
-                    TestPerformanceAdapterParent test = new TestPerformanceAdapterParent(t.getTestPerformance(), TestPerformanceActivity.this);
-                    mRecyclerViewTestPerformance.setAdapter(test);
-                    // TODO : Create Adapter here When api is Complete
-                } else {
-                    // Update UI
-                    hideRefreshing();
-                    Snackbar.make(findViewById(android.R.id.content), "Sync Failed", Snackbar.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TestPerformanceResponseModel> call, Throwable t) {
-                // Update UI
-                hideRefreshing();
-                Snackbar.make(findViewById(android.R.id.content), "Sync Failed", Snackbar.LENGTH_SHORT).show();
-            }
-        });
+  private void showRefreshing() {
+    if (!mSwipeRefreshLayout.isRefreshing()) {
+      mSwipeRefreshLayout.setRefreshing(true);
     }
+  }
 
-    private void showRefreshing() {
-        if (!mSwipeRefreshLayout.isRefreshing())
-            mSwipeRefreshLayout.setRefreshing(true);
+  private void hideRefreshing() {
+    if (mSwipeRefreshLayout.isRefreshing()) {
+      mSwipeRefreshLayout.setRefreshing(false);
     }
+  }
 
-    private void hideRefreshing() {
-        if (mSwipeRefreshLayout.isRefreshing())
-            mSwipeRefreshLayout.setRefreshing(false);
+  public void showErrorPlaceholder(String message) {
+    if (placeholderError != null && errormessage != null) {
+      if (placeholderError.getVisibility() != View.VISIBLE) {
+        placeholderError.setVisibility(View.VISIBLE);
+      }
+      errormessage.setText(message);
     }
+  }
+
+  public void hidePlaceHolder() {
+    if (placeholderError != null && errormessage != null) {
+      if (placeholderError.getVisibility() == View.VISIBLE) {
+        placeholderError.setVisibility(View.INVISIBLE);
+      }
+      errormessage.setText("Something Went Wrong Try Again");
+    }
+  }
 }

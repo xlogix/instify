@@ -7,6 +7,8 @@
         android:id="@+id/swipe_refresh_layout_notes"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <RelativeLayout android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view_notes"
@@ -14,7 +16,14 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            <include
+                layout="@layout/placeholder_no_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
 
+            />
+        </RelativeLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 </android.support.design.widget.CoordinatorLayout>
 

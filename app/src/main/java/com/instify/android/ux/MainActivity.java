@@ -15,8 +15,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -80,15 +82,16 @@ public class MainActivity extends AppCompatActivity {
   SQLiteHandler db = new SQLiteHandler(this);
   boolean doubleBackToExitPressedOnce = false;
   View headerView;
+
   private DrawerLayout drawerLayout;
   private ViewPager mViewPager;
   /**
-   * The {@link android.support.v4.view.PagerAdapter} that will provide
+   * The {@link PagerAdapter} that will provide
    * fragments for each of the sections. We use a
    * {@link FragmentPagerAdapter} derivative, which will keep every
    * loaded fragment in memory. If this becomes too memory intensive, it
    * may be best to switch to a
-   * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+   * {@link FragmentStatePagerAdapter}.
    */
   private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -373,7 +376,7 @@ public class MainActivity extends AppCompatActivity {
           startActivity(new Intent(MainActivity.this, FeePaymentHistoryActivity.class));
           break;
         case R.id.nav_send:
-          String[] emails = { "abhishekuniyal09@gmail.com" };
+          String[] emails = {"abhishekuniyal09@gmail.com"};
           String subject = "I want to submit Feedback";
           String message = "Hi, ";
           Intent email = new Intent(Intent.ACTION_SENDTO);

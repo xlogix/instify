@@ -1,18 +1,12 @@
 package com.instify.android.ux;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
@@ -22,27 +16,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.StorageReference;
 import com.instify.android.R;
-import com.instify.android.app.AppConfig;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.NotesFileModel;
-import com.instify.android.services.MyFirebaseDownloadService;
 import com.instify.android.services.MyFirebaseUploadService;
-
-import java.io.File;
 import java.util.Calendar;
-import java.util.Locale;
-import java.util.UUID;
-import net.gotev.uploadservice.MultipartUploadRequest;
-import net.gotev.uploadservice.UploadNotificationConfig;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.AppSettingsDialog;
-import pub.devrel.easypermissions.EasyPermissions;
-import timber.log.Timber;
 
 public class NotesUploadActivity extends AppCompatActivity implements View.OnClickListener {
   private static final String TAG = NotesUploadActivity.class.getSimpleName();
@@ -88,6 +68,9 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
         switch (intent.getAction()) {
           case MyFirebaseUploadService.UPLOAD_COMPLETED:
             onUploadResultIntent(intent);
+            break;
+          default:
+            stopService(intent);
             break;
         }
       }

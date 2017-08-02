@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "299280645644-n5dp54nl3gbhdnkk7gupgeot7d79s3p4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.instify.android",
+            "certificate_hash": "7fd5d7d17941850aec07bf870e224ded72289a99"
+          }
+        },
+        {
           "client_id": "299280645644-34i0avmbv24ffsujpfg28renecsh31pl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
