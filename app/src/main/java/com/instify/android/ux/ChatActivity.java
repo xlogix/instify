@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -369,6 +370,7 @@ public class ChatActivity extends AppCompatActivity {
   /**
    * Another class to display the chat items in the UI
    */
+  @Keep
   public static class MessageViewHolder extends RecyclerView.ViewHolder {
     TextView messageTextView;
     ImageView messageImageView;

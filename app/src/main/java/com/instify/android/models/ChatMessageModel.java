@@ -1,5 +1,6 @@
 package com.instify.android.models;
 
+import android.support.annotation.Keep;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -7,7 +8,7 @@ import java.util.Locale;
 /**
  * Created by Abhish3k on 7/2/2016. // Using Firebase Database
  */
-
+@Keep
 public class ChatMessageModel {
 
     private String id;
