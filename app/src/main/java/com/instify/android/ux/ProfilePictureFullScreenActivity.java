@@ -11,23 +11,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.instify.android.R;
 import com.soundcloud.android.crop.Crop;
-
 import java.io.File;
 import java.util.List;
-
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
-import com.instify.android.R;
 
 /**
  * Created by Abhish3k on 29-03-2017.
@@ -102,11 +98,11 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
         }
 
         // Declare Img Button
-        userImage = (ImageView) findViewById(R.id.fullimg);
+      userImage = findViewById(R.id.fullimg);
 
         // Checks if the user didn't remove the image
         // Put the picture into the image View
-        Glide.with(this)
+      GlideApp.with(this)
                 .load(mFirebaseUser.getPhotoUrl())
                 .dontAnimate()
                 .centerCrop()
@@ -117,7 +113,7 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity implemen
         // Developers using AdMob can store them as custom values in a string resource file or
         // simply use constants. Note that the ad units used here are configured to return only test
         // ads, and should not be used outside this sample.
-        mAdView = (AdView) findViewById(R.id.adView);
+      mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
         // [END load_banner_ad]

@@ -118,8 +118,8 @@ public class ChatActivity extends AppCompatActivity {
     setdata(model);
     MESSAGES_CHILD = refPath + "/discussion";
 
-    mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-    mMessageRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_trending);
+    mProgressBar = findViewById(R.id.progressBar);
+    mMessageRecyclerView = findViewById(R.id.recycler_view_trending);
     mLinearLayoutManager = new LinearLayoutManager(this);
     mLinearLayoutManager.setStackFromEnd(true);
 
@@ -171,7 +171,7 @@ public class ChatActivity extends AppCompatActivity {
                   ContextCompat.getDrawable(ChatActivity.this,
                       R.drawable.ic_account_circle_black_36dp));
             } else {
-              Glide.with(ChatActivity.this)
+              GlideApp.with(ChatActivity.this)
                   .load(friendlyMessage.getPhotoUrl())
                   .placeholder(R.drawable.ic_account_circle_black_36dp)
                   .into(viewHolder.messengerImageView);
@@ -234,7 +234,7 @@ public class ChatActivity extends AppCompatActivity {
     mFirebaseRemoteConfig.setConfigSettings(firebaseRemoteConfigSettings);
     mFirebaseRemoteConfig.setDefaults(defaultConfigMap);
 
-    mMessageEditText = (EditText) findViewById(R.id.messageEditText);
+    mMessageEditText = findViewById(R.id.messageEditText);
     mMessageEditText.setFilters(new InputFilter[] {
         new InputFilter.LengthFilter(
             mSharedPreferences.getInt(AppConfig.FRIENDLY_MSG_LENGTH, DEFAULT_MSG_LENGTH_LIMIT))
@@ -255,7 +255,7 @@ public class ChatActivity extends AppCompatActivity {
       }
     });
 
-    mSendButton = (Button) findViewById(R.id.sendButton);
+    mSendButton = findViewById(R.id.sendButton);
     mSendButton.setOnClickListener(view -> {
       ChatMessageModel friendlyMessage =
           new ChatMessageModel(mMessageEditText.getText().toString(), mUsername, mPhotoUrl, null);
@@ -381,12 +381,12 @@ public class ChatActivity extends AppCompatActivity {
 
     public MessageViewHolder(View v) {
       super(v);
-      messageTextView = (TextView) itemView.findViewById(R.id.messageTextView);
-      messageImageView = (ImageView) itemView.findViewById(R.id.messageimage);
-      messengerTextView = (TextView) itemView.findViewById(R.id.messengerTextView);
-      messageDateTextView = (TextView) itemView.findViewById(R.id.messagedat);
-      messageTimeTextView = (TextView) itemView.findViewById(R.id.message_time_textView);
-      messengerImageView = (CircleImageView) itemView.findViewById(R.id.messengerImageView);
+      messageTextView = itemView.findViewById(R.id.messageTextView);
+      messageImageView = itemView.findViewById(R.id.messageimage);
+      messengerTextView = itemView.findViewById(R.id.messengerTextView);
+      messageDateTextView = itemView.findViewById(R.id.messagedat);
+      messageTimeTextView = itemView.findViewById(R.id.message_time_textView);
+      messengerImageView = itemView.findViewById(R.id.messengerImageView);
     }
   }
 }

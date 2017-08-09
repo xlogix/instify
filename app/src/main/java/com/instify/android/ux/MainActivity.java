@@ -36,7 +36,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.github.javiersantos.appupdater.AppUpdater;
 import com.github.javiersantos.appupdater.enums.Display;
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
   private SectionsPagerAdapter mSectionsPagerAdapter;
 
   @Override public void onBackPressed() {
-    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    DrawerLayout drawer = findViewById(R.id.drawer_layout);
     if (drawer.isDrawerOpen(GravityCompat.START)) {
       drawer.closeDrawer(GravityCompat.START);
     } else if (doubleBackToExitPressedOnce) {
@@ -145,11 +144,11 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
 
-    Toolbar toolbar = (Toolbar) findViewById(R.id.mToolbar);
+    Toolbar toolbar = findViewById(R.id.mToolbar);
     setSupportActionBar(toolbar);
 
     // Declare Views
-    mSharedFab = (FloatingActionButton) findViewById(R.id.shared_fab);
+    mSharedFab = findViewById(R.id.shared_fab);
 
     AppUpdater appUpdater = new AppUpdater(this).setDisplay(Display.DIALOG)
         .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
@@ -163,13 +162,13 @@ public class MainActivity extends AppCompatActivity {
     MobileAds.initialize(getApplicationContext(), getString(R.string.all_ad_app_id));
 
     // Drawer Layout
-    drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    drawerLayout = findViewById(R.id.drawer_layout);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
         R.string.content_description_open_navigation_drawer,
         R.string.content_description_close_navigation_drawer);
     drawerLayout.addDrawerListener(toggle);
     // [START] Initialize Navigation Drawer and Profile Picture
-    NavigationView navView = (NavigationView) findViewById(R.id.navigation_view);
+    NavigationView navView = findViewById(R.id.navigation_view);
     setupDrawerContent(navView);
     drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
       @Override public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -194,8 +193,8 @@ public class MainActivity extends AppCompatActivity {
     headerView = navView.inflateHeaderView(R.layout.nav_header_main);
         /* [START] Setup Header View */
 
-    ImageView navImageView = (ImageView) headerView.findViewById(R.id.nav_drawer_user_photo);
-    TextView navTextView = (TextView) headerView.findViewById(R.id.nav_drawer_header_text);
+    ImageView navImageView = headerView.findViewById(R.id.nav_drawer_user_photo);
+    TextView navTextView = headerView.findViewById(R.id.nav_drawer_header_text);
 
     // Download the image from ERP
     // new DownloadImage(navImageView).execute(db.getUserDetails().get("dept"));
@@ -203,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
     if (mFirebaseUser != null) {
       try {
         // Set profile picture from Firebase account
-        Glide.with(this)
+        GlideApp.with(this)
             .load(mFirebaseUser.getPhotoUrl().toString())
             .placeholder(R.drawable.default_pic_face)
             .dontAnimate()
@@ -231,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
     mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
     // Set up the ViewPager with the sections adapter.
-    mViewPager = (ViewPager) findViewById(R.id.container);
+    mViewPager = findViewById(R.id.container);
     mViewPager.setAdapter(mSectionsPagerAdapter);
     // Set the default tab as Campus Portal
     mViewPager.setCurrentItem(1);
@@ -261,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
       }
     });
 
-    TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
+    TabLayout mTabLayout = findViewById(R.id.tabLayout);
     mTabLayout.setupWithViewPager(mViewPager);
     //        mTabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(MainActivity.this, R.color.white));
 
