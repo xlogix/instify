@@ -5,11 +5,13 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ScrollView;
@@ -30,13 +32,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import java.util.HashMap;
-import java.util.Map;
-import org.json.JSONException;
-import org.json.JSONObject;
-import retrofit2.Call;
-import retrofit2.Callback;
-import timber.log.Timber;
 import com.instify.android.R;
 import com.instify.android.app.AppConfig;
 import com.instify.android.app.AppController;
@@ -44,6 +39,13 @@ import com.instify.android.helpers.RetrofitBuilder;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.interfaces.RetrofitInterface;
 import com.instify.android.models.UserModel;
+import java.util.HashMap;
+import java.util.Map;
+import org.json.JSONException;
+import org.json.JSONObject;
+import retrofit2.Call;
+import retrofit2.Callback;
+import timber.log.Timber;
 
 /**
  * Created by Abhish3k on 12/27/2016.
@@ -112,24 +114,17 @@ public class LoginActivity extends AppCompatActivity
   // [STOP on_destroy_remove_listener]
 
   @Override public void onCreate(Bundle savedInstanceState) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      Window w = getWindow();
+      // w.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+      w.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+    }
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_login);
     ButterKnife.bind(this);
 
     // Set the status bar as translucent
     // setStatusBarTranslucent(true);
-
-    // hide the native android navigation and status bar
-    systemUIView = getWindow().getDecorView();
-    hideSystemUI();
-
-    if (android.os.Build.VERSION.SDK_INT >= 19) {
-      getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(visibility -> {
-        if (visibility == 0) {
-          hideSystemUI();
-        }
-      });
-    }
 
     // Setup animation
     AnimationDrawable animationDrawable = (AnimationDrawable) mScrollView.getBackground();
@@ -207,13 +202,6 @@ public class LoginActivity extends AppCompatActivity
     // [END auth_state_listener]
   }
 
-  @TargetApi(19) public void hideSystemUI() {
-    systemUIView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        | View.SYSTEM_UI_FLAG_FULLSCREEN
-        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-  }
-
   // Set the status bar translucent(works only after API 19)
   @TargetApi(19) protected void setStatusBarTranslucent(boolean makeTranslucent) {
     if (makeTranslucent) {
@@ -261,8 +249,8 @@ public class LoginActivity extends AppCompatActivity
       Timber.d("signInWithCredential:onComplete:" + task.isSuccessful());
 
       // Notify the user
-      Toast.makeText(LoginActivity.this,
-          "Successfully logged into Google. Continue with the ERP login", Toast.LENGTH_LONG).show();
+      Toast.makeText(LoginActivity.this, "Sign in successful! Continue with ERP login",
+          Toast.LENGTH_LONG).show();
       // Make the fields active
       mRegNoField.setEnabled(true);
       mPasswordField.setEnabled(true);

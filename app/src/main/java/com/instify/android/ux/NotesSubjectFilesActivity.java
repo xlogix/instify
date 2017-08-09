@@ -63,7 +63,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
   private static final int OTHER_SELECT = 6;
   RecyclerView mRVFish;
   SearchView searchView = null;
-  @BindView(R.id.errormessage) TextView errormessage;
+  @BindView(R.id.error_message) TextView errormessage;
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
   private Uri mFileUri = null;
   private Uri mFilePath;
@@ -73,7 +73,6 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
     setContentView(R.layout.activity_notes_subject_files);
     ButterKnife.bind(this);
     setTitle(Html.fromHtml("<small>" + getIntent().getStringExtra("code") + "</small>"));
-
 
     mRVFish = (RecyclerView) findViewById(R.id.recycler_view_notes);
     setNotesFirebase(getIntent().getStringExtra("code"));
@@ -85,8 +84,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference().child("notes").child(subjectCode);
     FirebaseRecyclerAdapter<NotesFileModel, NotesFileAdapter.MyHolder> adapter =
         new FirebaseRecyclerAdapter<NotesFileModel, NotesFileAdapter.MyHolder>(NotesFileModel.class,
-            R.layout.card_view_notes_subjects_item, NotesFileAdapter.MyHolder.class,
-            ref) {
+            R.layout.card_view_notes_subjects_item, NotesFileAdapter.MyHolder.class, ref) {
           @Override public int getItemCount() {
             if (super.getItemCount() == 0) {
               showErrorPlaceholder("No notes to display, Be the first to upload!");
@@ -96,8 +94,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
             return super.getItemCount();
           }
 
-          @Override
-          protected void populateViewHolder(NotesFileAdapter.MyHolder viewHolder,
+          @Override protected void populateViewHolder(NotesFileAdapter.MyHolder viewHolder,
               NotesFileModel model, int position) {
             viewHolder.setdatatoview(model);
             viewHolder.cv.setOnClickListener(v -> {
@@ -191,7 +188,6 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
         // Update UI
         //    hideRefreshing();
         showErrorPlaceholder("No Notes to Display, Be the First To upload");
-
       }
     }, error -> {
       showErrorPlaceholder("Network Error,Try Again");
@@ -280,7 +276,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
 
   // Requesting permission
   @AfterPermissionGranted(RC_CAMERA_PERMISSION) private void requestCameraPermission() {
-    String[] perms = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    String[] perms = { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE };
     if (EasyPermissions.hasPermissions(this, perms)) {
       // Choose file storage location
       String mPathName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Instify/";
@@ -456,7 +452,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
       if (placeholderError.getVisibility() == View.VISIBLE) {
         placeholderError.setVisibility(View.INVISIBLE);
       }
-      errormessage.setText("Something Went Wrong Try Again");
+      errormessage.setText("Something Went Wrong. Try Again!");
     }
   }
 }

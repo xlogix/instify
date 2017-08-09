@@ -10,7 +10,7 @@ android {
   signingConfigs {
     release {
       try {
-        storeFile file("fnplus-key.jks")
+        storeFile file("/Users/abhishek/Android Dev/Release Keys/fnplus-key.jks")
         storePassword KEYSTORE_PASSWORD
         keyAlias KEYSTORE_ALIAS
         keyPassword KEY_PASSWORD
@@ -37,7 +37,7 @@ android {
       minifyEnabled false
       shrinkResources false
       versionNameSuffix '-DEBUG'
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
     release {
       minifyEnabled true
@@ -63,32 +63,31 @@ android {
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
   // for App Invites and Dynamic Links
-  compile 'com.google.firebase:firebase-appindexing:11.0.2'
-  compile 'com.google.firebase:firebase-invites:11.0.2'
+  compile 'com.google.firebase:firebase-appindexing:11.0.4'
+  compile 'com.google.firebase:firebase-invites:11.0.4'
   // for cloud messaging i.e sending notifications
-  compile 'com.google.firebase:firebase-messaging:11.0.2'
+  compile 'com.google.firebase:firebase-messaging:11.0.4'
   compile 'com.android.support:multidex:1.0.1'
 
   // ADS
-  compile 'com.google.firebase:firebase-ads:11.0.2'
+  compile 'com.google.firebase:firebase-ads:11.0.4'
 
   // AUTH
-  compile 'com.google.firebase:firebase-auth:11.0.2'
-  compile 'com.google.android.gms:play-services-auth:11.0.2'
+  compile 'com.google.firebase:firebase-auth:11.0.4'
+  compile 'com.google.android.gms:play-services-auth:11.0.4'
 
   // DATABASE
-  compile 'com.google.firebase:firebase-database:11.0.2'
+  compile 'com.google.firebase:firebase-database:11.0.4'
   compile 'com.firebaseui:firebase-ui-database:2.1.1'
 
   // CRASH
-  compile 'com.google.firebase:firebase-crash:11.0.2'
+  compile 'com.google.firebase:firebase-crash:11.0.4'
 
   // IMAGE AND LOADING
   compile 'de.hdodenhof:circleimageview:2.1.0'
   compile 'com.android.volley:volley:1.0.0'
   compile 'pub.devrel:easypermissions:0.4.2'
   compile 'com.github.bumptech.glide:glide:3.8.0'
-
 
   // WEB VIEW
   compile 'com.thefinestartist:finestwebview:1.2.7'
@@ -99,8 +98,8 @@ dependencies {
 
   // LOGGING/DEBUG
   compile 'com.jakewharton.timber:timber:4.5.1'
-  compile 'com.google.firebase:firebase-core:11.0.2'
-  compile 'com.google.firebase:firebase-config:11.0.2'
+  compile 'com.google.firebase:firebase-core:11.0.4'
+  compile 'com.google.firebase:firebase-config:11.0.4'
 
   // SERVICE
   compile 'net.gotev:uploadservice:3.2.3'
@@ -114,7 +113,7 @@ dependencies {
   compile 'com.google.code.gson:gson:2.8.1'
 
   // STORAGE FIREBASE
-  compile 'com.google.firebase:firebase-storage:11.0.2'
+  compile 'com.google.firebase:firebase-storage:11.0.4'
 
   // SUPPORTING LIBRARIES
   compile 'com.android.support:appcompat-v7:25.4.0'

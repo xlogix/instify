@@ -61,7 +61,7 @@ public class TimeTableFragment extends Fragment {
   Unbinder unbinder;
   String userRegNo;
   String userPass;
-  @BindView(R.id.errormessage) TextView errormessage;
+  @BindView(R.id.error_message) TextView errormessage;
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
   private String TAG = TimeTableFragment.class.getSimpleName();
   private SwipeRefreshLayout mSwipeRefreshLayout;

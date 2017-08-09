@@ -41,6 +41,7 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
   private String mFiletype;
   private BroadcastReceiver mBroadcastReceiver;
   private ProgressDialog mProgressDialog;
+
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_post_notes);
@@ -50,18 +51,15 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
     buttonUpload = (Button) findViewById(R.id.buttonUpload);
     editText = (EditText) findViewById(R.id.editTextName);
     editTextdesc = (EditText) findViewById(R.id.desc);
-    mFilePath=Uri.parse(getIntent().getExtras().getString("fileuri"));
-    mSubjectcode=getIntent().getExtras().getString("code");
-    mFiletype=getIntent().getExtras().getString("filetype");
-
+    mFilePath = Uri.parse(getIntent().getExtras().getString("fileuri"));
+    mSubjectcode = getIntent().getExtras().getString("code");
+    mFiletype = getIntent().getExtras().getString("filetype");
 
     // Setting Click Listeners
-
     buttonUpload.setOnClickListener(this);
     // Download receiver
     mBroadcastReceiver = new BroadcastReceiver() {
-      @Override
-      public void onReceive(Context context, Intent intent) {
+      @Override public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "onReceive:" + intent);
         hideProgressDialog();
 
@@ -76,20 +74,23 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
       }
     };
   }
+
   private void onUploadResultIntent(Intent intent) {
     // Got a new intent from MyUploadService with a success or failure
     mDownloadUrl = intent.getParcelableExtra(MyFirebaseUploadService.EXTRA_DOWNLOAD_URL);
     mFileUri = intent.getParcelableExtra(MyFirebaseUploadService.EXTRA_FILE_URI);
-    if (mDownloadUrl!=null){
-    SQLiteHandler db = new SQLiteHandler(this);
-    NotesFileModel nfm = new NotesFileModel(editText.getText().toString(), mDownloadUrl.toString(), editTextdesc.getText().toString(), getCurrentTime(), db.getUserDetails().getName(), db.getUserDetails().getRegno(),mFiletype,getUnixtime());
-    DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("notes").child(mSubjectcode).push();
-    ref.setValue(nfm);
+    if (mDownloadUrl != null) {
+      SQLiteHandler db = new SQLiteHandler(this);
+      NotesFileModel nfm =
+          new NotesFileModel(editText.getText().toString(), mDownloadUrl.toString(),
+              editTextdesc.getText().toString(), getCurrentTime(), db.getUserDetails().getName(),
+              db.getUserDetails().getRegno(), mFiletype, getUnixtime());
+      DatabaseReference ref =
+          FirebaseDatabase.getInstance().getReference().child("notes").child(mSubjectcode).push();
+      ref.setValue(nfm);
       stopService(intent);
-    finish();
+      finish();
     }
-
-
   }
   /*
   * This is the method responsible for pdf upload
@@ -141,28 +142,27 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
         Calendar.YEAR) + " " + c.get(Calendar.HOUR) + "-" + c.get(Calendar.MINUTE) + "-" + c.get(
         Calendar.SECOND);
   }
-  public long getUnixtime()
-  {
+
+  public long getUnixtime() {
     Calendar c = Calendar.getInstance();
     return c.getTimeInMillis();
   }
 
-
   @Override public void onClick(View v) {
-//    if (v == buttonChoose) {
-//      showFileChooser();
-//    }
+    //    if (v == buttonChoose) {
+    //      showFileChooser();
+    //    }
     if (v == buttonUpload) {
-      if (TextUtils.isEmpty(editText.getText().toString()) || TextUtils.isEmpty(editTextdesc.getText().toString())) {
+      if (TextUtils.isEmpty(editText.getText().toString()) || TextUtils.isEmpty(
+          editTextdesc.getText().toString())) {
         Toast.makeText(this, "Field Cant be empty!!", Toast.LENGTH_SHORT).show();
       } else {
         showProgressDialog();
         uploadFromUri(mFilePath);
-
-
       }
     }
   }
+
   // [START upload_from_uri]
   private void uploadFromUri(Uri fileUri) {
     Log.d(TAG, "uploadFromUri:src:" + fileUri.toString());
@@ -172,21 +172,19 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
 
     // Start MyUploadService to upload the file, so that the file is uploaded
     // even if this Activity is killed or put in the background
-    startService(new Intent(this, MyFirebaseUploadService.class)
-            .putExtra(MyFirebaseUploadService.EXTRA_FILE_URI, fileUri)
-            .putExtra("storage_loc",mSubjectcode)
-            .setAction(MyFirebaseUploadService.ACTION_UPLOAD));
-
-
-
+    startService(new Intent(this, MyFirebaseUploadService.class).putExtra(
+        MyFirebaseUploadService.EXTRA_FILE_URI, fileUri)
+        .putExtra("storage_loc", mSubjectcode)
+        .setAction(MyFirebaseUploadService.ACTION_UPLOAD)
+        .setPackage(this.getPackageName()));
   }
 
-  @Override
-  protected void onStart() {
+  @Override protected void onStart() {
     super.onStart();
     LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
     manager.registerReceiver(mBroadcastReceiver, MyFirebaseUploadService.getIntentFilter());
   }
+
   private void showProgressDialog() {
     if (mProgressDialog == null) {
       mProgressDialog = new ProgressDialog(this);

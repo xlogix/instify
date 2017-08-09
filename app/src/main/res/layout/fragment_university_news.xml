@@ -3,22 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipe_refresh_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-  <RelativeLayout android:layout_width="match_parent"
-      android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    >
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      >
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_university"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
     <include
         layout="@layout/placeholder_no_data"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-
-    />
+        />
   </RelativeLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

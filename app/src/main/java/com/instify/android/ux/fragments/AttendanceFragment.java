@@ -45,7 +45,7 @@ public class AttendanceFragment extends Fragment {
 
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
   Unbinder unbinder;
-  @BindView(R.id.errormessage) TextView errormessage;
+  @BindView(R.id.error_message) TextView errormessage;
   private SwipeRefreshLayout mSwipeRefreshLayout;
   //    private ExpandableListView expListView;
   private CardView attdCards;

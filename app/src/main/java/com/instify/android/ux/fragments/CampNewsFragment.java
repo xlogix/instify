@@ -41,7 +41,7 @@ public class CampNewsFragment extends Fragment {
   DatabaseReference newsRef;
   FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder> fAdapterAll;
   String userRegNo, userDept, pathAll, pathDept, pathSec;
-  @BindView(R.id.errormessage) TextView errormessage;
+  @BindView(R.id.error_message) TextView errormessage;
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
   Unbinder unbinder;
 

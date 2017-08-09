@@ -39,7 +39,6 @@ public class SupportUsActivity extends AppCompatActivity {
 
         // TODO : Remove test device before release
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("11408151BC4116DE6AD4B6BFC1B34457")
                 .build();
 
         // Load ads into Interstitial Ads

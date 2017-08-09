@@ -5,20 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
   <ImageView
       android:layout_width="150dp"
       android:layout_height="150dp"
       android:layout_gravity="center"
-      app:srcCompat="@drawable/ic_smartphone_with_sad_face_on_screen"/>
+      app:srcCompat="@drawable/ic_smartphone_with_sad_face_on_screen"
+      />
 
   <TextView
+      android:id="@+id/error_message"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="20dp"
       android:gravity="center"
-      android:id="@+id/errormessage"
       android:text="Something went wrong\n Swipe to refresh"
-      android:textSize="20sp"/>
+      android:textSize="20sp"
+      />
 </LinearLayout>

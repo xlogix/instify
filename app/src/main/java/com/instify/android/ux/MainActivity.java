@@ -185,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
       }
 
       @Override public void onDrawerStateChanged(int newState) {
-
       }
     });
 
@@ -237,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
     // Set the default tab as Campus Portal
     mViewPager.setCurrentItem(1);
     // Prevent fragments from destroying themselves
-    mViewPager.setOffscreenPageLimit(1);
+    mViewPager.setOffscreenPageLimit(5);
 
     mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
       @Override

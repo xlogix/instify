@@ -27,11 +27,9 @@ import retrofit2.Response;
 
 public class TestPerformanceActivity extends AppCompatActivity {
 
-  @BindView(R.id.recycler_view_test_performance)
-  RecyclerView mRecyclerViewTestPerformance;
-  @BindView(R.id.swipe_refresh_layout_test_performance)
-  SwipeRefreshLayout mSwipeRefreshLayout;
-  @BindView(R.id.errormessage) TextView errormessage;
+  @BindView(R.id.recycler_view_test_performance) RecyclerView mRecyclerViewTestPerformance;
+  @BindView(R.id.swipe_refresh_layout_test_performance) SwipeRefreshLayout mSwipeRefreshLayout;
+  @BindView(R.id.error_message) TextView errormessage;
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
   private SQLiteHandler db = new SQLiteHandler(this);
 
@@ -67,8 +65,7 @@ public class TestPerformanceActivity extends AppCompatActivity {
     showRefreshing();
 
     call.enqueue(new Callback<TestPerformanceResponseModel>() {
-      @Override
-      public void onResponse(Call<TestPerformanceResponseModel> call,
+      @Override public void onResponse(Call<TestPerformanceResponseModel> call,
           Response<TestPerformanceResponseModel> response) {
         TestPerformanceResponseModel t = response.body();
         if (response.isSuccessful()) {
@@ -79,7 +76,7 @@ public class TestPerformanceActivity extends AppCompatActivity {
               new TestPerformanceAdapterParent(t.getTestPerformance(),
                   TestPerformanceActivity.this);
           if (test.getItemCount() == 0) {
-            showErrorPlaceholder("No Data in Erp To display");
+            showErrorPlaceholder("No Data in ERP to Display");
           } else {
             hidePlaceHolder();
           }
@@ -94,8 +91,7 @@ public class TestPerformanceActivity extends AppCompatActivity {
         }
       }
 
-      @Override
-      public void onFailure(Call<TestPerformanceResponseModel> call, Throwable t) {
+      @Override public void onFailure(Call<TestPerformanceResponseModel> call, Throwable t) {
         // Update UI
         hideRefreshing();
         showErrorPlaceholder("Sync Failed");

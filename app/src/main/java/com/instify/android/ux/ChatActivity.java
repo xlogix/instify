@@ -58,9 +58,10 @@ import timber.log.Timber;
  */
 
 public class ChatActivity extends AppCompatActivity {
+  private static final String TAG = ChatActivity.class.getSimpleName();
+
   public static final int DEFAULT_MSG_LENGTH_LIMIT = 100;
   public static final String ANONYMOUS = "anonymous";
-  private static final String TAG = ChatActivity.class.getSimpleName();
   private static final int REQUEST_IMAGE = 1;
   private static final String MESSAGE_SENT_EVENT = "message_sent";
   private static final String MESSAGE_URL = "http://friendlychat.firebase.google.com/message/";
@@ -370,8 +371,7 @@ public class ChatActivity extends AppCompatActivity {
   /**
    * Another class to display the chat items in the UI
    */
-  @Keep
-  public static class MessageViewHolder extends RecyclerView.ViewHolder {
+  @Keep public static class MessageViewHolder extends RecyclerView.ViewHolder {
     TextView messageTextView;
     ImageView messageImageView;
     TextView messengerTextView;

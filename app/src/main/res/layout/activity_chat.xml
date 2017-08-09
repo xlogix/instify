@@ -3,197 +3,214 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
-    <ScrollView
-        android:id="@+id/nestedscroll"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/linearLayout"
-        android:fillViewport="true">
+  <ScrollView
+      android:id="@+id/nestedscroll"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_above="@+id/linearLayout"
+      android:fillViewport="true"
+      >
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="4dp"
-            tools:context=".ux.ChatActivity">
-
-            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/tools"
-                android:id="@+id/cardView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="4dp"
-                app:contentPadding="6dp"
-                card_view:cardCornerRadius="4dp">
-
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:transitionName="newstype"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_school" />
-
-                    <TextView
-                        android:id="@+id/campusTitle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginStart="8dp"
-                        android:autoLink="all"
-                        android:text="Be A Part Of it!"
-                        android:textColor="@color/colorPrimary"
-                        android:textIsSelectable="true"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
-                        android:transitionName="campusTitle"
-                        app:layout_constraintLeft_toRightOf="@+id/imageView2"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/imageView2"
-                        card_view:layout_constraintLeft_creator="1"
-                        card_view:layout_constraintRight_creator="1" />
-
-                    <TextView
-                        android:id="@+id/campusAuthor"
-                        android:layout_width="wrap_content"
-
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:text="By xyxz"
-                        android:textColor="@color/colorAccent"
-                        android:textIsSelectable="true"
-                        android:textSize="14sp"
-                        android:transitionName="campusAuthor"
-                        app:layout_constraintLeft_toRightOf="@+id/imageView2"
-                        app:layout_constraintTop_toBottomOf="@+id/campusTitle" />
-
-                    <TextView
-                        android:id="@+id/campusDescription"
-                        android:layout_width="0dp"
-
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="3dp"
-                        android:autoLink="all"
-                        android:text="lorem ipsum"
-                        android:textColor="@color/monsoon"
-                        android:textIsSelectable="true"
-                        android:textSize="16sp"
-                        android:transitionName="campusDescription"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-                        card_view:layout_constraintLeft_creator="1"
-                        card_view:layout_constraintRight_creator="1" />
-
-                    <LinearLayout
-                        android:id="@+id/linearLayout2"
-                        android:layout_width="0dp"
-                        android:layout_height="2dp"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@color/colorPrimary"
-                        android:orientation="vertical"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/campusAuthor"
-                        card_view:layout_constraintLeft_creator="1"
-                        card_view:layout_constraintRight_creator="1" />
-
-                    <ImageButton
-                        android:id="@+id/imageButton2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginTop="8dp"
-                        android:background="?selectableItemBackgroundBorderless"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/campusDescription"
-                        app:srcCompat="@drawable/ic_share_black_24dp"
-                        card_view:layout_constraintBottom_creator="1"
-                        card_view:layout_constraintTop_creator="1" />
-
-                </android.support.constraint.ConstraintLayout>
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view_trending"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                android:layout_below="@+id/cardView"
-                android:fitsSystemWindows="true" />
-
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true" />
-
-            <include
-                layout="@layout/placeholder_empty_chat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/cardView"
-                android:visibility="gone" />
-
-        </RelativeLayout>
-    </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_margin="5dp"
-        android:orientation="horizontal">
+        android:paddingTop="4dp"
+        tools:context=".ux.ChatActivity"
+        >
 
-        <EditText
-            android:id="@+id/messageEditText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:hint="@string/msg_edit_box"
-            android:textSize="18sp" />
+      <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/tools"
+          android:id="@+id/cardView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_margin="4dp"
+          app:contentPadding="6dp"
+          card_view:cardCornerRadius="4dp"
+          >
 
-        <Button
-            android:id="@+id/sendButton"
-            android:layout_width="wrap_content"
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:enabled="false"
-            android:filterTouchesWhenObscured="true"
-            android:text="@string/msg_send" />
-    </LinearLayout>
+            >
+
+          <ImageView
+              android:id="@+id/imageView2"
+              android:layout_width="50dp"
+              android:layout_height="50dp"
+              android:layout_marginLeft="8dp"
+              android:layout_marginStart="8dp"
+              android:layout_marginTop="8dp"
+              android:transitionName="newstype"
+              app:layout_constraintLeft_toLeftOf="parent"
+              app:layout_constraintTop_toTopOf="parent"
+              app:srcCompat="@drawable/ic_school"
+              />
+
+          <TextView
+              android:id="@+id/campusTitle"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+
+              android:layout_marginEnd="4dp"
+              android:layout_marginLeft="8dp"
+              android:layout_marginRight="4dp"
+              android:layout_marginStart="8dp"
+              android:autoLink="all"
+              android:text="Be A Part Of it!"
+              android:textColor="@color/colorPrimary"
+              android:textIsSelectable="true"
+              android:textSize="24sp"
+              android:textStyle="bold"
+              android:transitionName="campusTitle"
+              app:layout_constraintLeft_toRightOf="@+id/imageView2"
+              app:layout_constraintRight_toRightOf="parent"
+              app:layout_constraintTop_toTopOf="@+id/imageView2"
+              card_view:layout_constraintLeft_creator="1"
+              card_view:layout_constraintRight_creator="1"
+              />
+
+          <TextView
+              android:id="@+id/campusAuthor"
+              android:layout_width="wrap_content"
+
+              android:layout_height="wrap_content"
+              android:layout_gravity="end"
+              android:layout_marginLeft="8dp"
+              android:layout_marginStart="8dp"
+              android:layout_marginTop="8dp"
+              android:text="By xyxz"
+              android:textColor="@color/colorAccent"
+              android:textIsSelectable="true"
+              android:textSize="14sp"
+              android:transitionName="campusAuthor"
+              app:layout_constraintLeft_toRightOf="@+id/imageView2"
+              app:layout_constraintTop_toBottomOf="@+id/campusTitle"
+              />
+
+          <TextView
+              android:id="@+id/campusDescription"
+              android:layout_width="0dp"
+
+              android:layout_height="wrap_content"
+              android:layout_marginEnd="4dp"
+              android:layout_marginLeft="4dp"
+              android:layout_marginRight="4dp"
+              android:layout_marginStart="4dp"
+              android:layout_marginTop="3dp"
+              android:autoLink="all"
+              android:text="lorem ipsum"
+              android:textColor="@color/monsoon"
+              android:textIsSelectable="true"
+              android:textSize="16sp"
+              android:transitionName="campusDescription"
+              app:layout_constraintHorizontal_bias="0.0"
+              app:layout_constraintLeft_toLeftOf="parent"
+              app:layout_constraintRight_toRightOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+              card_view:layout_constraintLeft_creator="1"
+              card_view:layout_constraintRight_creator="1"
+              />
+
+          <LinearLayout
+              android:id="@+id/linearLayout2"
+              android:layout_width="0dp"
+              android:layout_height="2dp"
+              android:layout_marginEnd="4dp"
+              android:layout_marginLeft="4dp"
+              android:layout_marginRight="4dp"
+              android:layout_marginStart="4dp"
+              android:layout_marginTop="8dp"
+              android:background="@color/colorPrimary"
+              android:orientation="vertical"
+              app:layout_constraintLeft_toLeftOf="parent"
+              app:layout_constraintRight_toRightOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/campusAuthor"
+              card_view:layout_constraintLeft_creator="1"
+              card_view:layout_constraintRight_creator="1"
+              />
+
+          <ImageButton
+              android:id="@+id/imageButton2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="8dp"
+              android:layout_marginEnd="8dp"
+              android:layout_marginRight="8dp"
+              android:layout_marginTop="8dp"
+              android:background="?selectableItemBackgroundBorderless"
+              app:layout_constraintBottom_toBottomOf="parent"
+              app:layout_constraintRight_toRightOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/campusDescription"
+              app:srcCompat="@drawable/ic_share_black_24dp"
+              card_view:layout_constraintBottom_creator="1"
+              card_view:layout_constraintTop_creator="1"
+              />
+
+        </android.support.constraint.ConstraintLayout>
+      </android.support.v7.widget.CardView>
+
+      <android.support.v7.widget.RecyclerView
+          android:id="@+id/recycler_view_trending"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+
+          android:layout_below="@+id/cardView"
+          android:fitsSystemWindows="true"
+          />
+
+
+      <ProgressBar
+          android:id="@+id/progressBar"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerHorizontal="true"
+          android:layout_centerVertical="true"
+          style="?android:attr/progressBarStyleLarge"
+          />
+
+      <include
+          layout="@layout/placeholder_empty_chat"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/cardView"
+          android:visibility="gone"
+          />
+
+    </RelativeLayout>
+  </ScrollView>
+
+  <LinearLayout
+      android:id="@+id/linearLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:layout_margin="5dp"
+      android:orientation="horizontal"
+      >
+
+    <EditText
+        android:id="@+id/messageEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:hint="@string/msg_edit_box"
+        android:textSize="18sp"
+        />
+
+    <Button
+        android:id="@+id/sendButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:enabled="false"
+        android:filterTouchesWhenObscured="true"
+        android:text="@string/msg_send"
+        />
+  </LinearLayout>
 </RelativeLayout>

@@ -55,7 +55,7 @@ public class UnivNewsFragment extends Fragment {
 
   private static final String endpoint =
       "https://hashbird.com/gogrit.in/workspace/srm-api/univ-news.php";
-  @BindView(R.id.errormessage) TextView errormessage;
+  @BindView(R.id.error_message) TextView errormessage;
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
   Unbinder unbinder;
 
