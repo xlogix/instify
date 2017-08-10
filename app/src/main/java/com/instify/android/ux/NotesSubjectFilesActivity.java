@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,8 +37,11 @@ import com.instify.android.models.NotesFileModel;
 import com.instify.android.ux.adapters.ListExpandableAdapter;
 import com.instify.android.ux.adapters.NotesFileAdapter;
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -283,28 +287,32 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
 
   // Requesting permission
   @AfterPermissionGranted(RC_CAMERA_PERMISSION) private void requestCameraPermission() {
-    String[] perms = { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE };
+    String[] perms = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
     if (EasyPermissions.hasPermissions(this, perms)) {
       // Choose file storage location
-      String mPathName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Instify/";
-      File path = new File(mPathName);
-      // Check
-      boolean isDirectoryCreated = path.exists();
-      if (!isDirectoryCreated) {
-        isDirectoryCreated = path.mkdir();
-      }
-      if (isDirectoryCreated) {
-        mPathName += getCurrentTime() + ".jpg";
-        File filePath = new File(mPathName);
-        // Log it
-        Timber.d(TAG, "File address :" + filePath);
-        // Assign it
-        mFileUri = Uri.fromFile(filePath);
-        // Get Intent
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mFileUri);
-        startActivityForResult(takePictureIntent, RC_CAMERA_PERMISSION);
-      }
+      dispatchTakePictureIntent();
+      //File imagePath = new File(this.getFilesDir(), "imagese");
+      //File newFile = new File(imagePath, getCurrentTime() + ".jpg");
+      //mFileUri = getUriForFile(this, "com.instify.android.provider", newFile);
+      ////String mPathName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Instify/";
+      ////File path = new File(mPathName);
+      ////// Check
+      ////boolean isDirectoryCreated = path.exists();
+      ////if (!isDirectoryCreated) {
+      ////  isDirectoryCreated = path.mkdir();
+      ////}
+      ////if (isDirectoryCreated) {
+      ////  mPathName += getCurrentTime() + ".jpg";
+      ////  File filePath = new File(mPathName);
+      ////  // Log it
+      ////  Timber.d(TAG, "File address :" + filePath);
+      ////  // Assign it
+      //
+      //// Get Intent
+      //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+      //takePictureIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+      //takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mFileUri);
+      //startActivityForResult(takePictureIntent, RC_CAMERA_PERMISSION);
     } else {
 
       // Ask for one permission
@@ -388,18 +396,18 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
   public String getCurrentTime() {
     Calendar c = Calendar.getInstance();
     return c.get(Calendar.DAY_OF_MONTH) + "-" + ((c.get(Calendar.MONTH)) + 1) + "-" + c.get(
-        Calendar.YEAR) + " " + c.get(Calendar.HOUR) + "-" + c.get(Calendar.MINUTE) + "-" + c.get(
+        Calendar.YEAR) + c.get(Calendar.HOUR) + "-" + c.get(Calendar.MINUTE) + "-" + c.get(
         Calendar.SECOND);
   }
 
   // Handling the image chooser activity result
   @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    if (requestCode == RC_CAMERA_PERMISSION && resultCode == RESULT_OK) {
+    if (requestCode == RC_CAMERA_PERMISSION && resultCode == RESULT_OK && mFileUri != null) {
       mFilePath = data.getData();
       Intent intent = new Intent(getApplicationContext(), NotesUploadActivity.class);
       intent.putExtra("code", getIntent().getStringExtra("code"));
-      intent.putExtra("fileuri", mFilePath.toString());
+      intent.putExtra("fileuri", mFileUri.toString());
       intent.putExtra("filetype", "image");
       startActivity(intent);
     } else if (requestCode == RC_STORAGE_PERMISSION && resultCode == RESULT_OK) {
@@ -473,6 +481,47 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
         placeholderError.setVisibility(View.INVISIBLE);
       }
       errormessage.setText("Something Went Wrong. Try Again!");
+    }
+  }
+
+  String mCurrentPhotoPath;
+
+  private File createImageFile() throws IOException {
+    // Create an image file name
+    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+    String imageFileName = "JPEG_" + timeStamp + "_";
+    File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+    File image = File.createTempFile(
+        imageFileName,  /* prefix */
+        ".jpg",         /* suffix */
+        storageDir      /* directory */
+    );
+
+    // Save a file: path for use with ACTION_VIEW intents
+    mCurrentPhotoPath = image.getAbsolutePath();
+    return image;
+  }
+
+  private void dispatchTakePictureIntent() {
+    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    // Ensure that there's a camera activity to handle the intent
+    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+      // Create the File where the photo should go
+      File photoFile = null;
+      try {
+        photoFile = createImageFile();
+      } catch (IOException ex) {
+        // Error occurred while creating the File
+
+      }
+      // Continue only if the File was successfully created
+      if (photoFile != null) {
+        mFileUri = FileProvider.getUriForFile(this,
+            "com.instify.android.provider",
+            photoFile);
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mFileUri);
+        startActivityForResult(takePictureIntent, RC_CAMERA_PERMISSION);
+      }
     }
   }
 }

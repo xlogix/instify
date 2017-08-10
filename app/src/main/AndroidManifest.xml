@@ -47,7 +47,15 @@
       android:supportsRtl="true"
       android:theme="@style/AppTheme"
       tools:replace="android:allowBackup">
-
+    <provider
+        android:name="android.support.v4.content.FileProvider"
+        android:authorities="${applicationId}.provider"
+        android:exported="false"
+        android:grantUriPermissions="true">
+      <meta-data
+          android:name="android.support.FILE_PROVIDER_PATHS"
+          android:resource="@xml/file_paths"/>
+    </provider>
     <!-- Support for expanded screen aspect ratio of 18:9 like Samsung Galaxy S8/S8+, LG G6 -->
     <meta-data
         android:name="android.max_aspect"
