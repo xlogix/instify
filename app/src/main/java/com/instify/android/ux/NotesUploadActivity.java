@@ -48,9 +48,9 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
     setTitle(Html.fromHtml("<small>POST TO- " + getIntent().getStringExtra("code") + "</small>"));
 
     // Initializing views
-    buttonUpload = (Button) findViewById(R.id.buttonUpload);
-    editText = (EditText) findViewById(R.id.editTextName);
-    editTextdesc = (EditText) findViewById(R.id.desc);
+    buttonUpload = findViewById(R.id.buttonUpload);
+    editText = findViewById(R.id.editTextName);
+    editTextdesc = findViewById(R.id.desc);
     mFilePath = Uri.parse(getIntent().getExtras().getString("fileuri"));
     mSubjectcode = getIntent().getExtras().getString("code");
     mFiletype = getIntent().getExtras().getString("filetype");
@@ -88,6 +88,7 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
       DatabaseReference ref =
           FirebaseDatabase.getInstance().getReference().child("notes").child(mSubjectcode).push();
       ref.setValue(nfm);
+      intent.setPackage(this.getPackageName());
       stopService(intent);
       finish();
     }

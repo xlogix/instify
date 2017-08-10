@@ -67,6 +67,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
   private Uri mFileUri = null;
   private Uri mFilePath;
+  private String type;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -74,7 +75,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
     ButterKnife.bind(this);
     setTitle(Html.fromHtml("<small>" + getIntent().getStringExtra("code") + "</small>"));
 
-    mRVFish = (RecyclerView) findViewById(R.id.recycler_view_notes);
+    mRVFish = findViewById(R.id.recycler_view_notes);
     setNotesFirebase(getIntent().getStringExtra("code"));
     //    getNotes(getIntent().getStringExtra("code"));
   }
@@ -236,33 +237,39 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
       View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_upload_notes, null);
       bottomSheetDialog.setContentView(sheetView);
       bottomSheetDialog.show();
-      LinearLayout doc = (LinearLayout) sheetView.findViewById(R.id.doc);
-      LinearLayout pdf = (LinearLayout) sheetView.findViewById(R.id.pdf);
-      LinearLayout audio = (LinearLayout) sheetView.findViewById(R.id.audio);
-      LinearLayout image = (LinearLayout) sheetView.findViewById(R.id.image);
-      LinearLayout video = (LinearLayout) sheetView.findViewById(R.id.video);
-      LinearLayout camera = (LinearLayout) sheetView.findViewById(R.id.camera);
-      LinearLayout other = (LinearLayout) sheetView.findViewById(R.id.other);
+      LinearLayout doc = sheetView.findViewById(R.id.doc);
+      LinearLayout pdf = sheetView.findViewById(R.id.pdf);
+      LinearLayout audio = sheetView.findViewById(R.id.audio);
+      LinearLayout image = sheetView.findViewById(R.id.image);
+      LinearLayout video = sheetView.findViewById(R.id.video);
+      LinearLayout camera = sheetView.findViewById(R.id.camera);
+      LinearLayout other = sheetView.findViewById(R.id.other);
       doc.setOnClickListener(v -> {
-        requestStoragePermission("doc");
+        type = "doc";
+        requestStoragePermission();
       });
       pdf.setOnClickListener(v -> {
-        requestStoragePermission("pdf");
+        type = "pdf";
+        requestStoragePermission();
       });
       camera.setOnClickListener(v -> {
         requestCameraPermission();
       });
       video.setOnClickListener(v -> {
-        requestStoragePermission("video");
+        type = "video";
+        requestStoragePermission();
       });
       audio.setOnClickListener(v -> {
-        requestStoragePermission("audio");
+        type = "audio";
+        requestStoragePermission();
       });
       image.setOnClickListener(v -> {
-        requestStoragePermission("image");
+        type = "image";
+        requestStoragePermission();
       });
       other.setOnClickListener(v -> {
-        requestStoragePermission("other");
+        type = "other";
+        requestStoragePermission();
       });
 
       return true;
@@ -308,45 +315,58 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
 
   // Requesting permission
   @AfterPermissionGranted(RC_STORAGE_PERMISSION) private void requestStoragePermission(
-      String type) {
+  ) {
     if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
       // Have permission, do the thing!
-      if (type.equals("pdf")) {
-        Intent intent = new Intent();
-        intent.setType("application/pdf");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Complete action using... "),
-            PDF_SELECT);
-      } else if (type.equals("doc")) {
-        Intent intent = new Intent();
-        intent.setType("application/docx");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Complete action using... "),
-            DOC_SELECT);
-      } else if (type.equals("audio")) {
-        Intent intent = new Intent();
-        intent.setType("audio/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Complete action using... "),
-            AUDIO_SELECT);
-      } else if (type.equals("image")) {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Complete action using... "),
-            IMAGE_SELECT);
-      } else if (type.equals("video")) {
-        Intent intent = new Intent();
-        intent.setType("video/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Complete action using... "),
-            VIDEO_SELECT);
-      } else {
-        Intent intent = new Intent();
-        intent.setType("*/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Complete action using... "),
-            OTHER_SELECT);
+      switch (type) {
+        case "pdf": {
+          Intent intent = new Intent();
+          intent.setType("application/pdf");
+          intent.setAction(Intent.ACTION_GET_CONTENT);
+          startActivityForResult(Intent.createChooser(intent, "Complete action using... "),
+              PDF_SELECT);
+          break;
+        }
+        case "doc": {
+          Intent intent = new Intent();
+          intent.setType("application/docx");
+          intent.setAction(Intent.ACTION_GET_CONTENT);
+          startActivityForResult(Intent.createChooser(intent, "Complete action using... "),
+              DOC_SELECT);
+          break;
+        }
+        case "audio": {
+          Intent intent = new Intent();
+          intent.setType("audio/*");
+          intent.setAction(Intent.ACTION_GET_CONTENT);
+          startActivityForResult(Intent.createChooser(intent, "Complete action using... "),
+              AUDIO_SELECT);
+          break;
+        }
+        case "image": {
+          Intent intent = new Intent();
+          intent.setType("image/*");
+          intent.setAction(Intent.ACTION_GET_CONTENT);
+          startActivityForResult(Intent.createChooser(intent, "Complete action using... "),
+              IMAGE_SELECT);
+          break;
+        }
+        case "video": {
+          Intent intent = new Intent();
+          intent.setType("video/*");
+          intent.setAction(Intent.ACTION_GET_CONTENT);
+          startActivityForResult(Intent.createChooser(intent, "Complete action using... "),
+              VIDEO_SELECT);
+          break;
+        }
+        default: {
+          Intent intent = new Intent();
+          intent.setType("*/*");
+          intent.setAction(Intent.ACTION_GET_CONTENT);
+          startActivityForResult(Intent.createChooser(intent, "Complete action using... "),
+              OTHER_SELECT);
+          break;
+        }
       }
     } else {
       // Ask for one permission
