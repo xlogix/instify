@@ -103,8 +103,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
               NotesFileModel model, int position) {
             viewHolder.setdatatoview(model);
             viewHolder.cv.setOnClickListener(v -> {
-              Uri uri = Uri.parse(model.getNotefile()); // missing 'http://' will cause crashed
-              Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+              Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(model.getNotefile()));
               startActivity(intent);
             });
           }
@@ -186,8 +185,6 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
           showErrorPlaceholder("Database Error");
           // Update UI
           //   hideRefreshing();
-          // Error in login. Get the error message
-          //                        String errorMsg = user.getString("error_msg");
         }
       } catch (JSONException e) {
         // Update UI
@@ -287,7 +284,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
 
   // Requesting permission
   @AfterPermissionGranted(RC_CAMERA_PERMISSION) private void requestCameraPermission() {
-    String[] perms = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    String[] perms = { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE };
     if (EasyPermissions.hasPermissions(this, perms)) {
       // Choose file storage location
       dispatchTakePictureIntent();
@@ -322,8 +319,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
   }
 
   // Requesting permission
-  @AfterPermissionGranted(RC_STORAGE_PERMISSION) private void requestStoragePermission(
-  ) {
+  @AfterPermissionGranted(RC_STORAGE_PERMISSION) private void requestStoragePermission() {
     if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
       // Have permission, do the thing!
       switch (type) {
@@ -491,11 +487,9 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
     String imageFileName = "JPEG_" + timeStamp + "_";
     File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-    File image = File.createTempFile(
-        imageFileName,  /* prefix */
+    File image = File.createTempFile(imageFileName,  /* prefix */
         ".jpg",         /* suffix */
-        storageDir      /* directory */
-    );
+        storageDir      /* directory */);
 
     // Save a file: path for use with ACTION_VIEW intents
     mCurrentPhotoPath = image.getAbsolutePath();
@@ -516,9 +510,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
       }
       // Continue only if the File was successfully created
       if (photoFile != null) {
-        mFileUri = FileProvider.getUriForFile(this,
-            "com.instify.android.provider",
-            photoFile);
+        mFileUri = FileProvider.getUriForFile(this, "com.instify.android.provider", photoFile);
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mFileUri);
         startActivityForResult(takePictureIntent, RC_CAMERA_PERMISSION);
       }

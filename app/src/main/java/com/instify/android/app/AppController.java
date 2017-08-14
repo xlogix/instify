@@ -42,6 +42,8 @@ public class AppController extends MultiDexApplication
     if (BuildConfig.DEBUG) {
       // Plant Tiber debug tree
       Timber.plant(new Timber.DebugTree());
+      // Set Crash Reporting to false
+      FirebaseCrash.setCrashCollectionEnabled(false);
       // Initialise Leak Canary
       if (LeakCanary.isInAnalyzerProcess(this)) {
         // This process is dedicated to LeakCanary for heap analysis.

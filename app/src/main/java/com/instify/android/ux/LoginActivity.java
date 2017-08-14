@@ -63,6 +63,7 @@ public class LoginActivity extends AppCompatActivity
   // [declare_auth_listener]
   public FirebaseAuth.AuthStateListener mAuthStateListener;
   @BindView(R.id.scrollView) ScrollView mScrollView;
+  // @BindView(R.id.constraint_login) ConstraintLayout constraintLayout;
   // Root View
   private View systemUIView;
   private ProgressDialog mProgressDialog;
@@ -133,8 +134,8 @@ public class LoginActivity extends AppCompatActivity
     animationDrawable.start();
 
     // Views
-    mRegNoField = (EditText) findViewById(R.id.field_regNo);
-    mPasswordField = (EditText) findViewById(R.id.field_password);
+    mRegNoField = findViewById(R.id.field_regNo);
+    mPasswordField = findViewById(R.id.field_password);
 
     // Buttons
     findViewById(R.id.button_google_login).setOnClickListener(this);

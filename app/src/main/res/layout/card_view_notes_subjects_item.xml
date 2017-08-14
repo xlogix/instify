@@ -5,6 +5,7 @@
     android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="4dp"
     android:elevation="4dp"
     app:cardCornerRadius="4dp"
     app:contentPadding="4dp"
@@ -37,10 +38,10 @@
         android:layout_toRightOf="@+id/imageView"
         android:gravity="end"
         android:maxLines="1"
-        android:paddingEnd="5dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="5dp"
+        android:paddingEnd="2dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:paddingTop="2dp"
         android:text="Posted date &amp; time "
         android:textSize="12sp"
         />
@@ -94,8 +95,8 @@
 
       <ImageButton
           android:id="@+id/share_button"
-          android:layout_width="16dp"
-          android:layout_height="16dp"
+          android:layout_width="20dp"
+          android:layout_height="20dp"
           android:background="?selectableItemBackground"
           app:srcCompat="@drawable/ic_share_black_24dp"
           />
