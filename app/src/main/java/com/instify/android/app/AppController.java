@@ -7,11 +7,13 @@ package com.instify.android.app;
 import android.app.Application;
 import android.content.Intent;
 import android.support.multidex.MultiDexApplication;
+import android.support.v7.app.AppCompatDelegate;
 import android.text.TextUtils;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.facebook.stetho.Stetho;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
@@ -30,7 +32,9 @@ public class AppController extends MultiDexApplication
   public FirebaseAnalytics mFirebaseAnalytics;
   private RequestQueue mRequestQueue;
   private PreferenceManager mPrefs;
-
+  static {
+    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+  }
   public static synchronized AppController getInstance() {
     return mInstance;
   }
@@ -38,7 +42,7 @@ public class AppController extends MultiDexApplication
   @Override public void onCreate() {
     super.onCreate();
     mInstance = this;
-
+    FirebaseApp.initializeApp(this);
     if (BuildConfig.DEBUG) {
       // Plant Tiber debug tree
       Timber.plant(new Timber.DebugTree());

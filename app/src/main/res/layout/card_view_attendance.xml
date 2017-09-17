@@ -67,7 +67,8 @@
           android:id="@+id/attdMaxHours"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          style="@style/TextAppearance.AppCompat.Medium"
+          android:textSize="16sp"
+
           />
 
       <android.support.v7.widget.AppCompatTextView
@@ -75,7 +76,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@id/attdMaxHours"
-          style="@style/TextAppearance.AppCompat.Medium"
+          android:textSize="16sp"
           />
 
       <android.support.v7.widget.AppCompatTextView
@@ -83,7 +84,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/attdAttendHours"
-          style="@style/TextAppearance.AppCompat.Medium"
+          android:textSize="16sp"
           />
 
       <android.support.v7.widget.AppCompatTextView
@@ -91,7 +92,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/attdAbsentHours"
-          style="@style/TextAppearance.AppCompat.Medium"
+          android:textSize="16sp"
           />
 
       <android.support.v7.widget.AppCompatTextView
@@ -99,7 +100,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/attdOdPercent"
-          style="@style/TextAppearance.AppCompat.Medium"
+          android:textSize="16sp"
           />
 
       <android.support.v7.widget.AppCompatTextView
@@ -107,7 +108,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/attdMin"
-          style="@style/TextAppearance.AppCompat.Medium"
+          android:textSize="16sp"
           />
     </RelativeLayout>
   </RelativeLayout>

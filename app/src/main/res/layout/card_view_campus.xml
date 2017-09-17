@@ -76,7 +76,6 @@
             android:autoLink="all"
             android:maxLines="7"
             android:text="lorem ipsum"
-            android:textColor="@color/monsoon"
             android:textIsSelectable="true"
             android:textSize="16sp"
             android:transitionName="campusDescription"

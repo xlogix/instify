@@ -56,7 +56,6 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:text="Wanna be part of Instify? Tell us about yourself through the Help Feedback section. We would really appreciate the help in building this ssssssssssssssssssssssssssssssssssssssssoftware."
-        android:textColor="@color/monsoon"
         android:textIsSelectable="true"
         android:textSize="16sp"
         app:layout_constraintHorizontal_bias="0.0"
