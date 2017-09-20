@@ -303,7 +303,7 @@ public class LoginActivity extends AppCompatActivity
           // Now store the user in SQLite
           String uid = jObj.getString("folio_no");
 
-          //   JSONObject user = jObj.getJSONObject("user");
+          // JSONObject user = jObj.getJSONObject("user");
           String name = jObj.getString("name");
           String email = jObj.getString("email");
           String created_at = jObj.getString("image");

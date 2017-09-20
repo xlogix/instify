@@ -7,12 +7,11 @@ package com.instify.android.app;
 public class AppConfig {
 
     public static final String FRIENDLY_MSG_LENGTH = "friendly_msg_length";
-
     // Server user login URL
     public static final String URL_LOGIN = "https://hashbird.com/gogrit.in/workspace/srm-api/get-info.php";
-    // Server Attendance details URL
+    // Server attendance details URL
     public static final String URL_ATTENDANCE = "https://hashbird.com/gogrit.in/workspace/srm-api/get-attd.php";
-    // Server Time Table details URL
+    // Server time Table details URL
     public static final String URL_GETTT = "https://hashbird.com/gogrit.in/workspace/srm-api/get-ptt.php";
     // Server fee details URL
     public static final String URL_FEE = "https://hashbird.com/gogrit.in/workspace/srm-api/fee_details.php";

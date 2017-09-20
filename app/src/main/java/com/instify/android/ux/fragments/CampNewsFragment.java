@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Keep;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -71,7 +72,7 @@ public class CampNewsFragment extends Fragment {
     setHasOptionsMenu(true);
 
     // Recycler view set up //
-    recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_campus_news);
+    recyclerView = rootView.findViewById(R.id.recycler_view_campus_news);
     recyclerView.setHasFixedSize(true);
     recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
     recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -149,7 +150,17 @@ public class CampNewsFragment extends Fragment {
         // Set click action for Share button
         holder.mImageButton2.setOnClickListener(view -> {
           SQLiteHandler db = new SQLiteHandler(getContext());
-          Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+
+          // Share ACTION
+          ShareCompat.IntentBuilder builder = ShareCompat.IntentBuilder.from(getActivity());
+          builder.setChooserTitle(model.title.toUpperCase());
+          builder.setSubject(model.title.toUpperCase());
+          builder.setText(model.description + "\n\n" + db.getUserDetails().getName()
+              + " has shared a topic with you from Instify https://goo.gl/YRSMJa");
+          builder.setType("text/plain");
+
+          // OLD
+          /*Intent sharingIntent = new Intent(Intent.ACTION_SEND);
           sharingIntent.setType("text/plain");
           String shareBodyText = "'"
               + model.title.toUpperCase()
@@ -162,7 +173,7 @@ public class CampNewsFragment extends Fragment {
           sharingIntent.putExtra(Intent.EXTRA_SUBJECT,
               db.getUserDetails().getName() + " has shared a topic with you from Instify");
           sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBodyText);
-          startActivity(Intent.createChooser(sharingIntent, "Share this topic on"));
+          startActivity(Intent.createChooser(sharingIntent, "Share this topic on"));*/
         });
       }
     };
@@ -211,7 +222,7 @@ public class CampNewsFragment extends Fragment {
       if (placeholderError.getVisibility() == View.VISIBLE) {
         placeholderError.setVisibility(View.INVISIBLE);
       }
-      errormessage.setText("Something Went Wrong Try Again");
+      errormessage.setText("Something went wrong. Try Again!");
     }
   }
 

@@ -34,8 +34,9 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
   private EditText editTextdesc;
   // URI to store the image
   private Uri mFileUri = null;
-  private Uri mDownloadUrl;
   private Uri mFilePath;
+
+  private Uri mDownloadUrl;
   private SearchView searchView = null;
   private String mSubjectcode;
   private String mFiletype;
@@ -68,6 +69,7 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
             onUploadResultIntent(intent);
             break;
           default:
+            intent.setPackage(NotesUploadActivity.this.getPackageName());
             stopService(intent);
             break;
         }
@@ -79,6 +81,7 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
     // Got a new intent from MyUploadService with a success or failure
     mDownloadUrl = intent.getParcelableExtra(MyFirebaseUploadService.EXTRA_DOWNLOAD_URL);
     mFileUri = intent.getParcelableExtra(MyFirebaseUploadService.EXTRA_FILE_URI);
+    intent.setPackage(this.getPackageName());
     if (mDownloadUrl != null) {
       SQLiteHandler db = new SQLiteHandler(this);
       NotesFileModel nfm =
@@ -88,7 +91,6 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
       DatabaseReference ref =
           FirebaseDatabase.getInstance().getReference().child("notes").child(mSubjectcode).push();
       ref.setValue(nfm);
-      intent.setPackage(this.getPackageName());
       stopService(intent);
       finish();
     }

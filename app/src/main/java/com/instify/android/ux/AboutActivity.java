@@ -29,7 +29,7 @@ public class AboutActivity extends AppCompatActivity {
     View aboutPage = new AboutPage(this).isRTL(false)
         .setDescription(
             "This app is developed by : Abhishek Uniyal, Arjun Mahishi, Somnath, Chandan Singh and Vijay Krishna"
-                + "\n\nSepcial thanks to : Ankur, Trishansh")
+                + "\n\nSpecial thanks to : Ankur, Trishansh")
         .setImage(R.drawable.ic_logo_96dp)
         .addItem(new Element().setTitle("Version 1.3.0"))
         .addGroup("Connect with us")

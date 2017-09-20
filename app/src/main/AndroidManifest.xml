@@ -12,6 +12,7 @@
   <uses-permission android:name="android.permission.VIBRATE"/>
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
 
   <!-- Dangerous permissions, access must be requested at runtime -->
   <uses-permission android:name="android.permission.CAMERA"/>
@@ -95,11 +96,33 @@
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
 
+        <action android:name="android.intent.action.SEND" />
+
         <category android:name="android.intent.category.DEFAULT"/>
 
         <data android:scheme="instify"/>
       </intent-filter>
     </activity>
+
+    <activity
+        android:name="ux.ReceiveActivity"
+        android:label="@string/app_name" >
+      <intent-filter>
+        <action android:name="android.intent.action.SEND" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+
+        <data android:mimeType="*/*" />
+      </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.SEND_MULTIPLE" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+
+        <data android:mimeType="*/*" />
+      </intent-filter>
+    </activity>
+
     <activity
         android:name=".ux.IntroActivity"
         android:label="@string/title_activity_intro"
@@ -153,7 +176,6 @@
     <activity
         android:name=".ux.NotesUploadActivity"
         android:parentActivityName=".ux.MainActivity"/>
-
     <service
         android:name=".services.MyFirebaseDownloadService"
         android:exported="false"/>

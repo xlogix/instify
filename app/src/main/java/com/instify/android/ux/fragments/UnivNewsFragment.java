@@ -55,7 +55,7 @@ public class UnivNewsFragment extends Fragment {
 
   private static final String endpoint =
       "https://hashbird.com/gogrit.in/workspace/srm-api/univ-news.php";
-  @BindView(R.id.error_message) TextView errormessage;
+  @BindView(R.id.error_message) TextView errorMessage;
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
   Unbinder unbinder;
 
@@ -74,18 +74,15 @@ public class UnivNewsFragment extends Fragment {
     return frag;
   }
 
-  @Override
-  public void onAttach(Context context) {
+  @Override public void onAttach(Context context) {
     super.onAttach(context);
   }
 
-  @Override
-  public void onDestroy() {
+  @Override public void onDestroy() {
     super.onDestroy();
   }
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
 
     View rootView = inflater.inflate(R.layout.fragment_university_news, container, false);
@@ -95,12 +92,12 @@ public class UnivNewsFragment extends Fragment {
     //Prevent  Crash on Rotate
     setRetainInstance(true);
     // Initialize SwipeRefreshLayout
-    mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
+    mSwipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout);
     mSwipeRefreshLayout.setColorSchemeResources(R.color.red_primary, R.color.black,
         R.color.google_blue_900);
 
     // Setting up recycle view
-    recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_university);
+    recyclerView = rootView.findViewById(R.id.recycler_view_university);
     recyclerView.setHasFixedSize(true);
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -156,8 +153,7 @@ public class UnivNewsFragment extends Fragment {
         }
       }
 
-      @Override
-      public void onFailure(Call<NewsItemModelList> call, Throwable t) {
+      @Override public void onFailure(Call<NewsItemModelList> call, Throwable t) {
         showErrorPlaceholder("Failed to Receive University News");
         news.clear();
         mAdapter.notifyDataSetChanged();
@@ -175,8 +171,7 @@ public class UnivNewsFragment extends Fragment {
       final float scale = getContext().getResources().getDisplayMetrics().density;
       // Set the ad size and ad unit ID for each Native Express ad in the items list.
       for (int i = 0; i <= news.size(); i += 5) {
-        final NativeExpressAdView adView =
-            (NativeExpressAdView) news.get(i);
+        final NativeExpressAdView adView = (NativeExpressAdView) news.get(i);
 
         AdSize adSize = new AdSize((int) ((recyclerView.getWidth()
             - recyclerView.getPaddingRight()
@@ -199,8 +194,8 @@ public class UnivNewsFragment extends Fragment {
 
     Object item = news.get(index);
     if (!(item instanceof NativeExpressAdView)) {
-      throw new ClassCastException("Expected item at index " + index + " to be a Native"
-          + " Express ad.");
+      throw new ClassCastException(
+          "Expected item at index " + index + " to be a Native" + " Express ad.");
     }
 
     final NativeExpressAdView adView = (NativeExpressAdView) item;
@@ -208,16 +203,14 @@ public class UnivNewsFragment extends Fragment {
     // Set an AdListener on the NativeExpressAdView to wait for the previous Native Express ad
     // to finish loading before loading the next ad in the items list.
     adView.setAdListener(new AdListener() {
-      @Override
-      public void onAdLoaded() {
+      @Override public void onAdLoaded() {
         super.onAdLoaded();
         // The previous Native Express ad loaded successfully, call this method again to
         // load the next ad in the items list.
         loadNativeExpressAd(index + 5);
       }
 
-      @Override
-      public void onAdFailedToLoad(int errorCode) {
+      @Override public void onAdFailedToLoad(int errorCode) {
         // The previous Native Express ad failed to load. Call this method again to load
         // the next ad in the items list.
         Log.e("MainActivity", "The previous Native Express ad failed to load. Attempting to"
@@ -231,25 +224,24 @@ public class UnivNewsFragment extends Fragment {
   }
 
   public void makeJSONRequest() {
-    JsonObjectRequest req = new JsonObjectRequest(endpoint, null,
-        response -> {
-          Timber.d(TAG, response.toString());
-          try {
-            JSONArray newsItems = response.getJSONArray("newsItems");
+    JsonObjectRequest req = new JsonObjectRequest(endpoint, null, response -> {
+      Timber.d(TAG, response.toString());
+      try {
+        JSONArray newsItems = response.getJSONArray("newsItems");
 
-            //                        mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), newsItems);
+        //                        mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), newsItems);
 
-            // UI
-            hideRefreshing();
+        // UI
+        hideRefreshing();
 
-            // Setting the adapter
-            recyclerView.setAdapter(mAdapter);
-          } catch (JSONException e) {
-            Log.e(TAG, "Json parsing error: " + e.getMessage());
-            Toast.makeText(getContext(), "JSON Parsing error", Toast.LENGTH_LONG).show();
-          }
-          mAdapter.notifyDataSetChanged();
-        }, VolleyError -> {
+        // Setting the adapter
+        recyclerView.setAdapter(mAdapter);
+      } catch (JSONException e) {
+        Log.e(TAG, "Json parsing error: " + e.getMessage());
+        Toast.makeText(getContext(), "JSON Parsing error", Toast.LENGTH_LONG).show();
+      }
+      mAdapter.notifyDataSetChanged();
+    }, VolleyError -> {
       Log.e(TAG, "Error: " + VolleyError.getMessage());
       Toast.makeText(getContext(), "Error Receiving University News", Toast.LENGTH_LONG).show();
       hideRefreshing();
@@ -263,8 +255,7 @@ public class UnivNewsFragment extends Fragment {
     AppController.getInstance().addToRequestQueue(req);
   }
 
-  @Override
-  public void onPrepareOptionsMenu(Menu menu) {
+  @Override public void onPrepareOptionsMenu(Menu menu) {
     menu.removeGroup(R.id.main_menu_group);
     super.onPrepareOptionsMenu(menu);
   }
@@ -287,20 +278,20 @@ public class UnivNewsFragment extends Fragment {
   }
 
   public void showErrorPlaceholder(String message) {
-    if (placeholderError != null && errormessage != null) {
+    if (placeholderError != null && errorMessage != null) {
       if (placeholderError.getVisibility() != View.VISIBLE) {
         placeholderError.setVisibility(View.VISIBLE);
       }
-      errormessage.setText(message);
+      errorMessage.setText(message);
     }
   }
 
   public void hidePlaceHolder() {
-    if (placeholderError != null && errormessage != null) {
+    if (placeholderError != null && errorMessage != null) {
       if (placeholderError.getVisibility() == View.VISIBLE) {
         placeholderError.setVisibility(View.INVISIBLE);
       }
-      errormessage.setText("Something Went Wrong Try Again");
+      errorMessage.setText("Something Went Wrong Try Again");
     }
   }
 
@@ -317,8 +308,7 @@ public class UnivNewsFragment extends Fragment {
       this.newsArray = newsArray;
     }
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
       RecyclerView.ViewHolder viewHolder;
       LayoutInflater inflater = LayoutInflater.from(parent.getContext());
       if (viewType == AD_TYPE) {
@@ -331,16 +321,14 @@ public class UnivNewsFragment extends Fragment {
       return viewHolder;
     }
 
-    @Override
-    public int getItemViewType(int position) {
+    @Override public int getItemViewType(int position) {
       if (position % 5 == 0) {
         return AD_TYPE;
       }
       return CONTENT_TYPE;
     }
 
-    @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    @Override public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
       int viewType = getItemViewType(position);
       switch (viewType) {
         case CONTENT_TYPE:
@@ -350,6 +338,15 @@ public class UnivNewsFragment extends Fragment {
           viewHolder.mUnivNewsSnip.setText(m.getSnip());
           viewHolder.mImageButton2.setOnClickListener(view -> {
             SQLiteHandler db = new SQLiteHandler(mContext);
+            // ShareCompat Builder
+            /* ShareCompat.IntentBuilder builder = ShareCompat.IntentBuilder.from(mContext);
+            builder.setChooserTitle(m.getTitle().toUpperCase());
+            builder.setSubject(m.getTitle().toUpperCase());
+            builder.setText(m.getSnip() + "\n" + m.getLink() + db.getUserDetails().getName()
+                + " has shared a topic with you from Instify https://goo.gl/YRSMJa");
+            builder.setType("text/plain");*/
+
+            // OLD
             Intent sharingIntent = new Intent(Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");
             String shareBodyText = "'"
@@ -398,10 +395,8 @@ public class UnivNewsFragment extends Fragment {
         case AD_TYPE:
           // Fall Through
         default:
-          AdViewHolder nativeExpressHolder =
-              (AdViewHolder) holder;
-          NativeExpressAdView adView =
-              (NativeExpressAdView) newsArray.get(position);
+          AdViewHolder nativeExpressHolder = (AdViewHolder) holder;
+          NativeExpressAdView adView = (NativeExpressAdView) newsArray.get(position);
           ViewGroup adCardView = (ViewGroup) nativeExpressHolder.itemView;
 
           // The NativeExpressAdViewHolder recycled by the RecyclerView may be a different
@@ -423,23 +418,17 @@ public class UnivNewsFragment extends Fragment {
       }
     }
 
-    @Override
-    public int getItemCount() {
+    @Override public int getItemCount() {
       return newsArray.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
       private final View mView;
-      @BindView(R.id.imageView2)
-      ImageView mImageView2;
-      @BindView(R.id.univ_news_title)
-      TextView mUnivNewsTitle;
-      @BindView(R.id.univ_news_snip)
-      TextView mUnivNewsSnip;
-      @BindView(R.id.imageButton2)
-      ImageButton mImageButton2;
-      @BindView(R.id.imageButton)
-      ImageButton mImageButton;
+      @BindView(R.id.imageView2) ImageView mImageView2;
+      @BindView(R.id.univ_news_title) TextView mUnivNewsTitle;
+      @BindView(R.id.univ_news_snip) TextView mUnivNewsSnip;
+      @BindView(R.id.imageButton2) ImageButton mImageButton2;
+      @BindView(R.id.imageButton) ImageButton mImageButton;
 
       public ViewHolder(View view) {
         super(view);

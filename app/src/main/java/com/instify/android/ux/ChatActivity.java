@@ -67,6 +67,7 @@ public class ChatActivity extends AppCompatActivity {
   private static final String MESSAGE_URL = "http://friendlychat.firebase.google.com/message/";
   private static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
   public static String MESSAGES_CHILD = "messages";
+
   @BindView(R.id.placeholder) LinearLayout mPlaceholder;
   String refPath;
   @BindView(R.id.imageView2) ImageView mImageView2;
@@ -75,6 +76,7 @@ public class ChatActivity extends AppCompatActivity {
   @BindView(R.id.campusDescription) TextView mCampusDescription;
   @BindView(R.id.imageButton2) ImageButton mImageButton2;
   @BindView(R.id.cardView) CardView mCardView;
+
   private String mUsername;
   private String mPhotoUrl;
   private Button mSendButton;

@@ -88,7 +88,7 @@
           android:layout_gravity="center_vertical"
           android:layout_marginEnd="12dp"
           android:layout_marginStart="12dp"
-          android:text="Chandan Singh"
+          android:text="Uploader Name"
           android:textAllCaps="true"
           android:textSize="12sp"
           />

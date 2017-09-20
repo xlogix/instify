@@ -37,13 +37,6 @@ import com.instify.android.services.MyFirebaseDownloadService;
 import com.instify.android.services.MyFirebaseUploadService;
 
 public class UploadNotesActivity extends AppCompatActivity implements View.OnClickListener, EasyPermissions.PermissionCallbacks {
-
-    static final String[] Subjects = new String[]{"Advanced Calculus And Complex Analysis", "Basic Electrical Engineering", "Basic Mechanical Engineering",
-            "Biology for Engineers", "Chemistry", "Program Design & Development using C", "Materials Science", "Programming Lab",
-            "Value Added Courses"};
-    static final String[] Chapters = new String[]{"Chapter 1", "Chapter 2", "Chapter 3", "Chapter 4", "Chapter 5", "Chapter 6", "Chapter 7",
-            "Chapter 8", "Chapter 9", "Chapter 10"};
-
     private static final String TAG = UploadNotesActivity.class.getSimpleName();
     // PERMS
     private static final int RC_TAKE_PICTURE = 101;
@@ -72,20 +65,6 @@ public class UploadNotesActivity extends AppCompatActivity implements View.OnCli
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
         // [END get_storage_ref]
-
-        // Spinner 1
-        final Spinner spinnerSubjects = (Spinner) findViewById(R.id.spinner_subjects);
-        ArrayAdapter<String> adapterSubjects = new ArrayAdapter<>(this,
-                R.layout.view_spinner_item, Subjects);
-        adapterSubjects.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerSubjects.setAdapter(adapterSubjects);
-
-        // Spinner 2
-        final Spinner spinnerChapters = (Spinner) findViewById(R.id.spinner_chapters);
-        ArrayAdapter<String> adapterChapters = new ArrayAdapter<>(this,
-                R.layout.view_spinner_item, Chapters);
-        adapterChapters.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerChapters.setAdapter(adapterChapters);
 
         // Click listeners
         findViewById(R.id.button_camera).setOnClickListener(this);

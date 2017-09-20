@@ -37,9 +37,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import com.bumptech.glide.Priority;
-import com.github.javiersantos.appupdater.AppUpdater;
-import com.github.javiersantos.appupdater.enums.Display;
-import com.github.javiersantos.appupdater.enums.UpdateFrom;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -149,11 +146,6 @@ public class MainActivity extends AppCompatActivity {
 
     // Declare Views
     mSharedFab = findViewById(R.id.shared_fab);
-
-    AppUpdater appUpdater = new AppUpdater(this).setDisplay(Display.DIALOG)
-        .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
-        .showEvery(2);
-    appUpdater.start();
 
     // Get the current logged-in user
     mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -374,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
           startActivity(new Intent(MainActivity.this, FeePaymentHistoryActivity.class));
           break;
         case R.id.nav_send:
-          String[] emails = {"abhishekuniyal09@gmail.com"};
+          String[] emails = { "abhishekuniyal09@gmail.com" };
           String subject = "I want to submit Feedback";
           String message = "Hi, ";
           Intent email = new Intent(Intent.ACTION_SENDTO);

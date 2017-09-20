@@ -28,15 +28,15 @@
 
 -optimizations !field/removal/writeonly,!field/marking/private,!class/merging/*,!code/allocation/variable
 
+# RetroLambda
+-dontwarn java.lang.invoke.*
+-dontwarn **$$Lambda$*
+
 # Basic proguard configuration to support all the devices
 -keep class android.support.v4.** {  *; }
-
--keep class android.support.v7.internal.** { *; }
-
--keep interface android.support.v7.internal.** { *; }
+-keep interface android.support.v7.** { *; }
 
 -keep class android.support.v7.** { *; }
-
 -keep interface android.support.v7.** { *; }
 
 # Keep Models of the app
