@@ -13,7 +13,6 @@ public class UserModel {
     @Expose
     private String name;
 
-
     @SerializedName("regno")
     @Expose
     private String regno;

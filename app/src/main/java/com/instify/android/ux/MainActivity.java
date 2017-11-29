@@ -35,8 +35,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import butterknife.ButterKnife;
+
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -58,6 +62,7 @@ import com.instify.android.ux.fragments.NotesFragment;
 import com.instify.android.ux.fragments.TimeTableFragment;
 import com.instify.android.ux.fragments.UnivNewsFragment;
 import com.thefinestartist.finestwebview.FinestWebView;
+
 import timber.log.Timber;
 
 /**
@@ -183,8 +188,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Inflate header view
     headerView = navView.inflateHeaderView(R.layout.nav_header_main);
-        /* [START] Setup Header View */
 
+    /* [START] Setup Header View */
     ImageView navImageView = headerView.findViewById(R.id.nav_drawer_user_photo);
     TextView navTextView = headerView.findViewById(R.id.nav_drawer_header_text);
 
@@ -194,12 +199,11 @@ public class MainActivity extends AppCompatActivity {
     if (mFirebaseUser != null) {
       try {
         // Set profile picture from Firebase account
-        GlideApp.with(this)
+        Glide.with(this)
             .load(mFirebaseUser.getPhotoUrl().toString())
-            .placeholder(R.drawable.default_pic_face)
-            .dontAnimate()
-            .centerCrop()
-            .priority(Priority.HIGH)
+            .apply(new RequestOptions().placeholder(R.drawable.default_pic_face))
+            .apply(new RequestOptions().centerCrop())
+            .apply(new RequestOptions().priority(Priority.HIGH))
             .into(navImageView);
       } catch (Exception e) {
         Timber.d(e);

@@ -24,9 +24,13 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--dontwarn okio.**
-
 -optimizations !field/removal/writeonly,!field/marking/private,!class/merging/*,!code/allocation/variable
+
+# Okio
+-keep class sun.misc.Unsafe { *; }
+-dontwarn java.nio.file.*
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontwarn okio.**
 
 # RetroLambda
 -dontwarn java.lang.invoke.*
@@ -38,6 +42,20 @@
 
 -keep class android.support.v7.** { *; }
 -keep interface android.support.v7.** { *; }
+
+# https://code.google.com/p/android/issues/detail?id=78377
+-keepnames class !android.support.v7.internal.view.menu.**, ** { *; }
+
+-keep public class android.support.v7.widget.** { *; }
+-keep public class android.support.v7.internal.widget.** { *; }
+
+-keep public class * extends android.support.v4.view.ActionProvider {
+    public <init>(android.content.Context);
+}
+
+-keepattributes *Annotation*
+-keep public class * extends android.support.design.widget.CoordinatorLayout.Behavior { *; }
+-keep public class * extends android.support.design.widget.ViewOffsetBehavior { *; }
 
 # Keep Models of the app
 -keepclassmembers class com.instify.android.models** { <fields>; }

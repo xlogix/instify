@@ -24,15 +24,6 @@
         >
 
       <android.support.v7.widget.AppCompatTextView
-          android:id="@+id/attdSubjectPercent"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_below="@+id/attdSubjectName"
-          android:text="89.0%"
-          android:textSize="40sp"
-          />
-
-      <android.support.v7.widget.AppCompatTextView
           android:id="@+id/attdSubjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -42,6 +33,14 @@
           style="@style/TextAppearance.AppCompat.Medium"
           />
 
+      <android.support.v7.widget.AppCompatTextView
+          android:id="@+id/attdSubjectPercent"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/attdSubjectName"
+          android:text="89.0%"
+          android:textSize="40sp"
+          />
 
     </RelativeLayout>
 
@@ -68,7 +67,6 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:textSize="16sp"
-
           />
 
       <android.support.v7.widget.AppCompatTextView
