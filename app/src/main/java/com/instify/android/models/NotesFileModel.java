@@ -25,7 +25,7 @@ public class NotesFileModel {
         this.unixtime=unixtime;
     }
 
-    public long getUnixtime() {
+    public long getUnixTime() {
         return unixtime;
     }
 

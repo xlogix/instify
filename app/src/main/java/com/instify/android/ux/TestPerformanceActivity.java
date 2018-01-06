@@ -1,8 +1,8 @@
 package com.instify.android.ux;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,10 +28,35 @@ import retrofit2.Response;
 public class TestPerformanceActivity extends AppCompatActivity {
 
   @BindView(R.id.recycler_view_test_performance) RecyclerView mRecyclerViewTestPerformance;
-  @BindView(R.id.swipe_refresh_layout_test_performance) SwipeRefreshLayout mSwipeRefreshLayout;
-  @BindView(R.id.error_message) TextView errormessage;
+  @BindView(R.id.fab_refresh) FloatingActionButton refreshingFAB;
+  @BindView(R.id.error_message) TextView errorMessage;
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
   private SQLiteHandler db = new SQLiteHandler(this);
+
+  // [START add_lifecycle_methods]
+
+  /**
+   * Called when leaving the activity
+   */
+  @Override public void onPause() {
+    super.onPause();
+  }
+
+  /**
+   * Called when returning to the activity
+   */
+  @Override protected void onResume() {
+    super.onResume();
+  }
+
+  /**
+   * Called before the activity is destroyed
+   */
+  @Override public void onDestroy() {
+    super.onDestroy();
+  }
+
+  // [END add_lifecycle_methods]
 
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -43,13 +68,13 @@ public class TestPerformanceActivity extends AppCompatActivity {
     }
     // Bind the Views
     ButterKnife.bind(this);
-    // Initialize SwipeRefreshLayout
-    mSwipeRefreshLayout.setColorSchemeResources(R.color.red_primary, R.color.black,
-        R.color.google_blue_900);
-    mSwipeRefreshLayout.setOnRefreshListener(this::AttemptJson);
+    refreshingFAB.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        AttemptJson();
+      }
+    });
     // Initialize Recycle View
     mRecyclerViewTestPerformance.setLayoutManager(new LinearLayoutManager(this));
-    mRecyclerViewTestPerformance.setHasFixedSize(true);
     mRecyclerViewTestPerformance.setNestedScrollingEnabled(false);
 
     // Call the API
@@ -61,20 +86,18 @@ public class TestPerformanceActivity extends AppCompatActivity {
     RetrofitInterface client = RetrofitBuilder.createService(RetrofitInterface.class);
     Call<TestPerformanceResponseModel> call =
         client.GetTestPerformance(db.getUserDetails().getRegno(), db.getUserDetails().getToken());
-    // Update UI
-    showRefreshing();
 
     call.enqueue(new Callback<TestPerformanceResponseModel>() {
       @Override public void onResponse(Call<TestPerformanceResponseModel> call,
           Response<TestPerformanceResponseModel> response) {
         TestPerformanceResponseModel t = response.body();
         if (response.isSuccessful()) {
-          // Update UI, Snackbar is only shown when loading fails (keeping it minimal)
-          hideRefreshing();
-
           TestPerformanceAdapterParent test =
               new TestPerformanceAdapterParent(t.getTestPerformance(),
                   TestPerformanceActivity.this);
+          // Update UI
+          Snackbar.make(findViewById(android.R.id.content), "Sync Successful",
+              Snackbar.LENGTH_SHORT).show();
           if (test.getItemCount() == 0) {
             showErrorPlaceholder("No Data in ERP to Display");
           } else {
@@ -83,8 +106,6 @@ public class TestPerformanceActivity extends AppCompatActivity {
           mRecyclerViewTestPerformance.setAdapter(test);
           // TODO : Create Adapter here When api is Complete
         } else {
-          // Update UI
-          hideRefreshing();
           showErrorPlaceholder("Sync Failed");
           Snackbar.make(findViewById(android.R.id.content), "Sync Failed", Snackbar.LENGTH_SHORT)
               .show();
@@ -92,8 +113,6 @@ public class TestPerformanceActivity extends AppCompatActivity {
       }
 
       @Override public void onFailure(Call<TestPerformanceResponseModel> call, Throwable t) {
-        // Update UI
-        hideRefreshing();
         showErrorPlaceholder("Sync Failed");
         Snackbar.make(findViewById(android.R.id.content), "Sync Failed", Snackbar.LENGTH_SHORT)
             .show();
@@ -101,33 +120,21 @@ public class TestPerformanceActivity extends AppCompatActivity {
     });
   }
 
-  private void showRefreshing() {
-    if (!mSwipeRefreshLayout.isRefreshing()) {
-      mSwipeRefreshLayout.setRefreshing(true);
-    }
-  }
-
-  private void hideRefreshing() {
-    if (mSwipeRefreshLayout.isRefreshing()) {
-      mSwipeRefreshLayout.setRefreshing(false);
-    }
-  }
-
   public void showErrorPlaceholder(String message) {
-    if (placeholderError != null && errormessage != null) {
+    if (placeholderError != null && errorMessage != null) {
       if (placeholderError.getVisibility() != View.VISIBLE) {
         placeholderError.setVisibility(View.VISIBLE);
       }
-      errormessage.setText(message);
+      errorMessage.setText(message);
     }
   }
 
   public void hidePlaceHolder() {
-    if (placeholderError != null && errormessage != null) {
+    if (placeholderError != null && errorMessage != null) {
       if (placeholderError.getVisibility() == View.VISIBLE) {
         placeholderError.setVisibility(View.INVISIBLE);
       }
-      errormessage.setText("Something Went Wrong Try Again");
+      errorMessage.setText("Something went Wrong. Please Try Again!");
     }
   }
 }

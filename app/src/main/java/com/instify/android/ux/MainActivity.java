@@ -27,7 +27,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -96,21 +95,7 @@ public class MainActivity extends AppCompatActivity {
    */
   private SectionsPagerAdapter mSectionsPagerAdapter;
 
-  @Override public void onBackPressed() {
-    DrawerLayout drawer = findViewById(R.id.drawer_layout);
-    if (drawer.isDrawerOpen(GravityCompat.START)) {
-      drawer.closeDrawer(GravityCompat.START);
-    } else if (doubleBackToExitPressedOnce) {
-      super.onBackPressed();
-    } else {
-      this.doubleBackToExitPressedOnce = true;
-      Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show();
-      new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
-    }
-  }
-
   // [START add_lifecycle_methods]
-
   /**
    * Called when leaving the activity
    */
@@ -124,12 +109,14 @@ public class MainActivity extends AppCompatActivity {
   @Override protected void onResume() {
     super.onResume();
     // Ensures that user didn't un-install Google Play Services required for Firebase related tasks.
-    checkPlayServices();
+    if (checkPlayServices()) {
+
+    }
     // Checks if the device is connected to the internet
     if (isDeviceOnline()) {
       Timber.d(TAG, "Device is online.");
     } else {
-      Snackbar.make(mViewPager, "Device Offline. Functionality may be limited",
+      Snackbar.make(mViewPager, "Device Offline. Functionality may be limited.",
           Snackbar.LENGTH_SHORT).show();
     }
   }
@@ -139,6 +126,20 @@ public class MainActivity extends AppCompatActivity {
    */
   @Override public void onDestroy() {
     super.onDestroy();
+  }
+  // [END add_lifecycle_methods]
+
+  @Override public void onBackPressed() {
+    DrawerLayout drawer = findViewById(R.id.drawer_layout);
+    if (drawer.isDrawerOpen(GravityCompat.START)) {
+      drawer.closeDrawer(GravityCompat.START);
+    } else if (doubleBackToExitPressedOnce) {
+      super.onBackPressed();
+    } else {
+      this.doubleBackToExitPressedOnce = true;
+      Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show();
+      new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
+    }
   }
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -169,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
     setupDrawerContent(navView);
     drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
       @Override public void onDrawerSlide(View drawerView, float slideOffset) {
-
       }
 
       @Override public void onDrawerOpened(View drawerView) {
@@ -177,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
       }
 
       @Override public void onDrawerClosed(View drawerView) {
-
       }
 
       @Override public void onDrawerStateChanged(int newState) {
@@ -219,7 +218,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, ProfilePictureFullScreenActivity.class));
       }
     });
-        /* [END] Setup Header View **/
+
+    /* [END] Setup Header View **/
 
     // Create the adapter that will return a fragment for each of the three
     // primary sections of the activity.
@@ -303,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
       });
     } else {
       // User is signed out
-      Log.d(TAG, "onAuthStateChanged:signed_out");
+      Timber.d(TAG, "onAuthStateChanged:signed_out");
       Intent homeIntent = new Intent(Intent.ACTION_MAIN);
       homeIntent.addCategory(Intent.CATEGORY_HOME);
       homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -323,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
       if (apiAvailability.isUserResolvableError(resultCode)) {
         apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
       } else {
-        Log.i(TAG, "This device is not supported.");
+        Timber.i(TAG, "This device is not supported.");
         finish();
       }
       return false;
@@ -529,16 +529,15 @@ public class MainActivity extends AppCompatActivity {
    * one of the sections/tabs/pages.
    */
   public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
+    // The total number of tabs
     static final int NUM_TABS = 5;
-
     static final int TAB_ATTENDANCE = 0;
     static final int TAB_CAMPUS_NEWS = 1;
     static final int TAB_TIME_TABLE = 2;
     static final int TAB_NOTES = 3;
     static final int TAB_UNIVERSITY_NEWS = 4;
     private int[] imageResId = {
-        R.drawable.ic_attendance_white, R.drawable.ic_campus_news_white,
+        R.drawable.ic_attendance_white, R.drawable.ic_whatshot_white,
         R.drawable.ic_time_table_white, R.drawable.ic_notes_white, R.drawable.ic_univ_news_white
     };
 
@@ -561,7 +560,7 @@ public class MainActivity extends AppCompatActivity {
         case TAB_UNIVERSITY_NEWS:
           return UnivNewsFragment.newInstance();
       }
-      return PlaceholderFragment.newInstance(position + 1);
+      return PlaceholderFragment.newInstance(position);
     }
 
     @Override public int getCount() {

@@ -21,10 +21,10 @@ public class ReceiveActivity extends Activity {
     // ShareCompat.IntentReader
     ShareCompat.IntentReader reader = ShareCompat.IntentReader.from(ReceiveActivity.this);
 
-    ImageView appImageView = (ImageView) findViewById(R.id.app_image_view);
+    ImageView appImageView = findViewById(R.id.app_image_view);
     appImageView.setImageDrawable(reader.getCallingApplicationIcon());
 
-    ImageView activityImageView = (ImageView) findViewById(R.id.activity_image_view);
+    ImageView activityImageView = findViewById(R.id.activity_image_view);
     activityImageView.setImageDrawable(reader.getCallingActivityIcon());
 
     // Activity

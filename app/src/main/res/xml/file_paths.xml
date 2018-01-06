@@ -4,7 +4,7 @@
       name="my_images"
       path="images/"/>
   <external-path
-      name="my_imagese"
+      name="my_images_all"
       path="."/>
   <!--<files-path name="my_docs" path="docs/"/>-->
   <!--<external-path name="my_imageext" path="Android/data/com.instify.android/files/Pictures/" />-->

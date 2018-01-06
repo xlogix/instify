@@ -45,9 +45,8 @@ public class AttendanceFragment extends Fragment {
 
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
   Unbinder unbinder;
-  @BindView(R.id.error_message) TextView errormessage;
+  @BindView(R.id.error_message) TextView errorMessage;
   private SwipeRefreshLayout mSwipeRefreshLayout;
-  //    private ExpandableListView expListView;
   private CardView attdCards;
   private TextView updatedAt;
   private SimpleStringRecyclerViewAdapter mAdapter;
@@ -63,18 +62,15 @@ public class AttendanceFragment extends Fragment {
     return frag;
   }
 
-  @Override
-  public void onAttach(Context context) {
+  @Override public void onAttach(Context context) {
     super.onAttach(context);
   }
 
-  @Override
-  public void onDestroy() {
+  @Override public void onDestroy() {
     super.onDestroy();
   }
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View rootView = inflater.inflate(R.layout.fragment_attendance, container, false);
@@ -82,13 +78,12 @@ public class AttendanceFragment extends Fragment {
     // Taking control of the menu options
     setHasOptionsMenu(true);
     // Initialize SwipeRefreshLayout
-    //Prevent Volley Crash on Rotate
+    mSwipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout_attendance);
+    // Prevent Volley Crash on Rotate
     setRetainInstance(true);
-    mSwipeRefreshLayout = (SwipeRefreshLayout)
-        rootView.findViewById(R.id.swipe_refresh_layout_attendance);
 
-    attdCards = (CardView) rootView.findViewById(R.id.attdCard);
-    recyclerView = (RecyclerView) rootView.findViewById(R.id.attdRecycle);
+    attdCards = rootView.findViewById(R.id.attdCard);
+    recyclerView = rootView.findViewById(R.id.attdRecycle);
     recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
     recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -108,40 +103,40 @@ public class AttendanceFragment extends Fragment {
     // Tag used to cancel the request
     String tag_string_req = "req_attendance";
 
-    StringRequest strReq = new StringRequest(Request.Method.POST,
-        AppConfig.URL_ATTENDANCE, new Response.Listener<String>() {
+    StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_ATTENDANCE,
+        new Response.Listener<String>() {
 
-      @Override
-      public void onResponse(String response) {
-        try {
-          hidePlaceHolder();
-          JSONObject jObj = new JSONObject(response);
-          Boolean error = jObj.getBoolean("error");
+          @Override public void onResponse(String response) {
+            try {
+              hidePlaceHolder();
+              JSONObject jObj = new JSONObject(response);
+              Boolean error = jObj.getBoolean("error");
 
-          // Handle UI
-          hideRefreshing();
+              // Handle UI
+              hideRefreshing();
 
-          mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), jObj);
-          recyclerView.setAdapter(mAdapter);
-        } catch (JSONException e) {
-          // Update UI
-          hideRefreshing();
-          // JSON error
-          e.printStackTrace();
-          showErrorPlaceholder("We are sorry. The ERP is misbehaving");
-          Toast.makeText(getContext(), "We are sorry. The ERP is misbehaving", Toast.LENGTH_LONG)
-              .show();
-        }
-      }
-    }, error -> {
+              mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), jObj);
+              recyclerView.setAdapter(mAdapter);
+            } catch (JSONException e) {
+              // Update UI
+              hideRefreshing();
+              // JSON error
+              e.printStackTrace();
+              showErrorPlaceholder("We are sorry. The ERP is misbehaving");
+              Toast.makeText(getContext(), "We are sorry. The ERP is misbehaving",
+                  Toast.LENGTH_LONG).show();
+            }
+          }
+        }, error -> {
       Timber.e("Network Error: " + error.getMessage());
+      // Show the default placeholder
       showErrorPlaceholder("It's your internet :(");
+      // Empty content in view
       recyclerView.setAdapter(null);
-      Toast.makeText(getActivity(),
-          "It's your internet :(", Toast.LENGTH_LONG).show();
+      // Make a Toast
+      Toast.makeText(getContext(), "It's your internet :(", Toast.LENGTH_LONG).show();
     }) {
-      @Override
-      protected Map<String, String> getParams() {
+      @Override protected Map<String, String> getParams() {
         // Posting parameters to login url
         Map<String, String> params = new HashMap<>();
         SQLiteHandler db = new SQLiteHandler(getContext());
@@ -154,18 +149,19 @@ public class AttendanceFragment extends Fragment {
         return params;
       }
     };
+
     // Set a maximum timeout if there are network problems
     int socketTimeout = 10000;  // 10 seconds - change to what you want
     RetryPolicy policy =
         new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
     strReq.setRetryPolicy(policy);
+
     // Adding request to request queue
     AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
   }
 
-  @Override
-  public void onPrepareOptionsMenu(Menu menu) {
+  @Override public void onPrepareOptionsMenu(Menu menu) {
     menu.removeGroup(R.id.main_menu_group);
     super.onPrepareOptionsMenu(menu);
   }
@@ -188,27 +184,26 @@ public class AttendanceFragment extends Fragment {
   }
 
   public void showErrorPlaceholder(String message) {
-    if (placeholderError != null && errormessage != null) {
+    if (placeholderError != null && errorMessage != null) {
       if (placeholderError.getVisibility() != View.VISIBLE) {
         placeholderError.setVisibility(View.VISIBLE);
       }
-      errormessage.setText(message);
+      errorMessage.setText(message);
     }
   }
 
   public void hidePlaceHolder() {
-    if (placeholderError != null && errormessage != null) {
+    if (placeholderError != null && errorMessage != null) {
       if (placeholderError.getVisibility() == View.VISIBLE) {
         placeholderError.setVisibility(View.INVISIBLE);
       }
-      errormessage.setText("Something Went Wrong Try Again");
+      errorMessage.setText("Something Went Wrong. Try Again!");
     }
   }
 
   private class AsyncGetAttendance extends AsyncTask<String, String, String> {
 
-    @Override
-    protected String doInBackground(String... strings) {
+    @Override protected String doInBackground(String... strings) {
       getAttendance();
       return null;
     }
@@ -226,15 +221,13 @@ public class AttendanceFragment extends Fragment {
       this.attdObj = attdObj;
     }
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
       View itemView = LayoutInflater.from(parent.getContext())
           .inflate(R.layout.card_view_attendance, parent, false);
       return new ViewHolder(itemView);
     }
 
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    @Override public void onBindViewHolder(final ViewHolder holder, int position) {
 
       try {
         Att attObj = new Att();
@@ -243,21 +236,26 @@ public class AttendanceFragment extends Fragment {
         holder.mTextViewTitle.setText(attdObj.getJSONObject(subjectCode).getString("sub-desc"));
         holder.mTextViewPercent.setText(
             attdObj.getJSONObject(subjectCode).getString("avg-attd") + "%");
+
         holder.attdMax.setText(
             "Maximum hours: " + attdObj.getJSONObject(subjectCode).getString("max-hrs"));
+
         holder.attdAttend.setText(
             "Attended hours: " + attdObj.getJSONObject(subjectCode).getString("attd-hrs"));
+
         holder.attdAbsent.setText(
             "Absent hours: " + attdObj.getJSONObject(subjectCode).getString("abs-hrs"));
+
         holder.attdOd.setText("OD/ML: " + attdObj.getJSONObject(subjectCode).getString("od-hrs"));
+
         holder.attdMin.setText("Hour(s) required for min. attendance: " + (int) attObj.attnCalc(
             Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("attd-hrs")),
-            Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("max-hrs"))
-        ));
+            Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("max-hrs"))));
+
         holder.attdBuffer.setText("Hour(s) available to take leave : " + (int) attObj.getBuffer(
             Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("attd-hrs")),
-            Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("max-hrs"))
-        ));
+            Double.parseDouble(attdObj.getJSONObject(subjectCode).getString("max-hrs"))));
+
         holder.attdCard.setOnClickListener(v -> {
           if (holder.toggle) {
             holder.attdExtra.setVisibility(View.GONE);
@@ -281,8 +279,7 @@ public class AttendanceFragment extends Fragment {
       }
     }
 
-    @Override
-    public int getItemCount() {
+    @Override public int getItemCount() {
 
       hidePlaceHolder();
       try {
@@ -311,17 +308,17 @@ public class AttendanceFragment extends Fragment {
       private ViewHolder(View view) {
         super(view);
         mView = view;
-        attdCard = (CardView) view.findViewById(R.id.attdCard);
-        mTextViewTitle = (AppCompatTextView) view.findViewById(R.id.attdSubjectName);
-        mTextViewPercent = (AppCompatTextView) view.findViewById(R.id.attdSubjectPercent);
-        attdMax = (AppCompatTextView) view.findViewById(R.id.attdMaxHours);
-        attdAbsent = (AppCompatTextView) view.findViewById(R.id.attdAbsentHours);
-        attdAttend = (AppCompatTextView) view.findViewById(R.id.attdAttendHours);
-        attdOd = (AppCompatTextView) view.findViewById(R.id.attdOdPercent);
-        attdBuffer = (AppCompatTextView) view.findViewById(R.id.attdBuffer);
-        attdMin = (AppCompatTextView) view.findViewById(R.id.attdMin);
-        attdExtra = (RelativeLayout) view.findViewById(R.id.attdExtra);
-        attdExpand = (ImageView) view.findViewById(R.id.attdExpand);
+        attdCard = view.findViewById(R.id.attdCard);
+        mTextViewTitle = view.findViewById(R.id.attdSubjectName);
+        mTextViewPercent = view.findViewById(R.id.attdSubjectPercent);
+        attdMax = view.findViewById(R.id.attdMaxHours);
+        attdAbsent = view.findViewById(R.id.attdAbsentHours);
+        attdAttend = view.findViewById(R.id.attdAttendHours);
+        attdOd = view.findViewById(R.id.attdOdPercent);
+        attdBuffer = view.findViewById(R.id.attdBuffer);
+        attdMin = view.findViewById(R.id.attdMin);
+        attdExtra = view.findViewById(R.id.attdExtra);
+        attdExpand = view.findViewById(R.id.attdExpand);
         toggle = false;
       }
     }
@@ -339,14 +336,12 @@ public class AttendanceFragment extends Fragment {
     private Att() {
     }
 
-    //****************************************************************************
     private double attnCalc(double present, double total) {
       pre = present;
       ttl = total;
       main_attendance = pre / ttl * 100;
 
       while (true) {
-
         double current_attendance = ((present + num) / (total + denom)) * 100;
         num++;
         denom++;
@@ -359,7 +354,6 @@ public class AttendanceFragment extends Fragment {
       return count;
     }
 
-    //****************************************************************************
     private double predict() {
 
       if (main_attendance > 75) {
@@ -375,7 +369,6 @@ public class AttendanceFragment extends Fragment {
       return countp;
     }
 
-    //****************************************************************************
     private double getBuffer(double present, double total) {
       this.attnCalc(present, total);
       return this.predict();

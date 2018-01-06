@@ -51,7 +51,6 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 public class UnivNewsFragment extends Fragment {
-  private static final String TAG = UnivNewsFragment.class.getSimpleName();
 
   private static final String endpoint =
       "https://hashbird.com/gogrit.in/workspace/srm-api/univ-news.php";
@@ -220,29 +219,30 @@ public class UnivNewsFragment extends Fragment {
     });
 
     adView.loadAd(
-        new AdRequest.Builder().addTestDevice("41838A8935E72BB91C7768E8585F1F53").build());
+        new AdRequest.Builder().build());
   }
 
   public void makeJSONRequest() {
     JsonObjectRequest req = new JsonObjectRequest(endpoint, null, response -> {
-      Timber.d(TAG, response.toString());
+      Timber.d(response.toString());
       try {
         JSONArray newsItems = response.getJSONArray("newsItems");
 
-        //                        mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), newsItems);
+        // mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), newsItems);
 
         // UI
         hideRefreshing();
-
         // Setting the adapter
         recyclerView.setAdapter(mAdapter);
       } catch (JSONException e) {
-        Log.e(TAG, "Json parsing error: " + e.getMessage());
+        Timber.e(e.getMessage(),"Json parsing error: %d");
         Toast.makeText(getContext(), "JSON Parsing error", Toast.LENGTH_LONG).show();
       }
       mAdapter.notifyDataSetChanged();
     }, VolleyError -> {
-      Log.e(TAG, "Error: " + VolleyError.getMessage());
+      // Log the message
+      Timber.e(VolleyError.getMessage(), "Error: %d ");
+      // Update UI
       Toast.makeText(getContext(), "Error Receiving University News", Toast.LENGTH_LONG).show();
       hideRefreshing();
     });

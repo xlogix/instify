@@ -51,7 +51,7 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 //        myHolder.textPrice.setText(current.price);
 //        myHolder.textPrice.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
 
-        //    new DownloadImage(imageView).execute("");
+        //  new DownloadImage(imageView).execute("");
         //  myHolder.onClick(new );
 
     }
@@ -79,10 +79,8 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 intent.putExtra("code", textType.getText().toString());
 
                 context.startActivity(intent);
-
             });
         }
-
         // Click event for all items
         @Override
         public void onClick(View v) {

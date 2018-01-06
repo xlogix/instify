@@ -72,9 +72,8 @@ public class NotesFragment extends Fragment {
     // Prevent Volley Crash on Rotate
     setRetainInstance(true);
     // Initialize Views
-    mSwipeRefreshLayout =
-        (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout_notes);
-    mRVFish = (RecyclerView) rootView.findViewById(R.id.recycler_view_notes);
+    mSwipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout_notes);
+    mRVFish = rootView.findViewById(R.id.recycler_view_notes);
 
     getSubs();
     // Implement swipe refresh action

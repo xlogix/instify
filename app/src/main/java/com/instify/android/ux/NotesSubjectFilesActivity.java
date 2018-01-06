@@ -55,7 +55,6 @@ import timber.log.Timber;
 
 public class NotesSubjectFilesActivity extends AppCompatActivity {
 
-  private static final String TAG = NotesSubjectFilesActivity.class.getSimpleName();
   // PERMS
   private static final int RC_CAMERA_PERMISSION = 101;
   private static final int RC_STORAGE_PERMISSION = 123;
@@ -65,7 +64,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
   private static final int VIDEO_SELECT = 4;
   private static final int PDF_SELECT = 2;
   private static final int OTHER_SELECT = 6;
-  RecyclerView mRVFish;
+  RecyclerView mNotesView;
   SearchView searchView = null;
   @BindView(R.id.error_message) TextView errormessage;
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
@@ -79,9 +78,9 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
     ButterKnife.bind(this);
     setTitle(Html.fromHtml("<small>" + getIntent().getStringExtra("code") + "</small>"));
 
-    mRVFish = findViewById(R.id.recycler_view_notes);
+    mNotesView = findViewById(R.id.recycler_view_notes);
     setNotesFirebase(getIntent().getStringExtra("code"));
-    //    getNotes(getIntent().getStringExtra("code"));
+    // getNotes(getIntent().getStringExtra("code"));
   }
 
   private void setNotesFirebase(final String subjectCode) {
@@ -101,16 +100,16 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
 
           @Override protected void populateViewHolder(NotesFileAdapter.MyHolder viewHolder,
               NotesFileModel model, int position) {
-            viewHolder.setdatatoview(model);
+            viewHolder.setDataToView(model);
             viewHolder.cv.setOnClickListener(v -> {
               Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(model.getNotefile()));
               startActivity(intent);
             });
           }
         };
-    mRVFish.setLayoutManager(new LinearLayoutManager(NotesSubjectFilesActivity.this));
+    mNotesView.setLayoutManager(new LinearLayoutManager(NotesSubjectFilesActivity.this));
 
-    mRVFish.setAdapter(adapter);
+    mNotesView.setAdapter(adapter);
   }
 
   private void getNotes(final String subjectCode) {
@@ -171,24 +170,24 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
             NotesFileModel.add(fishData);
           }
           // Setup and Handover data to recycler view
-          //  mRVFish = (RecyclerView) findViewById(R.id.);
+          //  mNotesView = (RecyclerView) findViewById(R.id.);
           NotesFileAdapter mAdapter =
               new NotesFileAdapter(NotesSubjectFilesActivity.this, NotesFileModel);
-          mRVFish.setAdapter(mAdapter);
-          mRVFish.setLayoutManager(new LinearLayoutManager(NotesSubjectFilesActivity.this));
+          mNotesView.setAdapter(mAdapter);
+          mNotesView.setLayoutManager(new LinearLayoutManager(NotesSubjectFilesActivity.this));
 
           //                        mAdapter = new NotesAdapter(getApplicationContext(), notes);
-          //                        mRVFish.setAdapter(mAdapter);
-          //                        mRVFish.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+          //                        mNotesView.setAdapter(mAdapter);
+          //                        mNotesView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         } else {
           showErrorPlaceholder("Database Error");
           // Update UI
-          //   hideRefreshing();
+          // hideRefreshing();
         }
       } catch (JSONException e) {
         // Update UI
-        //    hideRefreshing();
+        // hideRefreshing();
         showErrorPlaceholder("No Notes to Display, Be the First To upload");
       }
     }, error -> {
@@ -288,30 +287,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
     if (EasyPermissions.hasPermissions(this, perms)) {
       // Choose file storage location
       dispatchTakePictureIntent();
-      //File imagePath = new File(this.getFilesDir(), "imagese");
-      //File newFile = new File(imagePath, getCurrentTime() + ".jpg");
-      //mFileUri = getUriForFile(this, "com.instify.android.provider", newFile);
-      ////String mPathName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Instify/";
-      ////File path = new File(mPathName);
-      ////// Check
-      ////boolean isDirectoryCreated = path.exists();
-      ////if (!isDirectoryCreated) {
-      ////  isDirectoryCreated = path.mkdir();
-      ////}
-      ////if (isDirectoryCreated) {
-      ////  mPathName += getCurrentTime() + ".jpg";
-      ////  File filePath = new File(mPathName);
-      ////  // Log it
-      ////  Timber.d(TAG, "File address :" + filePath);
-      ////  // Assign it
-      //
-      //// Get Intent
-      //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-      //takePictureIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-      //takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mFileUri);
-      //startActivityForResult(takePictureIntent, RC_CAMERA_PERMISSION);
     } else {
-
       // Ask for one permission
       EasyPermissions.requestPermissions(this, getString(R.string.rationale_camera),
           RC_CAMERA_PERMISSION, perms);

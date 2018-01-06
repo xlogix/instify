@@ -54,16 +54,13 @@ import timber.log.Timber;
  */
 
 public class TimeTableFragment extends Fragment {
-  @BindView(R.id.calendarbutton)
-  ImageButton mCalendarbutton;
-  @BindView(R.id.currentdate)
-  TextView mCurrentdate;
+  @BindView(R.id.calendarbutton) ImageButton mCalendarButton;
+  @BindView(R.id.currentdate) TextView mCurrentDate;
   Unbinder unbinder;
   String userRegNo;
   String userPass;
-  @BindView(R.id.error_message) TextView errormessage;
+  @BindView(R.id.error_message) TextView errorMessage;
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
-  private String TAG = TimeTableFragment.class.getSimpleName();
   private SwipeRefreshLayout mSwipeRefreshLayout;
   private RecyclerView mRecyclerView;
   private TimeLineAdapter mTimeLineAdapter;
@@ -81,28 +78,24 @@ public class TimeTableFragment extends Fragment {
     return frag;
   }
 
-  @OnClick(R.id.calendarbutton)
-  void showcalendar() {
-    Calendar c = Calendar.getInstance();
-
-    DatePickerDialog datePickerDialog = new DatePickerDialog(
-        getContext(), null, c.get(Calendar.YEAR), c.get(Calendar.MONTH),
-        c.get(Calendar.DAY_OF_MONTH));
-    datePickerDialog.show();
-  }
-
-  @Override
-  public void onDestroy() {
-    super.onDestroy();
-  }
-
-  @Override
-  public void onAttach(Context context) {
+  @Override public void onAttach(Context context) {
     super.onAttach(context);
   }
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  @OnClick(R.id.calendarbutton) void showCalendar() {
+    Calendar c = Calendar.getInstance();
+
+    DatePickerDialog datePickerDialog =
+        new DatePickerDialog(getContext(), null, c.get(Calendar.YEAR), c.get(Calendar.MONTH),
+            c.get(Calendar.DAY_OF_MONTH));
+    datePickerDialog.show();
+  }
+
+  @Override public void onDestroy() {
+    super.onDestroy();
+  }
+
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View rootView = inflater.inflate(R.layout.fragment_time_table, container, false);
@@ -112,8 +105,7 @@ public class TimeTableFragment extends Fragment {
     //Prevent Volley Crash on Rotate
     setRetainInstance(true);
     // Initialize SwipeRefreshLayout
-    mSwipeRefreshLayout = (SwipeRefreshLayout)
-        rootView.findViewById(R.id.swipe_refresh_layout_time_table);
+    mSwipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout_time_table);
     // Set color scheme
     mSwipeRefreshLayout.setColorSchemeResources(R.color.red_primary, R.color.black,
         R.color.google_blue_900);
@@ -122,7 +114,7 @@ public class TimeTableFragment extends Fragment {
 
     SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMMM dd, yyyy", Locale.getDefault());
 
-    mCurrentdate.setText(sdf.format(date));
+    mCurrentDate.setText(sdf.format(date));
 
         /*// Declare elements of TimeLine view
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewTimeTable);
@@ -173,8 +165,7 @@ public class TimeTableFragment extends Fragment {
     return new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
   }
 
-  @Override
-  public void onDestroyView() {
+  @Override public void onDestroyView() {
     super.onDestroyView();
     unbinder.unbind();
   }
@@ -187,63 +178,65 @@ public class TimeTableFragment extends Fragment {
     userPass = db.getUserDetails().getToken();
 
     // Set the end point with the acquired credentials
-    String endpoint = "http://instify.herokuapp.com/api/time-table/?regno="
-        + userRegNo + "&password=" + userPass;
+    String endpoint =
+        "http://instify.herokuapp.com/api/time-table/?regno=" + userRegNo + "&password=" + userPass;
 
     String date = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date());
 
-    final String[] mTimeValues =
-        new String[] {date + " 08:00", date + " 09:10", date + " 10:05", date + " 11:00",
-            date + " 12:55", date + " 13:50", date + " 14:45"};
+    final String[] mTimeValues = new String[] {
+        date + " 08:00", date + " 09:10", date + " 10:05", date + " 11:00", date + " 12:55",
+        date + " 13:50", date + " 14:45"
+    };
 
         /*
          * Method to make json object request where json response is dynamic
          * */
-    JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, endpoint, null,
-        response -> {
-          try {
-            // Hide the Progress Dialog
-            hideRefreshing();
-            // Clear the list
-            mDataList.clear();
-            // Handle response
-            String msg = "";
-            Iterator<String> it = response.keys();
-            while (it.hasNext()) {
-              String key = it.next();
-              if (response.get(key) instanceof JSONArray) {
-                JSONArray array = response.getJSONArray(key);
-                int size = array.length();
-                // [TRY] Fix the card overlap issue
-                mTimeLineAdapter.notifyItemRangeRemoved(0, size);
-                for (int i = 0; i < size; i++) {
-                  msg += "Hour " + (i + 1) + " : " + array.get(i) + "\n";
-                  mDataList.add(new TimeTableModel(array.get(i).toString(), mTimeValues[i],
-                      OrderStatus.INACTIVE));
-                }
-                // Notify the adapter that data has been retrieved.
-                mTimeLineAdapter.notifyDataSetChanged();
-              } else {
-                msg = key + ":" + response.getString(key);
-                Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-              }
+    JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, endpoint, null, response -> {
+      try {
+        // Hide the Progress Dialog
+        hideRefreshing();
+        // Clear the list
+        mDataList.clear();
+        // Handle response
+        String msg = "";
+        Iterator<String> it = response.keys();
+        while (it.hasNext()) {
+          String key = it.next();
+          if (response.get(key) instanceof JSONArray) {
+            JSONArray array = response.getJSONArray(key);
+            int size = array.length();
+            // [TRY] Fix the card overlap issue
+            mTimeLineAdapter.notifyItemRangeRemoved(0, size);
+            for (int i = 0; i < size; i++) {
+              msg += "Hour " + (i + 1) + " : " + array.get(i) + "\n";
+              mDataList.add(new TimeTableModel(array.get(i).toString(), mTimeValues[i],
+                  OrderStatus.INACTIVE));
             }
-          } catch (JSONException e) {
-            Timber.d("JSON error : ", "Object DataSet is Incorrect");
-            e.printStackTrace();
+            // Notify the adapter that data has been retrieved.
+            mTimeLineAdapter.notifyDataSetChanged();
+          } else {
+            msg = key + ":" + response.getString(key);
+            Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
           }
-        }, error -> {
-      Timber.e("Error: " + error.getMessage());
+        }
+      } catch (JSONException e) {
+        Timber.d(e.getMessage(), "JSON error : ", "Object DataSet is Incorrect");
+        e.printStackTrace();
+      }
+    }, error -> {
+      Timber.e(error.getMessage(), "Error: %d ");
       // Handle UI
       hideRefreshing();
       Toast.makeText(getContext(), "Error Receiving Data", Toast.LENGTH_LONG).show();
     });
 
+    // Retry Policy
     int socketTimeout = 10000;  // 10 seconds - change to what you want
     RetryPolicy policy =
         new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
     req.setRetryPolicy(policy);
+    // Adding request to request queue
     AppController.getInstance().addToRequestQueue(req);
   }
 
@@ -254,8 +247,7 @@ public class TimeTableFragment extends Fragment {
     // Handle UI
     showRefreshing();
 
-    StringRequest strReq = new StringRequest(Request.Method.POST,
-        AppConfig.URL_GETTT, response -> {
+    StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_GETTT, response -> {
       Timber.d("Login Response: " + response);
       // Handle UI
       hideRefreshing();
@@ -347,8 +339,7 @@ public class TimeTableFragment extends Fragment {
           expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             int previousGroup = -1;
 
-            @Override
-            public void onGroupExpand(int groupPosition) {
+            @Override public void onGroupExpand(int groupPosition) {
 
               if (groupPosition != previousGroup) {
                 finalExpListView.collapseGroup(previousGroup);
@@ -363,8 +354,7 @@ public class TimeTableFragment extends Fragment {
 
           String errorMsg = jObj.getString("error_msg");
           showErrorPlaceholder(errorMsg);
-          Toast.makeText(getContext(),
-              errorMsg, Toast.LENGTH_LONG).show();
+          Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
         }
       } catch (JSONException e) {
         // Handle UI
@@ -379,12 +369,10 @@ public class TimeTableFragment extends Fragment {
       // Handle UI
       hideRefreshing();
       showErrorPlaceholder("Something Went Wrong,Please Try Again");
-      Toast.makeText(getActivity(),
-          error.getMessage(), Toast.LENGTH_LONG).show();
+      Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
     }) {
 
-      @Override
-      protected Map<String, String> getParams() {
+      @Override protected Map<String, String> getParams() {
         // Posting parameters to login url
         Map<String, String> params = new HashMap<>();
         SQLiteHandler db = new SQLiteHandler(getContext());
@@ -401,8 +389,7 @@ public class TimeTableFragment extends Fragment {
     AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
   }
 
-  @Override
-  public void onPrepareOptionsMenu(Menu menu) {
+  @Override public void onPrepareOptionsMenu(Menu menu) {
     menu.removeGroup(R.id.main_menu_group);
     super.onPrepareOptionsMenu(menu);
   }
@@ -420,33 +407,31 @@ public class TimeTableFragment extends Fragment {
   }
 
   public void showErrorPlaceholder(String message) {
-    if (placeholderError != null && errormessage != null) {
+    if (placeholderError != null && errorMessage != null) {
       if (placeholderError.getVisibility() != View.VISIBLE) {
         placeholderError.setVisibility(View.VISIBLE);
-    }
-      errormessage.setText(message);
+      }
+      errorMessage.setText(message);
     }
   }
 
   public void hidePlaceHolder() {
-    if (placeholderError != null && errormessage != null) {
+    if (placeholderError != null && errorMessage != null) {
       if (placeholderError.getVisibility() == View.VISIBLE) {
         placeholderError.setVisibility(View.INVISIBLE);
-    }
-      errormessage.setText("Something Went Wrong Try Again");
+      }
+      errorMessage.setText("Something Went Wrong. Try Again!");
     }
   }
 
   private class AttemptJson extends AsyncTask<String, String, String> {
 
-    @Override
-    protected String doInBackground(String... strings) {
+    @Override protected String doInBackground(String... strings) {
       // Get data for both the views
       getTimeTable();
       return "";
     }
   }
-
 }
 
 

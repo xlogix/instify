@@ -4,7 +4,6 @@ package com.instify.android.app;
  * Created by Abhish3k on 1/8/2017.
  */
 
-import android.app.Application;
 import android.content.Intent;
 import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
@@ -22,19 +21,21 @@ import com.instify.android.helpers.PreferenceManager;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.ux.IntroActivity;
 import com.squareup.leakcanary.LeakCanary;
+import com.thefinestartist.Base;
 import timber.log.Timber;
 
-public class AppController extends MultiDexApplication
-{
+public class AppController extends MultiDexApplication {
   public static final String TAG = AppController.class.getSimpleName();
 
   private static AppController mInstance;
   public FirebaseAnalytics mFirebaseAnalytics;
   private RequestQueue mRequestQueue;
   private PreferenceManager mPrefs;
+
   static {
     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
   }
+
   public static synchronized AppController getInstance() {
     return mInstance;
   }
@@ -43,6 +44,9 @@ public class AppController extends MultiDexApplication
     super.onCreate();
     mInstance = this;
     FirebaseApp.initializeApp(this);
+    // Fixes crash reported on Firebase, issue : https://github.com/TheFinestArtist/FinestWebView-Android/issues/79
+    Base.initialize(this);
+    // Check Build Config for debugging libraries
     if (BuildConfig.DEBUG) {
       // Plant Tiber debug tree
       Timber.plant(new Timber.DebugTree());

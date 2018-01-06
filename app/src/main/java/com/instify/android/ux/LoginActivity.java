@@ -8,8 +8,10 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -28,7 +30,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -48,7 +53,7 @@ import retrofit2.Callback;
 import timber.log.Timber;
 
 /**
- * Created by Abhish3k on 12/27/2016.
+ * Created by Abhish3k on 12/27/2016. Google and Custom Login using Firebase
  */
 
 public class LoginActivity extends AppCompatActivity
@@ -194,7 +199,7 @@ public class LoginActivity extends AppCompatActivity
       FirebaseUser user = firebaseAuth.getCurrentUser();
       if (user != null) {
         // User is signed in
-        Timber.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+        Timber.d(TAG, "onAuthStateChanged:signed_in:", user.getUid());
       } else {
         // User is signed out
         Timber.d(TAG, "onAuthStateChanged:signed_out");
@@ -246,27 +251,32 @@ public class LoginActivity extends AppCompatActivity
     // [END_EXCLUDE]
 
     AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-    mAuth.signInWithCredential(credential).addOnCompleteListener(this, task -> {
-      Timber.d("signInWithCredential:onComplete:" + task.isSuccessful());
+    mAuth.signInWithCredential(credential)
+        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+          @Override public void onComplete(@NonNull Task<AuthResult> task) {
+            if (task.isSuccessful()) {
+              // Sign in success, update UI with the signed-in user's information
+              Timber.d(TAG, "signInWithCredential:success");
 
-      // Notify the user
-      Toast.makeText(LoginActivity.this, "Sign in successful! Continue with ERP login",
-          Toast.LENGTH_LONG).show();
-      // Make the fields active
-      mRegNoField.setEnabled(true);
-      mPasswordField.setEnabled(true);
+              // [START_EXCLUDE]
+              Toast.makeText(LoginActivity.this, "Sign in successful! Continue with ERP login",
+                  Toast.LENGTH_LONG).show();
+              // Make the fields active
+              mRegNoField.setEnabled(true);
+              mPasswordField.setEnabled(true);
+              // [END_EXCLUDE]
 
-      // If sign in fails, display a message to the user. If sign in succeeds
-      // the auth state listener will be notified and logic to handle the
-      // signed in user can be handled in the listener.
-      if (!task.isSuccessful()) {
-        Timber.w("signInWithCredential", task.getException());
-        Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-      }
-      // [START_EXCLUDE]
-      hideProgressDialog();
-      // [END_EXCLUDE]
-    });
+            } else {
+              // If sign in fails, display a message to the user.
+              Timber.w(TAG, "signInWithCredential:failure", task.getException());
+              Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT)
+                  .show();
+            }
+            // [START_EXCLUDE]
+            hideProgressDialog();
+            // [END_EXCLUDE]
+          }
+        });
   }
   // [END auth_with_google]
 
@@ -278,7 +288,7 @@ public class LoginActivity extends AppCompatActivity
 
   // [START sign_in_with_email]
   private void attemptERPLogin(final String regNo, final String password) {
-    Timber.d(TAG, "attemptERPLogin:" + regNo);
+    Timber.d(TAG, "attemptERPLogin:" ,regNo);
     if (!validateForm()) {
       return;
     }
@@ -398,7 +408,7 @@ public class LoginActivity extends AppCompatActivity
       }
 
       @Override public void onFailure(Call<UserModel> call, Throwable t) {
-        Timber.e(TAG, "Login Error: " + t.getMessage());
+        Timber.e(TAG, "Login Error: ", t.getMessage());
         Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
         // Got an error, hide the Progress bar
         hideProgressDialog();
@@ -456,7 +466,7 @@ public class LoginActivity extends AppCompatActivity
   @Override public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
     // An unresolvable error has occurred and Google APIs (including Sign-In) will not
     // be available.
-    Timber.d("onConnectionFailed:" + connectionResult);
+    Timber.d("onConnectionFailed:"+ connectionResult);
     Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
   }
 }

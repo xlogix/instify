@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import com.instify.android.models.UserModel;
+import timber.log.Timber;
 
 public class SQLiteHandler extends SQLiteOpenHelper {
   private static final String TAG = SQLiteHandler.class.getSimpleName();
@@ -28,7 +29,6 @@ public class SQLiteHandler extends SQLiteOpenHelper {
   private static final String KEY_REGNO = "regno";
   private static final String KEY_DEPT = "dept";
   private static final String KEY_CREATED_AT = "created_at";
-
   // Time Table Columns names
   private static final String COL_0 = "id";
   private static final String COL_1 = "day";
@@ -114,7 +114,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     long id = db.insert(TABLE_USER, null, values);
     db.close(); // Closing database connection
 
-    Log.d(TAG, "New user inserted into sqlite: " + id);
+    Timber.d(TAG, "New user inserted into sqlite: ", id);
   }
 
   public void addUser(UserModel userModel) {
@@ -133,7 +133,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     long id = db.insert(TABLE_USER, null, values);
     db.close(); // Closing database connection
 
-    Log.d(TAG, "New user inserted into sqlite: " + id);
+    Timber.d(TAG, "New user inserted into sqlite: ", id);
   }
 
   /**
@@ -155,7 +155,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     cursor.close();
     db.close();
     // return user
-    Log.d(TAG, "Fetching user from Sqlite: " + userModel.getRegno());
+    Timber.d(TAG, "Fetching user from Sqlite: " + userModel.getRegno());
 
     return userModel;
   }
@@ -208,6 +208,6 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     db.delete(TABLE_USER, null, null);
     db.close();
 
-    Log.d(TAG, "Deleted all user info from sqlite");
+    Timber.d(TAG, "Deleted all user info from SQLite");
   }
 }

@@ -1,5 +1,6 @@
 package com.instify.android.ux.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Keep;
@@ -57,6 +58,10 @@ public class CampNewsFragment extends Fragment {
     return frag;
   }
 
+  @Override public void onAttach(Context context) {
+    super.onAttach(context);
+  }
+
   @Override
   public void onDestroy() {
     super.onDestroy();
@@ -81,7 +86,8 @@ public class CampNewsFragment extends Fragment {
     SQLiteHandler db = new SQLiteHandler(getContext());
     userRegNo = db.getUserDetails().getRegno();
     userDept = db.getUserDetails().getDept().replace(".", "-");
-    Timber.d("CampNewsFrag", userDept);
+    // Debug
+    Timber.d(userDept,"CampNewsFrag %d");
 
     // FAB //
     ((MainActivity) getActivity()).mSharedFab.setOnClickListener(v -> {

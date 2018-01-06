@@ -31,7 +31,7 @@ public class DateTimeUtils {
 
     public static String getRelativeTimeSpan(String dateString, String originalFormat) {
 
-        SimpleDateFormat formatter = new SimpleDateFormat(originalFormat, Locale.US);
+        SimpleDateFormat formatter = new SimpleDateFormat(originalFormat, Locale.UK);
         Date date = null;
         try {
             date = formatter.parse(dateString);

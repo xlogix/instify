@@ -23,6 +23,7 @@ import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.NotesFileModel;
 import com.instify.android.services.MyFirebaseUploadService;
 import java.util.Calendar;
+import timber.log.Timber;
 
 public class NotesUploadActivity extends AppCompatActivity implements View.OnClickListener {
   private static final String TAG = NotesUploadActivity.class.getSimpleName();
@@ -61,7 +62,7 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
     // Download receiver
     mBroadcastReceiver = new BroadcastReceiver() {
       @Override public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "onReceive:" + intent);
+        Timber.d(TAG, "onReceive:", intent);
         hideProgressDialog();
 
         switch (intent.getAction()) {
@@ -95,48 +96,6 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
       finish();
     }
   }
-  /*
-  * This is the method responsible for pdf upload
-  * We need the full pdf path and the name for the pdf in this method
-  * */
-  /*
-  public void uploadMultipart() {
-    // Getting name for the image
-    String name = editText.getText().toString().trim();
-    String desc = editTextdesc.getText().toString().trim();
-
-    // Getting the actual path of the image
-    String path = mFilePath.toString();
-
-    if (path == null) {
-      Toast.makeText(this, "Please move your file to internal storage and retry", Toast.LENGTH_LONG)
-          .show();
-    } else {
-      //Uploading code
-      try {
-        String uploadId = UUID.randomUUID().toString();
-        SQLiteHandler db = new SQLiteHandler(this);
-        //Creating a multi part request
-        new MultipartUploadRequest(this, uploadId, AppConfig.UPLOAD_URL).addFileToUpload(path,
-            "pdf") //Adding file
-            .addParameter("name", name)
-            .addParameter("regno",
-                db.getUserDetails().getRegno())//Adding text parameter to the request
-            .addParameter("desc", desc)//Adding text parameter to the request
-            .addParameter("code",
-                getIntent().getStringExtra("code"))//Adding text parameter to the request
-            .setNotificationConfig(new UploadNotificationConfig())
-            .setMaxRetries(2)
-            .startUpload(); //Starting the upload
-        Toast.makeText(getApplicationContext(), "Your File is being uploaded...", Toast.LENGTH_LONG)
-            .show();
-        finish();
-      } catch (Exception exc) {
-        Toast.makeText(this, exc.getMessage(), Toast.LENGTH_SHORT).show();
-      }
-    }
-  }
-  */
 
   // Get Current Time for naming the file
   public String getCurrentTime() {
@@ -168,7 +127,7 @@ public class NotesUploadActivity extends AppCompatActivity implements View.OnCli
 
   // [START upload_from_uri]
   private void uploadFromUri(Uri fileUri) {
-    Log.d(TAG, "uploadFromUri:src:" + fileUri.toString());
+    Timber.d(TAG, "uploadFromUri:src:", fileUri.toString());
 
     // Save the File URI
     mFileUri = fileUri;
