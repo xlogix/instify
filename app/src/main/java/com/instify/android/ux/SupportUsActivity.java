@@ -78,7 +78,7 @@ public class SupportUsActivity extends AppCompatActivity {
     });
 
     // [START load_banner_ad]
-    mAdView = (AdView) findViewById(R.id.adView);
+    mAdView = findViewById(R.id.adView);
     AdRequest adRequestBanner = new AdRequest.Builder().build();
     mAdView.loadAd(adRequestBanner);
     // [END load_banner_ad]

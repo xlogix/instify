@@ -58,12 +58,13 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
   // PERMS
   private static final int RC_CAMERA_PERMISSION = 101;
   private static final int RC_STORAGE_PERMISSION = 123;
-  private static final int IMAGE_SELECT = 3;
   private static final int DOC_SELECT = 1;
-  private static final int AUDIO_SELECT = 5;
-  private static final int VIDEO_SELECT = 4;
   private static final int PDF_SELECT = 2;
+  private static final int IMAGE_SELECT = 3;
+  private static final int VIDEO_SELECT = 4;
+  private static final int AUDIO_SELECT = 5;
   private static final int OTHER_SELECT = 6;
+
   RecyclerView mNotesView;
   SearchView searchView = null;
   @BindView(R.id.error_message) TextView errormessage;
@@ -123,11 +124,11 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
     StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_FILES, response -> {
       try {
         JSONArray user = new JSONArray(response);
-        boolean error;// = jObj.getBoolean("error");
+        boolean error; // = jObj.getBoolean("error");
         error = false;
 
         // Handle UI
-        //hideRefreshing();
+        // hideRefreshing();
 
         // Check for error node in json
         if (!error) {
@@ -146,7 +147,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
           //                        mAdapter = new NotesAdapter(notes);
           //                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
           //                        recyclerView.setLayoutManager(mLayoutManager);
-          //                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+          //  recyclerView.setItemAnimator(new DefaultItemAnimator());
 
           for (int i = 0; i < user.length(); i++) {
             JSONObject json_data = user.getJSONObject(i);
@@ -164,8 +165,8 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
             fishData.noteregno = json_data.getString("regno");
             fishData.noteposter = json_data.getString("author");
 
-            //fishData.sizeName = json_data.getString("registration").trim();
-            //fishData.price = json_data.getString("ID");
+            // fishData.sizeName = json_data.getString("registration").trim();
+            // fishData.price = json_data.getString("ID");
             // fishData.image = "https://hashbird.com/gogrit.in/workspace/srm-api/studentImages/" + json_data.getString("registration").trim() + ".jpg";
             NotesFileModel.add(fishData);
           }
@@ -176,9 +177,9 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
           mNotesView.setAdapter(mAdapter);
           mNotesView.setLayoutManager(new LinearLayoutManager(NotesSubjectFilesActivity.this));
 
-          //                        mAdapter = new NotesAdapter(getApplicationContext(), notes);
-          //                        mNotesView.setAdapter(mAdapter);
-          //                        mNotesView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+          //   mAdapter = new NotesAdapter(getApplicationContext(), notes);
+          //   mNotesView.setAdapter(mAdapter);
+          //   mNotesView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         } else {
           showErrorPlaceholder("Database Error");

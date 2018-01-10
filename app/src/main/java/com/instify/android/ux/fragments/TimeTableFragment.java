@@ -124,7 +124,7 @@ public class TimeTableFragment extends Fragment {
         mRecyclerView.setAdapter(mTimeLineAdapter);*/
 
     // Declare elements of another view
-    expListView = (ExpandableListView) rootView.findViewById(R.id.expListView);
+    expListView = rootView.findViewById(R.id.expListView);
 
         /*// Declare FAB
         final FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
@@ -354,22 +354,20 @@ public class TimeTableFragment extends Fragment {
 
           String errorMsg = jObj.getString("error_msg");
           showErrorPlaceholder(errorMsg);
-          Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
         }
-      } catch (JSONException e) {
+      } catch (JSONException error) {
         // Handle UI
         hideRefreshing();
         // JSON error
         showErrorPlaceholder("Json error,Please try again");
-        e.printStackTrace();
-        Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        Timber.e(error.getMessage(), "JSON error : ");
       }
     }, error -> {
       Timber.e("Login Error: " + error.getMessage());
       // Handle UI
       hideRefreshing();
       showErrorPlaceholder("Something Went Wrong,Please Try Again");
-      Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
+      // Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
     }) {
 
       @Override protected Map<String, String> getParams() {

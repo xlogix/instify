@@ -91,7 +91,7 @@ public class NotesFragment extends Fragment {
     showRefreshing();
     hidePlaceHolder();
     // Tag used to cancel the request
-    String tag_string_req = "req_attendance";
+    String tag_string_req = "req_notes";
 
     StringRequest strReq =
         new StringRequest(Request.Method.POST, AppConfig.URL_ATTENDANCE, response -> {
@@ -135,10 +135,8 @@ public class NotesFragment extends Fragment {
               // Update UI
               hideRefreshing();
               // Error in login. Get the error message
-
-              String errorMsg = jObj.getString("error_msg");
               showErrorPlaceholder(jObj.getString("error_msg"));
-              Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
+              // Toast.makeText(getContext(), jObj.getString("error_msg"), Toast.LENGTH_LONG).show();
             }
           } catch (JSONException e) {
             // Update UI
@@ -146,12 +144,12 @@ public class NotesFragment extends Fragment {
             // JSON error
             e.printStackTrace();
             showErrorPlaceholder("Json error ");
-            Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            // Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
           }
         }, error -> {
           Timber.e("Network Error: " + error.getMessage());
           showErrorPlaceholder("Network Error");
-          Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+          // Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
         }) {
           @Override protected Map<String, String> getParams() {
             // Posting parameters to login url

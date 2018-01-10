@@ -258,29 +258,6 @@ public class MainActivity extends AppCompatActivity {
 
     TabLayout mTabLayout = findViewById(R.id.tabLayout);
     mTabLayout.setupWithViewPager(mViewPager);
-    //        mTabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(MainActivity.this, R.color.white));
-
-    //        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-    //            @Override
-    //            public void onTabSelected(TabLayout.Tab tab) {
-    //
-    //                int tabIconColor = ContextCompat.getColor(MainActivity.this, R.color.white);
-    //                tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
-    //            }
-    //
-    //            @Override
-    //            public void onTabUnselected(TabLayout.Tab tab) {
-    //                int tabIconColor = ContextCompat.getColor(MainActivity.this, R.color.white);
-    //                tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
-    //            }
-    //
-    //            @Override
-    //            public void onTabReselected(TabLayout.Tab tab) {
-    //
-    //            }
-    //        }
-    //
-    //        );
 
     // Check if Google Play Services is installed or not
     checkPlayServices();
@@ -537,7 +514,7 @@ public class MainActivity extends AppCompatActivity {
     static final int TAB_NOTES = 3;
     static final int TAB_UNIVERSITY_NEWS = 4;
     private int[] imageResId = {
-        R.drawable.ic_attendance_white, R.drawable.ic_whatshot_white,
+        R.drawable.ic_thumbs_up_down, R.drawable.ic_whatshot_white,
         R.drawable.ic_time_table_white, R.drawable.ic_notes_white, R.drawable.ic_univ_news_white
     };
 

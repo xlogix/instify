@@ -48,7 +48,6 @@ public class AttendanceFragment extends Fragment {
   @BindView(R.id.error_message) TextView errorMessage;
   private SwipeRefreshLayout mSwipeRefreshLayout;
   private CardView attdCards;
-  private TextView updatedAt;
   private SimpleStringRecyclerViewAdapter mAdapter;
   private RecyclerView recyclerView;
 
@@ -110,7 +109,7 @@ public class AttendanceFragment extends Fragment {
             try {
               hidePlaceHolder();
               JSONObject jObj = new JSONObject(response);
-              Boolean error = jObj.getBoolean("error");
+              // Boolean error = jObj.getBoolean("error");
 
               // Handle UI
               hideRefreshing();
@@ -274,8 +273,8 @@ public class AttendanceFragment extends Fragment {
             >= 90.0) {
           holder.mTextViewPercent.setTextColor(getResources().getColor(R.color.green_accent));
         }
-      } catch (JSONException e) {
-        e.printStackTrace();
+      } catch (JSONException error) {
+        Timber.e(error.getMessage(), "JSON Response : ");
       }
     }
 
@@ -291,7 +290,8 @@ public class AttendanceFragment extends Fragment {
         return attdObj.getJSONArray("subjects").length();
       } catch (JSONException e) {
         showErrorPlaceholder("Problem with json");
-        Toast.makeText(mContext, "Problem with json", Toast.LENGTH_SHORT).show();
+        Timber.e(e.getMessage(), "JSON Response : ");
+        // Toast.makeText(getContext(), "Problem with json", Toast.LENGTH_SHORT).show();
         return 0;
       }
     }
