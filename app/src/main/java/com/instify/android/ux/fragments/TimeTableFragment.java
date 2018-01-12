@@ -34,6 +34,7 @@ import com.instify.android.models.OrderStatus;
 import com.instify.android.models.TimeTableModel;
 import com.instify.android.ux.adapters.ListExpandableAdapter;
 import com.instify.android.ux.adapters.TimeLineAdapter;
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -150,7 +151,7 @@ public class TimeTableFragment extends Fragment {
     // mWithLinePadding = true;
 
     // Call data fetcher
-    final AttemptJson dataObj = new AttemptJson();
+    final AttemptJson dataObj = new AttemptJson(this);
     dataObj.doInBackground();
 
     mSwipeRefreshLayout.setOnRefreshListener(() -> {
@@ -240,7 +241,7 @@ public class TimeTableFragment extends Fragment {
     AppController.getInstance().addToRequestQueue(req);
   }
 
-  private void getTimeTable() {
+  void getTimeTable() {
     // Tag used to cancel the request
     String tag_string_req = "req_timetable";
 
@@ -422,11 +423,17 @@ public class TimeTableFragment extends Fragment {
     }
   }
 
-  private class AttemptJson extends AsyncTask<String, String, String> {
+  private  static class AttemptJson extends AsyncTask<String, String, String> {
+    private WeakReference<TimeTableFragment> FragReference;
+
+    // only retain a weak reference to the fragment
+    AttemptJson(TimeTableFragment context) {
+      FragReference = new WeakReference<>(context);
+    }
 
     @Override protected String doInBackground(String... strings) {
       // Get data for both the views
-      getTimeTable();
+      FragReference.get().getTimeTable();
       return "";
     }
   }
