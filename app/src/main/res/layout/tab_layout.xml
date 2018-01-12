@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     >
 
   <android.support.design.widget.AppBarLayout
@@ -40,17 +40,29 @@
       android:id="@+id/container"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:layout_marginBottom="56dp"
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
+      />
+
+  <com.google.android.gms.ads.AdView
+      android:id="@+id/adView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      android:visibility="invisible"
+      ads:adSize="SMART_BANNER"
+      ads:adUnitId="@string/banner_ad_unit_id"
       />
 
   <android.support.design.widget.FloatingActionButton
       android:id="@+id/shared_fab"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginBottom="64dp"
       android:layout_marginEnd="16dp"
       android:layout_marginRight="16dp"
-      android:layout_marginBottom="16dp"
       android:src="@drawable/ic_edit"
+      ads:layout_constraintEnd_toEndOf="@id/adView"
       app:elevation="6dp"
       app:layout_anchor="@+id/container"
       app:layout_anchorGravity="bottom|end"

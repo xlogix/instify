@@ -69,7 +69,7 @@ public class SupportUsActivity extends AppCompatActivity {
     });
     // [END create_interstitial_ad_listener]
 
-    final TextView phoneNumber = (TextView) findViewById(R.id.copy);
+    final TextView phoneNumber = findViewById(R.id.copy);
     phoneNumber.setOnClickListener(v -> {
       ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
       ClipData clip = ClipData.newPlainText("Phone Number : ", "9962892900");
@@ -90,14 +90,13 @@ public class SupportUsActivity extends AppCompatActivity {
   // [START request_new_interstitial]
   private void requestNewInterstitial() {
     AdRequest adRequest =
-        new AdRequest.Builder().addTestDevice("11408151BC4116DE6AD4B6BFC1B34457").build();
+        new AdRequest.Builder().build();
 
     mInterstitialAd.loadAd(adRequest);
   }
   // [END request_new_interstitial]
 
   // [START add_lifecycle_methods]
-
   /**
    * Called when leaving the activity
    */

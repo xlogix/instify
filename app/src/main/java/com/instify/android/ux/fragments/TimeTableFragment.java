@@ -54,7 +54,7 @@ import timber.log.Timber;
  */
 
 public class TimeTableFragment extends Fragment {
-  @BindView(R.id.calendarbutton) ImageButton mCalendarButton;
+  @BindView(R.id.calendarButton) ImageButton mCalendarButton;
   @BindView(R.id.currentdate) TextView mCurrentDate;
   Unbinder unbinder;
   String userRegNo;
@@ -82,7 +82,7 @@ public class TimeTableFragment extends Fragment {
     super.onAttach(context);
   }
 
-  @OnClick(R.id.calendarbutton) void showCalendar() {
+  @OnClick(R.id.calendarButton) void showCalendar() {
     Calendar c = Calendar.getInstance();
 
     DatePickerDialog datePickerDialog =
@@ -359,14 +359,14 @@ public class TimeTableFragment extends Fragment {
         // Handle UI
         hideRefreshing();
         // JSON error
-        showErrorPlaceholder("Json error,Please try again");
+        showErrorPlaceholder("Json error, please try again");
         Timber.e(error.getMessage(), "JSON error : ");
       }
     }, error -> {
       Timber.e("Login Error: " + error.getMessage());
       // Handle UI
       hideRefreshing();
-      showErrorPlaceholder("Something Went Wrong,Please Try Again");
+      showErrorPlaceholder("Something went wrong, please try again");
       // Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
     }) {
 

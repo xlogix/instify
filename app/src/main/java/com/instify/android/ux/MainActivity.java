@@ -40,6 +40,9 @@ import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -85,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
 
   private DrawerLayout drawerLayout;
   private ViewPager mViewPager;
+  // Declare AdView
+  private AdView mAdView;
+
   /**
    * The {@link PagerAdapter} that will provide
    * fragments for each of the sections. We use a
@@ -96,10 +102,14 @@ public class MainActivity extends AppCompatActivity {
   private SectionsPagerAdapter mSectionsPagerAdapter;
 
   // [START add_lifecycle_methods]
+
   /**
    * Called when leaving the activity
    */
   @Override public void onPause() {
+    if (mAdView != null) {
+      mAdView.pause();
+    }
     super.onPause();
   }
 
@@ -108,6 +118,11 @@ public class MainActivity extends AppCompatActivity {
    */
   @Override protected void onResume() {
     super.onResume();
+
+    if (mAdView != null) {
+      mAdView.resume();
+    }
+
     // Ensures that user didn't un-install Google Play Services required for Firebase related tasks.
     if (checkPlayServices()) {
 
@@ -125,6 +140,10 @@ public class MainActivity extends AppCompatActivity {
    * Called before the activity is destroyed
    */
   @Override public void onDestroy() {
+    if (mAdView != null) {
+      mAdView.destroy();
+      finish();
+    }
     super.onDestroy();
   }
   // [END add_lifecycle_methods]
@@ -158,6 +177,20 @@ public class MainActivity extends AppCompatActivity {
 
     // Initialize Mobile Ads (AdWords)
     MobileAds.initialize(getApplicationContext(), getString(R.string.all_ad_app_id));
+
+    // [START load_banner_ad]
+    mAdView = findViewById(R.id.adView);
+    AdRequest adRequestBanner = new AdRequest.Builder().build();
+    // Load Ad
+    mAdView.loadAd(adRequestBanner);
+    // Add Ad Listener
+    mAdView.setAdListener(new AdListener() {
+      @Override public void onAdLoaded() {
+        super.onAdLoaded();
+        mAdView.setVisibility(View.VISIBLE);
+      }
+    });
+    // [END load_banner_ad]
 
     // Drawer Layout
     drawerLayout = findViewById(R.id.drawer_layout);
@@ -231,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
     // Set the default tab as Campus Portal
     mViewPager.setCurrentItem(1);
     // Prevent fragments from destroying themselves
-    mViewPager.setOffscreenPageLimit(5);
+    mViewPager.setOffscreenPageLimit(4);
 
     mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
       @Override
@@ -514,8 +547,8 @@ public class MainActivity extends AppCompatActivity {
     static final int TAB_NOTES = 3;
     static final int TAB_UNIVERSITY_NEWS = 4;
     private int[] imageResId = {
-        R.drawable.ic_thumbs_up_down, R.drawable.ic_whatshot_white,
-        R.drawable.ic_time_table_white, R.drawable.ic_notes_white, R.drawable.ic_univ_news_white
+        R.drawable.ic_thumbs_up_down, R.drawable.ic_whatshot_white, R.drawable.ic_time_table_white,
+        R.drawable.ic_notes_white, R.drawable.ic_univ_news_white
     };
 
     private SectionsPagerAdapter(FragmentManager fm) {

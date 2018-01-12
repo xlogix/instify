@@ -12,7 +12,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -212,14 +211,13 @@ public class UnivNewsFragment extends Fragment {
       @Override public void onAdFailedToLoad(int errorCode) {
         // The previous Native Express ad failed to load. Call this method again to load
         // the next ad in the items list.
-        Log.e("MainActivity", "The previous Native Express ad failed to load. Attempting to"
+        Timber.e("The previous Native Express ad failed to load. Attempting to"
             + " load the next Native Express ad in the items list.");
         loadNativeExpressAd(index + 5);
       }
     });
 
-    adView.loadAd(
-        new AdRequest.Builder().build());
+    adView.loadAd(new AdRequest.Builder().build());
   }
 
   public void makeJSONRequest() {
@@ -235,7 +233,7 @@ public class UnivNewsFragment extends Fragment {
         // Setting the adapter
         recyclerView.setAdapter(mAdapter);
       } catch (JSONException e) {
-        Timber.e(e.getMessage(),"Json parsing error: %d");
+        Timber.e(e.getMessage(), "Json parsing error: %d");
         Toast.makeText(getContext(), "JSON Parsing error", Toast.LENGTH_LONG).show();
       }
       mAdapter.notifyDataSetChanged();
