@@ -154,6 +154,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="?selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/scoreText"
             app:layout_constraintTop_toBottomOf="@+id/campusDescription"
             app:srcCompat="@drawable/ic_downvote_24dp"
@@ -176,17 +177,6 @@
             card_view:layout_constraintBottom_creator="1"
             card_view:layout_constraintTop_creator="1" />
 
-        <include
-            layout="@layout/card_view_chat_item_message"
-            android:id="@+id/commentView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/upVoteButton"
-            />
+
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

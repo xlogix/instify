@@ -15,7 +15,9 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -27,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -38,6 +41,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.firebase.storage.FirebaseStorage;
@@ -124,70 +128,61 @@ public class ChatActivity extends AppCompatActivity {
     mMessageRecyclerView = findViewById(R.id.recycler_view_trending);
     mLinearLayoutManager = new LinearLayoutManager(this);
     mLinearLayoutManager.setStackFromEnd(true);
+    Query query = FirebaseDatabase.getInstance().getReference().child(MESSAGES_CHILD);
+    FirebaseRecyclerOptions<ChatMessageModel> options =
+        new FirebaseRecyclerOptions.Builder<ChatMessageModel>().setQuery(query,
+            ChatMessageModel.class).build();
+    mFirebaseAdapter = new FirebaseRecyclerAdapter<ChatMessageModel, MessageViewHolder>(options) {
+      @Override public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // Create a new instance of the ViewHolder, in this case we are using a custom
+        // layout called R.layout.message for each item
+        View view = LayoutInflater.from(parent.getContext())
+            .inflate(R.layout.card_view_chat_item_message, parent, false);
 
-    mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-    mFirebaseAdapter =
-        new FirebaseRecyclerAdapter<ChatMessageModel, MessageViewHolder>(ChatMessageModel.class,
-            R.layout.card_view_chat_item_message, MessageViewHolder.class,
-            mFirebaseDatabaseReference.child(MESSAGES_CHILD)) {
+        return new MessageViewHolder(view);
+      }
 
-          @Override protected void populateViewHolder(final MessageViewHolder viewHolder,
-              ChatMessageModel friendlyMessage, int position) {
+      @Override protected void onBindViewHolder(@NonNull MessageViewHolder viewHolder, int position,
+          @NonNull ChatMessageModel model) {
+        mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+        if (model.getText() != null) {
 
-            mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-            if (friendlyMessage.getText() != null) {
+          viewHolder.messageTextView.setText(model.getText());
+          viewHolder.messageDateTextView.setText(model.getdatefromstamp());
+          viewHolder.messageTimeTextView.setText(model.gettimefromstamp());
 
-              viewHolder.messageTextView.setText(friendlyMessage.getText());
-              viewHolder.messageDateTextView.setText(friendlyMessage.getdatefromstamp());
-              viewHolder.messageTimeTextView.setText(friendlyMessage.gettimefromstamp());
-
-              viewHolder.messageTextView.setVisibility(TextView.VISIBLE);
-              viewHolder.messageImageView.setVisibility(ImageView.GONE);
-            } else {
-              String imageUrl = friendlyMessage.getImageUrl();
-              if (imageUrl.startsWith("gs://")) {
-                StorageReference storageReference =
-                    FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
-                storageReference.getDownloadUrl().addOnCompleteListener(task -> {
-                  if (task.isSuccessful()) {
-                    String downloadUrl = task.getResult().toString();
-                    Glide.with(viewHolder.messageImageView.getContext())
-                        .load(downloadUrl)
-                        .into(viewHolder.messageImageView);
-                  } else {
-                    Timber.w(TAG, "Getting download url was not successful.", task.getException());
-                  }
-                });
+          viewHolder.messageTextView.setVisibility(TextView.VISIBLE);
+          viewHolder.messageImageView.setVisibility(ImageView.GONE);
+        } else {
+          String imageUrl = model.getImageUrl();
+          if (imageUrl.startsWith("gs://")) {
+            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
+            storageReference.getDownloadUrl().addOnCompleteListener(task -> {
+              if (task.isSuccessful()) {
+                String downloadUrl = task.getResult().toString();
+                Glide.with(viewHolder.messageImageView.getContext()).load(downloadUrl).into(viewHolder.messageImageView);
               } else {
-                Glide.with(viewHolder.messageImageView.getContext())
-                    .load(friendlyMessage.getImageUrl())
-                    .into(viewHolder.messageImageView);
+                Timber.w(TAG, "Getting download url was not successful.", task.getException());
               }
-              viewHolder.messageImageView.setVisibility(ImageView.VISIBLE);
-              viewHolder.messageTextView.setVisibility(TextView.GONE);
-            }
-
-            viewHolder.messengerTextView.setText(friendlyMessage.getName());
-            if (friendlyMessage.getPhotoUrl() == null) {
-              viewHolder.messengerImageView.setImageDrawable(
-                  ContextCompat.getDrawable(ChatActivity.this,
-                      R.drawable.ic_account_circle_black_36dp));
-            } else {
-              GlideApp.with(ChatActivity.this)
-                  .load(friendlyMessage.getPhotoUrl())
-                  .placeholder(R.drawable.ic_account_circle_black_36dp)
-                  .into(viewHolder.messengerImageView);
-            }
-            //TODO Fix AppIndex,UserActions
-            if (friendlyMessage.getText() != null) {
-              // write this message to the on-device index
-              //                    FirebaseAppIndex.getInstance().update(getMessageIndexable(friendlyMessage));
-            }
-
-            // log a view action on it
-            //                FirebaseUserActions.getInstance().end(getMessageViewAction(friendlyMessage));
+            });
+          } else {
+            Glide.with(viewHolder.messageImageView.getContext()).load(model.getImageUrl()).into(viewHolder.messageImageView);
           }
+          viewHolder.messageImageView.setVisibility(ImageView.VISIBLE);
+          viewHolder.messageTextView.setVisibility(TextView.GONE);
+        }
 
+        viewHolder.messengerTextView.setText(model.getName());
+        if (model.getPhotoUrl() == null) {
+          viewHolder.messengerImageView.setImageDrawable(
+              ContextCompat.getDrawable(ChatActivity.this, R.drawable.ic_account_circle_black_36dp));
+        } else {
+          GlideApp.with(ChatActivity.this)
+              .load(model.getPhotoUrl())
+              .placeholder(R.drawable.ic_account_circle_black_36dp)
+              .into(viewHolder.messengerImageView);
+        }
+      }
           @Override public int getItemCount() {
             //Hide Progress Bar When no items
             if (super.getItemCount() == 0) {
@@ -199,6 +194,7 @@ public class ChatActivity extends AppCompatActivity {
             return super.getItemCount();
           }
         };
+
 
     mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
       @Override public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -350,6 +346,15 @@ public class ChatActivity extends AppCompatActivity {
     }
   }
 
+  @Override public void onStart() {
+    super.onStart();
+    if (mFirebaseAdapter != null) mFirebaseAdapter.startListening();
+  }
+
+  @Override public void onStop() {
+    super.onStop();
+    if (mFirebaseAdapter != null) mFirebaseAdapter.stopListening();
+  }
   private void putImageInStorage(StorageReference storageReference, Uri uri, final String key) {
     storageReference.putFile(uri)
         .addOnCompleteListener(ChatActivity.this,

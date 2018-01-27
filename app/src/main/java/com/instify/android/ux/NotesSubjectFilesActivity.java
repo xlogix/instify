@@ -16,9 +16,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,8 +29,9 @@ import butterknife.ButterKnife;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.DatabaseReference;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.instify.android.R;
 import com.instify.android.app.AppConfig;
 import com.instify.android.app.AppController;
@@ -72,6 +75,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
   private Uri mFileUri = null;
   private Uri mFilePath;
   private String type;
+  FirebaseRecyclerAdapter<NotesFileModel, NotesFileAdapter.MyHolder> adapter;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -85,11 +89,31 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
   }
 
   private void setNotesFirebase(final String subjectCode) {
-    DatabaseReference ref =
-        FirebaseDatabase.getInstance().getReference().child("notes").child(subjectCode);
-    FirebaseRecyclerAdapter<NotesFileModel, NotesFileAdapter.MyHolder> adapter =
-        new FirebaseRecyclerAdapter<NotesFileModel, NotesFileAdapter.MyHolder>(NotesFileModel.class,
-            R.layout.card_view_notes_subjects_item, NotesFileAdapter.MyHolder.class, ref) {
+
+    Query query = FirebaseDatabase.getInstance().getReference().child("notes").child(subjectCode);
+    FirebaseRecyclerOptions<NotesFileModel> options =
+        new FirebaseRecyclerOptions.Builder<NotesFileModel>().setQuery(query, NotesFileModel.class)
+            .build();
+    adapter = new FirebaseRecyclerAdapter<NotesFileModel, NotesFileAdapter.MyHolder>(options) {
+      @Override
+      public NotesFileAdapter.MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // Create a new instance of the ViewHolder, in this case we are using a custom
+        // layout called R.layout.message for each item
+        View view = LayoutInflater.from(parent.getContext())
+            .inflate(R.layout.card_view_experience, parent, false);
+
+        return new NotesFileAdapter.MyHolder(view);
+      }
+
+      @Override
+      protected void onBindViewHolder(@NonNull NotesFileAdapter.MyHolder viewHolder, int position,
+          @NonNull NotesFileModel model) {
+        viewHolder.setDataToView(model);
+        viewHolder.cv.setOnClickListener(v -> {
+          Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(model.getNotefile()));
+          startActivity(intent);
+        });
+      }
           @Override public int getItemCount() {
             if (super.getItemCount() == 0) {
               showErrorPlaceholder("No notes to display, Be the first to upload!");
@@ -98,21 +122,22 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
             }
             return super.getItemCount();
           }
-
-          @Override protected void populateViewHolder(NotesFileAdapter.MyHolder viewHolder,
-              NotesFileModel model, int position) {
-            viewHolder.setDataToView(model);
-            viewHolder.cv.setOnClickListener(v -> {
-              Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(model.getNotefile()));
-              startActivity(intent);
-            });
-          }
         };
+
     mNotesView.setLayoutManager(new LinearLayoutManager(NotesSubjectFilesActivity.this));
 
     mNotesView.setAdapter(adapter);
   }
 
+  @Override public void onStart() {
+    super.onStart();
+    if (adapter != null) adapter.startListening();
+  }
+
+  @Override public void onStop() {
+    super.onStop();
+    if (adapter != null) adapter.stopListening();
+  }
   private void getNotes(final String subjectCode) {
 
     // Handle UI

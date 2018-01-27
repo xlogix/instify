@@ -78,7 +78,7 @@ dependencies {
 
   // DATABASE
   implementation 'com.google.firebase:firebase-database:11.8.0'
-  implementation 'com.firebaseui:firebase-ui-database:2.3.0'
+  implementation 'com.firebaseui:firebase-ui-database:3.2.1'
 
   // CRASH
   implementation 'com.google.firebase:firebase-crash:11.8.0'

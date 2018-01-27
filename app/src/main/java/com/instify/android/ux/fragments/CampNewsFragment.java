@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Keep;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -21,9 +22,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.DatabaseError;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.instify.android.R;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.CampusNewsModel;
@@ -110,30 +112,22 @@ public class CampNewsFragment extends Fragment {
   public void showNews(final String path) {
 
     // News Database reference
-    newsRef = FirebaseDatabase.getInstance().getReference().child(path);
+    Query query = FirebaseDatabase.getInstance().getReference().child(path);
+    FirebaseRecyclerOptions<CampusNewsModel> options =
+        new FirebaseRecyclerOptions.Builder<CampusNewsModel>().setQuery(query,
+            CampusNewsModel.class).build();
+    fAdapterAll = new FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder>(options) {
+      @Override public CampusViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // Create a new instance of the ViewHolder, in this case we are using a custom
+        // layout called R.layout.message for each item
+        View view = LayoutInflater.from(parent.getContext())
+            .inflate(R.layout.card_view_campus, parent, false);
 
-    fAdapterAll = new FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder>(
-        CampusNewsModel.class,
-        R.layout.card_view_campus,
-        CampusViewHolder.class,
-        newsRef) {
-
-      @Override public void onCancelled(DatabaseError error) {
-        super.onCancelled(error);
+        return new CampusViewHolder(view);
       }
 
-      @Override public int getItemCount() {
-        if (super.getItemCount() == 0) {
-          showErrorPlaceholder("No News in Database");
-        } else {
-          hidePlaceHolder();
-        }
-        return super.getItemCount();
-      }
-
-      @Override
-      @Keep public void populateViewHolder(CampusViewHolder holder, CampusNewsModel model,
-          final int position) {
+      @Override protected void onBindViewHolder(@NonNull CampusViewHolder holder, int position,
+          @NonNull CampusNewsModel model) {
 
         holder.mCampusTitle.setText(model.title);
         holder.mCampusAuthor.setText(model.author);
@@ -145,13 +139,6 @@ public class CampNewsFragment extends Fragment {
           launchChat.putExtra("refPath", path + "/" + fAdapterAll.getRef(position).getKey());
           launchChat.putExtra("CampNewsModel", model);
           startActivity(launchChat);
-          //                    Pair<View, String> p1 = Pair.create(holder.mImageView2, "newstype");
-          //                    Pair<View, String> p2 = Pair.create(holder.mCampusTitle, "campusTitle");
-          //                    Pair<View, String> p3 = Pair.create(holder.mCampusAuthor, "campusAuthor");
-          //                    Pair<View, String> p4 = Pair.create(holder.mCampusDescription, "campusDescription");
-          //                    ActivityOptionsCompat options = ActivityOptionsCompat.
-          //                            makeSceneTransitionAnimation(getActivity(), p1, p2, p3, p4);
-          //                    startActivity(launchChat, options.toBundle());
         });
         // Set click action for Share button
         holder.mImageButton2.setOnClickListener(view -> {
@@ -164,25 +151,19 @@ public class CampNewsFragment extends Fragment {
           builder.setText(model.description + "\n\n" + db.getUserDetails().getName()
               + " has shared a topic with you from Instify https://goo.gl/YRSMJa");
           builder.setType("text/plain");
-
-          // OLD
-          /*Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-          sharingIntent.setType("text/plain");
-          String shareBodyText = "'"
-              + model.title.toUpperCase()
-              + "',"
-              + "\n"
-              + model.description
-              + "\n\n"
-              + db.getUserDetails().getName()
-              + " has shared a topic with you from Instify https://goo.gl/YRSMJa";
-          sharingIntent.putExtra(Intent.EXTRA_SUBJECT,
-              db.getUserDetails().getName() + " has shared a topic with you from Instify");
-          sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBodyText);
-          startActivity(Intent.createChooser(sharingIntent, "Share this topic on"));*/
         });
       }
+
+      @Override public int getItemCount() {
+        if (super.getItemCount() == 0) {
+          showErrorPlaceholder("No News in Database");
+        } else {
+          hidePlaceHolder();
+        }
+        return super.getItemCount();
+      }
     };
+
     // Finally, set the adapter
 
     recyclerView.setAdapter(fAdapterAll);
@@ -230,6 +211,16 @@ public class CampNewsFragment extends Fragment {
       }
       errormessage.setText("Something went wrong. Try Again!");
     }
+  }
+
+  @Override public void onStart() {
+    super.onStart();
+    if (fAdapterAll != null) fAdapterAll.startListening();
+  }
+
+  @Override public void onStop() {
+    super.onStop();
+    if (fAdapterAll != null) fAdapterAll.stopListening();
   }
 
   @Keep public static class CampusViewHolder extends RecyclerView.ViewHolder {
