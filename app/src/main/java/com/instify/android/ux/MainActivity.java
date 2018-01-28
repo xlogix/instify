@@ -34,9 +34,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import butterknife.ButterKnife;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.request.RequestOptions;
@@ -59,12 +57,11 @@ import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.listeners.OnSingleClickListener;
 import com.instify.android.models.FirebaseUserDataModel;
 import com.instify.android.ux.fragments.AttendanceFragment;
-import com.instify.android.ux.fragments.CampNewsFragment;
+import com.instify.android.ux.fragments.ExperiencesFragment;
 import com.instify.android.ux.fragments.NotesFragment;
 import com.instify.android.ux.fragments.TimeTableFragment;
 import com.instify.android.ux.fragments.UnivNewsFragment;
 import com.thefinestartist.finestwebview.FinestWebView;
-
 import timber.log.Timber;
 
 /**
@@ -355,7 +352,7 @@ public class MainActivity extends AppCompatActivity {
         case R.id.nav_attendance:
           mViewPager.setCurrentItem(0);
           break;
-        case R.id.nav_campus_news:
+        case R.id.nav_experiences:
           mViewPager.setCurrentItem(1);
           break;
         case R.id.nav_schedule:
@@ -542,7 +539,7 @@ public class MainActivity extends AppCompatActivity {
     // The total number of tabs
     static final int NUM_TABS = 5;
     static final int TAB_ATTENDANCE = 0;
-    static final int TAB_CAMPUS_NEWS = 1;
+    static final int TAB_EXPERIENCES = 1;
     static final int TAB_TIME_TABLE = 2;
     static final int TAB_NOTES = 3;
     static final int TAB_UNIVERSITY_NEWS = 4;
@@ -561,8 +558,8 @@ public class MainActivity extends AppCompatActivity {
       switch (position) {
         case TAB_ATTENDANCE:
           return AttendanceFragment.newInstance();
-        case TAB_CAMPUS_NEWS:
-          return CampNewsFragment.newInstance();
+        case TAB_EXPERIENCES:
+          return ExperiencesFragment.newInstance();
         case TAB_TIME_TABLE:
           return TimeTableFragment.newInstance();
         case TAB_NOTES:

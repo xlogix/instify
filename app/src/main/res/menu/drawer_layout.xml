@@ -6,9 +6,9 @@
             android:icon="@drawable/ic_attendance_white"
             android:title="@string/nav_attendance" />
         <item
-            android:id="@+id/nav_campus_news"
+            android:id="@+id/nav_experiences"
             android:icon="@drawable/ic_campus_news_white"
-            android:title="@string/nav_campus_news" />
+            android:title="@string/experiences"/>
         <item
             android:id="@+id/nav_schedule"
             android:icon="@drawable/ic_time_table_white"

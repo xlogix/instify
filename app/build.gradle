@@ -77,6 +77,8 @@ dependencies {
   implementation 'com.google.android.gms:play-services-auth:11.8.0'
 
   // DATABASE
+  implementation 'com.google.firebase:firebase-firestore:11.8.0'
+  implementation 'com.firebaseui:firebase-ui-firestore:3.2.1'
   implementation 'com.google.firebase:firebase-database:11.8.0'
   implementation 'com.firebaseui:firebase-ui-database:3.2.1'
 

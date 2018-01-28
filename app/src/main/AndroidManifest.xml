@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.instify.android">
 
   <supports-screens
@@ -12,7 +13,7 @@
   <uses-permission android:name="android.permission.VIBRATE"/>
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-  <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
+  <uses-permission android:name="android.permission.MANAGE_DOCUMENTS"/>
 
   <!-- Dangerous permissions, access must be requested at runtime -->
   <uses-permission android:name="android.permission.CAMERA"/>
@@ -24,6 +25,7 @@
   <permission
       android:name="${applicationId}.permission.C2D_MESSAGE"
       android:protectionLevel="signature"/>
+
   <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE"/>
 
   <!-- Declare features required by the app -->
@@ -101,26 +103,24 @@
         <data android:scheme="instify"/>
       </intent-filter>
     </activity>
-
     <activity
         android:name="ux.ReceiveActivity"
-        android:label="@string/app_name" >
+        android:label="@string/app_name">
       <intent-filter>
-        <action android:name="android.intent.action.SEND" />
+        <action android:name="android.intent.action.SEND"/>
 
-        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.DEFAULT"/>
 
-        <data android:mimeType="*/*" />
+        <data android:mimeType="*/*"/>
       </intent-filter>
       <intent-filter>
-        <action android:name="android.intent.action.SEND_MULTIPLE" />
+        <action android:name="android.intent.action.SEND_MULTIPLE"/>
 
-        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.DEFAULT"/>
 
-        <data android:mimeType="*/*" />
+        <data android:mimeType="*/*"/>
       </intent-filter>
     </activity>
-
     <activity
         android:name=".ux.IntroActivity"
         android:label="@string/title_activity_intro"
@@ -174,6 +174,7 @@
     <activity
         android:name=".ux.NotesUploadActivity"
         android:parentActivityName=".ux.MainActivity"/>
+
     <service
         android:name=".services.MyFirebaseDownloadService"
         android:exported="false"/>
@@ -212,5 +213,8 @@
         android:resource="@color/colorPrimary"/>
     <!-- ./Firebase Notifications -->
 
+    <activity android:name=".ux.UploadExperiencesActivity">
+    </activity>
   </application>
+
 </manifest>

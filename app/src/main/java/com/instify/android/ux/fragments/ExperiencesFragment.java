@@ -1,6 +1,7 @@
 package com.instify.android.ux.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +22,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.bumptech.glide.Glide;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.instify.android.R;
+import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.ExperiencesModel;
+import com.instify.android.ux.MainActivity;
+import com.instify.android.ux.UploadExperiencesActivity;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,13 +42,15 @@ import com.instify.android.models.ExperiencesModel;
  * create an instance of this fragment.
  */
 public class ExperiencesFragment extends Fragment {
+  private static final String TAG = "ExperiencesFragment";
   // TODO: Rename parameter arguments, choose names that match
   // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
   @BindView(R.id.recycler_view_experience) RecyclerView recyclerView;
   @BindView(R.id.error_message) TextView errorMessage;
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
   Unbinder unbinder;
-  FirebaseRecyclerAdapter adapter;
+  FirestoreRecyclerAdapter adapter;
+  String currentUserRno;
   // TODO: Rename and change types of parameters
 
   public ExperiencesFragment() {
@@ -72,6 +83,8 @@ public class ExperiencesFragment extends Fragment {
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    SQLiteHandler db = new SQLiteHandler(getContext());
+    currentUserRno = db.getUserDetails().getRegno();
   }
 
   @Override public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -84,11 +97,16 @@ public class ExperiencesFragment extends Fragment {
 
   @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    Query query = FirebaseDatabase.getInstance().getReference().child("experiences");
-    FirebaseRecyclerOptions<ExperiencesModel> options =
-        new FirebaseRecyclerOptions.Builder<ExperiencesModel>().setQuery(query,
+    // FAB //
+    ((MainActivity) getActivity()).mSharedFab.setOnClickListener(v -> {
+      Intent uploadExperience = new Intent(getContext(), UploadExperiencesActivity.class);
+      startActivity(uploadExperience);
+    });
+    Query query = FirebaseFirestore.getInstance().collection("experiences");
+    FirestoreRecyclerOptions<ExperiencesModel> options =
+        new FirestoreRecyclerOptions.Builder<ExperiencesModel>().setQuery(query,
             ExperiencesModel.class).build();
-    adapter = new FirebaseRecyclerAdapter<ExperiencesModel, ViewHolder>(options) {
+    adapter = new FirestoreRecyclerAdapter<ExperiencesModel, ViewHolder>(options) {
       @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Create a new instance of the ViewHolder, in this case we are using a custom
         // layout called R.layout.message for each item
@@ -101,6 +119,8 @@ public class ExperiencesFragment extends Fragment {
       @Override protected void onBindViewHolder(@NonNull ViewHolder holder, int position,
           @NonNull ExperiencesModel model) {
         holder.setBindDataToView(model, getContext());
+        holder.upVoteButton.setOnClickListener(view1 -> voteExperience(model.getId(), true));
+        holder.downVoteButton.setOnClickListener(view1 -> voteExperience(model.getId(), false));
       }
     };
     recyclerView.setHasFixedSize(true);
@@ -133,6 +153,23 @@ public class ExperiencesFragment extends Fragment {
     }
   }
 
+  public void voteExperience(String id, Boolean value) {
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    Map<String, Boolean> vote = new HashMap<>();
+    vote.put(currentUserRno, value);
+    DocumentReference sfDocRef = db.collection("experiences").document(id);
+
+    db.runTransaction(transaction -> {
+      DocumentSnapshot snapshot = transaction.get(sfDocRef);
+      HashMap<String, Boolean> currentVotes = (HashMap<String, Boolean>) snapshot.get("votes");
+      currentVotes.put(currentUserRno, value);
+      transaction.update(sfDocRef, "votes", currentVotes);
+      return currentVotes;
+    })
+        .addOnSuccessListener(result -> Log.d(TAG, "Transaction success: " + result))
+        .addOnFailureListener(e -> Log.w(TAG, "Transaction failure.", e));
+  }
+
   @Keep public static class ViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.imageView2) ImageView imageView2;
     @BindView(R.id.campusTitle) TextView campusTitle;
@@ -154,7 +191,7 @@ public class ExperiencesFragment extends Fragment {
       campusTitle.setText(model.getTitle());
       campusAuthor.setText(model.getAuthor());
       campusDescription.setText(model.getDescription());
-      scoreText.setText(model.getVotes().size());
+      scoreText.setText(String.valueOf(model.getVotes().size()));
       Glide.with(context).load(model.getImageUrl()).into(imagePost);
     }
   }

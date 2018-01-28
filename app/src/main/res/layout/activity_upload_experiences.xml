@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
+    android:padding="@dimen/activity_vertical_margin"
+    >
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/relative_layout"
+      >
+    <ImageButton
+        android:layout_margin="8dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:id="@+id/imageUpload"
+        app:srcCompat="@drawable/ic_image"
+        android:layout_centerHorizontal="true"
+        android:scaleType="fitXY"
+        android:layout_below="@+id/post_announcement_text"
+        android:background="?selectableItemBackgroundBorderless"
+        />
+
+    <TextView
+        android:id="@+id/post_announcement_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Share an Experience"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        />
+
+    <EditText
+        android:id="@+id/experience_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageUpload"
+        android:layout_marginBottom="10dp"
+        android:hint="Title"
+        android:maxLines="1"
+        />
+
+    <EditText
+        android:id="@+id/experience_description"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/experience_title"
+        android:hint="Description"
+        android:textColor="@color/black"
+        />
+
+    <Spinner
+        android:id="@+id/categorySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/experienceCategoryArray"
+        android:layout_below="@+id/experience_description"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        />
+
+    <Button
+        android:id="@+id/postExperience"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/categorySpinner"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="Post"
+        />
+  </RelativeLayout>
+</ScrollView>

@@ -192,6 +192,7 @@ public class CampNewsFragment extends Fragment {
 
   @Override public void onDestroyView() {
     super.onDestroyView();
+    if (fAdapterAll != null) fAdapterAll.stopListening();
     unbinder.unbind();
   }
 
@@ -220,7 +221,6 @@ public class CampNewsFragment extends Fragment {
 
   @Override public void onStop() {
     super.onStop();
-    if (fAdapterAll != null) fAdapterAll.stopListening();
   }
 
   @Keep public static class CampusViewHolder extends RecyclerView.ViewHolder {

@@ -1,5 +1,7 @@
 package com.instify.android.models;
 
+import com.google.firebase.firestore.ServerTimestamp;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -7,20 +9,38 @@ import java.util.HashMap;
  */
 
 public class ExperiencesModel {
-  private String title, description, author, imageUrl, category;
+  private String id, title, description, author, imageUrl, category;
   private HashMap<String, Boolean> votes;
-
+  @ServerTimestamp private Date timestamp;
   public ExperiencesModel() {
   }
 
-  public ExperiencesModel(String title, String description, String author, String imageUrl,
+  public ExperiencesModel(String id, String title, String description, String author,
+      String imageUrl,
       String category, HashMap<String, Boolean> votes) {
+    this.id = id;
     this.title = title;
     this.description = description;
     this.author = author;
     this.imageUrl = imageUrl;
     this.category = category;
     this.votes = votes;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public Date getTimestamp() {
+    return timestamp;
+  }
+
+  public void setTimestamp(Date timestamp) {
+    this.timestamp = timestamp;
   }
 
   public String getTitle() {
