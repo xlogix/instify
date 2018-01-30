@@ -7,19 +7,15 @@
     android:layout_height="match_parent"
     >
 
-
-  <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  <android.support.design.widget.CoordinatorLayout
       xmlns:ads="http://schemas.android.com/apk/res-auto"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
       android:id="@+id/coordinatorLayout"
       android:layout_width="match_parent"
       android:layout_height="0dp"
-
       ads:layout_constraintBottom_toTopOf="@+id/adView"
       ads:layout_constraintEnd_toEndOf="parent"
       ads:layout_constraintHorizontal_bias="0.5"
       ads:layout_constraintStart_toStartOf="parent"
-
       ads:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_chainStyle="spread"
       >
@@ -60,7 +56,6 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
 
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/shared_fab"
         android:layout_width="wrap_content"
@@ -78,6 +73,7 @@
         />
 
   </android.support.design.widget.CoordinatorLayout>
+
   <com.google.android.gms.ads.AdView
       android:id="@+id/adView"
       android:layout_width="match_parent"
@@ -89,8 +85,8 @@
       ads:layout_constraintBottom_toBottomOf="parent"
       ads:layout_constraintEnd_toEndOf="parent"
       ads:layout_constraintHorizontal_bias="0.5"
-
       ads:layout_constraintStart_toStartOf="parent"
       ads:layout_constraintTop_toBottomOf="@+id/coordinatorLayout"
       />
+
 </android.support.constraint.ConstraintLayout>

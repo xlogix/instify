@@ -189,9 +189,9 @@ public class TimeTableFragment extends Fragment {
         date + " 13:50", date + " 14:45"
     };
 
-        /*
-         * Method to make json object request where json response is dynamic
-         * */
+    /*
+     * Method to make json object request where json response is dynamic
+     */
     JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, endpoint, null, response -> {
       try {
         // Hide the Progress Dialog
@@ -419,7 +419,7 @@ public class TimeTableFragment extends Fragment {
       if (placeholderError.getVisibility() == View.VISIBLE) {
         placeholderError.setVisibility(View.INVISIBLE);
       }
-      errorMessage.setText("Something Went Wrong. Try Again!");
+      errorMessage.setText("Something went wrong. Try again!");
     }
   }
 

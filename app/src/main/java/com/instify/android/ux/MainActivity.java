@@ -483,12 +483,13 @@ public class MainActivity extends AppCompatActivity {
         .menuTextGravity(Gravity.CENTER)
         .menuTextPaddingRightRes(R.dimen.defaultMenuTextPaddingLeft)
         .dividerHeight(0)
+        .webViewDisplayZoomControls(true)
         .webViewDomStorageEnabled(true)
         .webViewJavaScriptEnabled(true)
         .webViewDisplayZoomControls(true)
         .webViewJavaScriptCanOpenWindowsAutomatically(true)
         .gradientDivider(false)
-        .setCustomAnimations(R.anim.slide_up, R.anim.hold, R.anim.hold, R.anim.slide_down)
+        .setCustomAnimations(R.anim.fragment_open_enter, R.anim.fragment_open_exit, R.anim.fragment_close_enter, R.anim.fragment_close_exit)
         .injectJavaScript("javascript:"
             + "document.getElementById('accountname').value = '"
             + regNo

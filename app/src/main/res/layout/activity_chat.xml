@@ -7,7 +7,7 @@
     >
 
   <ScrollView
-      android:id="@+id/nestedscroll"
+      android:id="@+id/nestedScroll"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_above="@+id/linearLayout"
@@ -197,19 +197,26 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_weight="1"
+        android:background="@drawable/edit_text"
         android:hint="@string/msg_edit_box"
+        android:inputType="textCapSentences|textMultiLine"
+        android:maxLength="2000"
+        android:padding="10dp"
         android:textSize="18sp"
         />
 
-    <Button
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/sendButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:enabled="false"
+        android:layout_gravity="center_vertical"
         android:filterTouchesWhenObscured="true"
-        android:text="@string/msg_send"
+        android:src="@drawable/ic_send"
+        app:backgroundTint="#fff"
+        app:fabSize="mini"
         />
   </LinearLayout>
 </RelativeLayout>

@@ -1,24 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000"
-    android:paddingTop="16dp">
+    android:fitsSystemWindows="true"
+    >
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/fullimg"
-        android:layout_width="192dp"
-        android:layout_height="192dp"
-        android:layout_centerHorizontal="true"
-        android:contentDescription="Your Profile Image"
-        android:src="@drawable/default_pic_face" />
+  <android.support.design.widget.AppBarLayout
+      android:id="@+id/app_bar"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/app_bar_height"
+      android:fitsSystemWindows="true"
+      android:src="@drawable/default_pic_face"
+      android:theme="@style/AppTheme.AppBarOverlay"
+      >
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id" />
-</RelativeLayout>
+    <android.support.design.widget.CollapsingToolbarLayout
+        android:id="@+id/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:contentScrim="?attr/colorPrimary"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed"
+        >
+
+      <android.support.v7.widget.Toolbar
+          android:id="@+id/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          app:layout_collapseMode="pin"
+          app:popupTheme="@style/AppTheme.PopupOverlay"
+          />
+
+    </android.support.design.widget.CollapsingToolbarLayout>
+  </android.support.design.widget.AppBarLayout>
+
+  <android.support.design.widget.FloatingActionButton
+      android:id="@+id/fab"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/fab_margin"
+      app:backgroundTint="#fff"
+      app:fabSize="normal"
+      app:layout_anchor="@id/app_bar"
+      app:layout_anchorGravity="bottom|end"
+      app:srcCompat="@drawable/ic_action_camera"
+      />
+
+  <com.google.android.gms.ads.AdView
+      android:id="@+id/adView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:layout_gravity="bottom"
+      ads:adSize="SMART_BANNER"
+      ads:adUnitId="@string/banner_ad_unit_id"
+      />
+
+</android.support.design.widget.CoordinatorLayout>
