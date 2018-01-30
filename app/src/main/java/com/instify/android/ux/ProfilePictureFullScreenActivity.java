@@ -11,7 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,9 +34,9 @@ import timber.log.Timber;
 
 public class ProfilePictureFullScreenActivity extends AppCompatActivity
     implements EasyPermissions.PermissionCallbacks {
+
   public static final String ANDROID_RESOURCE = "android.resource://";
   public static final String FORWARD_SLASH = "/";
-  private static final String TAG = ProfilePictureFullScreenActivity.class.getSimpleName();
   // Permission code for Camera and Gallery Permission
   private static final int RC_CAMERA_AND_GALLERY_PERM = 123;
   // [START initialize_auth]
@@ -99,11 +101,11 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity
 
     // Checks if the user didn't remove the image
     // Put the picture into the image View
-    GlideApp.with(this)
+    Glide.with(this)
         .load(mFirebaseUser.getPhotoUrl())
-        .dontAnimate()
-        .centerCrop()
-        .priority(Priority.HIGH)
+        .apply(new RequestOptions().dontAnimate())
+        .apply(new RequestOptions().centerCrop())
+        .apply(new RequestOptions().priority(Priority.HIGH))
         .into(userImage);
 
     // AdMob ad unit IDs are not currently stored inside the google-services.json file.
@@ -127,7 +129,7 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity
 
     mFirebaseUser.updateProfile(profileUpdates).addOnCompleteListener(task -> {
       if (task.isSuccessful()) {
-        Timber.d(TAG, "User profile updated.");
+        Timber.d("User profile updated.");
         Toast.makeText(ProfilePictureFullScreenActivity.this, "Successfully updated",
             Toast.LENGTH_SHORT).show();
       }
@@ -213,12 +215,12 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity
 
   @Override public void onPermissionsGranted(int requestCode, List<String> perms) {
     // Some permissions have been granted
-    Timber.d(TAG, "onPermissionsGranted:" + requestCode + ":" + perms.size());
+    Timber.d("onPermissionsGranted:" + requestCode + ":" + perms.size());
   }
 
   @Override public void onPermissionsDenied(int requestCode, List<String> perms) {
     // Some permissions have been denied
-    Timber.d(TAG, "onPermissionsDenied:" + requestCode + ":" + perms.size());
+    Timber.d("onPermissionsDenied:" + requestCode + ":" + perms.size());
 
     // (Optional) Check whether the user denied any permissions and checked "NEVER ASK AGAIN."
     // This will display a dialog directing them to enable the permission in app settings.
