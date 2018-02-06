@@ -80,16 +80,16 @@ public class AppController extends MultiDexApplication {
       // set in-app defaults
       Map<String, Object> remoteConfigDefaults = new HashMap();
       remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_REQUIRED, false);
-      remoteConfigDefaults.put(ForceUpdateChecker.KEY_CURRENT_VERSION, "1.0.0");
+      remoteConfigDefaults.put(ForceUpdateChecker.KEY_CURRENT_VERSION, "1.3.0");
       remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_URL,
-          "https://play.google.com/store/apps/details?id=com.sembozdemir.renstagram");
+          "https://play.google.com/store/apps/details?id=com.instify.android");
 
       firebaseRemoteConfig.setDefaults(remoteConfigDefaults);
       firebaseRemoteConfig.fetch(60) // fetch every minutes
           .addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override public void onComplete(@NonNull Task<Void> task) {
               if (task.isSuccessful()) {
-                Timber.d(TAG, "remote config is fetched.");
+                Timber.d(TAG, "RemoteConfig is fetched.");
                 firebaseRemoteConfig.activateFetched();
               }
             }
