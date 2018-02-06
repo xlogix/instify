@@ -1,6 +1,7 @@
 package com.instify.android.ux;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -22,6 +23,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
@@ -53,6 +55,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
 import com.instify.android.app.AppController;
+import com.instify.android.app.ForceUpdateChecker;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.listeners.OnSingleClickListener;
 import com.instify.android.models.FirebaseUserDataModel;
@@ -68,7 +71,8 @@ import timber.log.Timber;
  * Created by Abhish3k on 3/1/2016. Main Activity
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+    implements ForceUpdateChecker.OnUpdateNeededListener {
   private static final String TAG = MainActivity.class.getSimpleName();
 
   /* Play Services Request required to check if Google Services is installed or not */
@@ -168,6 +172,9 @@ public class MainActivity extends AppCompatActivity {
 
     // Declare Views
     mSharedFab = findViewById(R.id.shared_fab);
+
+    // Initialize ForceUpdateChecker
+    ForceUpdateChecker.with(this).onUpdateNeeded(this).check();
 
     // Get the current logged-in user
     mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -318,6 +325,30 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
+  // Check if update to new version is needed or not
+  @Override public void onUpdateNeeded(String updateUrl) {
+    AlertDialog dialog = new AlertDialog.Builder(this).setTitle("New version available")
+        .setMessage("Please update to new version to continue using the app")
+        .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+          @Override public void onClick(DialogInterface dialog, int which) {
+            redirectStore(updateUrl);
+          }
+        })
+        .setNegativeButton("No, thanks", new DialogInterface.OnClickListener() {
+          @Override public void onClick(DialogInterface dialog, int which) {
+            finish();
+          }
+        })
+        .create();
+    dialog.show();
+  }
+
+  private void redirectStore(String updateUrl) {
+    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateUrl));
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    startActivity(intent);
+  }
+
   /**
    * Check the device to make sure it has the Google Play Services APK. If
    * it doesn't, display a dialog that allows users to download the APK from
@@ -338,6 +369,7 @@ public class MainActivity extends AppCompatActivity {
     return true;
   }
 
+  // Check if device is online
   private boolean isDeviceOnline() {
     ConnectivityManager connMgr = (ConnectivityManager) this.getApplicationContext()
         .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -489,7 +521,8 @@ public class MainActivity extends AppCompatActivity {
         .webViewDisplayZoomControls(true)
         .webViewJavaScriptCanOpenWindowsAutomatically(true)
         .gradientDivider(false)
-        .setCustomAnimations(R.anim.fragment_open_enter, R.anim.fragment_open_exit, R.anim.fragment_close_enter, R.anim.fragment_close_exit)
+        .setCustomAnimations(R.anim.fragment_open_enter, R.anim.fragment_open_exit,
+            R.anim.fragment_close_enter, R.anim.fragment_close_exit)
         .injectJavaScript("javascript:"
             + "document.getElementById('accountname').value = '"
             + regNo

@@ -5,6 +5,7 @@ package com.instify.android.app;
  */
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
 import android.text.TextUtils;
@@ -12,16 +13,21 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.facebook.stetho.Stetho;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.instify.android.BuildConfig;
 import com.instify.android.helpers.PreferenceManager;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.ux.IntroActivity;
 import com.squareup.leakcanary.LeakCanary;
 import com.thefinestartist.Base;
+import java.util.HashMap;
+import java.util.Map;
 import timber.log.Timber;
 
 public class AppController extends MultiDexApplication {
@@ -68,6 +74,26 @@ public class AppController extends MultiDexApplication {
       mFirebaseAnalytics.setAnalyticsCollectionEnabled(true);
       // Set Crash Reporting to true
       FirebaseCrash.setCrashCollectionEnabled(true);
+      // Initialize FirebaseRemoteConfig
+      FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+
+      // set in-app defaults
+      Map<String, Object> remoteConfigDefaults = new HashMap();
+      remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_REQUIRED, false);
+      remoteConfigDefaults.put(ForceUpdateChecker.KEY_CURRENT_VERSION, "1.0.0");
+      remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_URL,
+          "https://play.google.com/store/apps/details?id=com.sembozdemir.renstagram");
+
+      firebaseRemoteConfig.setDefaults(remoteConfigDefaults);
+      firebaseRemoteConfig.fetch(60) // fetch every minutes
+          .addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override public void onComplete(@NonNull Task<Void> task) {
+              if (task.isSuccessful()) {
+                Timber.d(TAG, "remote config is fetched.");
+                firebaseRemoteConfig.activateFetched();
+              }
+            }
+          });
     }
   }
 
