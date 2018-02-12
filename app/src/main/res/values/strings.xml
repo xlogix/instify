@@ -90,6 +90,7 @@
   <string name="Type_your_query">Type your query</string>
   <string name="menu_action_filter">Filter</string>
   <string name="no_network_connection_toast">No network connection found</string>
+  <string name="get_picture_from_camera">Get picture from Camera</string>
 
   <!-- Login Activity -->
   <string name="hint_email">Your Email</string>

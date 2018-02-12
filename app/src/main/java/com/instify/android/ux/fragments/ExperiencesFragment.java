@@ -43,6 +43,7 @@ import java.util.Map;
  */
 public class ExperiencesFragment extends Fragment {
   private static final String TAG = "ExperiencesFragment";
+
   // TODO: Rename parameter arguments, choose names that match
   // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
   @BindView(R.id.recycler_view_experience) RecyclerView recyclerView;

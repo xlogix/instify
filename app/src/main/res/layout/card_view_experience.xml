@@ -67,9 +67,9 @@
         app:layout_constraintTop_toBottomOf="@+id/campusTitle"
         />
     <ImageView
+        android:id="@+id/imagePost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/imagePost"
         android:layout_marginTop="4dp"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
         />
@@ -83,8 +83,8 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="3dp"
         android:autoLink="all"
-        android:maxLines="7"
         android:ellipsize="end"
+        android:maxLines="7"
         android:text="Default News description"
         android:textIsSelectable="true"
         android:textSize="16sp"
@@ -133,38 +133,38 @@
         android:id="@+id/upVoteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="?selectableItemBackgroundBorderless"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/campusDescription"
-        app:srcCompat="@drawable/ic_upvote_24dp"
+        app:srcCompat="@drawable/ic_thumb_up"
         card_view:layout_constraintBottom_creator="1"
         card_view:layout_constraintTop_creator="1"
-        android:layout_marginLeft="8dp"
         />
     <TextView
+        android:id="@+id/scoreText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="2452"
-        android:id="@+id/scoreText"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/upVoteButton"
         app:layout_constraintTop_toBottomOf="@+id/campusDescription"
         card_view:layout_constraintBottom_creator="1"
         card_view:layout_constraintTop_creator="1"
-        android:layout_marginLeft="8dp"
         />
     <ImageButton
         android:id="@+id/downVoteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="?selectableItemBackgroundBorderless"
@@ -174,7 +174,6 @@
         app:srcCompat="@drawable/ic_downvote_24dp"
         card_view:layout_constraintBottom_creator="1"
         card_view:layout_constraintTop_creator="1"
-        android:layout_marginLeft="8dp"
         />
 
     <ImageButton

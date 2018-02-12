@@ -2,56 +2,56 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <group android:id="@+id/main_menu_group">
+  <group android:id="@+id/main_menu_group">
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_action_search_24dp"
+        android:orderInCategory="1"
+        android:title="@string/menu_action_search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
+        android:id="@+id/action_filter"
+        android:icon="@drawable/ic_filter_list_white_24dp"
+        android:orderInCategory="2"
+        android:title="@string/menu_action_filter"
+        app:showAsAction="always">
+      <menu>
         <item
-            android:id="@+id/action_search"
-            android:icon="@drawable/ic_action_search_24dp"
-            android:orderInCategory="1"
-            android:title="@string/menu_action_search"
-            app:actionViewClass="android.support.v7.widget.SearchView"
-            app:showAsAction="ifRoom|collapseActionView" />
-
+            android:id="@+id/filter_by_class"
+            android:checked="false"
+            android:title="Filter by Section"
+            app:showAsAction="never"/>
         <item
-            android:id="@+id/action_filter"
-            android:icon="@drawable/ic_filter_list_white_24dp"
-            android:orderInCategory="2"
-            android:title="@string/menu_action_filter"
-            app:showAsAction="always">
-            <menu>
-                <item
-                    android:id="@+id/filter_by_class"
-                    android:checked="false"
-                    android:title="Filter by Section"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/filter_by_department"
-                    android:checked="false"
-                    android:title="Filter by Department"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/filter_by_university"
-                    android:checked="false"
-                    android:title="Filter by University"
-                    app:showAsAction="never" />
-            </menu>
-        </item>
-    </group>
+            android:id="@+id/filter_by_department"
+            android:checked="false"
+            android:title="Filter by Department"
+            app:showAsAction="never"/>
+        <item
+            android:id="@+id/filter_by_university"
+            android:checked="false"
+            android:title="Filter by University"
+            app:showAsAction="never"/>
+      </menu>
+    </item>
+  </group>
 
-    <item
-        android:id="@+id/action_account"
-        android:checked="false"
-        android:orderInCategory="3"
-        android:title="My Profile" />
+  <item
+      android:id="@+id/action_account"
+      android:checked="false"
+      android:orderInCategory="3"
+      android:title="My Profile"/>
 
-    <item
-        android:id="@+id/action_settings"
-        android:checked="false"
-        android:orderInCategory="4"
-        android:title="@string/nav_settings" />
+  <item
+      android:id="@+id/action_settings"
+      android:checked="false"
+      android:orderInCategory="4"
+      android:title="@string/nav_settings"/>
 
-    <item
-        android:id="@+id/action_logout"
-        android:checked="false"
-        android:orderInCategory="5"
-        android:title="@string/nav_logout" />
+  <item
+      android:id="@+id/action_logout"
+      android:checked="false"
+      android:orderInCategory="5"
+      android:title="@string/nav_logout"/>
 </menu>
