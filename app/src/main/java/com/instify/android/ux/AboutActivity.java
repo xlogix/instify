@@ -27,7 +27,7 @@ public class AboutActivity extends AppCompatActivity {
 
     View aboutPage = new AboutPage(this).isRTL(false)
         .setDescription(
-            "This app is developed by : Abhishek Uniyal, Arjun Mahishi, Somnath, Chandan Singh and Vijay Krishna"
+            "This app is developed by : Abhishek Uniyal, Vijay Krishna, Arjun Mahishi, Somnath and Chandan Singh"
                 + "\n\nSpecial thanks to : Ankur, Trishansh")
         .setImage(R.drawable.ic_logo_96dp)
         .addItem(new Element().setTitle("Version 2.0.0"))
