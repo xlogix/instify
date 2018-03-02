@@ -19,7 +19,9 @@ public class CampusNewsModel implements Parcelable {
           return new CampusNewsModel[size];
         }
       };
+
   public String title, description, author, dept, sec;
+
   private int level;
 
   public CampusNewsModel() {
@@ -36,15 +38,6 @@ public class CampusNewsModel implements Parcelable {
     this.description = description;
     this.author = author;
     this.level = level;
-  }
-
-  public CampusNewsModel(String t, String d, int level, String dept, String sec, String user) {
-    this.title = t;
-    this.description = d;
-    this.author = user;
-    this.level = level;
-    this.dept = dept;
-    this.sec = sec;
   }
 
   protected CampusNewsModel(Parcel in) {
@@ -67,5 +60,17 @@ public class CampusNewsModel implements Parcelable {
     dest.writeInt(this.level);
     dest.writeString(this.sec);
     dest.writeString(this.dept);
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public String getAuthor() {
+    return author;
   }
 }

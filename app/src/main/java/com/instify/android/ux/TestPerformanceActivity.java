@@ -107,15 +107,11 @@ public class TestPerformanceActivity extends AppCompatActivity {
           // TODO : Create Adapter here When api is Complete
         } else {
           showErrorPlaceholder("Sync Failed");
-          Snackbar.make(findViewById(android.R.id.content), "Sync Failed", Snackbar.LENGTH_SHORT)
-              .show();
         }
       }
 
       @Override public void onFailure(Call<TestPerformanceResponseModel> call, Throwable t) {
         showErrorPlaceholder("Sync Failed");
-        Snackbar.make(findViewById(android.R.id.content), "Sync Failed", Snackbar.LENGTH_SHORT)
-            .show();
       }
     });
   }
@@ -134,7 +130,7 @@ public class TestPerformanceActivity extends AppCompatActivity {
       if (placeholderError.getVisibility() == View.VISIBLE) {
         placeholderError.setVisibility(View.INVISIBLE);
       }
-      errorMessage.setText("Something went Wrong. Please Try Again!");
+      errorMessage.setText("Something went wrong. Please try again!");
     }
   }
 }

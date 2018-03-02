@@ -2,7 +2,6 @@
 <android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:fab="http://schemas.android.com/tools"
     android:id="@+id/swipe_refresh_layout_time_table"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -49,8 +48,8 @@
                 android:layout_height="45dp"
                 android:layout_margin="8dp"
                 android:background="?selectableItemBackgroundBorderless"
-                android:scaleType="fitXY"
                 android:contentDescription="Calendar Logo"
+                android:scaleType="fitXY"
                 app:srcCompat="@drawable/ic_calendar"
                 />
             <TextView
@@ -78,68 +77,5 @@
 
       </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
-
-    <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/shared_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:visibility="gone"
-        fab:menu_animationDelayPerItem="0"
-        fab:menu_colorNormal="#FFB805"
-        fab:menu_colorPressed="#F2AB00"
-        fab:menu_colorRipple="#D99200"
-        fab:menu_labels_hideAnimation="@anim/jump_to_down"
-        fab:menu_labels_showAnimation="@anim/jump_from_down"
-        fab:menu_shadowColor="#444"
-        fab:menu_labels_style="@style/MenuLabelsStyle"
-        >
-
-      <com.github.clans.fab.FloatingActionButton
-          android:id="@+id/fab1"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@drawable/ic_edit"
-          fab:fab_label="Monday"
-          style="@style/MenuButtonsStyle"
-          />
-
-      <com.github.clans.fab.FloatingActionButton
-          android:id="@+id/fab2"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@drawable/ic_edit"
-          fab:fab_label="Tuesday"
-          style="@style/MenuButtonsStyle"
-          />
-
-      <com.github.clans.fab.FloatingActionButton
-          android:id="@+id/fab3"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@drawable/ic_edit"
-          fab:fab_label="Wednesday"
-          style="@style/MenuButtonsStyle"
-          />
-
-      <com.github.clans.fab.FloatingActionButton
-          android:id="@+id/fab4"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@drawable/ic_edit"
-          fab:fab_label="Thursday"
-          style="@style/MenuButtonsStyle"
-          />
-
-      <com.github.clans.fab.FloatingActionButton
-          android:id="@+id/fab5"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@drawable/ic_edit"
-          fab:fab_label="Friday"
-          style="@style/MenuButtonsStyle"
-          />
-    </com.github.clans.fab.FloatingActionMenu>
   </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

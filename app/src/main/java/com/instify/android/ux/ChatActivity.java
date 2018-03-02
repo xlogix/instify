@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -18,7 +19,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -83,7 +83,7 @@ public class ChatActivity extends AppCompatActivity {
 
   private String mUsername;
   private String mPhotoUrl;
-  private Button mSendButton;
+  private FloatingActionButton mSendButton;
   private RecyclerView mMessageRecyclerView;
   private LinearLayoutManager mLinearLayoutManager;
   private FirebaseAnalytics mFirebaseAnalytics;
@@ -175,11 +175,11 @@ public class ChatActivity extends AppCompatActivity {
         viewHolder.messengerTextView.setText(model.getName());
         if (model.getPhotoUrl() == null) {
           viewHolder.messengerImageView.setImageDrawable(
-              ContextCompat.getDrawable(ChatActivity.this, R.drawable.ic_account_circle_black_36dp));
+              ContextCompat.getDrawable(ChatActivity.this, R.drawable.ic_account_circle_black));
         } else {
           GlideApp.with(ChatActivity.this)
               .load(model.getPhotoUrl())
-              .placeholder(R.drawable.ic_account_circle_black_36dp)
+              .placeholder(R.drawable.ic_account_circle_black)
               .into(viewHolder.messengerImageView);
         }
       }

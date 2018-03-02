@@ -10,17 +10,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.sql.Timestamp;
-
 import com.instify.android.R;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.CampusNewsModel;
+import java.sql.Timestamp;
 
 /**
  * Created by Abhish3k on 4/18/2016.
@@ -50,16 +47,16 @@ public class UploadNewsActivity extends AppCompatActivity {
     }
 
     // UI elements //
-    newsTitle = (EditText) findViewById(R.id.news_title);
-    newsDescription = (EditText) findViewById(R.id.news_description);
-    newsLevelRadio = (RadioGroup) findViewById(R.id.campusUploadRadioGroup);
-    univRadio = (RadioButton) findViewById(R.id.campusUploadUniv);
-    deptRadio = (RadioButton) findViewById(R.id.campusUploadDept);
-    classRadio = (RadioButton) findViewById(R.id.campusUploadClass);
-    submitNews = (Button) findViewById(R.id.post);
-    dept = (Spinner) findViewById(R.id.campusUploadDeptSpinner);
-    classYear = (Spinner) findViewById(R.id.campusUploadClassYearSpinner);
-    classSec = (Spinner) findViewById(R.id.campusUploadClassSecSpinner);
+    newsTitle = findViewById(R.id.news_title);
+    newsDescription = findViewById(R.id.news_description);
+    newsLevelRadio = findViewById(R.id.campusUploadRadioGroup);
+    univRadio = findViewById(R.id.campusUploadUniv);
+    deptRadio = findViewById(R.id.campusUploadDept);
+    classRadio = findViewById(R.id.campusUploadClass);
+    submitNews = findViewById(R.id.post);
+    dept = findViewById(R.id.campusUploadDeptSpinner);
+    classYear = findViewById(R.id.campusUploadClassYearSpinner);
+    classSec = findViewById(R.id.campusUploadClassSecSpinner);
 
     // Adapters //
     ArrayAdapter<CharSequence> deptAdapter =

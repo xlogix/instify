@@ -7,7 +7,7 @@
             android:title="@string/nav_attendance" />
         <item
             android:id="@+id/nav_experiences"
-            android:icon="@drawable/ic_campus_news_white"
+            android:icon="@drawable/ic_whatshot_white"
             android:title="@string/experiences"/>
         <item
             android:id="@+id/nav_schedule"

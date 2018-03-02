@@ -69,8 +69,6 @@
   <string name="No_network_connection">No network connection</string>
   <string name="Internal_error">Internal error, please try it later</string>
   <string name="Loading">Loading …</string>
-  <string name="Retry">Retry</string>
-  <string name="Ok">OK</string>
   <string name="Cancel">Cancel</string>
   <string name="Close">Close</string>
   <string name="Clear">Clear</string>
@@ -91,6 +89,10 @@
   <string name="menu_action_filter">Filter</string>
   <string name="no_network_connection_toast">No network connection found</string>
   <string name="get_picture_from_camera">Get picture from Camera</string>
+  <plurals name="likes_count">
+    <item quantity="one">%d like</item>
+    <item quantity="other">%d likes</item>
+  </plurals>
 
   <!-- Login Activity -->
   <string name="hint_email">Your Email</string>
@@ -148,6 +150,7 @@
     MainActivity
   </string>
   <!--[END] Easy Permissions -->
+
   <!-- Arrays for Experience category -->
   <string-array name="experienceCategoryArray">
     <item>General</item>
@@ -203,7 +206,6 @@
   </string-array>
 
   <!-- Strings related to Settings -->
-
   <!-- Example General settings -->
   <string name="pref_header_general">General</string>
 
@@ -242,6 +244,5 @@
   <string name="title_notifications">Notifications</string>
 
   <!-- TODO: Remove or change this placeholder text -->
-  <string name="hello_blank_fragment">Hello blank fragment</string>
   <string name="experiences">Experiences</string>
 </resources>

@@ -60,7 +60,7 @@ import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.listeners.OnSingleClickListener;
 import com.instify.android.models.FirebaseUserDataModel;
 import com.instify.android.ux.fragments.AttendanceFragment;
-import com.instify.android.ux.fragments.ExperiencesFragment;
+import com.instify.android.ux.fragments.FeedFragment;
 import com.instify.android.ux.fragments.NotesFragment;
 import com.instify.android.ux.fragments.TimeTableFragment;
 import com.instify.android.ux.fragments.UnivNewsFragment;
@@ -79,9 +79,9 @@ public class MainActivity extends AppCompatActivity
   private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
   public FloatingActionButton mSharedFab;
   public FirebaseUserDataModel userInfoObject;
-  // Set Firebase User
+  // Declare Firebase User
   FirebaseUser mFirebaseUser;
-  // Set Database Reference
+  // Declare Database Reference
   DatabaseReference dbRef, userRef;
   SQLiteHandler db = new SQLiteHandler(this);
   boolean doubleBackToExitPressedOnce = false;
@@ -123,10 +123,9 @@ public class MainActivity extends AppCompatActivity
     if (mAdView != null) {
       mAdView.resume();
     }
-
     // Ensures that user didn't un-install Google Play Services required for Firebase related tasks.
-    if (checkPlayServices()) {
-
+    if (!checkPlayServices()) {
+      Toast.makeText(this, "Device doesn't have Google Play Services installed, some features may not work.", Toast.LENGTH_SHORT).show();
     }
     // Checks if the device is connected to the internet
     if (isDeviceOnline()) {
@@ -578,8 +577,8 @@ public class MainActivity extends AppCompatActivity
     static final int TAB_NOTES = 3;
     static final int TAB_UNIVERSITY_NEWS = 4;
     private int[] imageResId = {
-        R.drawable.ic_thumbs_up_down, R.drawable.ic_whatshot_white, R.drawable.ic_time_table_white,
-        R.drawable.ic_notes_white, R.drawable.ic_univ_news_white
+        R.drawable.ic_attendance_white, R.drawable.ic_whatshot_white,
+        R.drawable.ic_time_table_white, R.drawable.ic_notes_white, R.drawable.ic_univ_news_white
     };
 
     private SectionsPagerAdapter(FragmentManager fm) {
@@ -593,7 +592,7 @@ public class MainActivity extends AppCompatActivity
         case TAB_ATTENDANCE:
           return AttendanceFragment.newInstance();
         case TAB_EXPERIENCES:
-          return ExperiencesFragment.newInstance();
+          return FeedFragment.newInstance();
         case TAB_TIME_TABLE:
           return TimeTableFragment.newInstance();
         case TAB_NOTES:

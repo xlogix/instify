@@ -10,13 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.Collections;
-import java.util.List;
-
 import com.instify.android.R;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.NotesFileModel;
+import java.util.Collections;
+import java.util.List;
 
 public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

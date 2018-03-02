@@ -51,8 +51,6 @@ import timber.log.Timber;
 
 public class UnivNewsFragment extends Fragment {
 
-  private static final String endpoint =
-      "https://hashbird.com/gogrit.in/workspace/srm-api/univ-news.php";
   @BindView(R.id.error_message) TextView errorMessage;
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
   Unbinder unbinder;
@@ -87,7 +85,7 @@ public class UnivNewsFragment extends Fragment {
     unbinder = ButterKnife.bind(this, rootView);
     // Taking control of the menu options
     setHasOptionsMenu(true);
-    //Prevent  Crash on Rotate
+    // Prevent crash on Rotate
     setRetainInstance(true);
     // Initialize SwipeRefreshLayout
     mSwipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout);
@@ -128,16 +126,19 @@ public class UnivNewsFragment extends Fragment {
 
           news.clear();
           news.addAll(response.body().getNewsItems());
-          for (int i = 0; i < news.size(); i += 5) {
+          /* for (int i = 0; i < news.size(); i += 5) {
             final NativeExpressAdView n = new NativeExpressAdView(getContext());
             news.add(i, n);
           }
+          */
+
+          // Handle UI
           hidePlaceHolder();
-          // UI
           hideRefreshing();
-          setUpAndLoadNativeExpressAds();
+
+          // setUpAndLoadNativeExpressAds();
           if (news.size() == 0) {
-            showErrorPlaceholder("Error in fetching University News");
+            showErrorPlaceholder("Error in fetching news");
           } else {
             hidePlaceHolder();
           }
@@ -146,16 +147,15 @@ public class UnivNewsFragment extends Fragment {
 
         } else {
           showErrorPlaceholder("Error Receiving University News");
-          Toast.makeText(getContext(), "Error Receiving University News", Toast.LENGTH_LONG).show();
           hideRefreshing();
         }
       }
 
       @Override public void onFailure(Call<NewsItemModelList> call, Throwable t) {
+        // Update UI
         showErrorPlaceholder("Failed to Receive University News");
         news.clear();
         mAdapter.notifyDataSetChanged();
-        Toast.makeText(getContext(), "Failed to Receive University News", Toast.LENGTH_LONG).show();
         hideRefreshing();
       }
     });
@@ -218,39 +218,6 @@ public class UnivNewsFragment extends Fragment {
     });
 
     adView.loadAd(new AdRequest.Builder().build());
-  }
-
-  public void makeJSONRequest() {
-    JsonObjectRequest req = new JsonObjectRequest(endpoint, null, response -> {
-      Timber.d(response.toString());
-      try {
-        JSONArray newsItems = response.getJSONArray("newsItems");
-
-        // mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), newsItems);
-
-        // UI
-        hideRefreshing();
-        // Setting the adapter
-        recyclerView.setAdapter(mAdapter);
-      } catch (JSONException e) {
-        Timber.e(e.getMessage(), "Json parsing error: %d");
-        Toast.makeText(getContext(), "JSON Parsing error", Toast.LENGTH_LONG).show();
-      }
-      mAdapter.notifyDataSetChanged();
-    }, VolleyError -> {
-      // Log the message
-      Timber.e(VolleyError.getMessage(), "Error: %d ");
-      // Update UI
-      Toast.makeText(getContext(), "Error Receiving University News", Toast.LENGTH_LONG).show();
-      hideRefreshing();
-    });
-
-    int socketTimeout = 10000;  // 10 seconds - change to what you want
-    RetryPolicy policy =
-        new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-    req.setRetryPolicy(policy);
-    AppController.getInstance().addToRequestQueue(req);
   }
 
   @Override public void onPrepareOptionsMenu(Menu menu) {
@@ -321,7 +288,7 @@ public class UnivNewsFragment extends Fragment {
 
     @Override public int getItemViewType(int position) {
       if (position % 5 == 0) {
-        return AD_TYPE;
+        return CONTENT_TYPE;
       }
       return CONTENT_TYPE;
     }
@@ -336,6 +303,7 @@ public class UnivNewsFragment extends Fragment {
           viewHolder.mUnivNewsSnip.setText(m.getSnip());
           viewHolder.mImageButton2.setOnClickListener(view -> {
             SQLiteHandler db = new SQLiteHandler(mContext);
+
             // ShareCompat Builder
             /* ShareCompat.IntentBuilder builder = ShareCompat.IntentBuilder.from(mContext);
             builder.setChooserTitle(m.getTitle().toUpperCase());
@@ -363,7 +331,7 @@ public class UnivNewsFragment extends Fragment {
             mContext.startActivity(Intent.createChooser(sharingIntent, "Share this topic on"));
           });
           viewHolder.mImageButton.setOnClickListener(view -> {
-            //                           //ToDo Comments for Univ News
+                                   //ToDo Comments for Univ News
           });
           viewHolder.mView.setOnClickListener(v -> {
 
@@ -426,7 +394,7 @@ public class UnivNewsFragment extends Fragment {
       @BindView(R.id.univ_news_title) TextView mUnivNewsTitle;
       @BindView(R.id.univ_news_snip) TextView mUnivNewsSnip;
       @BindView(R.id.imageButton2) ImageButton mImageButton2;
-      @BindView(R.id.imageButton) ImageButton mImageButton;
+      @BindView(R.id.btnLikeUniv) ImageButton mImageButton;
 
       public ViewHolder(View view) {
         super(view);

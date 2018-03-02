@@ -49,10 +49,10 @@ public class FeePaymentHistoryActivity extends AppCompatActivity {
     }
 
     // Declare Views
-    RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+    RecyclerView mRecyclerView = findViewById(R.id.my_recycler_view);
 
     // [START load_banner_ad]
-    mAdView = (AdView) findViewById(R.id.adView);
+    mAdView = findViewById(R.id.adView);
     AdRequest adRequest = new AdRequest.Builder().build();
     mAdView.loadAd(adRequest);
     // [END load_banner_ad]

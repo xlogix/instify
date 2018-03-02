@@ -1,112 +1,90 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColor">@color/textColorPrimary</item>
-        <item name="android:textColorSecondary">@color/textColorSecondary</item>
-        <item name="colorButtonNormal">@color/colorAccent</item>
-    </style>
+  <!-- Base application theme. -->
+  <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <!-- Customize your theme here. -->
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:textColor">@color/textColorPrimary</item>
+    <item name="android:textColorSecondary">@color/textColorSecondary</item>
+    <item name="colorButtonNormal">@color/colorAccent</item>
+  </style>
 
-    <style name="AppTheme.ActionBar.Transparent" parent="AppTheme">
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="windowActionBarOverlay">true</item>
-        <item name="colorPrimary">@android:color/transparent</item>
-    </style>
+  <style name="AppTheme.ActionBar.Transparent" parent="AppTheme">
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="windowActionBarOverlay">true</item>
+    <item name="colorPrimary">@android:color/transparent</item>
+  </style>
 
-    <style name="AppTheme.ActionBar" parent="AppTheme">
-        <item name="windowActionBarOverlay">false</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-    </style>
+  <style name="AppTheme.ActionBar" parent="AppTheme">
+    <item name="windowActionBarOverlay">false</item>
+    <item name="colorPrimary">@color/colorPrimary</item>
+  </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
+  <style name="AppTheme.NoActionBar">
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
+  </style>
 
-    <style name="AppTheme.NoActionBarTransparent">
-        <item name="colorPrimary">@color/transparent</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="windowActionBarOverlay">true</item>
-    </style>
+  <style name="AppTheme.NoActionBarTransparent">
+    <item name="colorPrimary">@color/transparent</item>
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="windowActionBarOverlay">true</item>
+  </style>
 
-    <!-- [START] FAB STYLES -->
-    <style name="MenuLabelsStyle">
-        <item name="android:background">@drawable/fab_label_background</item>
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:maxLines">2</item>
-        <item name="android:ellipsize">end</item>
-    </style>
+  <style name="AppTheme.TransparentActivity">
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="android:windowIsTranslucent">true</item>
+  </style>
 
-    <style name="MenuButtonsStyle">
-        <item name="fab_size">mini</item>
-        <item name="fab_showAnimation">@anim/jump_from_down</item>
-        <item name="fab_hideAnimation">@anim/jump_to_down</item>
-        <item name="fab_shadowColor">#444</item>
-        <item name="fab_colorNormal">#FFB805</item>
-        <item name="fab_colorPressed">#F2AB00</item>
-        <item name="fab_colorRipple">#D99200</item>
-    </style>
+  <style name="AppTheme.TransparentActivity.FullScreen">
+    <item name="android:windowFullscreen">true</item>
+  </style>
 
-    <style name="MenuButtonsSmall">
-        <item name="fab_size">mini</item>
-        <item name="fab_colorNormal">#1565C0</item>
-        <item name="fab_colorPressed">#2272CD</item>
-        <item name="fab_colorRipple">#62B2FF</item>
-    </style>
+  <!-- [START] DARK THEME -->
+  <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
 
-    <style name="MenuButtonsSmall.Green">
-        <item name="fab_colorNormal">#43A047</item>
-        <item name="fab_colorPressed">#2E7D32</item>
-        <item name="fab_colorRipple">#1B5E20</item>
-    </style>
-    <!-- [END] FAB STYLES -->
+    <item name="android:windowBackground">@color/colorPrimary</item>
 
-    <!-- [START] DARK THEME -->
-    <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <item name="colorControlNormal">@color/iron</item>
+    <item name="colorControlActivated">@color/white</item>
+    <item name="colorControlHighlight">@color/white</item>
+    <item name="android:textColorHint">@color/iron</item>
 
-        <item name="android:windowBackground">@color/colorPrimary</item>
+    <item name="colorButtonNormal">@color/colorPrimaryDark</item>
 
-        <item name="colorControlNormal">@color/iron</item>
-        <item name="colorControlActivated">@color/white</item>
-        <item name="colorControlHighlight">@color/white</item>
-        <item name="android:textColorHint">@color/iron</item>
+  </style>
 
-        <item name="colorButtonNormal">@color/colorPrimaryDark</item>
+  <style name="AppTheme.Dark.Dialog" parent="Theme.AppCompat.Dialog">
+    <item name="colorAccent">@color/white</item>
+    <item name="android:textColorPrimary">@color/iron</item>
+    <item name="android:background">@color/colorPrimary</item>
+  </style>
+  <!-- [END] DARK THEME -->
 
-    </style>
+  <!-- By default, the tab created by TabLayout sets the textAllCaps property to be true, which prevents ImageSpans from being rendered.
+  You can override this behavior by changing the tabTextAppearance property. -->
+  <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">
+    <item name="textAllCaps">false</item>
+  </style>
 
-    <style name="AppTheme.Dark.Dialog" parent="Theme.AppCompat.Dialog">
-        <item name="colorAccent">@color/white</item>
-        <item name="android:textColorPrimary">@color/iron</item>
-        <item name="android:background">@color/colorPrimary</item>
-    </style>
-    <!-- [END] DARK THEME -->
+  <style name="ThemeDialogText">
+    <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+  </style>
 
-    <!-- By default, the tab created by TabLayout sets the textAllCaps property to be true, which prevents ImageSpans from being rendered.
-    You can override this behavior by changing the tabTextAppearance property. -->
-    <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="textAllCaps">false</item>
-    </style>
+  <style name="EditTextTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <item name="colorControlNormal">@color/white</item>
+    <item name="colorControlActivated">@color/white</item>
+    <item name="colorControlHighlight">@color/white</item>
+    <item name="colorAccent">@color/white</item>
+    <item name="android:textColorHint">@color/white</item>
+  </style>
 
-    <style name="ThemeDialogText">
-        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
-    </style>
+  <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-    <style name="EditTextTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorControlNormal">@color/white</item>
-        <item name="colorControlActivated">@color/white</item>
-        <item name="colorControlHighlight">@color/white</item>
-        <item name="colorAccent">@color/white</item>
-        <item name="android:textColorHint">@color/white</item>
-    </style>
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+  <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
 </resources>

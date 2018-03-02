@@ -1,6 +1,8 @@
 package com.instify.android.helpers;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -18,9 +20,14 @@ public class RetrofitBuilder {
   public static OkHttpClient.Builder httpClient =
       new OkHttpClient.Builder().addNetworkInterceptor(new StethoInterceptor());
 
-  //Single Instance of Builder
+  // Instantiate Gson
+  public static Gson gson = new GsonBuilder()
+      .setLenient()
+      .create();
+
+  // Single Instance of Builder
   public static Retrofit.Builder builder = new Retrofit.Builder().baseUrl(API_BASE_URL)
-      .addConverterFactory(GsonConverterFactory.create());
+      .addConverterFactory(GsonConverterFactory.create(gson));
 
   public static Retrofit retrofit = builder.client(httpClient.build()).build();
 

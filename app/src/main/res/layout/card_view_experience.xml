@@ -114,6 +114,7 @@
         card_view:layout_constraintLeft_creator="1"
         card_view:layout_constraintRight_creator="1"
         />
+
     <ImageButton
         android:id="@+id/imageButton"
         android:layout_width="wrap_content"
@@ -125,10 +126,11 @@
         android:background="?selectableItemBackgroundBorderless"
         app:layout_constraintRight_toLeftOf="@+id/imageButton2"
         app:layout_constraintTop_toBottomOf="@+id/campusDescription"
-        app:srcCompat="@drawable/ic_mode_comment_black_24dp"
+        app:srcCompat="@drawable/ic_comment_outline_grey"
         card_view:layout_constraintBottom_creator="1"
         card_view:layout_constraintTop_creator="1"
         />
+
     <ImageButton
         android:id="@+id/upVoteButton"
         android:layout_width="wrap_content"
@@ -140,10 +142,11 @@
         android:background="?selectableItemBackgroundBorderless"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/campusDescription"
-        app:srcCompat="@drawable/ic_thumb_up"
+        app:srcCompat="@drawable/ic_action_thumb_up"
         card_view:layout_constraintBottom_creator="1"
         card_view:layout_constraintTop_creator="1"
         />
+
     <TextView
         android:id="@+id/scoreText"
         android:layout_width="wrap_content"
@@ -159,6 +162,7 @@
         card_view:layout_constraintBottom_creator="1"
         card_view:layout_constraintTop_creator="1"
         />
+
     <ImageButton
         android:id="@+id/downVoteButton"
         android:layout_width="wrap_content"
@@ -171,7 +175,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/scoreText"
         app:layout_constraintTop_toBottomOf="@+id/campusDescription"
-        app:srcCompat="@drawable/ic_downvote_24dp"
+        app:srcCompat="@drawable/ic_action_thumb_down"
         card_view:layout_constraintBottom_creator="1"
         card_view:layout_constraintTop_creator="1"
         />
@@ -190,7 +194,6 @@
         card_view:layout_constraintBottom_creator="1"
         card_view:layout_constraintTop_creator="1"
         />
-
 
   </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

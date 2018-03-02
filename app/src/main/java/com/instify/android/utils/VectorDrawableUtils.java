@@ -10,7 +10,7 @@ import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 
 /**
- * Created by Vipul on 28/12/16.
+ * Created by abhishek on 01/03/18.
  */
 
 public class VectorDrawableUtils {

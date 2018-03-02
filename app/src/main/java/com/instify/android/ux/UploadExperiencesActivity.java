@@ -3,7 +3,6 @@ package com.instify.android.ux;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -18,6 +17,7 @@ import com.instify.android.R;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.ExperiencesModel;
 import java.util.HashMap;
+import timber.log.Timber;
 
 public class UploadExperiencesActivity extends AppCompatActivity {
 
@@ -56,7 +56,7 @@ public class UploadExperiencesActivity extends AppCompatActivity {
           .addOnSuccessListener(documentReference2 -> finish())
           .addOnFailureListener(e -> {
             Snackbar.make(relativeLayout, "Post Failed" + e, Snackbar.LENGTH_LONG).show();
-            Log.e("exp", e.getMessage(), e);
+            Timber.e(e.getMessage(), "exp");
           });
     }
   }
