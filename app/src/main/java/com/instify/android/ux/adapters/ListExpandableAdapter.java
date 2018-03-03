@@ -16,7 +16,7 @@ public class ListExpandableAdapter extends BaseExpandableListAdapter {
   private Context context;
   private List<String> headerArray;
   private HashMap<String, ArrayList<String>> childArray;
-  private LayoutInflater infalInflater;
+  private LayoutInflater inflater;
 
   // Initialize constructor for array list
   public ListExpandableAdapter(Context context, ArrayList<String> headerArray,
@@ -24,7 +24,7 @@ public class ListExpandableAdapter extends BaseExpandableListAdapter {
     this.context = context;
     this.headerArray = headerArray;
     this.childArray = listChildData;
-    infalInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
   }
 
   @Override public Object getChild(int groupPosition, int childPosititon) {
@@ -42,8 +42,7 @@ public class ListExpandableAdapter extends BaseExpandableListAdapter {
     final String childText = (String) getChild(groupPosition, childPosition);
 
     if (convertView == null) {
-
-      convertView = infalInflater.inflate(R.layout.list_sub_child, null);
+      convertView = inflater.inflate(R.layout.list_sub_child, null);
     }
 
     TextView textViewChild = convertView.findViewById(R.id.textViewChild);
@@ -75,11 +74,10 @@ public class ListExpandableAdapter extends BaseExpandableListAdapter {
       ViewGroup parent) {
     String headerTitle = (String) getGroup(groupPosition);
     if (convertView == null) {
-      convertView = infalInflater.inflate(R.layout.list_group_header, null);
+      convertView = inflater.inflate(R.layout.list_group_header, null);
     }
 
-    TextView textViewHeader = (TextView) convertView.findViewById(R.id.textViewHeader);
-    //        convertView.setBackgroundResource(R.color.white);
+    TextView textViewHeader = convertView.findViewById(R.id.textViewHeader);
     textViewHeader.setText(headerTitle);
 
     return convertView;

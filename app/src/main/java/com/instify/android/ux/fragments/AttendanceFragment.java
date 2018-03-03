@@ -132,8 +132,6 @@ public class AttendanceFragment extends Fragment {
       showErrorPlaceholder("It's your internet :(");
       // Empty content in view
       recyclerView.setAdapter(null);
-      // Make a Toast
-      Toast.makeText(getContext(), "It's your internet :(", Toast.LENGTH_LONG).show();
     }) {
       @Override protected Map<String, String> getParams() {
         // Posting parameters to login url

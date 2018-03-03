@@ -39,10 +39,10 @@
   <string name="nav_section_1">Navigate</string>
   <string name="nav_attendance">Attendance</string>
   <string name="nav_campus_news">Campus News</string>
+  <string name="nav_whats_hot">What\'s Hot</string>
   <string name="nav_univ_news">University News</string>
   <string name="nav_notes">Notes</string>
   <string name="nav_schedule">Schedule</string>
-
   <string name="nav_section_2">Test Performance</string>
   <string name="nav_gpa_calculator">Calculate GPA</string>
   <string name="nav_test_scores">Test Scores</string>
@@ -130,7 +130,6 @@
 
   <string name="progress_downloading">Downloading…</string>
   <string name="progress_uploading">Uploading…</string>
-  <string name="progress_auth">Signing In…</string>
 
   <string name="upload_success">Upload finished</string>
   <string name="upload_failure">Upload failed</string>\

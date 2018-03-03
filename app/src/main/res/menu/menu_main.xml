@@ -37,11 +37,11 @@
     </item>
   </group>
 
-  <item
+  <!--<item
       android:id="@+id/action_account"
       android:checked="false"
       android:orderInCategory="3"
-      android:title="My Profile"/>
+      android:title="My Profile"/>-->
 
   <item
       android:id="@+id/action_settings"

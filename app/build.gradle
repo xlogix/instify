@@ -25,8 +25,8 @@ android {
     applicationId "com.instify.android"
     minSdkVersion 16
     targetSdkVersion 27
-    versionCode 12
-    versionName "2.0.0"
+    versionCode 14
+    versionName "2.0.1"
     multiDexEnabled true
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     vectorDrawables.useSupportLibrary = true
@@ -136,7 +136,6 @@ dependencies {
   implementation 'com.github.medyo:android-about-page:1.2.2'
   implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
   implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
-  implementation 'com.commonsware.cwac:camera:0.7.0'
 
   // TESTING
   androidTestImplementation 'com.android.support.test:runner:1.0.1'

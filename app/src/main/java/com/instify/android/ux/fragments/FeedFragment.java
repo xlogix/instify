@@ -60,6 +60,26 @@ public class FeedFragment extends Fragment {
     return frag;
   }
 
+  @Override public void onStart() {
+    super.onStart();
+    if (fAdapterAll != null) fAdapterAll.startListening();
+  }
+
+  @Override public void onStop() {
+    super.onStop();
+    if (fAdapterAll != null) fAdapterAll.stopListening();
+  }
+
+  @Override public void onPause() {
+    super.onPause();
+    if (fAdapterAll != null) fAdapterAll.stopListening();
+  }
+
+  @Override public void onResume() {
+    super.onResume();
+    if (fAdapterAll != null) fAdapterAll.startListening();
+  }
+
   @Override public void onAttach(Context context) {
     super.onAttach(context);
   }
@@ -101,12 +121,16 @@ public class FeedFragment extends Fragment {
 
     showNews(pathAll);
     // Return the root view //
-
     return rootView;
   }
 
-  public void showNews(final String path) {
+  @Override public void onDestroyView() {
+    super.onDestroyView();
+    if (fAdapterAll != null) fAdapterAll.stopListening();
+    unbinder.unbind();
+  }
 
+  public void showNews(final String path) {
     // News Database reference
     Query query = FirebaseDatabase.getInstance().getReference().child(path);
     FirebaseRecyclerOptions<CampusNewsModel> options =
@@ -199,12 +223,6 @@ public class FeedFragment extends Fragment {
     return super.onOptionsItemSelected(item);
   }
 
-  @Override public void onDestroyView() {
-    super.onDestroyView();
-    if (fAdapterAll != null) fAdapterAll.stopListening();
-    unbinder.unbind();
-  }
-
   public void showErrorPlaceholder(String message) {
     if (placeholderError != null && errormessage != null) {
       if (placeholderError.getVisibility() != View.VISIBLE) {
@@ -221,15 +239,6 @@ public class FeedFragment extends Fragment {
       }
       errormessage.setText("Something went wrong. Try Again!");
     }
-  }
-
-  @Override public void onStart() {
-    super.onStart();
-    if (fAdapterAll != null) fAdapterAll.startListening();
-  }
-
-  @Override public void onStop() {
-    super.onStop();
   }
 
   @Keep public static class CampusViewHolder extends RecyclerView.ViewHolder {

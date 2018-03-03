@@ -4,14 +4,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -126,13 +123,6 @@ public class MainActivity extends AppCompatActivity
     // Ensures that user didn't un-install Google Play Services required for Firebase related tasks.
     if (!checkPlayServices()) {
       Toast.makeText(this, "Device doesn't have Google Play Services installed, some features may not work.", Toast.LENGTH_SHORT).show();
-    }
-    // Checks if the device is connected to the internet
-    if (isDeviceOnline()) {
-      Timber.d(TAG, "Device is online.");
-    } else {
-      Snackbar.make(mViewPager, "Device Offline. Functionality may be limited.",
-          Snackbar.LENGTH_SHORT).show();
     }
   }
 
@@ -368,14 +358,6 @@ public class MainActivity extends AppCompatActivity
     return true;
   }
 
-  // Check if device is online
-  private boolean isDeviceOnline() {
-    ConnectivityManager connMgr = (ConnectivityManager) this.getApplicationContext()
-        .getSystemService(Context.CONNECTIVITY_SERVICE);
-    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-    return (networkInfo != null && networkInfo.isConnected());
-  }
-
   private void setupDrawerContent(NavigationView navigationView) {
     navigationView.setNavigationItemSelectedListener(menuItem -> {
       menuItem.setChecked(true);
@@ -464,8 +446,6 @@ public class MainActivity extends AppCompatActivity
     } else if (id == R.id.action_search) {
       return true;
     } else if (id == R.id.action_filter) {
-      return true;
-    } else if (id == R.id.action_account) {
       return true;
     } else if (id == R.id.action_settings) {
       startActivity(new Intent(MainActivity.this, SettingsActivity.class));

@@ -26,35 +26,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.android.volley.Request;
-import com.android.volley.toolbox.StringRequest;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.instify.android.R;
-import com.instify.android.app.AppConfig;
-import com.instify.android.app.AppController;
-import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.NotesFileModel;
-import com.instify.android.ux.adapters.ListExpandableAdapter;
 import com.instify.android.ux.adapters.NotesFileAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
-import timber.log.Timber;
 
 public class NotesSubjectFilesActivity extends AppCompatActivity {
 
@@ -114,15 +100,16 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
           startActivity(intent);
         });
       }
-          @Override public int getItemCount() {
-            if (super.getItemCount() == 0) {
-              showErrorPlaceholder("No notes to display, Be the first to upload!");
-            } else {
-              hidePlaceHolder();
-            }
-            return super.getItemCount();
-          }
-        };
+
+      @Override public int getItemCount() {
+        if (super.getItemCount() == 0) {
+          showErrorPlaceholder("No notes to display, Be the first to upload!");
+        } else {
+          hidePlaceHolder();
+        }
+        return super.getItemCount();
+      }
+    };
 
     mNotesView.setLayoutManager(new LinearLayoutManager(NotesSubjectFilesActivity.this));
 
@@ -137,105 +124,6 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
   @Override public void onStop() {
     super.onStop();
     if (adapter != null) adapter.stopListening();
-  }
-  private void getNotes(final String subjectCode) {
-
-    // Handle UI
-    // showRefreshing();
-
-    // Tag used to cancel the request
-    String tag_string_req = "req_files";
-
-    StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_FILES, response -> {
-      try {
-        JSONArray user = new JSONArray(response);
-        boolean error; // = jObj.getBoolean("error");
-        error = false;
-
-        // Handle UI
-        // hideRefreshing();
-
-        // Check for error node in json
-        if (!error) {
-          ListExpandableAdapter expListAdapter;
-
-          // declare array List for all headers in list
-          ArrayList<String> headersArrayList = new ArrayList<>();
-          List<NotesFileModel> NotesFileModel = new ArrayList<>();
-          // Declare Hash map for all headers and their corresponding values
-          HashMap<String, ArrayList<String>> childArrayList = new HashMap<>();
-
-          // expListView = (ExpandableListView)findViewById(R.id.expListView);
-          //    JSONArray user = jObj.getJSONArray(response);
-
-          //  int i;
-          //                        mAdapter = new NotesAdapter(notes);
-          //                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-          //                        recyclerView.setLayoutManager(mLayoutManager);
-          //  recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-          for (int i = 0; i < user.length(); i++) {
-            JSONObject json_data = user.getJSONObject(i);
-            //  JSONObject subs = user.getJSONObject(user.getString(i));
-
-            //                            notes movie = notes(subs.getString("sub-desc"));
-            //                            notes.add(movie);
-            //   notes obj = new notes(subs.getString("sub-desc"));
-
-            NotesFileModel fishData = new NotesFileModel();
-            fishData.notename = json_data.getString("name");
-            fishData.notedesc = json_data.getString("desc");
-            fishData.notetime = json_data.getString("uploaded");
-            fishData.notefile = json_data.getString("file");
-            fishData.noteregno = json_data.getString("regno");
-            fishData.noteposter = json_data.getString("author");
-
-            // fishData.sizeName = json_data.getString("registration").trim();
-            // fishData.price = json_data.getString("ID");
-            // fishData.image = "https://hashbird.com/gogrit.in/workspace/srm-api/studentImages/" + json_data.getString("registration").trim() + ".jpg";
-            NotesFileModel.add(fishData);
-          }
-          // Setup and Handover data to recycler view
-          //  mNotesView = (RecyclerView) findViewById(R.id.);
-          NotesFileAdapter mAdapter =
-              new NotesFileAdapter(NotesSubjectFilesActivity.this, NotesFileModel);
-          mNotesView.setAdapter(mAdapter);
-          mNotesView.setLayoutManager(new LinearLayoutManager(NotesSubjectFilesActivity.this));
-
-          //   mAdapter = new NotesAdapter(getApplicationContext(), notes);
-          //   mNotesView.setAdapter(mAdapter);
-          //   mNotesView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-
-        } else {
-          showErrorPlaceholder("Database Error");
-          // Update UI
-          // hideRefreshing();
-        }
-      } catch (JSONException e) {
-        // Update UI
-        // hideRefreshing();
-        showErrorPlaceholder("No Notes to Display, Be the First To upload");
-      }
-    }, error -> {
-      showErrorPlaceholder("Network Error,Try Again");
-      Timber.e("Network Error: " + error.getMessage());
-      Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-    }) {
-      @Override protected Map<String, String> getParams() {
-        // Posting parameters to login url
-        Map<String, String> params = new HashMap<>();
-        SQLiteHandler db = new SQLiteHandler(getApplicationContext());
-        String regNo = db.getUserDetails().getRegno();
-        // String pass = db.getUserDetails().get("created_at");
-
-        params.put("regno", regNo);
-        //  params.put("pass", pass);
-        params.put("subject", subjectCode);
-        return params;
-      }
-    };
-    // Adding request to request queue
-    AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {

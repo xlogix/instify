@@ -147,10 +147,6 @@
         android:name=".ux.ChatActivity"
         android:label="@string/title_activity_chat"/>
     <activity
-        android:name=".ux.TakePhotoActivity"
-        android:screenOrientation="portrait"
-        android:theme="@style/AppTheme.TransparentActivity"/>
-    <activity
         android:name=".ux.TestPerformanceActivity"
         android:label="@string/title_activity_test_performance"
         android:parentActivityName=".ux.MainActivity"/>
