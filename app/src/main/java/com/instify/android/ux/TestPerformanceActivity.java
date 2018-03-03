@@ -95,14 +95,16 @@ public class TestPerformanceActivity extends AppCompatActivity {
           TestPerformanceAdapterParent test =
               new TestPerformanceAdapterParent(t.getTestPerformance(),
                   TestPerformanceActivity.this);
+
           // Update UI
-          Snackbar.make(findViewById(android.R.id.content), "Sync Successful",
-              Snackbar.LENGTH_SHORT).show();
+          Snackbar.make(refreshingFAB, "Sync Successful", Snackbar.LENGTH_SHORT).show();
+
           if (test.getItemCount() == 0) {
             showErrorPlaceholder("No Data in ERP to Display");
           } else {
             hidePlaceHolder();
           }
+
           mRecyclerViewTestPerformance.setAdapter(test);
           // TODO : Create Adapter here When api is Complete
         } else {
