@@ -35,7 +35,6 @@ public class TestPerformanceActivity extends AppCompatActivity {
   private SQLiteHandler db = new SQLiteHandler(this);
 
   // [START add_lifecycle_methods]
-
   /**
    * Called when leaving the activity
    */

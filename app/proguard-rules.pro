@@ -30,16 +30,22 @@
 -keep class sun.misc.Unsafe { *; }
 -dontwarn java.nio.file.*
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
--dontwarn okio.**
 
 # RetroLambda
 -dontwarn java.lang.invoke.*
 -dontwarn **$$Lambda$*
 
+# okhttp3
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontwarn org.conscrypt.**
+# A resource is loaded with a relative path so the package of this class must be preserved.
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+
 # Basic proguard configuration to support all the devices
 -keep class android.support.v4.** {  *; }
 -keep interface android.support.v7.** { *; }
-
 -keep class android.support.v7.** { *; }
 -keep interface android.support.v7.** { *; }
 
