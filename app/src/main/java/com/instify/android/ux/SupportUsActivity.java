@@ -7,14 +7,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
-
-import timber.log.Timber;
 import com.instify.android.R;
+import timber.log.Timber;
 
 /**
  * Created by Abhish3k on 24-03-2017.
@@ -36,7 +34,6 @@ public class SupportUsActivity extends AppCompatActivity {
     mInterstitialAd = new InterstitialAd(this);
     mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
 
-    // TODO : Remove test device before release
     AdRequest adRequest = new AdRequest.Builder().build();
 
     // Load ads into Interstitial Ads
@@ -60,7 +57,7 @@ public class SupportUsActivity extends AppCompatActivity {
 
       @Override public void onAdFailedToLoad(int i) {
         // See https://goo.gl/sCZj0H for possible error codes.
-        Timber.w(TAG, "onAdFailedToLoad:" + i);
+        Timber.w("onAdFailedToLoad: %d", i);
       }
 
       @Override public void onAdOpened() {
@@ -84,18 +81,6 @@ public class SupportUsActivity extends AppCompatActivity {
     // [END load_banner_ad]
   }
 
-  /**
-   * Load a new interstitial ad asynchronously.
-   */
-  // [START request_new_interstitial]
-  private void requestNewInterstitial() {
-    AdRequest adRequest =
-        new AdRequest.Builder().build();
-
-    mInterstitialAd.loadAd(adRequest);
-  }
-  // [END request_new_interstitial]
-
   // [START add_lifecycle_methods]
   /**
    * Called when leaving the activity
@@ -111,10 +96,10 @@ public class SupportUsActivity extends AppCompatActivity {
    * Called when returning to the activity
    */
   @Override public void onResume() {
-    super.onResume();
     if (mAdView != null) {
       mAdView.resume();
     }
+    super.onResume();
   }
 
   /**

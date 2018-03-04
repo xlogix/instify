@@ -115,85 +115,84 @@
         card_view:layout_constraintRight_creator="1"
         />
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
-        android:background="?selectableItemBackgroundBorderless"
-        app:layout_constraintRight_toLeftOf="@+id/imageButton2"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         app:layout_constraintTop_toBottomOf="@+id/campusDescription"
-        app:srcCompat="@drawable/ic_comment_outline_grey"
-        card_view:layout_constraintBottom_creator="1"
-        card_view:layout_constraintTop_creator="1"
-        />
+        >
 
-    <ImageButton
-        android:id="@+id/upVoteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="?selectableItemBackgroundBorderless"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/campusDescription"
-        app:srcCompat="@drawable/ic_action_thumb_up"
-        card_view:layout_constraintBottom_creator="1"
-        card_view:layout_constraintTop_creator="1"
-        />
+      <ImageButton
+          android:id="@+id/upVoteButton"
+          android:layout_width="48dp"
+          android:layout_height="48dp"
+          android:background="@android:color/transparent"
+          android:src="@drawable/ic_action_like"
+          />
 
-    <TextView
-        android:id="@+id/scoreText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="2452"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/upVoteButton"
-        app:layout_constraintTop_toBottomOf="@+id/campusDescription"
-        card_view:layout_constraintBottom_creator="1"
-        card_view:layout_constraintTop_creator="1"
-        />
+      <ImageButton
+          android:id="@+id/imageButton"
+          android:layout_width="48dp"
+          android:layout_height="48dp"
+          android:background="?selectableItemBackgroundBorderless"
+          app:layout_constraintRight_toLeftOf="@+id/imageButton2"
+          app:layout_constraintTop_toBottomOf="@+id/campusDescription"
+          app:srcCompat="@drawable/ic_action_comment"
+          card_view:layout_constraintBottom_creator="1"
+          card_view:layout_constraintTop_creator="1"
+          />
 
-    <ImageButton
-        android:id="@+id/downVoteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="?selectableItemBackgroundBorderless"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/scoreText"
-        app:layout_constraintTop_toBottomOf="@+id/campusDescription"
-        app:srcCompat="@drawable/ic_action_thumb_down"
-        card_view:layout_constraintBottom_creator="1"
-        card_view:layout_constraintTop_creator="1"
-        />
+      <ImageButton
+          android:id="@+id/imageButton2"
+          android:layout_width="48dp"
+          android:layout_height="48dp"
+          android:background="?selectableItemBackgroundBorderless"
+          app:layout_constraintRight_toRightOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/campusDescription"
+          app:srcCompat="@drawable/ic_share_black_24dp"
+          card_view:layout_constraintBottom_creator="1"
+          card_view:layout_constraintTop_creator="1"
+          />
 
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:background="?selectableItemBackgroundBorderless"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/campusDescription"
-        app:srcCompat="@drawable/ic_share_black_24dp"
-        card_view:layout_constraintBottom_creator="1"
-        card_view:layout_constraintTop_creator="1"
-        />
+      <LinearLayout
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:gravity="center_vertical|end"
+          >
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_like"
+            />
+
+        <TextSwitcher
+            android:id="@+id/tsLikesCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:inAnimation="@anim/slide_in_likes_counter"
+            android:outAnimation="@anim/slide_out_likes_counter"
+            >
+
+          <TextView
+              android:id="@+id/scoreText"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="0 likes"
+              android:textColor="@color/text_like_counter"
+              />
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="@color/text_like_counter"
+              />
+        </TextSwitcher>
+      </LinearLayout>
+    </LinearLayout>
   </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

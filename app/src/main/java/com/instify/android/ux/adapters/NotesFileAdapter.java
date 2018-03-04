@@ -11,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.instify.android.R;
-import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.NotesFileModel;
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +18,6 @@ import java.util.List;
 public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   private List<NotesFileModel> data = Collections.emptyList();
-  private SQLiteHandler db;
   private Context context;
   private LayoutInflater inflater;
 
@@ -33,7 +31,7 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
   // Inflate the layout when ViewHolder created
   @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     // Inflate View
-    View view = inflater.inflate(R.layout.card_view_notes_subjects_item, parent, false);
+    View view = inflater.inflate(R.layout.card_view_notes_subjects_item, parent);
     // Set adapter
     return new NotesFileAdapter.MyHolder(view);
   }
@@ -54,11 +52,10 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
   public static class MyHolder extends RecyclerView.ViewHolder {
 
-    TextView notename;
-    TextView notedesc;
-    TextView notetime;
+    TextView noteName;
+    TextView noteDesc;
+    TextView noteTime;
     TextView author;
-    //TextView textPrice;
     ImageView imageView;
     ImageButton shareButton;
     String link;
@@ -67,26 +64,26 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     // create constructor to get widget reference
     public MyHolder(final View itemView) {
       super(itemView);
-      cv = itemView.findViewById(R.id.cardView);
-      notename = itemView.findViewById(R.id.name);
-      notedesc = itemView.findViewById(R.id.desc);
-      notetime = itemView.findViewById(R.id.datetime);
+      cv = itemView.findViewById(R.id.cardViewSubjectsItem);
+      noteName = itemView.findViewById(R.id.name);
+      noteDesc = itemView.findViewById(R.id.desc);
+      noteTime = itemView.findViewById(R.id.datetime);
       author = itemView.findViewById(R.id.uname);
       imageView = itemView.findViewById(R.id.imageView);
       shareButton = itemView.findViewById(R.id.share_button);
     }
 
     public void setDataToView(NotesFileModel current) {
-      notename.setText(current.noteName);
-      notedesc.setText(current.noteDesc);
+      noteName.setText(current.notename);
+      noteDesc.setText(current.notedesc);
       long now = System.currentTimeMillis();
-      notetime.setText(
-          DateUtils.getRelativeTimeSpanString(current.getUnixTime(), now, DateUtils.DAY_IN_MILLIS));
-      author.setText(current.notePoster);
+      noteTime.setText(
+          DateUtils.getRelativeTimeSpanString(current.getUnixtime(), now, DateUtils.DAY_IN_MILLIS));
+      author.setText(current.noteposter);
       shareButton.setOnClickListener(v -> {
-        //TODO SHare Link via text
+        // TODO: SHare Link via text
       });
-      switch (current.noteType) {
+      switch (current.notetype) {
         case "doc":
           imageView.setImageResource(R.drawable.ic_doc);
           break;
@@ -108,7 +105,7 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         default:
           imageView.setImageResource(R.drawable.ic_attach_file_black_24dp);
       }
-      link = current.getNoteFile();
+      link = current.getNotefile();
     }
   }
 }

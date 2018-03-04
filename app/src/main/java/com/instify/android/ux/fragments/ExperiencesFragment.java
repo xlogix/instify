@@ -112,7 +112,7 @@ public class ExperiencesFragment extends Fragment {
         // Create a new instance of the ViewHolder, in this case we are using a custom
         // layout called R.layout.message for each item
         View view = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.card_view_experience, parent, false);
+            .inflate(R.layout.card_view_experiences, parent, false);
 
         return new ViewHolder(view);
       }

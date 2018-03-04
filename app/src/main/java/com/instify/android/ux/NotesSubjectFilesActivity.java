@@ -87,7 +87,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
         // Create a new instance of the ViewHolder, in this case we are using a custom
         // layout called R.layout.message for each item
         View view = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.card_view_experience, parent, false);
+            .inflate(R.layout.card_view_experiences, parent, false);
 
         return new NotesFileAdapter.MyHolder(view);
       }
@@ -97,7 +97,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
           @NonNull NotesFileModel model) {
         viewHolder.setDataToView(model);
         viewHolder.cv.setOnClickListener(v -> {
-          Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(model.getNoteFile()));
+          Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(model.getNotefile()));
           startActivity(intent);
         });
       }
@@ -367,7 +367,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
       if (placeholderError.getVisibility() == View.VISIBLE) {
         placeholderError.setVisibility(View.INVISIBLE);
       }
-      errorMessage.setText("Something Went Wrong. Try Again!");
+      errorMessage.setText("Something went wrong. Try again!");
     }
   }
 

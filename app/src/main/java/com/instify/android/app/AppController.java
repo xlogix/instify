@@ -19,6 +19,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.instify.android.BuildConfig;
 import com.instify.android.helpers.PreferenceManager;
@@ -50,6 +51,8 @@ public class AppController extends MultiDexApplication {
     super.onCreate();
     mInstance = this;
     FirebaseApp.initializeApp(this);
+    // Disk Persistence in Firebase
+    FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     // Fixes crash reported on Firebase, issue : https://github.com/TheFinestArtist/FinestWebView-Android/issues/79
     Base.initialize(this);
     // Check Build Config for debugging libraries
@@ -79,12 +82,12 @@ public class AppController extends MultiDexApplication {
       // set in-app defaults
       Map<String, Object> remoteConfigDefaults = new HashMap();
       remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_REQUIRED, false);
-      remoteConfigDefaults.put(ForceUpdateChecker.KEY_CURRENT_VERSION, "2.0.1");
+      remoteConfigDefaults.put(ForceUpdateChecker.KEY_CURRENT_VERSION, "2.0.2");
       remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_URL,
           "https://play.google.com/store/apps/details?id=com.instify.android");
 
       firebaseRemoteConfig.setDefaults(remoteConfigDefaults);
-      firebaseRemoteConfig.fetch(60) // fetch every minutes
+      firebaseRemoteConfig.fetch(60) // fetch every minute
           .addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override public void onComplete(@NonNull Task<Void> task) {
               if (task.isSuccessful()) {

@@ -55,7 +55,7 @@ import com.instify.android.app.AppController;
 import com.instify.android.app.ForceUpdateChecker;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.listeners.OnSingleClickListener;
-import com.instify.android.models.FirebaseUserDataModel;
+import com.instify.android.models.UserDataModel;
 import com.instify.android.ux.fragments.AttendanceFragment;
 import com.instify.android.ux.fragments.FeedFragment;
 import com.instify.android.ux.fragments.NotesFragment;
@@ -75,19 +75,22 @@ public class MainActivity extends AppCompatActivity
   /* Play Services Request required to check if Google Services is installed or not */
   private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
   public FloatingActionButton mSharedFab;
-  public FirebaseUserDataModel userInfoObject;
+  public UserDataModel userInfoObject;
   // Declare Firebase User
   FirebaseUser mFirebaseUser;
   // Declare Database Reference
   DatabaseReference dbRef, userRef;
+  ValueEventListener childListener;
+  // Declare SQLite
   SQLiteHandler db = new SQLiteHandler(this);
-  boolean doubleBackToExitPressedOnce = false;
-  View headerView;
 
   private DrawerLayout drawerLayout;
   private ViewPager mViewPager;
   // Declare AdView
   private AdView mAdView;
+  // Enable double press
+  boolean doubleBackToExitPressedOnce = false;
+  View headerView;
 
   /**
    * The {@link PagerAdapter} that will provide
@@ -105,9 +108,12 @@ public class MainActivity extends AppCompatActivity
    * Called when leaving the activity
    */
   @Override public void onPause() {
+    // Ad-view
     if (mAdView != null) {
       mAdView.pause();
     }
+    // Remove Database Listener
+    userRef.removeEventListener(childListener);
     super.onPause();
   }
 
@@ -115,11 +121,13 @@ public class MainActivity extends AppCompatActivity
    * Called when returning to the activity
    */
   @Override protected void onResume() {
-    super.onResume();
+    // Add Database Listener
+    userRef.addValueEventListener(childListener);
 
     if (mAdView != null) {
       mAdView.resume();
     }
+    super.onResume();
     // Ensures that user didn't un-install Google Play Services required for Firebase related tasks.
     if (!checkPlayServices()) {
       Toast.makeText(this,
@@ -132,6 +140,8 @@ public class MainActivity extends AppCompatActivity
    * Called before the activity is destroyed
    */
   @Override public void onDestroy() {
+    // Remove Database Listener
+    userRef.removeEventListener(childListener);
     if (mAdView != null) {
       mAdView.removeAllViews();
       mAdView.destroy();
@@ -171,23 +181,6 @@ public class MainActivity extends AppCompatActivity
     // Get the current logged-in user
     mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-    // Initialize Mobile Ads (AdWords)
-    MobileAds.initialize(getApplicationContext(), getString(R.string.all_ad_app_id));
-
-    // [START load_banner_ad]
-    mAdView = findViewById(R.id.adView);
-    AdRequest adRequestBanner = new AdRequest.Builder().build();
-    // Load Ad
-    mAdView.loadAd(adRequestBanner);
-    // Add Ad Listener
-    mAdView.setAdListener(new AdListener() {
-      @Override public void onAdLoaded() {
-        super.onAdLoaded();
-        mAdView.setVisibility(View.VISIBLE);
-      }
-    });
-    // [END load_banner_ad]
-
     // Drawer Layout
     drawerLayout = findViewById(R.id.drawer_layout);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
@@ -211,7 +204,6 @@ public class MainActivity extends AppCompatActivity
       @Override public void onDrawerStateChanged(int newState) {
       }
     });
-
     toggle.syncState();
 
     // Inflate header view
@@ -247,7 +239,6 @@ public class MainActivity extends AppCompatActivity
         startActivity(new Intent(MainActivity.this, ProfilePictureFullScreenActivity.class));
       }
     });
-
     /* [END] Setup Header View **/
 
     // Create the adapter that will return a fragment for each of the three
@@ -297,10 +288,10 @@ public class MainActivity extends AppCompatActivity
       userRef = dbRef.child("users").child(mFirebaseUser.getUid());
 
       // User object generation for the database - for usage in all fragments
-      userRef.addValueEventListener(new ValueEventListener() {
+      childListener = userRef.addValueEventListener(new ValueEventListener() {
         @Override public void onDataChange(DataSnapshot dataSnapshot) {
           // Collecting users data to use through out the app
-          userInfoObject = dataSnapshot.getValue(FirebaseUserDataModel.class);
+          userInfoObject = dataSnapshot.getValue(UserDataModel.class);
         }
 
         @Override public void onCancelled(DatabaseError databaseError) {
@@ -315,12 +306,29 @@ public class MainActivity extends AppCompatActivity
       homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
       startActivity(homeIntent);
     }
+
+    // Initialize Mobile Ads (AdWords)
+    MobileAds.initialize(getApplicationContext(), getString(R.string.all_ad_app_id));
+
+    // [START load_banner_ad]
+    mAdView = findViewById(R.id.adView);
+    AdRequest adRequestBanner = new AdRequest.Builder().build();
+    // Load Ad
+    mAdView.loadAd(adRequestBanner);
+    // Add Ad Listener
+    mAdView.setAdListener(new AdListener() {
+      @Override public void onAdLoaded() {
+        super.onAdLoaded();
+        mAdView.setVisibility(View.VISIBLE);
+      }
+    });
+    // [END load_banner_ad]
   }
 
   // Check if update to new version is needed or not
   @Override public void onUpdateNeeded(String updateUrl) {
     AlertDialog dialog = new AlertDialog.Builder(this).setTitle("New version available")
-        .setMessage("Please update to new version to continue using the app")
+        .setMessage("Please update to new version to enjoy latest features and bug fixes!")
         .setPositiveButton("Update", new DialogInterface.OnClickListener() {
           @Override public void onClick(DialogInterface dialog, int which) {
             redirectStore(updateUrl);

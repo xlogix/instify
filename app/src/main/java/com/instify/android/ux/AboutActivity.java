@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
+import com.instify.android.BuildConfig;
 import com.instify.android.R;
 import java.util.Calendar;
 import mehdi.sakout.aboutpage.AboutPage;
@@ -30,7 +31,7 @@ public class AboutActivity extends AppCompatActivity {
             "This app is developed by : Abhishek Uniyal, Vijay Krishna, Arjun Mahishi, Somnath and Chandan Singh"
                 + "\n\nSpecial thanks to : Ankur, Trishansh")
         .setImage(R.drawable.ic_logo_96dp)
-        .addItem(new Element().setTitle("Version 2.0.0"))
+        .addItem(new Element().setTitle(BuildConfig.VERSION_NAME))
         .addGroup("Connect with us")
         .addEmail("support@fnplus.xyz")
         .addWebsite("https://www.fnplus.xyz/")

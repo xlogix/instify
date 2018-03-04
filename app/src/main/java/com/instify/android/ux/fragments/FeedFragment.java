@@ -101,7 +101,13 @@ public class FeedFragment extends Fragment {
     // Recycler view set up //
     recyclerView = rootView.findViewById(R.id.recycler_view_campus_news);
     recyclerView.setHasFixedSize(true);
-    recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+    // Declare linear layout
+    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(recyclerView.getContext());
+    // Change the layout orientation to put new news on top
+    linearLayoutManager.setReverseLayout(true);
+    linearLayoutManager.setStackFromEnd(true);
+    // Set layout
+    recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setItemAnimator(new DefaultItemAnimator());
 
     // Debug
@@ -133,6 +139,10 @@ public class FeedFragment extends Fragment {
   public void showNews(String path) {
     // News Database reference
     Query query = FirebaseDatabase.getInstance().getReference().child(path);
+    // The Firebase Database synchronizes and stores a local copy of the data for active listeners
+    query.keepSynced(true);
+    query.orderByKey();
+    // Initialize
     FirebaseRecyclerOptions<CampusNewsModel> options =
         new FirebaseRecyclerOptions.Builder<CampusNewsModel>().setQuery(query,
             CampusNewsModel.class).build();
@@ -155,7 +165,6 @@ public class FeedFragment extends Fragment {
         holder.mCampusDescription.setText(model.description);
         // Set click action for Comment button
         holder.mImageButton.setOnClickListener(view -> {
-
           Intent launchChat = new Intent(view.getContext(), ChatActivity.class);
           launchChat.putExtra("refPath", path + "/" + fAdapterAll.getRef(position).getKey());
           launchChat.putExtra("CampNewsModel", model);

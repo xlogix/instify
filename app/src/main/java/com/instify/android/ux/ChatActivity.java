@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,13 +65,14 @@ import timber.log.Timber;
 public class ChatActivity extends AppCompatActivity {
   private static final String TAG = ChatActivity.class.getSimpleName();
 
-  public static final int DEFAULT_MSG_LENGTH_LIMIT = 100;
+  public static final int DEFAULT_MSG_LENGTH_LIMIT = 10;
   public static final String ANONYMOUS = "anonymous";
   private static final int REQUEST_IMAGE = 1;
   private static final String MESSAGE_SENT_EVENT = "message_sent";
   private static final String MESSAGE_URL = "http://friendlychat.firebase.google.com/message/";
   private static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
-  public static String MESSAGES_CHILD = "messages";
+  // Firebase Database Location
+  public static String MESSAGES_CHILD;
 
   @BindView(R.id.placeholder) LinearLayout mPlaceholder;
   String refPath;
@@ -104,7 +106,6 @@ public class ChatActivity extends AppCompatActivity {
     mUsername = ANONYMOUS;
 
     mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
     // Get data
     if (mFirebaseUser != null) {
       try {
@@ -121,17 +122,21 @@ public class ChatActivity extends AppCompatActivity {
 
     refPath = getIntent().getStringExtra("refPath");
     model = getIntent().getParcelableExtra("CampNewsModel");
-    setdata(model);
+    setData(model);
+    // Set location for storage
     MESSAGES_CHILD = refPath + "/discussion";
 
     mProgressBar = findViewById(R.id.progressBar);
     mMessageRecyclerView = findViewById(R.id.recycler_view_trending);
     mLinearLayoutManager = new LinearLayoutManager(this);
     mLinearLayoutManager.setStackFromEnd(true);
+
     Query query = FirebaseDatabase.getInstance().getReference().child(MESSAGES_CHILD);
+
     FirebaseRecyclerOptions<ChatMessageModel> options =
         new FirebaseRecyclerOptions.Builder<ChatMessageModel>().setQuery(query,
             ChatMessageModel.class).build();
+
     mFirebaseAdapter = new FirebaseRecyclerAdapter<ChatMessageModel, MessageViewHolder>(options) {
       @Override public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Create a new instance of the ViewHolder, in this case we are using a custom
@@ -156,17 +161,22 @@ public class ChatActivity extends AppCompatActivity {
         } else {
           String imageUrl = model.getImageUrl();
           if (imageUrl.startsWith("gs://")) {
-            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
+            StorageReference storageReference =
+                FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
             storageReference.getDownloadUrl().addOnCompleteListener(task -> {
               if (task.isSuccessful()) {
                 String downloadUrl = task.getResult().toString();
-                Glide.with(viewHolder.messageImageView.getContext()).load(downloadUrl).into(viewHolder.messageImageView);
+                Glide.with(viewHolder.messageImageView.getContext())
+                    .load(downloadUrl)
+                    .into(viewHolder.messageImageView);
               } else {
-                Timber.w(TAG, "Getting download url was not successful.", task.getException());
+                Timber.w(task.getException(), "Getting download url was not successful.");
               }
             });
           } else {
-            Glide.with(viewHolder.messageImageView.getContext()).load(model.getImageUrl()).into(viewHolder.messageImageView);
+            Glide.with(viewHolder.messageImageView.getContext())
+                .load(model.getImageUrl())
+                .into(viewHolder.messageImageView);
           }
           viewHolder.messageImageView.setVisibility(ImageView.VISIBLE);
           viewHolder.messageTextView.setVisibility(TextView.GONE);
@@ -183,18 +193,18 @@ public class ChatActivity extends AppCompatActivity {
               .into(viewHolder.messengerImageView);
         }
       }
-          @Override public int getItemCount() {
-            //Hide Progress Bar When no items
-            if (super.getItemCount() == 0) {
-              mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-              mPlaceholder.setVisibility(View.VISIBLE);
-            } else {
-              mPlaceholder.setVisibility(View.GONE);
-            }
-            return super.getItemCount();
-          }
-        };
 
+      @Override public int getItemCount() {
+        //Hide Progress Bar When no items
+        if (super.getItemCount() == 0) {
+          mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+          mPlaceholder.setVisibility(View.VISIBLE);
+        } else {
+          mPlaceholder.setVisibility(View.GONE);
+        }
+        return super.getItemCount();
+      }
+    };
 
     mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
       @Override public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -212,7 +222,6 @@ public class ChatActivity extends AppCompatActivity {
 
     mMessageRecyclerView.setLayoutManager(mLinearLayoutManager);
     mMessageRecyclerView.setAdapter(mFirebaseAdapter);
-    mMessageRecyclerView.setNestedScrollingEnabled(false);
     // Initialize Firebase Measurement.
     mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
@@ -221,12 +230,12 @@ public class ChatActivity extends AppCompatActivity {
 
     // Define Firebase Remote Config Settings.
     FirebaseRemoteConfigSettings firebaseRemoteConfigSettings =
-        new FirebaseRemoteConfigSettings.Builder().setDeveloperModeEnabled(true).build();
+        new FirebaseRemoteConfigSettings.Builder().setDeveloperModeEnabled(false).build();
 
     // Define default config values. Defaults are used when fetched config values are not
     // available. Eg: if an error occurred fetching values from the server.
     Map<String, Object> defaultConfigMap = new HashMap<>();
-    defaultConfigMap.put("friendly_msg_length", 1000L);
+    defaultConfigMap.put("friendly_msg_length", 10L);
 
     // Apply config settings and default values.
     mFirebaseRemoteConfig.setConfigSettings(firebaseRemoteConfigSettings);
@@ -254,16 +263,18 @@ public class ChatActivity extends AppCompatActivity {
     });
 
     mSendButton = findViewById(R.id.sendButton);
-    mSendButton.setOnClickListener(view -> {
-      ChatMessageModel friendlyMessage =
-          new ChatMessageModel(mMessageEditText.getText().toString(), mUsername, mPhotoUrl, null);
-      mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(friendlyMessage);
-      mMessageEditText.setText("");
-      mFirebaseAnalytics.logEvent(MESSAGE_SENT_EVENT, null);
+    mSendButton.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        ChatMessageModel friendlyMessage =
+            new ChatMessageModel(mMessageEditText.getText().toString(), mUsername, mPhotoUrl, null);
+        mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(friendlyMessage);
+        mMessageEditText.setText("");
+        mFirebaseAnalytics.logEvent(MESSAGE_SENT_EVENT, null);
+      }
     });
   }
 
-  private void setdata(CampusNewsModel model) {
+  private void setData(CampusNewsModel model) {
     mCampusTitle.setText(model.title);
     mCampusAuthor.setText(model.author);
     mCampusDescription.setText(model.description);
@@ -321,7 +332,7 @@ public class ChatActivity extends AppCompatActivity {
       if (resultCode == RESULT_OK) {
         if (data != null) {
           final Uri uri = data.getData();
-          Timber.d(TAG, "Uri: " + uri.toString());
+          Timber.d("Uri: %s", uri.toString());
 
           ChatMessageModel tempMessage =
               new ChatMessageModel(null, mUsername, mPhotoUrl, LOADING_IMAGE_URL);
@@ -337,8 +348,7 @@ public class ChatActivity extends AppCompatActivity {
 
                   putImageInStorage(storageReference, uri, key);
                 } else {
-                  Timber.w(TAG, "Unable to write message to database.",
-                      databaseError.toException());
+                  Timber.w(databaseError.toException(), "Unable to write message to database.");
                 }
               });
         }
@@ -346,15 +356,21 @@ public class ChatActivity extends AppCompatActivity {
     }
   }
 
+  @Override public void onPause() {
+    if (mFirebaseAdapter != null) mFirebaseAdapter.stopListening();
+    super.onPause();
+  }
+
   @Override public void onStart() {
-    super.onStart();
     if (mFirebaseAdapter != null) mFirebaseAdapter.startListening();
+    super.onStart();
   }
 
   @Override public void onStop() {
-    super.onStop();
     if (mFirebaseAdapter != null) mFirebaseAdapter.stopListening();
+    super.onStop();
   }
+
   private void putImageInStorage(StorageReference storageReference, Uri uri, final String key) {
     storageReference.putFile(uri)
         .addOnCompleteListener(ChatActivity.this,
@@ -369,7 +385,7 @@ public class ChatActivity extends AppCompatActivity {
                       .child(key)
                       .setValue(friendlyMessage);
                 } else {
-                  Timber.w(TAG, "Image upload task was not successful.", task.getException());
+                  Timber.w(task.getException(), "Image upload task was not successful.");
                 }
               }
             });

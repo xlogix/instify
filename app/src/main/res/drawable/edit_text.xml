@@ -18,7 +18,7 @@
       <corners
           android:radius="20dp"/>
       <solid
-          android:color="#eee"/>
+          android:color="@color/background_grey"/>
       <size
           android:height="40dp"/>
     </shape>

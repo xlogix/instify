@@ -4,18 +4,18 @@ package com.instify.android.models;
  * Created by Arjun Mahishi on 18-Dec-16.
  */
 
-public class FirebaseUserDataModel {
+public class UserDataModel {
 
     public String name, regNo, email, dept, image;
     public boolean cr;
 
-    public FirebaseUserDataModel() {
+    public UserDataModel() {
     }
 
     /**
      * Constructor for a new user
      */
-    public FirebaseUserDataModel(String name, String email, String image, String regno, String dept) {
+    public UserDataModel(String name, String email, String image, String regno, String dept) {
 
         this.name = name;
         this.regNo = regno;

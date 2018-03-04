@@ -88,9 +88,9 @@ dependencies {
 
   // DATABASE
   implementation "com.google.firebase:firebase-firestore:${firebaseLibVersion}"
-  implementation 'com.firebaseui:firebase-ui-firestore:3.2.1'
+  implementation 'com.firebaseui:firebase-ui-firestore:3.2.2'
   implementation "com.google.firebase:firebase-database:${firebaseLibVersion}"
-  implementation 'com.firebaseui:firebase-ui-database:3.2.1'
+  implementation 'com.firebaseui:firebase-ui-database:3.2.2'
 
   // CRASH
   implementation "com.google.firebase:firebase-crash:${firebaseLibVersion}"

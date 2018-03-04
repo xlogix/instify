@@ -6,36 +6,31 @@ package com.instify.android.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 public class TestPerformanceModel {
 
-    @SerializedName("name")
-    @Expose
-    private String name;
-    @SerializedName("subjects")
-    @Expose
-    private List<SubjectsModel> subjects = null;
+  @SerializedName("name") @Expose private String name;
+  @SerializedName("subjects") @Expose private List<SubjectsModel> subjects = null;
 
-    public TestPerformanceModel(String name, List<SubjectsModel> subjects) {
-        this.name = name;
-        this.subjects = subjects;
-    }
+  public TestPerformanceModel(String name, List<SubjectsModel> subjects) {
+    this.name = name;
+    this.subjects = subjects;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public List<SubjectsModel> getSubjects() {
-        return subjects;
-    }
+  public List<SubjectsModel> getSubjects() {
+    return subjects;
+  }
 
-    public void setSubjects(List<SubjectsModel> subjects) {
-        this.subjects = subjects;
-    }
+  public void setSubjects(List<SubjectsModel> subjects) {
+    this.subjects = subjects;
+  }
 }
