@@ -11,9 +11,11 @@ public class SubjectsModel {
     @SerializedName("CODE")
     @Expose
     private String cODE;
+
     @SerializedName("NAME")
     @Expose
     private String nAME;
+
     @SerializedName("MARKS")
     @Expose
     private String mARKS;

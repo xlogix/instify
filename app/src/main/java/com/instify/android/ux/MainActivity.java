@@ -122,7 +122,9 @@ public class MainActivity extends AppCompatActivity
     }
     // Ensures that user didn't un-install Google Play Services required for Firebase related tasks.
     if (!checkPlayServices()) {
-      Toast.makeText(this, "Device doesn't have Google Play Services installed, some features may not work.", Toast.LENGTH_SHORT).show();
+      Toast.makeText(this,
+          "Device doesn't have Google Play Services installed, some features may not work.",
+          Toast.LENGTH_SHORT).show();
     }
   }
 
@@ -131,6 +133,7 @@ public class MainActivity extends AppCompatActivity
    */
   @Override public void onDestroy() {
     if (mAdView != null) {
+      mAdView.removeAllViews();
       mAdView.destroy();
       finish();
     }

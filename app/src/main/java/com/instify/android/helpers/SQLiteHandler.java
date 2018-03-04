@@ -91,7 +91,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         + " TEXT )";
     db.execSQL(CREATE_TIME_TABLE);
 
-    Log.d(TAG, "Database tables created");
+    Timber.d(TAG, "Database tables created");
   }
 
   /**
@@ -155,7 +155,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     cursor.close();
     db.close();
     // return user
-    Timber.d(TAG, "Fetching user from Sqlite: " + userModel.getRegno());
+    Timber.d(TAG, "Fetching user from Sqlite: %d", userModel.getRegno());
 
     return userModel;
   }
@@ -185,9 +185,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
    */
   public Cursor gettt() {
     SQLiteDatabase db = this.getWritableDatabase();
-    Cursor res = db.rawQuery("SELECT * FROM " + TABLE_TIME_TABLE, null);
 
-    return res;
+    return db.rawQuery("SELECT * FROM " + TABLE_TIME_TABLE, null);
   }
 
   // Upgrading database

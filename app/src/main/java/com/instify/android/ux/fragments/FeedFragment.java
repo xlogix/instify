@@ -130,9 +130,9 @@ public class FeedFragment extends Fragment {
     unbinder.unbind();
   }
 
-  public void showNews(final String path) {
+  public void showNews(String path) {
     // News Database reference
-    Query query = FirebaseDatabase.getInstance().getReference().child(path);
+    Query query = FirebaseDatabase.getInstance().getReference().child(path).orderByKey();
     FirebaseRecyclerOptions<CampusNewsModel> options =
         new FirebaseRecyclerOptions.Builder<CampusNewsModel>().setQuery(query,
             CampusNewsModel.class).build();

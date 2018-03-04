@@ -24,7 +24,7 @@ public class ListExpandableAdapter extends BaseExpandableListAdapter {
     this.context = context;
     this.headerArray = headerArray;
     this.childArray = listChildData;
-    inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
   }
 
   @Override public Object getChild(int groupPosition, int childPosititon) {
@@ -36,13 +36,13 @@ public class ListExpandableAdapter extends BaseExpandableListAdapter {
   }
 
   // Inflate child view
-  @Override public View getChildView(int groupPosition, final int childPosition,
+  @Override public View getChildView(int groupPosition, int childPosition,
       boolean isLastChild, View convertView, ViewGroup parent) {
 
     final String childText = (String) getChild(groupPosition, childPosition);
 
     if (convertView == null) {
-      convertView = inflater.inflate(R.layout.list_sub_child, null);
+      convertView = inflater.inflate(R.layout.list_sub_child, parent, false);
     }
 
     TextView textViewChild = convertView.findViewById(R.id.textViewChild);
@@ -74,7 +74,7 @@ public class ListExpandableAdapter extends BaseExpandableListAdapter {
       ViewGroup parent) {
     String headerTitle = (String) getGroup(groupPosition);
     if (convertView == null) {
-      convertView = inflater.inflate(R.layout.list_group_header, null);
+      convertView = inflater.inflate(R.layout.list_group_header, parent, false);
     }
 
     TextView textViewHeader = convertView.findViewById(R.id.textViewHeader);

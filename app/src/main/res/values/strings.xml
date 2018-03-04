@@ -21,7 +21,7 @@
     ca-app-pub-3940256099942544/1033173712
   </string>
 
-  <string name="copy_right">Copyrights © %1$d</string>
+  <string name="default_notification_channel_id" translatable="false">global</string>
 
   <string name="title_activity_intro">Thanks for downloading!</string>
   <string name="title_activity_splash">Made with &#10084; by Fnplus</string>
@@ -93,6 +93,7 @@
     <item quantity="one">%d like</item>
     <item quantity="other">%d likes</item>
   </plurals>
+  <string name="copy_right">Copyrights © %1$d</string>
 
   <!-- Login Activity -->
   <string name="hint_email">Your Email</string>

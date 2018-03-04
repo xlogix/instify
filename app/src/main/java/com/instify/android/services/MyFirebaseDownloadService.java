@@ -6,42 +6,29 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StreamDownloadTask;
-
+import com.instify.android.R;
+import com.instify.android.ux.NotesUploadActivity;
 import java.io.IOException;
 import java.io.InputStream;
-
-import com.instify.android.R;
-import com.instify.android.ux.UploadNotesActivity;
 import timber.log.Timber;
 
 public class MyFirebaseDownloadService extends MyFirebaseBaseTaskService {
 
-  /**
-   * Actions
-   **/
+  /** Actions **/
   public static final String ACTION_DOWNLOAD = "action_download";
   public static final String DOWNLOAD_COMPLETED = "download_completed";
   public static final String DOWNLOAD_ERROR = "download_error";
-  /**
-   * Extras
-   **/
+
+  /** Extras **/
   public static final String EXTRA_DOWNLOAD_PATH = "extra_download_path";
   public static final String EXTRA_BYTES_DOWNLOADED = "extra_bytes_downloaded";
+
   private StorageReference mStorageRef;
-
-  public static IntentFilter getIntentFilter() {
-    IntentFilter filter = new IntentFilter();
-    filter.addAction(DOWNLOAD_COMPLETED);
-    filter.addAction(DOWNLOAD_ERROR);
-
-    return filter;
-  }
 
   @Override public void onCreate() {
     super.onCreate();
@@ -56,6 +43,7 @@ public class MyFirebaseDownloadService extends MyFirebaseBaseTaskService {
 
   @Override public int onStartCommand(Intent intent, int flags, int startId) {
     Timber.d("onStartCommand:" + intent + ":" + startId);
+
     if (ACTION_DOWNLOAD.equals(intent.getAction())) {
       // Get the path to download from the intent
       String downloadPath = intent.getStringExtra(EXTRA_DOWNLOAD_PATH);
@@ -139,7 +127,7 @@ public class MyFirebaseDownloadService extends MyFirebaseBaseTaskService {
 
     // Make Intent to MainActivity
     Intent intent =
-        new Intent(this, UploadNotesActivity.class).putExtra(EXTRA_DOWNLOAD_PATH, downloadPath)
+        new Intent(this, NotesUploadActivity.class).putExtra(EXTRA_DOWNLOAD_PATH, downloadPath)
             .putExtra(EXTRA_BYTES_DOWNLOADED, bytesDownloaded)
             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
@@ -147,5 +135,13 @@ public class MyFirebaseDownloadService extends MyFirebaseBaseTaskService {
     String caption =
         success ? getString(R.string.download_success) : getString(R.string.download_failure);
     showFinishedNotification(caption, intent, true);
+  }
+
+  public static IntentFilter getIntentFilter() {
+    IntentFilter filter = new IntentFilter();
+    filter.addAction(DOWNLOAD_COMPLETED);
+    filter.addAction(DOWNLOAD_ERROR);
+
+    return filter;
   }
 }

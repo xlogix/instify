@@ -122,6 +122,7 @@ public class SupportUsActivity extends AppCompatActivity {
    */
   @Override public void onDestroy() {
     if (mAdView != null) {
+      mAdView.removeAllViews();
       mAdView.destroy();
       finish();
     }

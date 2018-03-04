@@ -177,6 +177,7 @@ public class FeePaymentHistoryActivity extends AppCompatActivity {
     AppController.getInstance().cancelPendingRequests(tag_string_req);
     // Handle AdView
     if (mAdView != null) {
+      mAdView.removeAllViews();
       mAdView.destroy();
       finish();
     }
