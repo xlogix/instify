@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerAdapter;
@@ -71,7 +72,6 @@ import timber.log.Timber;
 public class MainActivity extends AppCompatActivity
     implements ForceUpdateChecker.OnUpdateNeededListener {
   private static final String TAG = MainActivity.class.getSimpleName();
-
   /* Play Services Request required to check if Google Services is installed or not */
   private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
   public FloatingActionButton mSharedFab;

@@ -124,9 +124,7 @@
           android:clickable="true"
           android:focusable="true"
           android:background="@drawable/checkbox_action_like"
-          android:stateListAnimator="@anim/scale"
-          card_view:layout_constraintBottom_creator="1"
-          card_view:layout_constraintTop_creator="1"
+          android:stateListAnimator="@animator/scale"
           />
 
       <ImageButton
