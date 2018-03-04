@@ -6,7 +6,7 @@
       barColorWhenSelected="#5D4037"/>
   <tab
       id="@+id/nav_campus_news"
-      icon="@drawable/ic_campus_news_white"
+      icon="@drawable/ic_whatshot_white"
       title="@string/nav_campus_news"
       barColorWhenSelected="@color/colorAccent"/>
   <tab
@@ -20,8 +20,8 @@
       title="@string/nav_notes"
       barColorWhenSelected="#FF5252"/>
   <tab
-      id="@+id/nav_univ_news"
+      id="@+id/nav_srm_news"
       icon="@drawable/ic_univ_news_white"
-      title="@string/nav_univ_news"
+      title="@string/nav_srm_news"
       barColorWhenSelected="#FF9800"/>
 </tabs>

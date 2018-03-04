@@ -67,6 +67,10 @@ public class TimeTableFragment extends Fragment {
     super.onAttach(context);
   }
 
+  @Override public void onDestroy() {
+    super.onDestroy();
+  }
+
   @OnClick(R.id.calendarButton) void showCalendar() {
     Calendar c = Calendar.getInstance();
 
@@ -76,10 +80,6 @@ public class TimeTableFragment extends Fragment {
     datePickerDialog.show();
   }
 
-  @Override public void onDestroy() {
-    super.onDestroy();
-  }
-
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
@@ -87,7 +87,7 @@ public class TimeTableFragment extends Fragment {
     unbinder = ButterKnife.bind(this, rootView);
     // Taking control of the menu options
     setHasOptionsMenu(true);
-    //Prevent Volley Crash on Rotate
+    // Prevent Volley Crash on Rotate
     setRetainInstance(true);
     // Initialize SwipeRefreshLayout
     mSwipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout_time_table);
@@ -117,10 +117,6 @@ public class TimeTableFragment extends Fragment {
     });
 
     return rootView;
-  }
-
-  private LinearLayoutManager getLinearLayoutManager() {
-    return new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
   }
 
   @Override public void onDestroyView() {

@@ -24,7 +24,8 @@
   <string name="default_notification_channel_id" translatable="false">global</string>
 
   <string name="title_activity_intro">Thanks for downloading!</string>
-  <string name="title_activity_splash">Made with &#10084; by Fnplus</string>
+  <string name="title_activity_splash">Powered by FNPLUS</string>
+  <string name="title_activity_login">Made with &#10084; by Fnplus</string>
   <string name="title_activity_register">Register Yourself</string>
   <string name="title_activity_chat">Discuss</string>
   <string name="title_activity_profile">Your Profile</string>
@@ -40,7 +41,7 @@
   <string name="nav_attendance">Attendance</string>
   <string name="nav_campus_news">Campus News</string>
   <string name="nav_whats_hot">What\'s Hot</string>
-  <string name="nav_univ_news">University News</string>
+  <string name="nav_srm_news">SRMIST News</string>
   <string name="nav_notes">Notes</string>
   <string name="nav_schedule">Schedule</string>
   <string name="nav_section_2">Test Performance</string>

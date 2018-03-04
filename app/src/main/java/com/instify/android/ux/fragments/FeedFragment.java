@@ -132,7 +132,7 @@ public class FeedFragment extends Fragment {
 
   public void showNews(String path) {
     // News Database reference
-    Query query = FirebaseDatabase.getInstance().getReference().child(path).orderByKey();
+    Query query = FirebaseDatabase.getInstance().getReference().child(path);
     FirebaseRecyclerOptions<CampusNewsModel> options =
         new FirebaseRecyclerOptions.Builder<CampusNewsModel>().setQuery(query,
             CampusNewsModel.class).build();
@@ -163,14 +163,6 @@ public class FeedFragment extends Fragment {
         });
         // Set click action for Share button
         holder.mImageButton2.setOnClickListener(view -> {
-          // Share ACTION
-          /* ShareCompat.IntentBuilder builder = ShareCompat.IntentBuilder.from(getActivity());
-          builder.setChooserTitle(model.title.toUpperCase());
-          builder.setSubject(model.title.toUpperCase());
-          builder.setText(model.description + "\n\n" + db.getUserDetails().getName()
-              + " has shared a topic with you from Instify https://goo.gl/YRSMJa");
-          builder.setType("text/plain");
-          */
 
           Intent sharingIntent = new Intent(Intent.ACTION_SEND);
           sharingIntent.setType("text/plain");

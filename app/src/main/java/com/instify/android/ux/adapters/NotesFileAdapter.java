@@ -19,7 +19,6 @@ import java.util.List;
 public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   private List<NotesFileModel> data = Collections.emptyList();
-  // ImageLoader imageLoader;
   private SQLiteHandler db;
   private Context context;
   private LayoutInflater inflater;
@@ -78,16 +77,16 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public void setDataToView(NotesFileModel current) {
-      notename.setText(current.notename);
-      notedesc.setText(current.notedesc);
+      notename.setText(current.noteName);
+      notedesc.setText(current.noteDesc);
       long now = System.currentTimeMillis();
       notetime.setText(
           DateUtils.getRelativeTimeSpanString(current.getUnixTime(), now, DateUtils.DAY_IN_MILLIS));
-      author.setText(current.noteposter);
+      author.setText(current.notePoster);
       shareButton.setOnClickListener(v -> {
         //TODO SHare Link via text
       });
-      switch (current.notetype) {
+      switch (current.noteType) {
         case "doc":
           imageView.setImageResource(R.drawable.ic_doc);
           break;
@@ -109,7 +108,7 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         default:
           imageView.setImageResource(R.drawable.ic_attach_file_black_24dp);
       }
-      link = current.getNotefile();
+      link = current.getNoteFile();
     }
   }
 }

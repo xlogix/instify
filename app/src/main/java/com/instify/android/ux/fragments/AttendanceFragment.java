@@ -65,6 +65,13 @@ public class AttendanceFragment extends Fragment {
     super.onAttach(context);
   }
 
+  /**
+   * Called when leaving the fragment
+   */
+  @Override public void onPause() {
+    super.onPause();
+  }
+
   @Override public void onDestroy() {
     super.onDestroy();
   }

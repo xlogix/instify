@@ -24,7 +24,7 @@ public class ListExpandableAdapter extends BaseExpandableListAdapter {
     this.context = context;
     this.headerArray = headerArray;
     this.childArray = listChildData;
-    this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    inflater = LayoutInflater.from(context);
   }
 
   @Override public Object getChild(int groupPosition, int childPosititon) {
@@ -36,8 +36,8 @@ public class ListExpandableAdapter extends BaseExpandableListAdapter {
   }
 
   // Inflate child view
-  @Override public View getChildView(int groupPosition, int childPosition,
-      boolean isLastChild, View convertView, ViewGroup parent) {
+  @Override public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
+      View convertView, ViewGroup parent) {
 
     final String childText = (String) getChild(groupPosition, childPosition);
 

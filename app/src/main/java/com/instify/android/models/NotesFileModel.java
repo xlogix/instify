@@ -5,90 +5,91 @@ package com.instify.android.models;
  */
 
 public class NotesFileModel {
-    public String notename;
-    public String notefile;
-    public String notedesc;
-    public String notetime;
-    public String noteposter;
-    public String noteregno;
-    public String notetype;
-    public long unixtime;
+  public String noteName;
+  public String noteFile;
+  public String noteDesc;
+  public String noteTime;
+  public String notePoster;
+  public String noteRegNo;
+  public String noteType;
+  public long unixTime;
 
-    public NotesFileModel(String notename, String notefile, String notedesc, String notetime, String noteposter, String noteregno,String notetype,long unixtime) {
-        this.notename = notename;
-        this.notefile = notefile;
-        this.notedesc = notedesc;
-        this.notetime = notetime;
-        this.noteposter = noteposter;
-        this.noteregno = noteregno;
-        this.notetype=notetype;
-        this.unixtime=unixtime;
-    }
+  public NotesFileModel(String noteName, String noteFile, String noteDesc, String noteTime,
+      String notePoster, String noteRegNo, String noteType, long unixTime) {
+    this.noteName = noteName;
+    this.noteFile = noteFile;
+    this.noteDesc = noteDesc;
+    this.noteTime = noteTime;
+    this.notePoster = notePoster;
+    this.noteRegNo = noteRegNo;
+    this.noteType = noteType;
+    this.unixTime = unixTime;
+  }
 
-    public long getUnixTime() {
-        return unixtime;
-    }
+  public long getUnixTime() {
+    return unixTime;
+  }
 
-    public void setUnixtime(long unixtime) {
-        this.unixtime = unixtime;
-    }
+  public void setUnixTime(long unixtime) {
+    this.unixTime = unixtime;
+  }
 
-    public String getNotetype() {
-        return notetype;
-    }
+  public String getNoteType() {
+    return noteType;
+  }
 
-    public void setNotetype(String notetype) {
-        this.notetype = notetype;
-    }
+  public void setNoteType(String noteType) {
+    this.noteType = noteType;
+  }
 
-    public String getNotename() {
-        return notename;
-    }
+  public String getNoteName() {
+    return noteName;
+  }
 
-    public void setNotename(String notename) {
-        this.notename = notename;
-    }
+  public void setNoteName(String noteName) {
+    this.noteName = noteName;
+  }
 
-    public String getNotefile() {
-        return notefile;
-    }
+  public String getNoteFile() {
+    return noteFile;
+  }
 
-    public void setNotefile(String notefile) {
-        this.notefile = notefile;
-    }
+  public void setNoteFile(String noteFile) {
+    this.noteFile = noteFile;
+  }
 
-    public String getNotedesc() {
-        return notedesc;
-    }
+  public String getNoteDesc() {
+    return noteDesc;
+  }
 
-    public void setNotedesc(String notedesc) {
-        this.notedesc = notedesc;
-    }
+  public void setNoteDesc(String noteDesc) {
+    this.noteDesc = noteDesc;
+  }
 
-    public String getNotetime() {
-        return notetime;
-    }
+  public String getNoteTime() {
+    return noteTime;
+  }
 
-    public void setNotetime(String notetime) {
-        this.notetime = notetime;
-    }
+  public void setNoteTime(String noteTime) {
+    this.noteTime = noteTime;
+  }
 
-    public String getNoteposter() {
-        return noteposter;
-    }
+  public String getNotePoster() {
+    return notePoster;
+  }
 
-    public void setNoteposter(String noteposter) {
-        this.noteposter = noteposter;
-    }
+  public void setNotePoster(String notePoster) {
+    this.notePoster = notePoster;
+  }
 
-    public String getNoteregno() {
-        return noteregno;
-    }
+  public String getNoteRegNo() {
+    return noteRegNo;
+  }
 
-    public void setNoteregno(String noteregno) {
-        this.noteregno = noteregno;
-    }
+  public void setNoteRegNo(String noteRegNo) {
+    this.noteRegNo = noteRegNo;
+  }
 
-    public NotesFileModel() {
-    }
+  public NotesFileModel() {
+  }
 }

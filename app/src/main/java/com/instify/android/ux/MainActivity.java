@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity
     // Set the default tab as Campus Portal
     mViewPager.setCurrentItem(1);
     // Prevent fragments from destroying themselves
-    mViewPager.setOffscreenPageLimit(4);
+    mViewPager.setOffscreenPageLimit(3);
 
     mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
       @Override
@@ -377,7 +377,7 @@ public class MainActivity extends AppCompatActivity
         case R.id.nav_notes:
           mViewPager.setCurrentItem(3);
           break;
-        case R.id.nav_univ_news:
+        case R.id.nav_srm_news:
           mViewPager.setCurrentItem(4);
           break;
         case R.id.nav_test_performance:

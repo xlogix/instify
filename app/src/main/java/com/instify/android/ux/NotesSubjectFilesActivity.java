@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -56,7 +57,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
 
   RecyclerView mNotesView;
   SearchView searchView = null;
-  @BindView(R.id.error_message) TextView errormessage;
+  @BindView(R.id.error_message) TextView errorMessage;
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
   private Uri mFileUri = null;
   private Uri mFilePath;
@@ -96,7 +97,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
           @NonNull NotesFileModel model) {
         viewHolder.setDataToView(model);
         viewHolder.cv.setOnClickListener(v -> {
-          Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(model.getNotefile()));
+          Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(model.getNoteFile()));
           startActivity(intent);
         });
       }
@@ -276,8 +277,8 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
     // EasyPermissions handles the request result.
     EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
   }
-
   // [END] EasyPermission Default Functions
+
   // Get Current Time for naming the file
   public String getCurrentTime() {
     Calendar c = Calendar.getInstance();
@@ -353,20 +354,20 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
   }
 
   public void showErrorPlaceholder(String message) {
-    if (placeholderError != null && errormessage != null) {
+    if (placeholderError != null && errorMessage != null) {
       if (placeholderError.getVisibility() != View.VISIBLE) {
         placeholderError.setVisibility(View.VISIBLE);
       }
-      errormessage.setText(message);
+      errorMessage.setText(message);
     }
   }
 
   public void hidePlaceHolder() {
-    if (placeholderError != null && errormessage != null) {
+    if (placeholderError != null && errorMessage != null) {
       if (placeholderError.getVisibility() == View.VISIBLE) {
         placeholderError.setVisibility(View.INVISIBLE);
       }
-      errormessage.setText("Something Went Wrong. Try Again!");
+      errorMessage.setText("Something Went Wrong. Try Again!");
     }
   }
 
@@ -374,7 +375,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
 
   private File createImageFile() throws IOException {
     // Create an image file name
-    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
     String imageFileName = "JPEG_" + timeStamp + "_";
     File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
     File image = File.createTempFile(imageFileName,  /* prefix */

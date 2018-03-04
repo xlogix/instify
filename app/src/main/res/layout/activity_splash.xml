@@ -20,14 +20,14 @@
             android:id="@+id/splash_content"
             android:layout_width="160dp"
             android:layout_height="160dp"
-            android:contentDescription="@string/title_activity_splash"
+            android:contentDescription="@string/title_activity_login"
             android:src="@drawable/ic_logo_96dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="Instant-Notify"
+            android:text="Get Notified"
             android:textColor="@color/colorPrimary"
             android:textSize="24sp" />
     </LinearLayout>
