@@ -103,7 +103,6 @@ public class MainActivity extends AppCompatActivity
   private SectionsPagerAdapter mSectionsPagerAdapter;
 
   // [START add_lifecycle_methods]
-
   /**
    * Called when leaving the activity
    */
@@ -283,7 +282,6 @@ public class MainActivity extends AppCompatActivity
     checkPlayServices();
 
     if (mFirebaseUser != null) {
-
       dbRef = FirebaseDatabase.getInstance().getReference();
       userRef = dbRef.child("users").child(mFirebaseUser.getUid());
 

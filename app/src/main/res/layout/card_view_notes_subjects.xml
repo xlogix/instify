@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:padding="8dp"
-        android:src="@drawable/ic_file_upload"
+        android:src="@drawable/ic_image_file_"
         />
 
     <LinearLayout

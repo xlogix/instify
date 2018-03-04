@@ -109,6 +109,7 @@ public class ChatActivity extends AppCompatActivity {
     // Get data
     if (mFirebaseUser != null) {
       try {
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mUsername = mFirebaseUser.getDisplayName();
         if (mFirebaseUser.getPhotoUrl() != null) {
           mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();

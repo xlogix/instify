@@ -17,6 +17,7 @@ import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.interfaces.RetrofitInterface;
 import com.instify.android.models.TestPerformanceResponseModel;
 import com.instify.android.ux.adapters.TestPerformanceAdapterParent;
+import javax.annotation.Nullable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,7 +77,6 @@ public class TestPerformanceActivity extends AppCompatActivity {
     // Initialize Recycle View
     mRecyclerViewTestPerformance.setLayoutManager(new LinearLayoutManager(this));
     mRecyclerViewTestPerformance.setNestedScrollingEnabled(false);
-
     // Call the API
     AttemptJson();
   }
@@ -88,8 +88,8 @@ public class TestPerformanceActivity extends AppCompatActivity {
         client.GetTestPerformance(db.getUserDetails().getRegno(), db.getUserDetails().getToken());
 
     call.enqueue(new Callback<TestPerformanceResponseModel>() {
-      @Override public void onResponse(Call<TestPerformanceResponseModel> call,
-          Response<TestPerformanceResponseModel> response) {
+      @Override public void onResponse(@Nullable Call<TestPerformanceResponseModel> call,
+          @Nullable Response<TestPerformanceResponseModel> response) {
         TestPerformanceResponseModel t = response.body();
         if (response.isSuccessful()) {
           TestPerformanceAdapterParent test =
@@ -100,13 +100,13 @@ public class TestPerformanceActivity extends AppCompatActivity {
           Snackbar.make(refreshingFAB, "Sync Successful", Snackbar.LENGTH_SHORT).show();
 
           if (test.getItemCount() == 0) {
-            showErrorPlaceholder("No Data in ERP to Display");
+            showErrorPlaceholder("No Data in ERP to display");
           } else {
             hidePlaceHolder();
           }
 
           mRecyclerViewTestPerformance.setAdapter(test);
-          // TODO : Create Adapter here When api is Complete
+          // TODO : Create Adapter here when API is Complete
         } else {
           showErrorPlaceholder("Sync Failed");
         }

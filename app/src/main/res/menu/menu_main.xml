@@ -19,19 +19,19 @@
         app:showAsAction="always">
       <menu>
         <item
-            android:id="@+id/filter_by_class"
+            android:id="@+id/filter_by_most_liked"
             android:checked="false"
-            android:title="Filter by Section"
+            android:title="Filter by Most Liked"
             app:showAsAction="never"/>
         <item
-            android:id="@+id/filter_by_department"
+            android:id="@+id/filter_by_time"
             android:checked="false"
-            android:title="Filter by Department"
+            android:title="Filter by Time"
             app:showAsAction="never"/>
         <item
-            android:id="@+id/filter_by_university"
+            android:id="@+id/filter_by_topics"
             android:checked="false"
-            android:title="Filter by University"
+            android:title="Filter by Topics"
             app:showAsAction="never"/>
       </menu>
     </item>

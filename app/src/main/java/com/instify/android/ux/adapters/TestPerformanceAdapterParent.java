@@ -54,7 +54,6 @@ public class TestPerformanceAdapterParent
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder {
-
     public TestPerformanceModel item;
     @BindView(R.id.testtype) TextView mTesttype;
     @BindView(R.id.toprecyc) RecyclerView mToprecyc;

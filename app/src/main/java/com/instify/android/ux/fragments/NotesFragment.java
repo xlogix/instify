@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -44,6 +43,7 @@ public class NotesFragment extends Fragment {
   private RecyclerView mRVFish;
   private SwipeRefreshLayout mSwipeRefreshLayout;
   private NotesAdapter mAdapter;
+  private Context mContext;
 
   public NotesFragment() {
   }
@@ -53,6 +53,22 @@ public class NotesFragment extends Fragment {
     Bundle args = new Bundle();
     frag.setArguments(args);
     return frag;
+  }
+
+  @Override public void onStart() {
+    super.onStart();
+  }
+
+  @Override public void onStop() {
+    super.onStop();
+  }
+
+  @Override public void onPause() {
+    super.onPause();
+  }
+
+  @Override public void onResume() {
+    super.onResume();
   }
 
   @Override public void onAttach(Context context) {
@@ -65,6 +81,9 @@ public class NotesFragment extends Fragment {
 
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
+
+    mContext = getContext();
+
     View rootView = inflater.inflate(R.layout.fragment_notes, container, false);
     unbinder = ButterKnife.bind(this, rootView);
     // Taking control of the menu options
@@ -98,7 +117,6 @@ public class NotesFragment extends Fragment {
           try {
             JSONObject jObj = new JSONObject(response);
             boolean error = jObj.getBoolean("error");
-
             // Handle UI
             hideRefreshing();
 
@@ -115,28 +133,26 @@ public class NotesFragment extends Fragment {
                 NotesModel fishData = new NotesModel();
                 fishData.fishName = subs.getString("sub-desc");
                 fishData.catName = name;
-                //fishData.sizeName = json_data.getString("registration").trim();
-                //fishData.price = json_data.getString("ID");
+                // fishData.sizeName = json_data.getString("registration").trim();
+                // fishData.price = json_data.getString("ID");
                 // fishData.image = "https://hashbird.com/gogrit.in/workspace/srm-api/studentImages/" + json_data.getString("registration").trim() + ".jpg";
                 notes.add(fishData);
 
                 //  Toast.makeText(getContext(),user.getString(i)+" - "+subs.getString("sub-desc"),Toast.LENGTH_SHORT).show()
               }
-
-              mAdapter = new NotesAdapter(getContext(), notes);
+              mAdapter = new NotesAdapter(mContext, notes);
               if (mAdapter.getItemCount() == 0) {
-                showErrorPlaceholder("Something Wrong With Erp");
+                showErrorPlaceholder("Something Wrong With ERP");
               } else {
                 hidePlaceHolder();
               }
               mRVFish.setAdapter(mAdapter);
-              mRVFish.setLayoutManager(new LinearLayoutManager(getContext()));
+              mRVFish.setLayoutManager(new LinearLayoutManager(mContext));
             } else {
               // Update UI
               hideRefreshing();
               // Error in login. Get the error message
               showErrorPlaceholder(jObj.getString("error_msg"));
-              // Toast.makeText(getContext(), jObj.getString("error_msg"), Toast.LENGTH_LONG).show();
             }
           } catch (JSONException e) {
             // Update UI
@@ -144,17 +160,15 @@ public class NotesFragment extends Fragment {
             // JSON error
             e.printStackTrace();
             showErrorPlaceholder("Json error ");
-            // Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
           }
         }, error -> {
           Timber.e("Network Error: " + error.getMessage());
           showErrorPlaceholder("Network Error");
-          // Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
         }) {
           @Override protected Map<String, String> getParams() {
             // Posting parameters to login url
             Map<String, String> params = new HashMap<>();
-            SQLiteHandler db = new SQLiteHandler(getContext());
+            SQLiteHandler db = new SQLiteHandler(mContext);
             String regNo = db.getUserDetails().getRegno();
             String pass = db.getUserDetails().getToken();
 

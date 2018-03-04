@@ -40,7 +40,6 @@ public class ListExpandableAdapter extends BaseExpandableListAdapter {
       View convertView, ViewGroup parent) {
 
     final String childText = (String) getChild(groupPosition, childPosition);
-
     if (convertView == null) {
       convertView = inflater.inflate(R.layout.list_sub_child, parent, false);
     }
@@ -76,7 +75,6 @@ public class ListExpandableAdapter extends BaseExpandableListAdapter {
     if (convertView == null) {
       convertView = inflater.inflate(R.layout.list_group_header, parent, false);
     }
-
     TextView textViewHeader = convertView.findViewById(R.id.textViewHeader);
     textViewHeader.setText(headerTitle);
 

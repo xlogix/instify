@@ -30,9 +30,8 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
   // Inflate the layout when ViewHolder created
   @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    View view = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.card_view_notes_subjects, parent, false);
-    return new MyHolder(view);
+    return new MyHolder(LayoutInflater.from(parent.getContext())
+        .inflate(R.layout.card_view_notes_subjects, parent, false));
   }
 
   // Bind data
@@ -52,14 +51,12 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     //  myHolder.onClick(new );
 
   }
-
   // Get total item from List
   @Override public int getItemCount() {
     return data.size();
   }
 
   public class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
     TextView textFishName;
     TextView textType;
 
@@ -73,7 +70,6 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         Intent intent = new Intent(context, NotesSubjectFilesActivity.class);
         intent.putExtra("subject", textFishName.getText().toString());
         intent.putExtra("code", textType.getText().toString());
-
         context.startActivity(intent);
       });
     }

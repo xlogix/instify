@@ -1,12 +1,10 @@
 package com.instify.android.ux.fragments;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -17,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
@@ -29,7 +26,6 @@ import com.instify.android.ux.adapters.ListExpandableAdapter;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -52,6 +48,7 @@ public class TimeTableFragment extends Fragment {
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
   private SwipeRefreshLayout mSwipeRefreshLayout;
   private ExpandableListView expListView;
+  private Context mContext;
 
   public TimeTableFragment() {
   }
@@ -63,6 +60,22 @@ public class TimeTableFragment extends Fragment {
     return frag;
   }
 
+  @Override public void onStart() {
+    super.onStart();
+  }
+
+  @Override public void onStop() {
+    super.onStop();
+  }
+
+  @Override public void onPause() {
+    super.onPause();
+  }
+
+  @Override public void onResume() {
+    super.onResume();
+  }
+
   @Override public void onAttach(Context context) {
     super.onAttach(context);
   }
@@ -71,17 +84,10 @@ public class TimeTableFragment extends Fragment {
     super.onDestroy();
   }
 
-  @OnClick(R.id.calendarButton) void showCalendar() {
-    Calendar c = Calendar.getInstance();
-
-    DatePickerDialog datePickerDialog =
-        new DatePickerDialog(getContext(), null, c.get(Calendar.YEAR), c.get(Calendar.MONTH),
-            c.get(Calendar.DAY_OF_MONTH));
-    datePickerDialog.show();
-  }
-
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
+    // Get Context
+    mContext = getContext();
     // Inflate the layout for this fragment
     View rootView = inflater.inflate(R.layout.fragment_time_table, container, false);
     unbinder = ButterKnife.bind(this, rootView);
@@ -96,9 +102,7 @@ public class TimeTableFragment extends Fragment {
         R.color.google_blue_900);
 
     Date date = new Date();
-
     SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMMM dd, yyyy", Locale.getDefault());
-
     mCurrentDate.setText(sdf.format(date));
 
     // Declare elements of another view
@@ -142,10 +146,8 @@ public class TimeTableFragment extends Fragment {
 
         // Check for error node in json
         if (!error) {
-
           ListExpandableAdapter adapter;
-
-          // declare array List for all headers in list
+          // Declare array List for all headers in list
           ArrayList<String> headersArrayList = new ArrayList<>();
 
           // Declare Hash map for all headers and their corresponding values
@@ -153,7 +155,6 @@ public class TimeTableFragment extends Fragment {
 
           JSONArray monday = jObj.getJSONArray("monday");
           Integer i;
-
           // For Monday
           ArrayList<String> mondayList = new ArrayList<>();
           headersArrayList.add("MONDAY");
@@ -203,7 +204,7 @@ public class TimeTableFragment extends Fragment {
           }
           childArrayList.put("FRIDAY", fridayList);
 
-          adapter = new ListExpandableAdapter(getContext(), headersArrayList, childArrayList);
+          adapter = new ListExpandableAdapter(mContext, headersArrayList, childArrayList);
           if (adapter.getGroupCount() == 0) {
             showErrorPlaceholder("Erp is not Responding");
           } else {
@@ -257,7 +258,7 @@ public class TimeTableFragment extends Fragment {
       @Override protected Map<String, String> getParams() {
         // Posting parameters to login url
         Map<String, String> params = new HashMap<>();
-        SQLiteHandler db = new SQLiteHandler(getContext());
+        SQLiteHandler db = new SQLiteHandler(mContext);
         String unm = db.getUserDetails().getRegno();
         String pass = db.getUserDetails().getToken();
 
@@ -321,5 +322,3 @@ public class TimeTableFragment extends Fragment {
     }
   }
 }
-
-

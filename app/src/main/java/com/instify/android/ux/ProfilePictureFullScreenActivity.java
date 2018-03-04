@@ -46,11 +46,10 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity
   // Declare AdView
   private AdView mAdView;
 
-  // [START add_lifecycle_methods]
   private static Uri resIdToUri(Context context, int resId) {
     return Uri.parse(ANDROID_RESOURCE + context.getPackageName() + FORWARD_SLASH + resId);
   }
-
+  // [START add_lifecycle_methods]
   /**
    * Called when leaving the activity
    */

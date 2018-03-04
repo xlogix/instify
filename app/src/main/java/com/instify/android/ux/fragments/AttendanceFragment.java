@@ -50,6 +50,7 @@ public class AttendanceFragment extends Fragment {
   private CardView attdCards;
   private SimpleStringRecyclerViewAdapter mAdapter;
   private RecyclerView recyclerView;
+  private Context mContext;
 
   public AttendanceFragment() {
   }
@@ -61,8 +62,12 @@ public class AttendanceFragment extends Fragment {
     return frag;
   }
 
-  @Override public void onAttach(Context context) {
-    super.onAttach(context);
+  @Override public void onStart() {
+    super.onStart();
+  }
+
+  @Override public void onStop() {
+    super.onStop();
   }
 
   /**
@@ -72,12 +77,22 @@ public class AttendanceFragment extends Fragment {
     super.onPause();
   }
 
+  @Override public void onResume() {
+    super.onResume();
+  }
+
+  @Override public void onAttach(Context context) {
+    super.onAttach(context);
+  }
+
   @Override public void onDestroy() {
     super.onDestroy();
   }
 
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
+    // Get Context
+    mContext = getContext();
     // Inflate the layout for this fragment
     View rootView = inflater.inflate(R.layout.fragment_attendance, container, false);
     unbinder = ButterKnife.bind(this, rootView);
@@ -121,7 +136,7 @@ public class AttendanceFragment extends Fragment {
               // Handle UI
               hideRefreshing();
 
-              mAdapter = new SimpleStringRecyclerViewAdapter(getContext(), jObj);
+              mAdapter = new SimpleStringRecyclerViewAdapter(mContext, jObj);
               recyclerView.setAdapter(mAdapter);
             } catch (JSONException e) {
               // Update UI
@@ -143,7 +158,7 @@ public class AttendanceFragment extends Fragment {
       @Override protected Map<String, String> getParams() {
         // Posting parameters to login url
         Map<String, String> params = new HashMap<>();
-        SQLiteHandler db = new SQLiteHandler(getContext());
+        SQLiteHandler db = new SQLiteHandler(mContext);
         String regNo = db.getUserDetails().getRegno();
         String pass = db.getUserDetails().getToken();
 
@@ -284,11 +299,10 @@ public class AttendanceFragment extends Fragment {
     }
 
     @Override public int getItemCount() {
-
       hidePlaceHolder();
       try {
         if (attdObj.getJSONArray("subjects").length() == 0) {
-          showErrorPlaceholder("No Attendence data in erp");
+          showErrorPlaceholder("No Attendance data in erp");
         } else {
           hidePlaceHolder();
         }
@@ -296,7 +310,6 @@ public class AttendanceFragment extends Fragment {
       } catch (JSONException e) {
         showErrorPlaceholder("Problem with json");
         Timber.e(e.getMessage(), "JSON Response : ");
-        // Toast.makeText(getContext(), "Problem with json", Toast.LENGTH_SHORT).show();
         return 0;
       }
     }
@@ -332,7 +345,7 @@ public class AttendanceFragment extends Fragment {
   private class Att {
 
     double main_attendance;
-    //Variables
+    // Variables
     int count = 0, num = 1, denom = 1;
     int countp = 0, deno = 1;
     private double pre;

@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +34,7 @@ import com.instify.android.ux.MainActivity;
 import com.instify.android.ux.UploadExperiencesActivity;
 import java.util.HashMap;
 import java.util.Map;
+import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,7 +42,6 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class ExperiencesFragment extends Fragment {
-  private static final String TAG = "ExperiencesFragment";
 
   // TODO: Rename parameter arguments, choose names that match
   // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -121,7 +120,6 @@ public class ExperiencesFragment extends Fragment {
           @NonNull ExperiencesModel model) {
         holder.setBindDataToView(model, getContext());
         holder.upVoteButton.setOnClickListener(view1 -> voteExperience(model.getId(), true));
-        holder.downVoteButton.setOnClickListener(view1 -> voteExperience(model.getId(), false));
       }
     };
     recyclerView.setHasFixedSize(true);
@@ -167,8 +165,8 @@ public class ExperiencesFragment extends Fragment {
       transaction.update(sfDocRef, "votes", currentVotes);
       return currentVotes;
     })
-        .addOnSuccessListener(result -> Log.d(TAG, "Transaction success: " + result))
-        .addOnFailureListener(e -> Log.w(TAG, "Transaction failure.", e));
+        .addOnSuccessListener(result -> Timber.d("Transaction success: %l", result))
+        .addOnFailureListener(e -> Timber.w(e, "Transaction failure."));
   }
 
   @Keep public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -180,7 +178,6 @@ public class ExperiencesFragment extends Fragment {
     @BindView(R.id.imageButton) ImageButton imageButton;
     @BindView(R.id.upVoteButton) ImageButton upVoteButton;
     @BindView(R.id.scoreText) TextView scoreText;
-    @BindView(R.id.downVoteButton) ImageButton downVoteButton;
     @BindView(R.id.imageButton2) ImageButton imageButton2;
 
     public ViewHolder(View view) {

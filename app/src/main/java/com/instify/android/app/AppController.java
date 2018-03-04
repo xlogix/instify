@@ -40,7 +40,7 @@ public class AppController extends MultiDexApplication {
   private PreferenceManager mPrefs;
 
   static {
-    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
   }
 
   public static synchronized AppController getInstance() {

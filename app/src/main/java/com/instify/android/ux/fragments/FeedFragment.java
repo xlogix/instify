@@ -43,7 +43,6 @@ public class FeedFragment extends Fragment {
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
 
   private Context mContext;
-
   // Firebase Declaration
   FirebaseRecyclerAdapter<CampusNewsModel, CampusViewHolder> fAdapterAll;
 
@@ -210,13 +209,13 @@ public class FeedFragment extends Fragment {
     // as you specify a parent activity in AndroidManifest.xml.
     int id = item.getItemId();
 
-    if (id == R.id.filter_by_university) {
+    if (id == R.id.filter_by_topics) {
       showNews(pathAll);
       return true;
-    } else if (id == R.id.filter_by_department) {
+    } else if (id == R.id.filter_by_time) {
       showNews(pathDept);
       return true;
-    } else if (id == R.id.filter_by_class) {
+    } else if (id == R.id.filter_by_most_liked) {
       showNews(pathSec);
       return true;
     }
