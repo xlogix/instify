@@ -45,8 +45,6 @@ public class CampusNewsModel implements Parcelable {
     this.description = in.readString();
     this.author = in.readString();
     this.level = in.readInt();
-    this.sec = in.readString();
-    this.dept = in.readString();
   }
 
   @Override public int describeContents() {
@@ -58,8 +56,6 @@ public class CampusNewsModel implements Parcelable {
     dest.writeString(this.description);
     dest.writeString(this.author);
     dest.writeInt(this.level);
-    dest.writeString(this.sec);
-    dest.writeString(this.dept);
   }
 
   public String getTitle() {

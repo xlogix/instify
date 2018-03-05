@@ -39,7 +39,7 @@ public class SplashActivity extends Activity {
     FirebaseUser mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
     // Splash screen timer
-    final int SPLASH_TIME_OUT = 1000;
+    final int SPLASH_TIME_OUT = 500;
 
     new Handler().postDelayed(new Runnable() {
       /*

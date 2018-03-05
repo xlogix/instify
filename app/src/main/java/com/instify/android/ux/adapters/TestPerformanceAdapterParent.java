@@ -53,7 +53,7 @@ public class TestPerformanceAdapterParent
     rv_child.setAdapter(childAdapter);
   }
 
-  public class ViewHolder extends RecyclerView.ViewHolder {
+  public static class ViewHolder extends RecyclerView.ViewHolder {
     public TestPerformanceModel item;
     @BindView(R.id.testtype) TextView mTesttype;
     @BindView(R.id.toprecyc) RecyclerView mToprecyc;

@@ -3,12 +3,9 @@ package com.instify.android.ux;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,12 +27,10 @@ public class UploadNewsActivity extends AppCompatActivity {
   DatabaseReference campusNewsRef, finalUploadRef;
   SQLiteHandler db = new SQLiteHandler(this);
   private EditText newsTitle, newsDescription;
-  private RadioGroup newsLevelRadio;
-  private RadioButton univRadio, deptRadio, classRadio;
+  private RadioButton univRadio;
   private Button submitNews;
   private int selectedLevel = 1;
   private String currentUser;
-  private Spinner dept, classYear, classSec;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -49,75 +44,13 @@ public class UploadNewsActivity extends AppCompatActivity {
     // UI elements //
     newsTitle = findViewById(R.id.news_title);
     newsDescription = findViewById(R.id.news_description);
-    newsLevelRadio = findViewById(R.id.campusUploadRadioGroup);
     univRadio = findViewById(R.id.campusUploadUniv);
-    deptRadio = findViewById(R.id.campusUploadDept);
-    classRadio = findViewById(R.id.campusUploadClass);
     submitNews = findViewById(R.id.post);
-    dept = findViewById(R.id.campusUploadDeptSpinner);
-    classYear = findViewById(R.id.campusUploadClassYearSpinner);
-    classSec = findViewById(R.id.campusUploadClassSecSpinner);
-
-    // Adapters //
-    ArrayAdapter<CharSequence> deptAdapter =
-        ArrayAdapter.createFromResource(this, R.array.campusUploadDeptArray,
-            R.layout.support_simple_spinner_dropdown_item);
-    deptAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-
-    ArrayAdapter<CharSequence> classYearAdapter =
-        ArrayAdapter.createFromResource(this, R.array.campusUploadYearArray,
-            R.layout.support_simple_spinner_dropdown_item);
-    classYearAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-
-    ArrayAdapter<CharSequence> classSecAdapter =
-        ArrayAdapter.createFromResource(this, R.array.campusUploadSecArray,
-            R.layout.support_simple_spinner_dropdown_item);
-    classSecAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-    // End Adapters //
-
-    dept.setAdapter(deptAdapter);
-    classYear.setAdapter(classYearAdapter);
-    classSec.setAdapter(classSecAdapter);
-
-    // disabling the spinners
-    dept.setEnabled(false);
-    classYear.setEnabled(false);
-    classSec.setEnabled(false);
 
     // Firebase objects //
     fUser = FirebaseAuth.getInstance().getCurrentUser();
     currentUser = db.getUserDetails().getRegno();
     campusNewsRef = dbRef.child("campusNews");
-
-    newsLevelRadio.setOnCheckedChangeListener((radioGroup, i) -> {
-      dept.setSelection(0);
-      classYear.setSelection(0);
-      classSec.setSelection(0);
-      switch (i) {
-        case R.id.campusUploadUniv: {
-          dept.setEnabled(false);
-          classYear.setEnabled(false);
-          classSec.setEnabled(false);
-          selectedLevel = 1;
-          break;
-        }
-
-        case R.id.campusUploadDept: {
-          dept.setEnabled(true);
-          classYear.setEnabled(false);
-          classSec.setEnabled(false);
-          selectedLevel = 2;
-          break;
-        }
-
-        case R.id.campusUploadClass: {
-          dept.setEnabled(true);
-          classYear.setEnabled(true);
-          classSec.setEnabled(true);
-          selectedLevel = 3;
-        }
-      }
-    });
 
     submitNews.setOnClickListener(view -> {
       // timestamp acts as news ID
@@ -150,69 +83,10 @@ public class UploadNewsActivity extends AppCompatActivity {
           Toast.LENGTH_SHORT).show();
       validate = false;
     }
-    switch (newsLevelRadio.getCheckedRadioButtonId()) {
-      case R.id.campusUploadUniv: {
-
-        break;
-      }
-
-      case R.id.campusUploadDept: {
-        if (dept.getSelectedItem().toString().equals("Select Department")) {
-          Toast.makeText(UploadNewsActivity.this, "Choose Dept from the Dropdown",
-              Toast.LENGTH_SHORT).show();
-          validate = false;
-        }
-        break;
-      }
-
-      case R.id.campusUploadClass: {
-        if (dept.getSelectedItemPosition() == 0) {
-          Toast.makeText(UploadNewsActivity.this, "Choose Dept from the Dropdown",
-              Toast.LENGTH_SHORT).show();
-          validate = false;
-        }
-        if (classYear.getSelectedItemPosition() == 0) {
-          Toast.makeText(UploadNewsActivity.this, "Choose Year from the Dropdown",
-              Toast.LENGTH_SHORT).show();
-          validate = false;
-        }
-        if (classSec.getSelectedItemPosition() == 0) {
-          Toast.makeText(UploadNewsActivity.this, "Choose Section from the Dropdown",
-              Toast.LENGTH_SHORT).show();
-          validate = false;
-        }
-      }
-    }
     return validate;
   }
 
-  private int getIntYear(String strYear) {
-    switch (strYear) {
-      case "First":
-        return 1;
-      case "Second":
-        return 2;
-      case "Third":
-        return 3;
-      case "Fourth":
-        return 4;
-      default:
-        return -1;
-    }
-  }
-
   private String getRefString() {
-    switch (newsLevelRadio.getCheckedRadioButtonId()) {
-      case R.id.campusUploadUniv:
-        return "all";
-      case R.id.campusUploadDept:
-        return dept.getSelectedItem().toString() + "/all";
-      case R.id.campusUploadClass: {
-        return dept.getSelectedItem().toString() + "/" + getIntYear(
-            classYear.getSelectedItem().toString()) + "/" + classSec.getSelectedItem().toString();
-      }
-      default:
-        return "all";
-    }
+    return "all";
   }
 }

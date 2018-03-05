@@ -32,9 +32,10 @@ public class TestPerformanceActivity extends AppCompatActivity {
   @BindView(R.id.fab_refresh) FloatingActionButton refreshingFAB;
   @BindView(R.id.error_message) TextView errorMessage;
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
-  private SQLiteHandler db = new SQLiteHandler(this);
+  SQLiteHandler db = new SQLiteHandler(this);
 
   // [START add_lifecycle_methods]
+
   /**
    * Called when leaving the activity
    */
@@ -89,12 +90,12 @@ public class TestPerformanceActivity extends AppCompatActivity {
     call.enqueue(new Callback<TestPerformanceResponseModel>() {
       @Override public void onResponse(@Nullable Call<TestPerformanceResponseModel> call,
           @Nullable Response<TestPerformanceResponseModel> response) {
+
         TestPerformanceResponseModel t = response.body();
         if (response.isSuccessful()) {
           TestPerformanceAdapterParent test =
               new TestPerformanceAdapterParent(t.getTestPerformance(),
                   TestPerformanceActivity.this);
-
           // Update UI
           Snackbar.make(refreshingFAB, "Sync Successful", Snackbar.LENGTH_SHORT).show();
 
@@ -103,15 +104,18 @@ public class TestPerformanceActivity extends AppCompatActivity {
           } else {
             hidePlaceHolder();
           }
-
+          // Set Adapter
           mRecyclerViewTestPerformance.setAdapter(test);
           // TODO : Create Adapter here when API is Complete
-        } else {
+        } else
+
+        {
           showErrorPlaceholder("Sync Failed");
         }
       }
 
-      @Override public void onFailure(Call<TestPerformanceResponseModel> call, Throwable t) {
+      @Override public void onFailure(@Nullable Call<TestPerformanceResponseModel> call,
+          @Nullable Throwable t) {
         showErrorPlaceholder("Sync Failed");
       }
     });

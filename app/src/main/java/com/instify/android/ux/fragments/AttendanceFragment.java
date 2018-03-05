@@ -120,32 +120,29 @@ public class AttendanceFragment extends Fragment {
   private void getAttendance() {
     // Handle UI
     showRefreshing();
-    hidePlaceHolder();
     // Tag used to cancel the request
     String tag_string_req = "req_attendance";
 
     StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_ATTENDANCE,
         new Response.Listener<String>() {
-
           @Override public void onResponse(String response) {
             try {
               hidePlaceHolder();
               JSONObject jObj = new JSONObject(response);
               // Boolean error = jObj.getBoolean("error");
-
               // Handle UI
               hideRefreshing();
-
+              // Hide Placeholder
+              hidePlaceHolder();
+              // Set Adapter
               mAdapter = new SimpleStringRecyclerViewAdapter(mContext, jObj);
               recyclerView.setAdapter(mAdapter);
             } catch (JSONException e) {
               // Update UI
               hideRefreshing();
               // JSON error
-              e.printStackTrace();
+              Timber.e("Error: The ERP is misbehaving!");
               showErrorPlaceholder("We are sorry. The ERP is misbehaving");
-              Toast.makeText(getContext(), "We are sorry. The ERP is misbehaving",
-                  Toast.LENGTH_LONG).show();
             }
           }
         }, error -> {

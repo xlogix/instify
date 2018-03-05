@@ -45,12 +45,11 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     //        myHolder.textSize.setText("REG-NO: " + current.sizeName);
     //        myHolder.textType.setText("YEAR: " + current.catName);
     //        myHolder.textPrice.setText(current.price);
-    //        myHolder.textPrice.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
-
     //  new DownloadImage(imageView).execute("");
     //  myHolder.onClick(new );
 
   }
+
   // Get total item from List
   @Override public int getItemCount() {
     return data.size();

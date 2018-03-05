@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 public class FeePaymentHistoryAdapter
     extends RecyclerView.Adapter<FeePaymentHistoryAdapter.DataObjectHolder> {
-
   private static final String TAG = FeePaymentHistoryAdapter.class.getSimpleName();
 
   private ArrayList<FeePaymentHistoryModel> mDataSet;
