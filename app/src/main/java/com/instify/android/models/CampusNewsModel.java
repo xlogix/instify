@@ -25,7 +25,6 @@ public class CampusNewsModel implements Parcelable {
     this.title = title;
     this.description = description;
     this.author = author;
-    this.level = level;
   }
 
   public static final Parcelable.Creator<CampusNewsModel> CREATOR =
@@ -43,7 +42,6 @@ public class CampusNewsModel implements Parcelable {
     this.title = in.readString();
     this.description = in.readString();
     this.author = in.readString();
-    this.level = in.readInt();
   }
 
   @Override public int describeContents() {
@@ -54,7 +52,6 @@ public class CampusNewsModel implements Parcelable {
     dest.writeString(this.title);
     dest.writeString(this.description);
     dest.writeString(this.author);
-    dest.writeInt(this.level);
   }
 
   public String getTitle() {

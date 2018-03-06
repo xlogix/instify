@@ -25,8 +25,8 @@ android {
     applicationId "com.instify.android"
     minSdkVersion 16
     targetSdkVersion 27
-    versionCode 15
-    versionName "2.0.2"
+    versionCode 17
+    versionName "2.0.4"
     multiDexEnabled true
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     vectorDrawables.useSupportLibrary = true

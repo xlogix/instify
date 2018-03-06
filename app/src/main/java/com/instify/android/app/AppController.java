@@ -82,7 +82,7 @@ public class AppController extends MultiDexApplication {
       // set in-app defaults
       Map<String, Object> remoteConfigDefaults = new HashMap();
       remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_REQUIRED, false);
-      remoteConfigDefaults.put(ForceUpdateChecker.KEY_CURRENT_VERSION, "2.0.2");
+      remoteConfigDefaults.put(ForceUpdateChecker.KEY_CURRENT_VERSION, "2.0.4");
       remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_URL,
           "https://play.google.com/store/apps/details?id=com.instify.android");
 
