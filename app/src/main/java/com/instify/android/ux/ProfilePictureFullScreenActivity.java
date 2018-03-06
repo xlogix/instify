@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -162,31 +161,16 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity
   }
 
   @AfterPermissionGranted(RC_CAMERA_AND_GALLERY_PERM) private void getPicture() {
-    if (Build.VERSION.SDK_INT < 19) {
-      String[] perms = { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE };
-
-      if (EasyPermissions.hasPermissions(this, perms)) {
-        // Have permission, do the thing!
-        Crop.pickImage(this);
-      } else {
-        // Ask for one permission
-        EasyPermissions.requestPermissions(this, getString(R.string.rationale_camera),
-            RC_CAMERA_AND_GALLERY_PERM, perms);
-      }
+    String[] perms = {
+        Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+    if (EasyPermissions.hasPermissions(this, perms)) {
+      // Have permission, do the thing!
+      Crop.pickImage(this);
     } else {
-      String[] perms = {
-          Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,
-          Manifest.permission.MANAGE_DOCUMENTS
-      };
-
-      if (EasyPermissions.hasPermissions(this, perms)) {
-        // Have permission, do the thing!
-        Crop.pickImage(this);
-      } else {
-        // Ask for one permission
-        EasyPermissions.requestPermissions(this, getString(R.string.rationale_camera),
-            RC_CAMERA_AND_GALLERY_PERM, perms);
-      }
+      // Ask for one permission
+      EasyPermissions.requestPermissions(this, getString(R.string.rationale_storage),
+          RC_CAMERA_AND_GALLERY_PERM, perms);
     }
   }
 

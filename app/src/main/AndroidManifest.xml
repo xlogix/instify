@@ -13,7 +13,6 @@
   <uses-permission android:name="android.permission.VIBRATE"/>
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-  <uses-permission android:name="android.permission.MANAGE_DOCUMENTS"/>
 
   <!-- Dangerous permissions, access must be requested at runtime -->
   <uses-permission android:name="android.permission.CAMERA"/>
@@ -24,6 +23,9 @@
   <!-- self-defined permission prevents other apps to hijack PNs -->
   <permission
       android:name="${applicationId}.permission.C2D_MESSAGE"
+      android:protectionLevel="signature"/>
+  <permission
+      android:name="android.permission.MANAGE_DOCUMENTS"
       android:protectionLevel="signature"/>
 
   <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE"/>
@@ -218,12 +220,12 @@
          See README(https://goo.gl/l4GJaQ) for more. -->
     <meta-data
         android:name="com.google.firebase.messaging.default_notification_icon"
-        android:resource="@drawable/ic_notification_white" />
+        android:resource="@drawable/ic_notification_white"/>
     <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
          notification message. See README(https://goo.gl/6BKBk7) for more. -->
     <meta-data
         android:name="com.google.firebase.messaging.default_notification_color"
-        android:resource="@color/colorPrimary" />
+        android:resource="@color/colorPrimary"/>
     <!-- [END fcm_default_icon] -->
     <!-- [START fcm_default_channel] -->
     <meta-data

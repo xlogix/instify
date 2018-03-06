@@ -126,7 +126,8 @@
   <string name="camera_button_text">Upload</string>
   <string name="take_photo_prompt">Upload a Photo</string>
   <string name="download">Download</string>
-  <string name="rationale_storage">Requesting access to the Storage</string>
+  <string name="rationale_camera">This app needs access to your camera so you can take pictures.</string>
+  <string name="rationale_storage">This app needs access to your storage so you can update your profile picture.</string>
   <string name="label_download">Download File</string>
   <string name="success">Success</string>
 
@@ -141,12 +142,6 @@
 
   <!--[START] Easy Permissions-->
   <string name="title_settings_dialog">Permissions Required</string>
-  <string name="rationale_camera">This app needs access to your camera so you can take pictures.
-  </string>
-  <string name="contacts_permission_rationale">"Contacts permissions are needed for providing
-    email
-    completions."
-  </string>
   <string name="returned_from_app_settings_to_activity">Returned from app settings to
     MainActivity
   </string>
