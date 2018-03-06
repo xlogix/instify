@@ -75,7 +75,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
     // getNotes(getIntent().getStringExtra("code"));
   }
 
-  private void setNotesFirebase(final String subjectCode) {
+  private void setNotesFirebase(String subjectCode) {
 
     Query query = FirebaseDatabase.getInstance().getReference().child("notes").child(subjectCode);
     FirebaseRecyclerOptions<NotesFileModel> options =
@@ -87,7 +87,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
         // Create a new instance of the ViewHolder, in this case we are using a custom
         // layout called R.layout.message for each item
         View view = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.card_view_experiences, parent, false);
+            .inflate(R.layout.card_view_notes_subjects_item, parent, false);
 
         return new NotesFileAdapter.MyHolder(view);
       }
@@ -118,20 +118,23 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
   }
 
   @Override public void onStart() {
-    super.onStart();
     if (adapter != null) adapter.startListening();
+    super.onStart();
   }
 
   @Override public void onStop() {
-    super.onStop();
     if (adapter != null) adapter.stopListening();
+    super.onStop();
+  }
+
+  @Override public void onPause() {
+    if (adapter != null) adapter.stopListening();
+    super.onPause();
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
-
     // adds item to action bar
     getMenuInflater().inflate(R.menu.search_main, menu);
-
     // Get Search item from action bar and Get Search service
     MenuItem searchItem = menu.findItem(R.id.action_search);
     SearchManager searchManager =
@@ -397,7 +400,6 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
         photoFile = createImageFile();
       } catch (IOException ex) {
         // Error occurred while creating the File
-
       }
       // Continue only if the File was successfully created
       if (photoFile != null) {

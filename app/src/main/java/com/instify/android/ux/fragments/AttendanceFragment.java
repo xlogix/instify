@@ -41,6 +41,11 @@ import timber.log.Timber;
  * Created by Abhish3k on 1/2/2017.
  */
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link AttendanceFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class AttendanceFragment extends Fragment {
 
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;

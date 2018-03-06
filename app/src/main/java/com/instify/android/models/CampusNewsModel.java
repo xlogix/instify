@@ -9,20 +9,8 @@ import android.os.Parcelable;
 
 public class CampusNewsModel implements Parcelable {
 
-  public static final Parcelable.Creator<CampusNewsModel> CREATOR =
-      new Parcelable.Creator<CampusNewsModel>() {
-        @Override public CampusNewsModel createFromParcel(Parcel source) {
-          return new CampusNewsModel(source);
-        }
-
-        @Override public CampusNewsModel[] newArray(int size) {
-          return new CampusNewsModel[size];
-        }
-      };
-
-  public String title, description, author, dept, sec;
-
-  private int level;
+  public String title, description, author;
+  public Integer level;
 
   public CampusNewsModel() {
   }
@@ -39,6 +27,17 @@ public class CampusNewsModel implements Parcelable {
     this.author = author;
     this.level = level;
   }
+
+  public static final Parcelable.Creator<CampusNewsModel> CREATOR =
+      new Parcelable.Creator<CampusNewsModel>() {
+        @Override public CampusNewsModel createFromParcel(Parcel source) {
+          return new CampusNewsModel(source);
+        }
+
+        @Override public CampusNewsModel[] newArray(int size) {
+          return new CampusNewsModel[size];
+        }
+      };
 
   protected CampusNewsModel(Parcel in) {
     this.title = in.readString();

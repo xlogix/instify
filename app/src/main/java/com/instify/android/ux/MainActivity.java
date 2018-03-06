@@ -58,6 +58,7 @@ import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.listeners.OnSingleClickListener;
 import com.instify.android.models.UserDataModel;
 import com.instify.android.ux.fragments.AttendanceFragment;
+import com.instify.android.ux.fragments.ExperiencesFragment;
 import com.instify.android.ux.fragments.FeedFragment;
 import com.instify.android.ux.fragments.NotesFragment;
 import com.instify.android.ux.fragments.TimeTableFragment;
@@ -459,7 +460,9 @@ public class MainActivity extends AppCompatActivity
     } else if (id == R.id.action_settings) {
       startActivity(new Intent(MainActivity.this, SettingsActivity.class));
     } else if (id == R.id.action_logout) {
-      AppController.getInstance().logoutUser();
+      if (AppController.getInstance() != null) {
+          AppController.getInstance().logoutUser();
+      }
     }
     return super.onOptionsItemSelected(item);
   }

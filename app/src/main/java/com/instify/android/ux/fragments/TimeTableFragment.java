@@ -37,9 +37,13 @@ import timber.log.Timber;
 
 /**
  * Created by Abhish3k on 21/02/2016.
- * Thanks :)
  */
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link TimeTableFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class TimeTableFragment extends Fragment {
   @BindView(R.id.calendarButton) ImageButton mCalendarButton;
   @BindView(R.id.currentdate) TextView mCurrentDate;
@@ -149,7 +153,6 @@ public class TimeTableFragment extends Fragment {
           ListExpandableAdapter adapter;
           // Declare array List for all headers in list
           ArrayList<String> headersArrayList = new ArrayList<>();
-
           // Declare Hash map for all headers and their corresponding values
           HashMap<String, ArrayList<String>> childArrayList = new HashMap<>();
 

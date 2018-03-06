@@ -31,14 +31,13 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
   // Inflate the layout when ViewHolder created
   @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     // Inflate View
-    View view = inflater.inflate(R.layout.card_view_notes_subjects_item, parent);
+    View view = inflater.inflate(R.layout.card_view_notes_subjects_item, parent, false);
     // Set adapter
     return new NotesFileAdapter.MyHolder(view);
   }
 
   // Bind data
   @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
     // Get current position of item in RecyclerView to bind data and assign values from list
     NotesFileAdapter.MyHolder myHolder = (NotesFileAdapter.MyHolder) holder;
     final NotesFileModel current = data.get(position);
@@ -62,7 +61,7 @@ public class NotesFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public CardView cv;
 
     // create constructor to get widget reference
-    public MyHolder(final View itemView) {
+    public MyHolder(View itemView) {
       super(itemView);
       cv = itemView.findViewById(R.id.cardViewSubjectsItem);
       noteName = itemView.findViewById(R.id.name);

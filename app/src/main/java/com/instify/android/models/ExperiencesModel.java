@@ -12,6 +12,8 @@ public class ExperiencesModel {
   private String id, title, description, author, imageUrl, category;
   private HashMap<String, Boolean> votes;
   @ServerTimestamp private Date timestamp;
+
+  // Default Constructor
   public ExperiencesModel() {
   }
 

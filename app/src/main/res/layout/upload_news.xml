@@ -1,79 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_animate"
     android:fillViewport="true"
+    android:fitsSystemWindows="true"
     android:padding="@dimen/activity_vertical_margin"
     >
 
-  <RelativeLayout
+  <android.support.constraint.ConstraintLayout
+      android:id="@+id/constraint_login"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="vertical"
       >
 
-    <TextView
-        android:id="@+id/post_announcement_text"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:paddingTop="20dp"
-        android:text="Post an Announcement"
-        android:textAllCaps="true"
-        android:textColor="@color/colorPrimary"
-        android:textSize="24sp"
-        />
+        android:focusable="true"
+        android:theme="@style/EditTextTheme"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/post_announcement_text"
+        app:layout_constraintVertical_chainStyle="spread"
+        >
 
-    <EditText
-        android:id="@+id/news_title"
-        android:layout_width="match_parent"
+      <EditText
+          android:id="@+id/news_title"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/post_announcement_text"
+          android:autoLink="all"
+          android:hint="Title"
+          android:inputType="text"
+          android:maxLines="1"
+          android:padding="10dp"
+          android:textColor="@color/white"
+          android:textIsSelectable="true"
+          />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/post_announcement_text"
-        android:layout_marginBottom="10dp"
-        android:hint="Title"
-        android:maxLines="1"
-        android:padding="10dp"
-        />
+        android:theme="@style/EditTextTheme"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+        app:layout_constraintVertical_chainStyle="spread"
+        >
 
-    <EditText
-        android:id="@+id/news_description"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@+id/news_title"
-        android:layout_marginBottom="10dp"
-        android:hint="Description"
-        android:padding="10dp"
-        android:textColor="@color/black"
-        />
-
-    <TextView
-        android:id="@+id/CampusUploadRadioTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/news_description"
-        android:layout_centerHorizontal="true"
-        android:text="Choose level"
-        android:textColor="@color/colorPrimary"
-        android:textSize="24sp"
-        />
+      <EditText
+          android:id="@+id/news_description"
+          android:layout_width="match_parent"
+          android:layout_height="120dp"
+          android:layout_below="@+id/news_title"
+          android:autoLink="all"
+          android:hint="Description"
+          android:inputType="text"
+          android:padding="10dp"
+          android:textColor="@color/white"
+          android:textIsSelectable="true"
+          />
+    </android.support.design.widget.TextInputLayout>
 
     <RadioButton
         android:id="@+id/campusUploadUniv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/CampusUploadRadioTitle"
+        android:layout_marginTop="12dp"
         android:checked="true"
         android:text="University"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
         />
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/post"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/campusUploadUniv"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/border_button_background"
         android:text="Post"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/campusUploadUniv"
         />
-  </RelativeLayout>
+  </android.support.constraint.ConstraintLayout>
 </ScrollView>

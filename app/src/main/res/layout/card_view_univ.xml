@@ -107,7 +107,7 @@
           android:layout_height="48dp"
           android:background="?selectableItemBackgroundBorderless"
           app:layout_constraintBottom_toBottomOf="@id/univ_news_snip"
-          app:srcCompat="@drawable/ic_share_black_24dp"
+          app:srcCompat="@drawable/ic_share_blue_24dp"
           />
 
       <LinearLayout

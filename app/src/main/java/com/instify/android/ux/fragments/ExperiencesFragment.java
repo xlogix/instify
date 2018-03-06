@@ -13,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +23,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentReference;
@@ -43,9 +47,7 @@ import timber.log.Timber;
  */
 public class ExperiencesFragment extends Fragment {
 
-  // TODO: Rename parameter arguments, choose names that match
-  // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-  @BindView(R.id.recycler_view_experience) RecyclerView recyclerView;
+  @BindView(R.id.recycler_view_experience) RecyclerView recyclerViewExperiences;
   @BindView(R.id.error_message) TextView errorMessage;
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
   Unbinder unbinder;
@@ -97,11 +99,14 @@ public class ExperiencesFragment extends Fragment {
 
   @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+
     // FAB //
     ((MainActivity) getActivity()).mSharedFab.setOnClickListener(v -> {
       Intent uploadExperience = new Intent(getContext(), UploadExperiencesActivity.class);
       startActivity(uploadExperience);
     });
+
+    // Query the database
     Query query = FirebaseFirestore.getInstance().collection("experiences");
     FirestoreRecyclerOptions<ExperiencesModel> options =
         new FirestoreRecyclerOptions.Builder<ExperiencesModel>().setQuery(query,
@@ -119,18 +124,29 @@ public class ExperiencesFragment extends Fragment {
       @Override protected void onBindViewHolder(@NonNull ViewHolder holder, int position,
           @NonNull ExperiencesModel model) {
         holder.setBindDataToView(model, getContext());
-        holder.upVoteButton.setOnClickListener(view1 -> voteExperience(model.getId(), true));
+        holder.upVoteButton.setOnCheckedChangeListener(
+            new CompoundButton.OnCheckedChangeListener() {
+              @Override public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                voteExperience(model.getId(), true);
+              }
+            });
       }
     };
-    recyclerView.setHasFixedSize(true);
-    recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-    recyclerView.setItemAnimator(new DefaultItemAnimator());
-    recyclerView.setAdapter(adapter);
+
+    recyclerViewExperiences.setHasFixedSize(true);
+    // Declare linear layout
+    LinearLayoutManager linearLayoutManager =
+        new LinearLayoutManager(recyclerViewExperiences.getContext());
+    recyclerViewExperiences.setLayoutManager(linearLayoutManager);
+    // Change the layout orientation to put new news on top
+    linearLayoutManager.setReverseLayout(true);
+    linearLayoutManager.setStackFromEnd(true);
+    recyclerViewExperiences.setItemAnimator(new DefaultItemAnimator());
+    recyclerViewExperiences.setAdapter(adapter);
   }
 
   @Override public void onDestroyView() {
     super.onDestroyView();
-
     unbinder.unbind();
   }
 
@@ -165,7 +181,7 @@ public class ExperiencesFragment extends Fragment {
       transaction.update(sfDocRef, "votes", currentVotes);
       return currentVotes;
     })
-        .addOnSuccessListener(result -> Timber.d("Transaction success: %l", result))
+        .addOnSuccessListener(result -> Timber.d("Transaction success: %s", result))
         .addOnFailureListener(e -> Timber.w(e, "Transaction failure."));
   }
 
@@ -176,9 +192,9 @@ public class ExperiencesFragment extends Fragment {
     @BindView(R.id.imagePost) ImageView imagePost;
     @BindView(R.id.campusDescription) TextView campusDescription;
     @BindView(R.id.imageButton) ImageButton imageButton;
-    @BindView(R.id.upVoteButton) ImageButton upVoteButton;
+    @BindView(R.id.btnLike) CheckBox upVoteButton;
     @BindView(R.id.scoreText) TextView scoreText;
-    @BindView(R.id.imageButton2) ImageButton imageButton2;
+    @BindView(R.id.shareButtonExperiences) ImageButton imageButton2;
 
     public ViewHolder(View view) {
       super(view);
@@ -190,7 +206,10 @@ public class ExperiencesFragment extends Fragment {
       campusAuthor.setText(model.getAuthor());
       campusDescription.setText(model.getDescription());
       scoreText.setText(String.valueOf(model.getVotes().size()));
-      Glide.with(context).load(model.getImageUrl()).into(imagePost);
+      Glide.with(context)
+          .load(model.getImageUrl())
+          .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+          .into(imagePost);
     }
   }
 }

@@ -35,6 +35,11 @@ import timber.log.Timber;
  * Created by Abhish3k on 2/23/2016.
  */
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link FeedFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class FeedFragment extends Fragment {
 
   RecyclerView recyclerView;
@@ -69,16 +74,6 @@ public class FeedFragment extends Fragment {
     if (fAdapterAll != null) fAdapterAll.stopListening();
   }
 
-  @Override public void onPause() {
-    super.onPause();
-    if (fAdapterAll != null) fAdapterAll.stopListening();
-  }
-
-  @Override public void onResume() {
-    super.onResume();
-    if (fAdapterAll != null) fAdapterAll.startListening();
-  }
-
   @Override public void onAttach(Context context) {
     super.onAttach(context);
   }
@@ -89,7 +84,7 @@ public class FeedFragment extends Fragment {
 
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-
+    // Get Context
     mContext = getContext();
 
     View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
@@ -121,8 +116,6 @@ public class FeedFragment extends Fragment {
 
     // Paths //
     pathAll = "campusNews/all";
-    pathDept = "campusNews/dept/" + userDept + "/all";
-    pathSec = "campusNews/dept/" + userDept + "/all";
 
     showNews(pathAll);
     // Return the root view //
@@ -140,7 +133,6 @@ public class FeedFragment extends Fragment {
     Query query = FirebaseDatabase.getInstance().getReference().child(path);
     // The Firebase Database synchronizes and stores a local copy of the data for active listeners
     query.keepSynced(true);
-    query.orderByKey();
     // Initialize
     FirebaseRecyclerOptions<CampusNewsModel> options =
         new FirebaseRecyclerOptions.Builder<CampusNewsModel>().setQuery(query,
@@ -158,7 +150,6 @@ public class FeedFragment extends Fragment {
 
       @Override protected void onBindViewHolder(@NonNull CampusViewHolder holder, int position,
           @NonNull CampusNewsModel model) {
-
         holder.mCampusTitle.setText(model.title);
         holder.mCampusAuthor.setText(model.author);
         holder.mCampusDescription.setText(model.description);

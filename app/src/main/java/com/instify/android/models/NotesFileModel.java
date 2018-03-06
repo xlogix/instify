@@ -15,9 +15,6 @@ public class NotesFileModel {
   public String notetype;
   public long unixtime;
 
-  public NotesFileModel() {
-  }
-
   public NotesFileModel(String notename, String notefile, String notedesc, String notetime,
       String noteposter, String noteregno, String notetype, long unixtime) {
     this.notename = notename;
@@ -92,5 +89,8 @@ public class NotesFileModel {
 
   public void setNoteregno(String noteregno) {
     this.noteregno = noteregno;
+  }
+
+  public NotesFileModel() {
   }
 }

@@ -134,7 +134,7 @@
           android:background="?selectableItemBackgroundBorderless"
           app:layout_constraintRight_toLeftOf="@+id/imageButton2"
           app:layout_constraintTop_toBottomOf="@+id/campusDescription"
-          app:srcCompat="@drawable/ic_action_comment"
+          app:srcCompat="@drawable/ic_action_insert_comment"
           card_view:layout_constraintBottom_creator="1"
           card_view:layout_constraintTop_creator="1"
           />
@@ -146,7 +146,7 @@
           android:background="?selectableItemBackgroundBorderless"
           app:layout_constraintRight_toRightOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/campusDescription"
-          app:srcCompat="@drawable/ic_share_black_24dp"
+          app:srcCompat="@drawable/ic_share_blue_24dp"
           card_view:layout_constraintBottom_creator="1"
           card_view:layout_constraintTop_creator="1"
           />
@@ -161,7 +161,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_like"
+            android:src="@drawable/ic_action_like_red"
             />
 
         <TextSwitcher

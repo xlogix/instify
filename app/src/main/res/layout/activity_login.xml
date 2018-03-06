@@ -14,8 +14,6 @@
       android:id="@+id/constraint_login"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:fillViewport="true"
-      android:fitsSystemWindows="true"
       >
 
     <ImageView
@@ -162,7 +160,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:gravity="center"
-        android:text="@string/title_activity_splash"
+        android:text="@string/title_activity_login"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

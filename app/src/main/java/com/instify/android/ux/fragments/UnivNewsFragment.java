@@ -303,15 +303,6 @@ public class UnivNewsFragment extends Fragment {
           viewHolder.mUnivNewsSnip.setText(m.getSnip());
           viewHolder.mImageButton2.setOnClickListener(view -> {
             SQLiteHandler db = new SQLiteHandler(mContext);
-
-            // ShareCompat Builder
-            /* ShareCompat.IntentBuilder builder = ShareCompat.IntentBuilder.from(mContext);
-            builder.setChooserTitle(m.getTitle().toUpperCase());
-            builder.setSubject(m.getTitle().toUpperCase());
-            builder.setText(m.getSnip() + "\n" + m.getLink() + db.getUserDetails().getName()
-                + " has shared a topic with you from Instify https://goo.gl/YRSMJa");
-            builder.setType("text/plain");*/
-
             // OLD
             Intent sharingIntent = new Intent(Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");

@@ -139,7 +139,7 @@ public class AppController extends MultiDexApplication {
     SQLiteHandler sqLiteHandler = new SQLiteHandler(this);
     sqLiteHandler.deleteUsers();
     // Set First Run to true
-    AppController.getInstance().getPrefManager().setIsFirstRun(true);
+    getPrefManager().setIsFirstRun(true);
     // Launch the intro activity
     Intent intent = new Intent(this, IntroActivity.class);
     // Closing all the Activities & Add new Flag to start new Activity
