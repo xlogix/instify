@@ -92,7 +92,8 @@ public class TestPerformanceActivity extends AppCompatActivity {
           @Nullable Response<TestPerformanceResponseModel> response) {
 
         TestPerformanceResponseModel t = response.body();
-        if (response.isSuccessful()) {
+
+        if (response.isSuccessful() && t != null && t.getTestPerformance() != null) {
           TestPerformanceAdapterParent test =
               new TestPerformanceAdapterParent(t.getTestPerformance(),
                   TestPerformanceActivity.this);
@@ -107,9 +108,7 @@ public class TestPerformanceActivity extends AppCompatActivity {
           // Set Adapter
           mRecyclerViewTestPerformance.setAdapter(test);
           // TODO : Create Adapter here when API is Complete
-        } else
-
-        {
+        } else {
           showErrorPlaceholder("Sync Failed");
         }
       }
