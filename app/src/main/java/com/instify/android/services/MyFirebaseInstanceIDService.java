@@ -42,7 +42,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     Timber.d(TAG, "Refreshed token: %d ", refreshedToken);
 
     // Saving reg id to shared preferences
-    storeRegIdInPref(refreshedToken);
+    storeTokenIdInPref(refreshedToken);
 
     FirebaseMessaging.getInstance().subscribeToTopic(AppConfig.TOPIC_GLOBAL);
 
@@ -70,7 +70,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     AppController.getInstance().getPrefManager().sentRegIdToServer(true);
   }
 
-  private void storeRegIdInPref(String token) {
+  private void storeTokenIdInPref(String token) {
     AppController.getInstance().getPrefManager().setRegId(token);
   }
 }

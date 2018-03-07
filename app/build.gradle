@@ -25,8 +25,8 @@ android {
     applicationId "com.instify.android"
     minSdkVersion 16
     targetSdkVersion 27
-    versionCode 17
-    versionName "2.0.4"
+    versionCode 18
+    versionName "2.1.0"
     multiDexEnabled true
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     vectorDrawables.useSupportLibrary = true
@@ -61,7 +61,7 @@ android {
 
 ext {
   firebaseLibVersion = "11.8.0"
-  supportLibVersion = "27.0.2"
+  supportLibVersion = "27.1.0"
   espressoVersion = "3.0.1"
   junitVersion = "4.12"
 }
@@ -74,7 +74,7 @@ dependencies {
   // Cloud messaging i.e sending notifications
   implementation "com.google.firebase:firebase-messaging:${firebaseLibVersion}"
   // Support for MultiDex
-  implementation 'com.android.support:multidex:1.0.2'
+  implementation 'com.android.support:multidex:1.0.3'
 
   // ADS
   implementation "com.google.firebase:firebase-ads:${firebaseLibVersion}"

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,23 +18,19 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.RetryPolicy;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.NativeExpressAdView;
 import com.instify.android.R;
-import com.instify.android.app.AppController;
 import com.instify.android.helpers.RetrofitBuilder;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.interfaces.RetrofitInterface;
@@ -42,8 +39,7 @@ import com.instify.android.models.NewsItemModelList;
 import com.thefinestartist.finestwebview.FinestWebView;
 import java.util.ArrayList;
 import java.util.List;
-import org.json.JSONArray;
-import org.json.JSONException;
+import javax.annotation.Nullable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -120,11 +116,12 @@ public class UnivNewsFragment extends Fragment {
     Call<NewsItemModelList> call = client.GetUnivNews();
     call.enqueue(new Callback<NewsItemModelList>() {
 
-      @Override
-      public void onResponse(Call<NewsItemModelList> call, Response<NewsItemModelList> response) {
+      @Override public void onResponse(@Nullable Call<NewsItemModelList> call,
+          @Nullable Response<NewsItemModelList> response) {
         if (response.isSuccessful()) {
-
+          // Clear the recycle view
           news.clear();
+
           news.addAll(response.body().getNewsItems());
           /* for (int i = 0; i < news.size(); i += 5) {
             final NativeExpressAdView n = new NativeExpressAdView(getContext());
@@ -142,9 +139,8 @@ public class UnivNewsFragment extends Fragment {
           } else {
             hidePlaceHolder();
           }
-          mAdapter.notifyDataSetChanged();
           // Setting the adapter
-
+          mAdapter.notifyDataSetChanged();
         } else {
           showErrorPlaceholder("Error Receiving University News");
           hideRefreshing();
@@ -152,9 +148,10 @@ public class UnivNewsFragment extends Fragment {
       }
 
       @Override public void onFailure(Call<NewsItemModelList> call, Throwable t) {
+        // Clear the view
+        news.clear();
         // Update UI
         showErrorPlaceholder("Failed to Receive University News");
-        news.clear();
         mAdapter.notifyDataSetChanged();
         hideRefreshing();
       }
@@ -185,7 +182,6 @@ public class UnivNewsFragment extends Fragment {
   }
 
   private void loadNativeExpressAd(final int index) {
-
     if (index >= news.size()) {
       return;
     }
@@ -287,9 +283,9 @@ public class UnivNewsFragment extends Fragment {
     }
 
     @Override public int getItemViewType(int position) {
-      if (position % 5 == 0) {
+      /* if (position % 5 == 0) {
         return CONTENT_TYPE;
-      }
+      } */
       return CONTENT_TYPE;
     }
 
@@ -298,21 +294,21 @@ public class UnivNewsFragment extends Fragment {
       switch (viewType) {
         case CONTENT_TYPE:
           ViewHolder viewHolder = (ViewHolder) holder;
-          NewsItemModel m = (NewsItemModel) newsArray.get(position);
-          viewHolder.mUnivNewsTitle.setText(m.getTitle());
-          viewHolder.mUnivNewsSnip.setText(m.getSnip());
+          NewsItemModel newsItemModelItem = (NewsItemModel) newsArray.get(position);
+          viewHolder.mUnivNewsTitle.setText(newsItemModelItem.getTitle());
+          viewHolder.mUnivNewsSnip.setText(newsItemModelItem.getSnip());
           viewHolder.mImageButton2.setOnClickListener(view -> {
             SQLiteHandler db = new SQLiteHandler(mContext);
             // OLD
             Intent sharingIntent = new Intent(Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");
             String shareBodyText = "'"
-                + m.getTitle().toUpperCase()
+                + newsItemModelItem.getTitle().toUpperCase()
                 + "',"
                 + "\n"
-                + m.getSnip()
+                + newsItemModelItem.getSnip()
                 + "\n"
-                + m.getLink()
+                + newsItemModelItem.getLink()
                 + "\n"
                 + db.getUserDetails().getName()
                 + " has shared a topic with you from Instify https://goo.gl/YRSMJa";
@@ -321,10 +317,7 @@ public class UnivNewsFragment extends Fragment {
             sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBodyText);
             mContext.startActivity(Intent.createChooser(sharingIntent, "Share this topic on"));
           });
-          viewHolder.mImageButton.setOnClickListener(view -> {
-                                   //ToDo Comments for Univ News
-          });
-          viewHolder.mView.setOnClickListener(v -> {
+          viewHolder.mUnivNewsSnip.setOnClickListener(v -> {
 
             new FinestWebView.Builder(v.getContext()).theme(R.style.FinestWebViewTheme)
                 .titleDefault("News Update")
@@ -346,7 +339,7 @@ public class UnivNewsFragment extends Fragment {
                 .dividerHeight(0)
                 .gradientDivider(false)
                 .setCustomAnimations(R.anim.slide_up, R.anim.hold, R.anim.hold, R.anim.slide_down)
-                .show(m.getLink());
+                .show(newsItemModelItem.getLink());
           });
           break;
         case AD_TYPE:
@@ -361,14 +354,12 @@ public class UnivNewsFragment extends Fragment {
           // NativeExpressAdViewHolder of any subviews in case it has a different
           // AdView associated with it, and make sure the AdView for this position doesn't
           // already have a parent of a different recycled NativeExpressAdViewHolder.
-
           if (adCardView.getChildCount() > 0) {
             adCardView.removeAllViews();
           }
           if (adView.getParent() != null) {
             ((ViewGroup) adView.getParent()).removeView(adView);
           }
-
           // Add the Native Express ad to the native express ad view.
           adCardView.addView(adView);
           break;
@@ -380,12 +371,12 @@ public class UnivNewsFragment extends Fragment {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-      private final View mView;
+      private View mView;
       @BindView(R.id.imageView2) ImageView mImageView2;
       @BindView(R.id.univ_news_title) TextView mUnivNewsTitle;
       @BindView(R.id.univ_news_snip) TextView mUnivNewsSnip;
       @BindView(R.id.imageButton2) ImageButton mImageButton2;
-      @BindView(R.id.btnLikeUniv) ImageButton mImageButton;
+      @BindView(R.id.btnLikeUniv) CheckBox mImageButton;
 
       public ViewHolder(View view) {
         super(view);

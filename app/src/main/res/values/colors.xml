@@ -10,8 +10,7 @@
     <color name="textColorPrimary">#212121</color>
     <color name="textColorSecondary">#727272</color>
     <color name="colorAccentLight">#F8BBD0</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="colorAccentDark">#c2185b</color>
+    <color name="colorAccent">#f44336</color>
 
     <!-- UI colors-->
     <color name="transparent">#00000000</color>

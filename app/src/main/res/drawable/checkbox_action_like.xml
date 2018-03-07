@@ -8,9 +8,9 @@
 
     <selector>
       <item
-          android:drawable="@drawable/ic_action_like_red"
+          android:drawable="@drawable/ic_action_favorite"
           android:state_checked="true"/>
-      <item android:drawable="@drawable/ic_action_like"/>
+      <item android:drawable="@drawable/ic_action_favorite_border"/>
     </selector>
   </item>
 </layer-list>

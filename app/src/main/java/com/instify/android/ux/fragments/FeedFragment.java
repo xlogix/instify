@@ -204,10 +204,10 @@ public class FeedFragment extends Fragment {
       showNews(pathAll);
       return true;
     } else if (id == R.id.filter_by_time) {
-      showNews(pathDept);
+      showNews(pathAll);
       return true;
     } else if (id == R.id.filter_by_most_liked) {
-      showNews(pathSec);
+      showNews(pathAll);
       return true;
     }
 

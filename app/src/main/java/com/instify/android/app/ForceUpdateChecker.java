@@ -12,7 +12,6 @@ import timber.log.Timber;
  */
 
 public class ForceUpdateChecker {
-
   private static final String TAG = ForceUpdateChecker.class.getSimpleName();
 
   public static final String KEY_UPDATE_REQUIRED = "force_update_required";
