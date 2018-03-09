@@ -12,13 +12,13 @@ import android.text.TextUtils;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.instify.android.BuildConfig;
@@ -27,6 +27,7 @@ import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.ux.IntroActivity;
 import com.squareup.leakcanary.LeakCanary;
 import com.thefinestartist.Base;
+import io.fabric.sdk.android.Fabric;
 import java.util.HashMap;
 import java.util.Map;
 import timber.log.Timber;
@@ -59,8 +60,6 @@ public class AppController extends MultiDexApplication {
     if (BuildConfig.DEBUG) {
       // Plant Tiber debug tree
       Timber.plant(new Timber.DebugTree());
-      // Set Crash Reporting to false
-      FirebaseCrash.setCrashCollectionEnabled(false);
       // Initialise Leak Canary
       if (LeakCanary.isInAnalyzerProcess(this)) {
         // This process is dedicated to LeakCanary for heap analysis.
@@ -76,7 +75,7 @@ public class AppController extends MultiDexApplication {
       // Set Analytics collection to true
       mFirebaseAnalytics.setAnalyticsCollectionEnabled(true);
       // Set Crash Reporting to true
-      FirebaseCrash.setCrashCollectionEnabled(true);
+      Fabric.with(this, new Crashlytics());
       // Initialize FirebaseRemoteConfig
       FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
       // set in-app defaults

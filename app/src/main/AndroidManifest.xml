@@ -71,7 +71,7 @@
         android:value="false"/>
     <!-- Disable Crash reporting to false by default -->
     <meta-data
-        android:name="firebase_crash_collection_enabled"
+        android:name="firebase_crashlytics_collection_enabled"
         android:value="false"/>
     <!-- Declare default WebView Activity -->
     <activity
@@ -161,10 +161,6 @@
         android:label="@string/title_activity_support_us"
         android:parentActivityName=".ux.MainActivity"/>
     <activity
-        android:name=".ux.UploadNotesActivity"
-        android:label="@string/title_activity_upload_notes"
-        android:parentActivityName=".ux.MainActivity"/>
-    <activity
         android:name=".ux.UploadNewsActivity"
         android:label="@string/title_activity_upload_campus"
         android:parentActivityName=".ux.MainActivity"/>
@@ -179,7 +175,7 @@
         android:name=".ux.NotesSubjectFilesActivity"
         android:parentActivityName=".ux.MainActivity"/>
     <activity
-        android:name=".ux.NotesUploadActivity"
+        android:name=".ux.UploadNotesActivity"
         android:parentActivityName=".ux.MainActivity"/>
 
     <service

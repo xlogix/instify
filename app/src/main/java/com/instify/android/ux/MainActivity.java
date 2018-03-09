@@ -1,5 +1,7 @@
 package com.instify.android.ux;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +16,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerAdapter;
@@ -31,9 +32,11 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -57,13 +60,14 @@ import com.instify.android.app.ForceUpdateChecker;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.listeners.OnSingleClickListener;
 import com.instify.android.models.UserDataModel;
+import com.instify.android.utils.GetScreenHeightWidthUtils;
 import com.instify.android.ux.fragments.AttendanceFragment;
-import com.instify.android.ux.fragments.ExperiencesFragment;
 import com.instify.android.ux.fragments.FeedFragment;
 import com.instify.android.ux.fragments.NotesFragment;
 import com.instify.android.ux.fragments.TimeTableFragment;
 import com.instify.android.ux.fragments.UnivNewsFragment;
 import com.thefinestartist.finestwebview.FinestWebView;
+import javax.annotation.Nullable;
 import timber.log.Timber;
 
 /**
@@ -73,6 +77,14 @@ import timber.log.Timber;
 public class MainActivity extends AppCompatActivity
     implements ForceUpdateChecker.OnUpdateNeededListener {
   private static final String TAG = MainActivity.class.getSimpleName();
+
+  private static final int ANIM_DURATION_TOOLBAR = 500;
+  private static final int ANIM_DURATION_FAB = 500;
+
+  private boolean pendingIntroAnimation = true;
+  // Enable double press
+  private boolean doubleBackToExitPressedOnce = false;
+
   /* Play Services Request required to check if Google Services is installed or not */
   private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
   public FloatingActionButton mSharedFab;
@@ -89,9 +101,10 @@ public class MainActivity extends AppCompatActivity
   private ViewPager mViewPager;
   // Declare AdView
   private AdView mAdView;
-  // Enable double press
-  boolean doubleBackToExitPressedOnce = false;
   View headerView;
+
+  @Nullable @BindView(R.id.mToolbar) Toolbar toolbar;
+  @Nullable @BindView(R.id.action_filter) MenuItem filterMenuItem;
 
   /**
    * The {@link PagerAdapter} that will provide
@@ -104,6 +117,7 @@ public class MainActivity extends AppCompatActivity
   private SectionsPagerAdapter mSectionsPagerAdapter;
 
   // [START add_lifecycle_methods]
+
   /**
    * Called when leaving the activity
    */
@@ -169,8 +183,11 @@ public class MainActivity extends AppCompatActivity
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
 
-    Toolbar toolbar = findViewById(R.id.mToolbar);
-    setSupportActionBar(toolbar);
+    setupToolbar();
+
+    if (savedInstanceState == null) {
+      pendingIntroAnimation = false;
+    }
 
     // Declare Views
     mSharedFab = findViewById(R.id.shared_fab);
@@ -189,6 +206,9 @@ public class MainActivity extends AppCompatActivity
     drawerLayout.addDrawerListener(toggle);
     // [START] Initialize Navigation Drawer and Profile Picture
     NavigationView navView = findViewById(R.id.navigation_view);
+    // Inflate header view
+    headerView = navView.inflateHeaderView(R.layout.nav_header_main);
+    // Setup Drawer Content
     setupDrawerContent(navView);
     drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
       @Override public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -206,8 +226,7 @@ public class MainActivity extends AppCompatActivity
     });
     toggle.syncState();
 
-    // Inflate header view
-    headerView = navView.inflateHeaderView(R.layout.nav_header_main);
+    // toolbar.setNavigationIcon(R.drawable.ic_menu_white);
 
     /* [START] Setup Header View */
     ImageView navImageView = headerView.findViewById(R.id.nav_drawer_user_photo);
@@ -263,8 +282,6 @@ public class MainActivity extends AppCompatActivity
           case 1:
             mSharedFab.show();
             break;
-          case 3:
-            mSharedFab.hide();
           default:
             mSharedFab.hide();
             break;
@@ -318,10 +335,17 @@ public class MainActivity extends AppCompatActivity
     mAdView.setAdListener(new AdListener() {
       @Override public void onAdLoaded() {
         super.onAdLoaded();
+        mAdView.animate().setStartDelay(400);
         mAdView.setVisibility(View.VISIBLE);
       }
     });
     // [END load_banner_ad]
+  }
+
+  protected void setupToolbar() {
+    if (toolbar != null) {
+      setSupportActionBar(toolbar);
+    }
   }
 
   // Check if update to new version is needed or not
@@ -415,16 +439,7 @@ public class MainActivity extends AppCompatActivity
           }
           break;
         case R.id.nav_share:
-          try {
-            Intent share = new Intent(Intent.ACTION_VIEW);
-            share.setData(Uri.parse("market://details?id=com.instify.android"));
-            startActivity(share);
-          } catch (Exception e) { // Google Play is not installed
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(
-                Uri.parse("https://play.google.com/store/apps/details?id=com.instify.android"));
-            startActivity(intent);
-          }
+          redirectStore("market://details?id=com.instify.android");
           break;
         case R.id.nav_donate_us:
           startActivity(new Intent(MainActivity.this, SupportUsActivity.class));
@@ -438,10 +453,54 @@ public class MainActivity extends AppCompatActivity
     });
   }
 
+  public Toolbar getToolbar() {
+    return toolbar;
+  }
+
+  public MenuItem getFilterMenuItem() {
+    return filterMenuItem;
+  }
+
   @Override public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.menu_main, menu);
+    // Start Animations
+    if (pendingIntroAnimation) {
+      pendingIntroAnimation = false;
+      startIntroAnimation();
+    }
     return true;
+  }
+
+  private void startIntroAnimation() {
+    mSharedFab.setTranslationY(2 * getResources().getDimensionPixelOffset(R.dimen.btn_fab_size));
+
+    int actionbarSize = GetScreenHeightWidthUtils.dpToPx(56);
+    getToolbar().setTranslationY(-actionbarSize);
+    getFilterMenuItem().getActionView().setTranslationY(-actionbarSize);
+
+    getToolbar().animate().translationY(0).setDuration(ANIM_DURATION_TOOLBAR).setStartDelay(300);
+
+    getFilterMenuItem().getActionView()
+        .animate()
+        .translationY(0)
+        .setDuration(ANIM_DURATION_TOOLBAR)
+        .setStartDelay(300)
+        .setListener(new AnimatorListenerAdapter() {
+          @Override public void onAnimationEnd(Animator animation) {
+            startContentAnimation();
+          }
+        })
+        .start();
+  }
+
+  private void startContentAnimation() {
+    mSharedFab.animate()
+        .translationY(0)
+        .setInterpolator(new OvershootInterpolator(1.f))
+        .setStartDelay(300)
+        .setDuration(ANIM_DURATION_FAB)
+        .start();
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -461,7 +520,7 @@ public class MainActivity extends AppCompatActivity
       startActivity(new Intent(MainActivity.this, SettingsActivity.class));
     } else if (id == R.id.action_logout) {
       if (AppController.getInstance() != null) {
-          AppController.getInstance().logoutUser();
+        AppController.getInstance().logoutUser();
       }
     }
     return super.onOptionsItemSelected(item);

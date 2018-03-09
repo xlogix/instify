@@ -5,19 +5,13 @@
     <color name="colorPrimary">#2196F3</color>
     <!-- Status bar -->
     <color name="colorPrimaryDark">#1976D2</color>
-    <!-- Navigation bar-->
-    <color name="navigationBarColor">#BBDEFB</color>
-    <color name="textColorPrimary">#212121</color>
-    <color name="textColorSecondary">#727272</color>
-    <color name="colorAccentLight">#F8BBD0</color>
     <color name="colorAccent">#f44336</color>
+
+    <color name="fab_color_pressed">#007787</color>
+    <color name="fab_color_shadow">#44000000</color>
 
     <!-- UI colors-->
     <color name="transparent">#00000000</color>
-    <color name="semi_transparent">#bd000000</color>
-    <color name="black_transparent_70percent">#B3000000</color>
-    <color name="semi_light_transparent">#5a000000</color>
-    <color name="semi_lighter_transparent">#2d000000</color>
     <color name="background_grey">#f2f2f2</color>
     <color name="line_lighter_grey">#dedede</color>
     <color name="line_light_grey">#d7a7a7a7</color>

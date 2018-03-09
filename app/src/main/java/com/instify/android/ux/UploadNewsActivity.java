@@ -34,7 +34,7 @@ public class UploadNewsActivity extends AppCompatActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.upload_news);
+    setContentView(R.layout.activity_post_news);
 
     if (getSupportActionBar() != null) {
       getSupportActionBar().setHomeButtonEnabled(true);

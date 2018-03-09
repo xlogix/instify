@@ -25,6 +25,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.instify.android.R;
+import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.CampusNewsModel;
 import com.instify.android.ux.ChatActivity;
 import com.instify.android.ux.MainActivity;
@@ -43,7 +44,7 @@ import timber.log.Timber;
 public class FeedFragment extends Fragment {
 
   RecyclerView recyclerView;
-  String userDept, pathAll, pathDept, pathSec;
+  String currentUserRno, userDept, pathAll;
   @BindView(R.id.error_message) TextView errormessage;
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
 
@@ -82,7 +83,13 @@ public class FeedFragment extends Fragment {
     super.onDestroy();
   }
 
-  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  @Override public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    SQLiteHandler db = new SQLiteHandler(getContext());
+    currentUserRno = db.getUserDetails().getRegno();
+  }
+
+  @Override public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Get Context
     mContext = getContext();
@@ -162,7 +169,6 @@ public class FeedFragment extends Fragment {
         });
         // Set click action for Share button
         holder.mImageButton2.setOnClickListener(view -> {
-
           Intent sharingIntent = new Intent(Intent.ACTION_SEND);
           sharingIntent.setType("text/plain");
           String shareBodyText = "'"
@@ -178,6 +184,13 @@ public class FeedFragment extends Fragment {
           sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBodyText);
           mContext.startActivity(Intent.createChooser(sharingIntent, "Share this topic on"));
         });
+        // Set click action for Delete Button
+        /*holder.mDeleteButton.setOnClickListener(view -> {
+          if (currentUserRno == model.getAuthor()) {
+          mDeleteButton.set
+
+          }
+        });*/
       }
 
       @Override public int getItemCount() {
@@ -240,6 +253,7 @@ public class FeedFragment extends Fragment {
     @BindView(R.id.campusDescription) TextView mCampusDescription;
     @BindView(R.id.imageButton2) ImageButton mImageButton2;
     @BindView(R.id.imageButton) ImageButton mImageButton;
+    @BindView(R.id.image_button_delete_feed_item) ImageButton mDeleteButton;
 
     public CampusViewHolder(View v) {
       super(v);

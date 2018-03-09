@@ -134,7 +134,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
     // adds item to action bar
-    getMenuInflater().inflate(R.menu.search_main, menu);
+    getMenuInflater().inflate(R.menu.upload_menu_main, menu);
     // Get Search item from action bar and Get Search service
     MenuItem searchItem = menu.findItem(R.id.action_search);
     SearchManager searchManager =
@@ -295,56 +295,56 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == RC_CAMERA_PERMISSION && resultCode == RESULT_OK && mFileUri != null) {
       mFilePath = data.getData();
-      Intent intent = new Intent(getApplicationContext(), NotesUploadActivity.class);
+      Intent intent = new Intent(getApplicationContext(), UploadNotesActivity.class);
       intent.putExtra("code", getIntent().getStringExtra("code"));
       intent.putExtra("fileuri", mFileUri.toString());
       intent.putExtra("filetype", "image");
       startActivity(intent);
     } else if (requestCode == RC_STORAGE_PERMISSION && resultCode == RESULT_OK) {
       mFilePath = data.getData();
-      Intent intent = new Intent(getApplicationContext(), NotesUploadActivity.class);
+      Intent intent = new Intent(getApplicationContext(), UploadNotesActivity.class);
       intent.putExtra("code", getIntent().getStringExtra("code"));
       intent.putExtra("fileuri", mFilePath.toString());
       intent.putExtra("filetype", "image");
       startActivity(intent);
     } else if (requestCode == PDF_SELECT && resultCode == RESULT_OK) {
       mFilePath = data.getData();
-      Intent intent = new Intent(getApplicationContext(), NotesUploadActivity.class);
+      Intent intent = new Intent(getApplicationContext(), UploadNotesActivity.class);
       intent.putExtra("code", getIntent().getStringExtra("code"));
       intent.putExtra("fileuri", mFilePath.toString());
       intent.putExtra("filetype", "pdf");
       startActivity(intent);
     } else if (requestCode == DOC_SELECT && resultCode == RESULT_OK) {
       mFilePath = data.getData();
-      Intent intent = new Intent(getApplicationContext(), NotesUploadActivity.class);
+      Intent intent = new Intent(getApplicationContext(), UploadNotesActivity.class);
       intent.putExtra("code", getIntent().getStringExtra("code"));
       intent.putExtra("fileuri", mFilePath.toString());
       intent.putExtra("filetype", "doc");
       startActivity(intent);
     } else if (requestCode == IMAGE_SELECT && resultCode == RESULT_OK) {
       mFilePath = data.getData();
-      Intent intent = new Intent(getApplicationContext(), NotesUploadActivity.class);
+      Intent intent = new Intent(getApplicationContext(), UploadNotesActivity.class);
       intent.putExtra("code", getIntent().getStringExtra("code"));
       intent.putExtra("fileuri", mFilePath.toString());
       intent.putExtra("filetype", "image");
       startActivity(intent);
     } else if (requestCode == VIDEO_SELECT && resultCode == RESULT_OK) {
       mFilePath = data.getData();
-      Intent intent = new Intent(getApplicationContext(), NotesUploadActivity.class);
+      Intent intent = new Intent(getApplicationContext(), UploadNotesActivity.class);
       intent.putExtra("code", getIntent().getStringExtra("code"));
       intent.putExtra("fileuri", mFilePath.toString());
       intent.putExtra("filetype", "video");
       startActivity(intent);
     } else if (requestCode == AUDIO_SELECT && resultCode == RESULT_OK) {
       mFilePath = data.getData();
-      Intent intent = new Intent(getApplicationContext(), NotesUploadActivity.class);
+      Intent intent = new Intent(getApplicationContext(), UploadNotesActivity.class);
       intent.putExtra("code", getIntent().getStringExtra("code"));
       intent.putExtra("fileuri", mFilePath.toString());
       intent.putExtra("filetype", "audio");
       startActivity(intent);
     } else if (requestCode == OTHER_SELECT && resultCode == RESULT_OK) {
       mFilePath = data.getData();
-      Intent intent = new Intent(getApplicationContext(), NotesUploadActivity.class);
+      Intent intent = new Intent(getApplicationContext(), UploadNotesActivity.class);
       intent.putExtra("code", getIntent().getStringExtra("code"));
       intent.putExtra("fileuri", mFilePath.toString());
       intent.putExtra("filetype", "other");

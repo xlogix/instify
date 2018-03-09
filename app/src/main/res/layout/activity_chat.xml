@@ -146,7 +146,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/campusDescription"
-                app:srcCompat="@drawable/ic_share_blue_24dp"
+                app:srcCompat="@drawable/ic_action_share_blue_24dp"
                 card_view:layout_constraintBottom_creator="1"
                 card_view:layout_constraintTop_creator="1"
                 />

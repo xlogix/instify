@@ -53,7 +53,6 @@ public class ExperiencesFragment extends Fragment {
   Unbinder unbinder;
   FirestoreRecyclerAdapter adapter;
   String currentUserRno;
-  // TODO: Rename and change types of parameters
 
   public ExperiencesFragment() {
     // Required empty public constructor
@@ -141,6 +140,7 @@ public class ExperiencesFragment extends Fragment {
     // Change the layout orientation to put new news on top
     linearLayoutManager.setReverseLayout(true);
     linearLayoutManager.setStackFromEnd(true);
+    // Set Animator and Adapter
     recyclerViewExperiences.setItemAnimator(new DefaultItemAnimator());
     recyclerViewExperiences.setAdapter(adapter);
   }

@@ -97,7 +97,7 @@
           android:layout_width="20dp"
           android:layout_height="20dp"
           android:background="?selectableItemBackground"
-          app:srcCompat="@drawable/ic_share_blue_24dp"
+          app:srcCompat="@drawable/ic_action_share_blue_24dp"
           />
 
     </LinearLayout>

@@ -12,7 +12,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StreamDownloadTask;
 import com.instify.android.R;
-import com.instify.android.ux.NotesUploadActivity;
+import com.instify.android.ux.UploadNotesActivity;
 import java.io.IOException;
 import java.io.InputStream;
 import timber.log.Timber;
@@ -127,7 +127,7 @@ public class MyFirebaseDownloadService extends MyFirebaseBaseTaskService {
 
     // Make Intent to MainActivity
     Intent intent =
-        new Intent(this, NotesUploadActivity.class).putExtra(EXTRA_DOWNLOAD_PATH, downloadPath)
+        new Intent(this, UploadNotesActivity.class).putExtra(EXTRA_DOWNLOAD_PATH, downloadPath)
             .putExtra(EXTRA_BYTES_DOWNLOADED, bytesDownloaded)
             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
