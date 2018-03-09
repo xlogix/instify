@@ -22,8 +22,12 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.CampusNewsModel;
@@ -184,13 +188,29 @@ public class FeedFragment extends Fragment {
           sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBodyText);
           mContext.startActivity(Intent.createChooser(sharingIntent, "Share this topic on"));
         });
-        // Set click action for Delete Button
-        /*holder.mDeleteButton.setOnClickListener(view -> {
-          if (currentUserRno == model.getAuthor()) {
-          mDeleteButton.set
 
-          }
-        });*/
+        if (currentUserRno.equals(model.getAuthor())) {
+          holder.mDeleteButton.setVisibility(View.VISIBLE);
+        }
+
+        // Set click action for Delete Button
+        holder.mDeleteButton.setOnClickListener(view -> {
+
+          DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+          Query applesQuery = ref.child(pathAll).orderByChild("author").equalTo(currentUserRno);
+
+          applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override public void onDataChange(DataSnapshot dataSnapshot) {
+              for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                appleSnapshot.getRef().removeValue();
+              }
+            }
+
+            @Override public void onCancelled(DatabaseError databaseError) {
+              Timber.e(databaseError.toException(), "onCancelled");
+            }
+          });
+        });
       }
 
       @Override public int getItemCount() {

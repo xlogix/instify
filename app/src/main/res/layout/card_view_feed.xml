@@ -139,17 +139,6 @@
           />
 
       <ImageButton
-          android:id="@+id/imageButton2"
-          android:layout_width="48dp"
-          android:layout_height="48dp"
-          android:background="?selectableItemBackgroundBorderless"
-          android:contentDescription="@string/share_via"
-          app:srcCompat="@drawable/ic_action_share_blue_24dp"
-          card_view:layout_constraintBottom_creator="1"
-          card_view:layout_constraintTop_creator="1"
-          />
-
-      <ImageButton
           android:id="@+id/image_button_delete_feed_item"
           android:layout_width="48dp"
           android:layout_height="48dp"
@@ -157,6 +146,17 @@
           android:contentDescription="Delete"
           android:visibility="gone"
           app:srcCompat="@drawable/ic_action_delete_forever"
+          card_view:layout_constraintBottom_creator="1"
+          card_view:layout_constraintTop_creator="1"
+          />
+
+      <ImageButton
+          android:id="@+id/imageButton2"
+          android:layout_width="48dp"
+          android:layout_height="48dp"
+          android:background="?selectableItemBackgroundBorderless"
+          android:contentDescription="@string/share_via"
+          app:srcCompat="@drawable/ic_action_share_blue_24dp"
           card_view:layout_constraintBottom_creator="1"
           card_view:layout_constraintTop_creator="1"
           />
