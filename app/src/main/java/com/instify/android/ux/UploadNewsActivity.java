@@ -27,7 +27,6 @@ public class UploadNewsActivity extends AppCompatActivity {
   DatabaseReference campusNewsRef, finalUploadRef;
   SQLiteHandler db = new SQLiteHandler(this);
   private EditText newsTitle, newsDescription;
-  private RadioButton univRadio;
   private Button submitNews;
   private int selectedLevel = 1;
   private String currentUser;
@@ -44,7 +43,6 @@ public class UploadNewsActivity extends AppCompatActivity {
     // UI elements //
     newsTitle = findViewById(R.id.news_title);
     newsDescription = findViewById(R.id.news_description);
-    univRadio = findViewById(R.id.campusUploadUniv);
     submitNews = findViewById(R.id.post);
 
     // Firebase objects //
@@ -79,7 +77,7 @@ public class UploadNewsActivity extends AppCompatActivity {
     if (TextUtils.isEmpty(newsTitle.getText().toString()) || TextUtils.isEmpty(
         newsDescription.getText().toString())) {
 
-      Toast.makeText(UploadNewsActivity.this, "News Title/Description Cant Be Empty",
+      Toast.makeText(UploadNewsActivity.this, "News title/description can't Be empty",
           Toast.LENGTH_SHORT).show();
       validate = false;
     }

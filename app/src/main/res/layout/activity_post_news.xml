@@ -20,6 +20,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:focusable="true"
+        android:textIsSelectable="true"
         android:theme="@style/EditTextTheme"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -35,10 +36,8 @@
           android:autoLink="all"
           android:hint="Title"
           android:inputType="text"
-          android:maxLines="1"
-          android:padding="10dp"
+          android:padding="8dp"
           android:textColor="@color/white"
-          android:textIsSelectable="true"
           />
 
     </android.support.design.widget.TextInputLayout>
@@ -48,6 +47,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:theme="@style/EditTextTheme"
+        android:focusable="true"
+        android:textIsSelectable="true"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -63,28 +64,17 @@
           android:autoLink="all"
           android:hint="Description"
           android:inputType="text"
-          android:focusable="true"
-          android:padding="10dp"
+          android:padding="8dp"
           android:textColor="@color/white"
-          android:textIsSelectable="true"
           />
     </android.support.design.widget.TextInputLayout>
 
-    <RadioButton
-        android:id="@+id/campusUploadUniv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:checked="true"
-        android:text="University"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
-        />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/post"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="64dp"
         android:background="@drawable/border_button_background"
         android:text="Post"
         android:textColor="@android:color/white"
@@ -92,7 +82,7 @@
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/campusUploadUniv"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
         />
   </android.support.constraint.ConstraintLayout>
 </ScrollView>

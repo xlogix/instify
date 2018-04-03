@@ -160,10 +160,11 @@
     <activity
         android:name=".ux.UploadNewsActivity"
         android:label="@string/title_activity_upload_campus"
-        android:parentActivityName=".ux.MainActivity"/>
+        android:parentActivityName=".ux.MainActivity"
+        android:windowSoftInputMode="adjustResize"/>
     <activity
         android:name=".ux.UploadExperiencesActivity"
-        android:windowSoftInputMode="stateHidden"/>
+        android:windowSoftInputMode="adjustResize"/>
     <activity
         android:name=".ux.AboutActivity"
         android:label="@string/app_name"

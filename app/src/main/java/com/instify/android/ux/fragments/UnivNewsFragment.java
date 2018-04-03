@@ -373,7 +373,6 @@ public class UnivNewsFragment extends Fragment {
       @BindView(R.id.univ_news_title) TextView mUnivNewsTitle;
       @BindView(R.id.univ_news_snip) TextView mUnivNewsSnip;
       @BindView(R.id.imageButton2) ImageButton mImageButton2;
-      @BindView(R.id.btnLikeUniv) CheckBox mImageButton;
 
       public ViewHolder(View view) {
         super(view);
