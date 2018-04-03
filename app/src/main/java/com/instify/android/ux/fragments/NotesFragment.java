@@ -45,7 +45,7 @@ public class NotesFragment extends Fragment {
   @BindView(R.id.error_message) TextView errormessage;
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
   Unbinder unbinder;
-  private RecyclerView mRVFish;
+  private RecyclerView mRecycleViewNotes;
   private SwipeRefreshLayout mSwipeRefreshLayout;
   private NotesAdapter mAdapter;
   private Context mContext;
@@ -97,7 +97,7 @@ public class NotesFragment extends Fragment {
     setRetainInstance(true);
     // Initialize Views
     mSwipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout_notes);
-    mRVFish = rootView.findViewById(R.id.recycler_view_notes);
+    mRecycleViewNotes = rootView.findViewById(R.id.recycler_view_notes);
 
     getSubs();
     // Implement swipe refresh action
@@ -118,7 +118,7 @@ public class NotesFragment extends Fragment {
     String tag_string_req = "req_notes";
 
     StringRequest strReq =
-        new StringRequest(Request.Method.POST, AppConfig.URL_ATTENDANCE, response -> {
+        new StringRequest(Request.Method.POST, AppConfig.KEY_URL_GET_ATTENDANCE, response -> {
           try {
             JSONObject jObj = new JSONObject(response);
             boolean error = jObj.getBoolean("error");
@@ -136,14 +136,9 @@ public class NotesFragment extends Fragment {
                 JSONObject subs = jObj.getJSONObject(user.getString(i));
 
                 NotesModel fishData = new NotesModel();
-                fishData.fishName = subs.getString("sub-desc");
-                fishData.catName = name;
-                // fishData.sizeName = json_data.getString("registration").trim();
-                // fishData.price = json_data.getString("ID");
-                // fishData.image = "https://hashbird.com/gogrit.in/workspace/srm-api/studentImages/" + json_data.getString("registration").trim() + ".jpg";
+                fishData.subjectName = subs.getString("sub-desc");
+                fishData.subjectCode = name;
                 notes.add(fishData);
-
-                //  Toast.makeText(getContext(),user.getString(i)+" - "+subs.getString("sub-desc"),Toast.LENGTH_SHORT).show()
               }
               mAdapter = new NotesAdapter(mContext, notes);
               if (mAdapter.getItemCount() == 0) {
@@ -151,8 +146,8 @@ public class NotesFragment extends Fragment {
               } else {
                 hidePlaceHolder();
               }
-              mRVFish.setAdapter(mAdapter);
-              mRVFish.setLayoutManager(new LinearLayoutManager(mContext));
+              mRecycleViewNotes.setLayoutManager(new LinearLayoutManager(mContext));
+              mRecycleViewNotes.setAdapter(mAdapter);
             } else {
               // Update UI
               hideRefreshing();
@@ -164,6 +159,7 @@ public class NotesFragment extends Fragment {
             hideRefreshing();
             // JSON error
             e.printStackTrace();
+            // Show error placeholder
             showErrorPlaceholder("Json error ");
           }
         }, error -> {

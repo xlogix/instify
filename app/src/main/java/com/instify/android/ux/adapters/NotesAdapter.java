@@ -40,14 +40,8 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     // Get current position of item in RecyclerView to bind data and assign values from list
     MyHolder myHolder = (MyHolder) holder;
     NotesModel current = data.get(position);
-    myHolder.textFishName.setText(current.fishName);
-    myHolder.textType.setText(current.catName);
-    //        myHolder.textSize.setText("REG-NO: " + current.sizeName);
-    //        myHolder.textType.setText("YEAR: " + current.catName);
-    //        myHolder.textPrice.setText(current.price);
-    //  new DownloadImage(imageView).execute("");
-    //  myHolder.onClick(new );
-
+    myHolder.textSubjectName.setText(current.subjectName);
+    myHolder.textSubjectCode.setText(current.subjectCode);
   }
 
   // Get total item from List
@@ -56,19 +50,19 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
   }
 
   public class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    TextView textFishName;
-    TextView textType;
+    TextView textSubjectName;
+    TextView textSubjectCode;
 
     // create constructor to get widget reference
     public MyHolder(View itemView) {
       super(itemView);
-      textFishName = itemView.findViewById(R.id.title);
-      textType = itemView.findViewById(R.id.code);
+      textSubjectName = itemView.findViewById(R.id.title);
+      textSubjectCode = itemView.findViewById(R.id.code);
 
       itemView.setOnClickListener(v -> {
         Intent intent = new Intent(context, NotesSubjectFilesActivity.class);
-        intent.putExtra("subject", textFishName.getText().toString());
-        intent.putExtra("code", textType.getText().toString());
+        intent.putExtra("subject", textSubjectName.getText().toString());
+        intent.putExtra("code", textSubjectCode.getText().toString());
         context.startActivity(intent);
       });
     }

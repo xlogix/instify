@@ -28,6 +28,7 @@ import com.instify.android.ux.IntroActivity;
 import com.squareup.leakcanary.LeakCanary;
 import com.thefinestartist.Base;
 import io.fabric.sdk.android.Fabric;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import timber.log.Timber;
@@ -39,6 +40,7 @@ public class AppController extends MultiDexApplication {
   public FirebaseAnalytics mFirebaseAnalytics;
   private RequestQueue mRequestQueue;
   private PreferenceManager mPrefs;
+  private SQLiteHandler sqLiteHandler;
 
   static {
     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
@@ -56,6 +58,9 @@ public class AppController extends MultiDexApplication {
     FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     // Fixes crash reported on Firebase, issue : https://github.com/TheFinestArtist/FinestWebView-Android/issues/79
     Base.initialize(this);
+    // Initialize the SQLiteHandler
+    sqLiteHandler = new SQLiteHandler(this);
+
     // Check Build Config for debugging libraries
     if (BuildConfig.DEBUG) {
       // Plant Tiber debug tree
@@ -80,13 +85,26 @@ public class AppController extends MultiDexApplication {
       FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
       // set in-app defaults
       Map<String, Object> remoteConfigDefaults = new HashMap();
-      remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_REQUIRED, false);
-      remoteConfigDefaults.put(ForceUpdateChecker.KEY_CURRENT_VERSION, "2.0.4");
-      remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_URL,
+
+      // Check for app update required parameter
+      remoteConfigDefaults.put(ForceRemoteConfigUpdateChecker.KEY_APP_UPDATE_REQUIRED, false);
+      remoteConfigDefaults.put(ForceRemoteConfigUpdateChecker.KEY_CURRENT_VERSION, "2.1.0");
+      remoteConfigDefaults.put(ForceRemoteConfigUpdateChecker.KEY_UPDATE_URL,
           "https://play.google.com/store/apps/details?id=com.instify.android");
 
+      // Check for api update required parameter
+      remoteConfigDefaults.put(ForceRemoteConfigUpdateChecker.KEY_API_UPDATE_REQUIRED, false);
+      remoteConfigDefaults.put(ForceRemoteConfigUpdateChecker.KEY_URL_LOGIN,
+          "https://fnplus.xyz/srm-api/get-info.php");
+      remoteConfigDefaults.put(ForceRemoteConfigUpdateChecker.KEY_URL_GET_ATTENDANCE,
+          "https://fnplus.xyz/srm-api/get-aatd.php");
+      remoteConfigDefaults.put(ForceRemoteConfigUpdateChecker.KEY_URL_GET_TT,
+          "https://fnplus.xyz/srm-api/get-ptt.php");
+      remoteConfigDefaults.put(ForceRemoteConfigUpdateChecker.KEY_URL_GET_FEE,
+          "https://fnplus.xyz/srm-api/fee_details.php");
+
       firebaseRemoteConfig.setDefaults(remoteConfigDefaults);
-      firebaseRemoteConfig.fetch(60) // fetch every minute
+      firebaseRemoteConfig.fetch(120) // fetch every 2 minutes
           .addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override public void onComplete(@NonNull Task<Void> task) {
               if (task.isSuccessful()) {
@@ -130,15 +148,45 @@ public class AppController extends MultiDexApplication {
     }
   }
 
+  public static boolean deleteDir(File dir) {
+    if (dir != null && dir.isDirectory()) {
+      String[] children = dir.list();
+      for (int i = 0; i < children.length; i++) {
+        boolean success = deleteDir(new File(dir, children[i]));
+        if (!success) {
+          return false;
+        }
+      }
+    }
+
+    return dir.delete();
+  }
+
+  public void clearApplicationData() {
+    File cache = getCacheDir();
+    File appDir = new File(cache.getParent());
+    if(appDir.exists()){
+      String[] children = appDir.list();
+      for(String s : children){
+        if(!s.equals("lib")){
+          deleteDir(new File(appDir, s));
+          Timber.i("File /data/data/APP_PACKAGE/" + s +" DELETED");
+        }
+      }
+    }
+  }
+
   public void logoutUser() {
-    mPrefs.clear();
-    // SignOut from Firebase
-    FirebaseAuth.getInstance().signOut();
-    // Delete database
-    SQLiteHandler sqLiteHandler = new SQLiteHandler(this);
-    sqLiteHandler.deleteUsers();
-    // Set First Run to true
+    // Clear cache
+    clearApplicationData();
+    // Clear shared preferences data
+    getPrefManager().clear();
+    // Set first run to true
     getPrefManager().setIsFirstRun(true);
+    // Delete database
+    sqLiteHandler.deleteUsers();
+    // Sign-out from Firebase
+    FirebaseAuth.getInstance().signOut();
     // Launch the intro activity
     Intent intent = new Intent(this, IntroActivity.class);
     // Closing all the Activities & Add new Flag to start new Activity

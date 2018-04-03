@@ -137,9 +137,6 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme.NoActionBar"/>
     <activity
-        android:name=".ux.UploadExperiencesActivity"
-        android:windowSoftInputMode="stateHidden"/>
-    <activity
         android:name=".ux.ProfileActivity"
         android:label="@string/title_activity_profile"/>
     <activity
@@ -164,6 +161,9 @@
         android:name=".ux.UploadNewsActivity"
         android:label="@string/title_activity_upload_campus"
         android:parentActivityName=".ux.MainActivity"/>
+    <activity
+        android:name=".ux.UploadExperiencesActivity"
+        android:windowSoftInputMode="stateHidden"/>
     <activity
         android:name=".ux.AboutActivity"
         android:label="@string/app_name"

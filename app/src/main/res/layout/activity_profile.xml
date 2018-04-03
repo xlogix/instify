@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/srm_logo" />
+            android:src="@drawable/img_srm_logo" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/user_profile_photo"

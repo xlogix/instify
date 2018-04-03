@@ -87,7 +87,7 @@ public class FeePaymentHistoryActivity extends AppCompatActivity {
     // Update UI
     showProgressDialog();
 
-    StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_FEE, response -> {
+    StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.KEY_URL_GET_FEE, response -> {
       // Log the event
       Timber.d(TAG, "Login Response: " + response);
       // Update UI

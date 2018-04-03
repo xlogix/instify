@@ -47,11 +47,11 @@
       android:id="@+id/action_settings"
       android:checked="false"
       android:orderInCategory="4"
-      android:title="@string/nav_settings"/>
+      android:title="@string/menu_action_settings"/>
 
   <item
       android:id="@+id/action_logout"
       android:checked="false"
       android:orderInCategory="5"
-      android:title="@string/nav_logout"/>
+      android:title="@string/menu_action_logout"/>
 </menu>

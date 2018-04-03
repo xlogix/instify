@@ -5,13 +5,12 @@
     <color name="colorPrimary">#2196F3</color>
     <!-- Status bar -->
     <color name="colorPrimaryDark">#1976D2</color>
+    <color name="colorAccent">#f44336</color>
     <!-- Navigation bar-->
     <color name="navigationBarColor">#BBDEFB</color>
     <color name="textColorPrimary">#ffffff</color>
     <color name="textColorSecondary">#727272</color>
-    <color name="colorAccentLight">#F8BBD0</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="colorAccentDark">#c2185b</color>
+
     <!-- UI colors-->
     <color name="transparent">#00000000</color>
     <color name="semi_transparent">#bd000000</color>

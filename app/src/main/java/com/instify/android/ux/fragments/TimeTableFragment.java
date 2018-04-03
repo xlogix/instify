@@ -139,7 +139,7 @@ public class TimeTableFragment extends Fragment {
     // Handle UI
     showRefreshing();
 
-    StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_GETTT, response -> {
+    StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.KEY_URL_GET_TT, response -> {
       Timber.d("Login Response: " + response);
       // Handle UI
       hideRefreshing();

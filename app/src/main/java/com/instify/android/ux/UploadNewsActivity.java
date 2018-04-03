@@ -49,7 +49,7 @@ public class UploadNewsActivity extends AppCompatActivity {
 
     // Firebase objects //
     fUser = FirebaseAuth.getInstance().getCurrentUser();
-    currentUser = db.getUserDetails().getRegno();
+    currentUser = db.getUserDetails().getName();
     campusNewsRef = dbRef.child("campusNews");
 
     submitNews.setOnClickListener(view -> {

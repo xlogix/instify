@@ -11,12 +11,18 @@ import timber.log.Timber;
  * Created by abhishek on 07/02/18.
  */
 
-public class ForceUpdateChecker {
-  private static final String TAG = ForceUpdateChecker.class.getSimpleName();
+public class ForceRemoteConfigUpdateChecker {
+  private static final String TAG = ForceRemoteConfigUpdateChecker.class.getSimpleName();
 
-  public static final String KEY_UPDATE_REQUIRED = "force_update_required";
+  public static final String KEY_APP_UPDATE_REQUIRED = "force_app_update_required";
   public static final String KEY_CURRENT_VERSION = "force_update_current_version";
   public static final String KEY_UPDATE_URL = "force_update_store_url";
+
+  public static final String KEY_API_UPDATE_REQUIRED = "force_api_update_required";
+  public static final String KEY_URL_LOGIN = "api_url_login";
+  public static final String KEY_URL_GET_ATTENDANCE = "api_url_get_attendance";
+  public static final String KEY_URL_GET_TT = "api_url_get_tt";
+  public static final String KEY_URL_GET_FEE = "api_url_get_fee";
 
   private OnUpdateNeededListener onUpdateNeededListener;
   private Context context;
@@ -29,7 +35,7 @@ public class ForceUpdateChecker {
     return new Builder(context);
   }
 
-  public ForceUpdateChecker(@NonNull Context context,
+  public ForceRemoteConfigUpdateChecker(@NonNull Context context,
       OnUpdateNeededListener onUpdateNeededListener) {
     this.context = context;
     this.onUpdateNeededListener = onUpdateNeededListener;
@@ -38,7 +44,7 @@ public class ForceUpdateChecker {
   public void check() {
     FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.getInstance();
 
-    if (remoteConfig.getBoolean(KEY_UPDATE_REQUIRED)) {
+    if (remoteConfig.getBoolean(KEY_APP_UPDATE_REQUIRED)) {
       String currentVersion = remoteConfig.getString(KEY_CURRENT_VERSION);
       String appVersion = getAppVersion(context);
       String updateUrl = remoteConfig.getString(KEY_UPDATE_URL);
@@ -46,6 +52,12 @@ public class ForceUpdateChecker {
       if (!TextUtils.equals(currentVersion, appVersion) && onUpdateNeededListener != null) {
         onUpdateNeededListener.onUpdateNeeded(updateUrl);
       }
+    }
+    if (remoteConfig.getBoolean(KEY_API_UPDATE_REQUIRED)) {
+      AppConfig.KEY_URL_LOGIN = remoteConfig.getString(KEY_URL_LOGIN);
+      AppConfig.KEY_URL_GET_ATTENDANCE = remoteConfig.getString(KEY_URL_GET_ATTENDANCE);
+      AppConfig.KEY_URL_GET_TT = remoteConfig.getString(KEY_URL_GET_TT);
+      AppConfig.KEY_URL_GET_FEE = remoteConfig.getString(KEY_URL_GET_FEE);
     }
   }
 
@@ -76,15 +88,15 @@ public class ForceUpdateChecker {
       return this;
     }
 
-    public ForceUpdateChecker build() {
-      return new ForceUpdateChecker(context, onUpdateNeededListener);
+    public ForceRemoteConfigUpdateChecker build() {
+      return new ForceRemoteConfigUpdateChecker(context, onUpdateNeededListener);
     }
 
-    public ForceUpdateChecker check() {
-      ForceUpdateChecker forceUpdateChecker = build();
-      forceUpdateChecker.check();
+    public ForceRemoteConfigUpdateChecker check() {
+      ForceRemoteConfigUpdateChecker forceRemoteConfigUpdateChecker = build();
+      forceRemoteConfigUpdateChecker.check();
 
-      return forceUpdateChecker;
+      return forceRemoteConfigUpdateChecker;
     }
   }
 }

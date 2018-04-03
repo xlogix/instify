@@ -1,6 +1,5 @@
 package com.instify.android.ux;
 
-import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -8,14 +7,12 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.Toast;
 import butterknife.BindView;
@@ -70,9 +67,8 @@ public class LoginActivity extends AppCompatActivity
   @BindView(R.id.scrollView) ScrollView mScrollView;
   // @BindView(R.id.constraint_login) ConstraintLayout constraintLayout;
   // Root View
-  private View systemUIView;
   private ProgressDialog mProgressDialog;
-  private EditText mRegNoField, mPasswordField;
+  private AppCompatEditText mRegNoField, mPasswordField;
   private SQLiteHandler db;
   // [declare Google API client]
   private GoogleApiClient mGoogleApiClient;
@@ -122,15 +118,11 @@ public class LoginActivity extends AppCompatActivity
   @Override public void onCreate(Bundle savedInstanceState) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
       Window w = getWindow();
-      // w.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
       w.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
     }
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_login);
     ButterKnife.bind(this);
-
-    // Set the status bar as translucent
-    // setStatusBarTranslucent(true);
 
     // Setup animation
     AnimationDrawable animationDrawable = (AnimationDrawable) mScrollView.getBackground();
@@ -169,7 +161,7 @@ public class LoginActivity extends AppCompatActivity
                 R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
             .drawShadow(true)                   // Whether to draw a drop shadow or not
             .cancelable(
-                false)                  // Whether tapping outside the outer circle dismisses the view
+                true)                  // Whether tapping outside the outer circle dismisses the view
             .tintTarget(true)                   // Whether to tint the target view's color
             .transparentTarget(
                 true)           // Specify whether the target is transparent (displays the content underneath)
@@ -182,9 +174,8 @@ public class LoginActivity extends AppCompatActivity
             getString(R.string.default_web_client_id)).requestEmail().requestProfile().build();
 
     mGoogleApiClient =
-        new GoogleApiClient.Builder(this).enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-            .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-            .build();
+        new GoogleApiClient.Builder(this).enableAutoManage(this /* FragmentActivity */,
+            this /* OnConnectionFailedListener */).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
     // [END config_signin]
 
     // SQLite database handler
@@ -206,15 +197,6 @@ public class LoginActivity extends AppCompatActivity
       }
     };
     // [END auth_state_listener]
-  }
-
-  // Set the status bar translucent(works only after API 19)
-  @TargetApi(19) protected void setStatusBarTranslucent(boolean makeTranslucent) {
-    if (makeTranslucent) {
-      getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-    } else {
-      getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-    }
   }
 
   // [START signin]
@@ -245,7 +227,7 @@ public class LoginActivity extends AppCompatActivity
 
   // [START auth_with_google]
   private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-    Timber.d("firebaseAuthWithGoogle:" + acct.getId());
+    Timber.d(acct.getId(), "firebaseAuthWithGoogle:");
     // [START_EXCLUDE silent]
     showProgressDialog();
     // [END_EXCLUDE]
@@ -268,7 +250,7 @@ public class LoginActivity extends AppCompatActivity
 
             } else {
               // If sign in fails, display a message to the user.
-              Timber.w(TAG, "signInWithCredential:failure", task.getException());
+              Timber.w(task.getException(), "signInWithCredential:failure");
               Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT)
                   .show();
             }
@@ -281,14 +263,14 @@ public class LoginActivity extends AppCompatActivity
   // [END auth_with_google]
 
   public void intentLoginToMain() {
-    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+    startActivity(new Intent(this, MainActivity.class));
     finish();
     overridePendingTransition(R.anim.left_to_right_start, R.anim.right_to_left_start);
   }
 
   // [START sign_in_with_email]
   private void attemptERPLogin(final String regNo, final String password) {
-    Timber.d(TAG, "attemptERPLogin:" ,regNo);
+    Timber.d(TAG, "attemptERPLogin:", regNo);
     if (!validateForm()) {
       return;
     }
@@ -299,7 +281,7 @@ public class LoginActivity extends AppCompatActivity
     // Tag used to cancel the request
     String tag_string_req = "req_login";
 
-    StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_LOGIN, response -> {
+    StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.KEY_URL_LOGIN, response -> {
       Timber.d(TAG, "Login Response: " + response);
       try {
         JSONObject jObj = new JSONObject(response);
@@ -327,24 +309,16 @@ public class LoginActivity extends AppCompatActivity
           intentLoginToMain();
 
           // Fetch the error msg
-          String errorMsg = jObj.getString("error_msg");
-          if (mAuth.getCurrentUser() != null) {
-            Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_LONG).show();
-          }
-        } else {
-          // Error in login. Get the error message
-          String errorMsg = jObj.getString("error_msg");
-          Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+          Toast.makeText(this, jObj.getString("error_msg"), Toast.LENGTH_LONG).show();
         }
       } catch (JSONException e) {
         // JSON error
         e.printStackTrace();
-        Toast.makeText(LoginActivity.this, "Json error: " + e.getMessage(), Toast.LENGTH_LONG)
-            .show();
+        Toast.makeText(this, "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
       }
     }, error -> {
       Timber.e(TAG, "Login Error: " + error.getMessage());
-      Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+      Toast.makeText(this, error.getMessage(), Toast.LENGTH_LONG).show();
       // Got an error, hide the Progress bar
       hideProgressDialog();
     }) {
@@ -375,34 +349,36 @@ public class LoginActivity extends AppCompatActivity
     call.enqueue(new Callback<UserModel>() {
       @Override public void onResponse(@NonNull Call<UserModel> call,
           @NonNull retrofit2.Response<UserModel> response) {
+
         if (response.isSuccessful()) {
-          UserModel u = response.body();
-          if (!u.getError()) {
+
+          UserModel user = response.body();
+
+          if (!user.getError()) {
             // Set login to true
             AppController.getInstance().getPrefManager().setLogin(true);
 
             if (mAuth.getCurrentUser() != null) {
-              u.setEmail(mAuth.getCurrentUser().getEmail());
-              u.setUid(mAuth.getCurrentUser().getUid());
-            }
-            u.setToken(password);
+              user.setEmail(mAuth.getCurrentUser().getEmail());
+              user.setUid(mAuth.getCurrentUser().getUid());
 
-            // TODO : Pass the object usermodel as arguments to adduser
-            db.addUser(u);
+              user.setRegno(regNo);
+              user.setToken(password);
 
-            hideProgressDialog();
-            // Take the user to the main activity
-            intentLoginToMain();
-            if (mAuth.getCurrentUser() != null) {
-              Toast.makeText(LoginActivity.this, u.getErrorMsg(), Toast.LENGTH_LONG).show();
+              // TODO : Pass the object usermodel as arguments to adduser
+              db.addUser(user);
+              // Update UI
+              Toast.makeText(LoginActivity.this, user.getErrorMsg(), Toast.LENGTH_LONG).show();
+              hideProgressDialog();
+              // Take the user to the main activity
+              intentLoginToMain();
             }
           } else {
             // Set the login to false again
             AppController.getInstance().getPrefManager().setLogin(false);
             // Handle UI
             hideProgressDialog();
-            //
-            Toast.makeText(LoginActivity.this, u.getErrorMsg(), Toast.LENGTH_LONG).show();
+            Toast.makeText(LoginActivity.this, user.getErrorMsg(), Toast.LENGTH_LONG).show();
           }
         }
       }
@@ -466,7 +442,7 @@ public class LoginActivity extends AppCompatActivity
   @Override public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
     // An unresolvable error has occurred and Google APIs (including Sign-In) will not
     // be available.
-    Timber.d("onConnectionFailed:"+ connectionResult);
+    Timber.d("onConnectionFailed:" + connectionResult);
     Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
   }
 }

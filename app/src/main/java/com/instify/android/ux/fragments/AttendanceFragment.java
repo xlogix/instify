@@ -57,8 +57,15 @@ public class AttendanceFragment extends Fragment {
   private Context mContext;
 
   public AttendanceFragment() {
+    // Required empty public constructor
   }
 
+  /**
+   * Use this factory method to create a new instance of
+   * this fragment using the provided parameters.
+   *
+   * @return A new instance of fragment ExperiencesFragment.
+   */
   public static AttendanceFragment newInstance() {
     AttendanceFragment frag = new AttendanceFragment();
     Bundle args = new Bundle();
@@ -127,7 +134,7 @@ public class AttendanceFragment extends Fragment {
     // Tag used to cancel the request
     String tag_string_req = "req_attendance";
 
-    StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_ATTENDANCE,
+    StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.KEY_URL_GET_ATTENDANCE,
         new Response.Listener<String>() {
           @Override public void onResponse(String response) {
             try {
@@ -150,11 +157,12 @@ public class AttendanceFragment extends Fragment {
             }
           }
         }, error -> {
+      // Empty content in view
+      recyclerView.setAdapter(null);
+      // Log the response
       Timber.e("Network Error: " + error.getMessage());
       // Show the default placeholder
       showErrorPlaceholder("It's your internet :(");
-      // Empty content in view
-      recyclerView.setAdapter(null);
     }) {
       @Override protected Map<String, String> getParams() {
         // Posting parameters to login url

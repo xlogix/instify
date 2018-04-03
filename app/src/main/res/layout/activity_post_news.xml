@@ -63,6 +63,7 @@
           android:autoLink="all"
           android:hint="Description"
           android:inputType="text"
+          android:focusable="true"
           android:padding="10dp"
           android:textColor="@color/white"
           android:textIsSelectable="true"

@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bottom_sheet_parent"
     android:layout_width="match_parent"
-    android:layout_height="180dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
     >
+
   <LinearLayout
       android:id="@+id/doc"
       android:layout_width="match_parent"
@@ -18,20 +19,17 @@
       android:padding="16dp"
       >
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_doc"
-        />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
+        android:drawableLeft="@drawable/ic_doc"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_doc"
         android:text="Document"
         />
   </LinearLayout>
+
   <LinearLayout
       android:id="@+id/pdf"
       android:layout_width="match_parent"
@@ -42,20 +40,18 @@
       android:orientation="horizontal"
       android:padding="16dp"
       >
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/ic_pdf"
-        />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
+        android:drawableLeft="@drawable/ic_pdf"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_pdf"
         android:text="PDF"
         />
   </LinearLayout>
+
   <LinearLayout
       android:id="@+id/image"
       android:layout_width="match_parent"
@@ -66,20 +62,18 @@
       android:orientation="horizontal"
       android:padding="16dp"
       >
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/ic_image"
-        />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
+        android:drawableLeft="@drawable/ic_image"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_image"
         android:text="Image"
         />
   </LinearLayout>
+
   <LinearLayout
       android:id="@+id/camera"
       android:layout_width="match_parent"
@@ -90,20 +84,18 @@
       android:orientation="horizontal"
       android:padding="16dp"
       >
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/ic_photo_camera"
-        />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
+        android:drawableLeft="@drawable/ic_photo_camera"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_photo_camera"
         android:text="Camera"
         />
   </LinearLayout>
+
   <LinearLayout
       android:id="@+id/video"
       android:layout_width="match_parent"
@@ -114,20 +106,18 @@
       android:orientation="horizontal"
       android:padding="16dp"
       >
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/ic_video_camera"
-        />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
+        android:drawableLeft="@drawable/ic_video_camera"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_video_camera"
         android:text="Video"
         />
   </LinearLayout>
+
   <LinearLayout
       android:id="@+id/audio"
       android:layout_width="match_parent"
@@ -138,20 +128,18 @@
       android:orientation="horizontal"
       android:padding="16dp"
       >
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/ic_music_player"
-        />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
+        android:drawableLeft="@drawable/ic_music_player"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_music_player"
         android:text="Audio"
         />
   </LinearLayout>
+
   <LinearLayout
       android:id="@+id/other"
       android:layout_width="match_parent"
@@ -162,17 +150,14 @@
       android:orientation="horizontal"
       android:padding="16dp"
       >
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/ic_attach_file_black_24dp"
-        />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
+        android:drawableLeft="@drawable/ic_attach_file_black_24dp"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_attach_file_black_24dp"
         android:text="Other Documents"
         />
   </LinearLayout>

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 public class FeePaymentHistoryAdapter
     extends RecyclerView.Adapter<FeePaymentHistoryAdapter.DataObjectHolder> {
-  private static final String TAG = FeePaymentHistoryAdapter.class.getSimpleName();
 
   private ArrayList<FeePaymentHistoryModel> mDataSet;
 
@@ -58,9 +57,9 @@ public class FeePaymentHistoryAdapter
 
     public DataObjectHolder(View itemView) {
       super(itemView);
-      label = itemView.findViewById(R.id.textView);
-      dateTime = itemView.findViewById(R.id.textView2);
-      amount = itemView.findViewById(R.id.textView3);
+      label = itemView.findViewById(R.id.textViewLabel);
+      dateTime = itemView.findViewById(R.id.textViewDateTime);
+      amount = itemView.findViewById(R.id.textViewAmount);
     }
   }
 }

@@ -1,7 +1,5 @@
 package com.instify.android.ux;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,6 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -56,7 +55,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.instify.android.R;
 import com.instify.android.app.AppController;
-import com.instify.android.app.ForceUpdateChecker;
+import com.instify.android.app.ForceRemoteConfigUpdateChecker;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.listeners.OnSingleClickListener;
 import com.instify.android.models.UserDataModel;
@@ -71,11 +70,11 @@ import javax.annotation.Nullable;
 import timber.log.Timber;
 
 /**
- * Created by Abhish3k on 3/1/2016. Main Activity
+ * Created by Abhish3k on 3/1/2016.
  */
 
 public class MainActivity extends AppCompatActivity
-    implements ForceUpdateChecker.OnUpdateNeededListener {
+    implements ForceRemoteConfigUpdateChecker.OnUpdateNeededListener {
   private static final String TAG = MainActivity.class.getSimpleName();
 
   private static final int ANIM_DURATION_TOOLBAR = 500;
@@ -84,7 +83,6 @@ public class MainActivity extends AppCompatActivity
   private boolean pendingIntroAnimation = true;
   // Enable double press
   private boolean doubleBackToExitPressedOnce = false;
-
   /* Play Services Request required to check if Google Services is installed or not */
   private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
   public FloatingActionButton mSharedFab;
@@ -121,7 +119,7 @@ public class MainActivity extends AppCompatActivity
   /**
    * Called when leaving the activity
    */
-  @Override public void onPause() {
+  @Override protected void onPause() {
     // Ad-view
     if (mAdView != null) {
       mAdView.pause();
@@ -137,7 +135,6 @@ public class MainActivity extends AppCompatActivity
   @Override protected void onResume() {
     // Add Database Listener
     userRef.addValueEventListener(childListener);
-
     if (mAdView != null) {
       mAdView.resume();
     }
@@ -153,7 +150,7 @@ public class MainActivity extends AppCompatActivity
   /**
    * Called before the activity is destroyed
    */
-  @Override public void onDestroy() {
+  @Override protected void onDestroy() {
     // Remove Database Listener
     userRef.removeEventListener(childListener);
     if (mAdView != null) {
@@ -188,16 +185,12 @@ public class MainActivity extends AppCompatActivity
     if (savedInstanceState == null) {
       pendingIntroAnimation = false;
     }
-
     // Declare Views
     mSharedFab = findViewById(R.id.shared_fab);
-
-    // Initialize ForceUpdateChecker
-    ForceUpdateChecker.with(this).onUpdateNeeded(this).check();
-
     // Get the current logged-in user
     mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
+    // Initialize ForceUpdateChecker
+    ForceRemoteConfigUpdateChecker.with(this).onUpdateNeeded(this).check();
     // Drawer Layout
     drawerLayout = findViewById(R.id.drawer_layout);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
@@ -230,7 +223,8 @@ public class MainActivity extends AppCompatActivity
 
     /* [START] Setup Header View */
     ImageView navImageView = headerView.findViewById(R.id.nav_drawer_user_photo);
-    TextView navTextView = headerView.findViewById(R.id.nav_drawer_header_text);
+    TextView navTextViewName = headerView.findViewById(R.id.nav_drawer_header_text_name);
+    TextView navTextViewEmail = headerView.findViewById(R.id.nav_drawer_header_text_email);
 
     // Download the image from ERP
     // new DownloadImage(navImageView).execute(db.getUserDetails().get("dept"));
@@ -240,6 +234,7 @@ public class MainActivity extends AppCompatActivity
         // Set profile picture from Firebase account
         Glide.with(this)
             .load(mFirebaseUser.getPhotoUrl().toString())
+            .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
             .apply(new RequestOptions().placeholder(R.drawable.default_pic_face))
             .apply(new RequestOptions().centerCrop())
             .apply(new RequestOptions().priority(Priority.HIGH))
@@ -250,7 +245,8 @@ public class MainActivity extends AppCompatActivity
       }
     }
     // Set the name
-    navTextView.setText(db.getUserDetails().getName());
+    navTextViewName.setText(db.getUserDetails().getName());
+    navTextViewEmail.setText(db.getUserDetails().getEmail());
 
     // Click listeners
     navImageView.setOnClickListener(new OnSingleClickListener() {
@@ -453,11 +449,11 @@ public class MainActivity extends AppCompatActivity
     });
   }
 
-  public Toolbar getToolbar() {
+  @Nullable public Toolbar getToolbar() {
     return toolbar;
   }
 
-  public MenuItem getFilterMenuItem() {
+  @Nullable public MenuItem getFilterMenuItem() {
     return filterMenuItem;
   }
 
@@ -477,21 +473,9 @@ public class MainActivity extends AppCompatActivity
 
     int actionbarSize = GetScreenHeightWidthUtils.dpToPx(56);
     getToolbar().setTranslationY(-actionbarSize);
-    getFilterMenuItem().getActionView().setTranslationY(-actionbarSize);
-
     getToolbar().animate().translationY(0).setDuration(ANIM_DURATION_TOOLBAR).setStartDelay(300);
-
-    getFilterMenuItem().getActionView()
-        .animate()
-        .translationY(0)
-        .setDuration(ANIM_DURATION_TOOLBAR)
-        .setStartDelay(300)
-        .setListener(new AnimatorListenerAdapter() {
-          @Override public void onAnimationEnd(Animator animation) {
-            startContentAnimation();
-          }
-        })
-        .start();
+    // Start content Animation in fragment
+    startContentAnimation();
   }
 
   private void startContentAnimation() {
@@ -517,11 +501,10 @@ public class MainActivity extends AppCompatActivity
     } else if (id == R.id.action_filter) {
       return true;
     } else if (id == R.id.action_settings) {
-      startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+      startActivity(new Intent(this, SettingsActivity.class));
     } else if (id == R.id.action_logout) {
-      if (AppController.getInstance() != null) {
-        AppController.getInstance().logoutUser();
-      }
+      AppController.getInstance().logoutUser();
+      return true;
     }
     return super.onOptionsItemSelected(item);
   }
@@ -564,7 +547,6 @@ public class MainActivity extends AppCompatActivity
         .menuSelector(R.drawable.selector_light_theme)
         .menuTextGravity(Gravity.CENTER)
         .menuTextPaddingRightRes(R.dimen.defaultMenuTextPaddingLeft)
-        .dividerHeight(0)
         .webViewDisplayZoomControls(true)
         .webViewDomStorageEnabled(true)
         .webViewJavaScriptEnabled(true)

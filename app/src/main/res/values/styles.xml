@@ -8,6 +8,7 @@
     <item name="android:textColor">@color/textColorPrimary</item>
     <item name="android:textColorSecondary">@color/textColorSecondary</item>
     <item name="colorButtonNormal">@color/colorAccent</item>
+    <item name="android:typeface">normal</item>
   </style>
 
   <style name="AppTheme.ActionBar.Transparent" parent="AppTheme">
@@ -46,16 +47,12 @@
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
-
     <item name="android:windowBackground">@color/colorPrimary</item>
-
     <item name="colorControlNormal">@color/iron</item>
     <item name="colorControlActivated">@color/white</item>
     <item name="colorControlHighlight">@color/white</item>
     <item name="android:textColorHint">@color/iron</item>
-
     <item name="colorButtonNormal">@color/colorPrimaryDark</item>
-
   </style>
 
   <style name="AppTheme.Dark.Dialog" parent="Theme.AppCompat.Dialog">

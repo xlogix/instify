@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -121,18 +120,16 @@ public class UnivNewsFragment extends Fragment {
         if (response.isSuccessful()) {
           // Clear the recycle view
           news.clear();
-
+          // Add the items
           news.addAll(response.body().getNewsItems());
           /* for (int i = 0; i < news.size(); i += 5) {
             final NativeExpressAdView n = new NativeExpressAdView(getContext());
             news.add(i, n);
           }
           */
-
           // Handle UI
           hidePlaceHolder();
           hideRefreshing();
-
           // setUpAndLoadNativeExpressAds();
           if (news.size() == 0) {
             showErrorPlaceholder("Error in fetching news");
@@ -142,7 +139,7 @@ public class UnivNewsFragment extends Fragment {
           // Setting the adapter
           mAdapter.notifyDataSetChanged();
         } else {
-          showErrorPlaceholder("Error Receiving University News");
+          showErrorPlaceholder("Error receiving university news");
           hideRefreshing();
         }
       }
@@ -151,7 +148,7 @@ public class UnivNewsFragment extends Fragment {
         // Clear the view
         news.clear();
         // Update UI
-        showErrorPlaceholder("Failed to Receive University News");
+        showErrorPlaceholder("Failed to receive university news");
         mAdapter.notifyDataSetChanged();
         hideRefreshing();
       }

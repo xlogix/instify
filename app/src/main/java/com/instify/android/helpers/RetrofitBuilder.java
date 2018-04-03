@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitBuilder {
 
   //Api Url
-  public static final String API_BASE_URL = "https://hashbird.com/gogrit.in/workspace/srm-api/";
+  public static final String API_BASE_URL = "https://fnplus.xyz/srm-api/";
 
   // Log requests in Stetho
   public static OkHttpClient.Builder httpClient =

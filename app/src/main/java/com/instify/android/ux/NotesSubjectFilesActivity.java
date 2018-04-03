@@ -36,7 +36,6 @@ import com.instify.android.ux.adapters.NotesFileAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -97,8 +96,7 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
           @NonNull NotesFileModel model) {
         viewHolder.setDataToView(model);
         viewHolder.cv.setOnClickListener(v -> {
-          Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(model.getNotefile()));
-          startActivity(intent);
+          startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(model.getNotefile())));
         });
       }
 
@@ -281,14 +279,6 @@ public class NotesSubjectFilesActivity extends AppCompatActivity {
     EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
   }
   // [END] EasyPermission Default Functions
-
-  // Get Current Time for naming the file
-  public String getCurrentTime() {
-    Calendar c = Calendar.getInstance();
-    return c.get(Calendar.DAY_OF_MONTH) + "-" + ((c.get(Calendar.MONTH)) + 1) + "-" + c.get(
-        Calendar.YEAR) + c.get(Calendar.HOUR) + "-" + c.get(Calendar.MINUTE) + "-" + c.get(
-        Calendar.SECOND);
-  }
 
   // Handling the image chooser activity result
   @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {

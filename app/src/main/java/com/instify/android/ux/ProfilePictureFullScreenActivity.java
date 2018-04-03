@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -103,7 +104,7 @@ public class ProfilePictureFullScreenActivity extends AppCompatActivity
     // Put the picture into the image View
     Glide.with(this)
         .load(mFirebaseUser.getPhotoUrl())
-        .apply(new RequestOptions().dontAnimate())
+        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
         .apply(new RequestOptions().centerCrop())
         .apply(new RequestOptions().priority(Priority.HIGH))
         .into(userImage);

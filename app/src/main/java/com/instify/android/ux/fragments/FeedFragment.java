@@ -48,7 +48,7 @@ import timber.log.Timber;
 public class FeedFragment extends Fragment {
 
   RecyclerView recyclerView;
-  String currentUserRno, userDept, pathAll;
+  String currentUserRno, currentUserName, userDept, pathAll;
   @BindView(R.id.error_message) TextView errormessage;
   @BindView(R.id.placeholder_error) LinearLayout placeholderError;
 
@@ -91,6 +91,7 @@ public class FeedFragment extends Fragment {
     super.onCreate(savedInstanceState);
     SQLiteHandler db = new SQLiteHandler(getContext());
     currentUserRno = db.getUserDetails().getRegno();
+    currentUserName = db.getUserDetails().getName();
   }
 
   @Override public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -188,8 +189,8 @@ public class FeedFragment extends Fragment {
           sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBodyText);
           mContext.startActivity(Intent.createChooser(sharingIntent, "Share this topic on"));
         });
-
-        if (currentUserRno.equals(model.getAuthor())) {
+        // Check if the logged in user
+        if (currentUserName.equals(model.getAuthor())) {
           holder.mDeleteButton.setVisibility(View.VISIBLE);
         }
 
@@ -197,7 +198,7 @@ public class FeedFragment extends Fragment {
         holder.mDeleteButton.setOnClickListener(view -> {
 
           DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-          Query applesQuery = ref.child(pathAll).orderByChild("author").equalTo(currentUserRno);
+          Query applesQuery = ref.child(pathAll).orderByChild("author").equalTo(currentUserName);
 
           applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override public void onDataChange(DataSnapshot dataSnapshot) {

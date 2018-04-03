@@ -5,9 +5,7 @@ package com.instify.android.models;
  */
 
 public class NotesModel {
-    public String fishName;
-    public String catName;
-    public String sizeName;
-    public String price;
+    public String subjectName;
+    public String subjectCode;
 
 }

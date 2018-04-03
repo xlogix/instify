@@ -1,14 +1,11 @@
 package com.instify.android.ux;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-
 import com.github.paolorotolo.appintro.AppIntro2;
-import com.github.paolorotolo.appintro.AppIntroFragment;
-
+import com.github.paolorotolo.appintro.AppIntro2Fragment;
 import com.instify.android.R;
 import com.instify.android.app.AppController;
 
@@ -24,27 +21,24 @@ public class IntroActivity extends AppIntro2 {
 
     // Add your slide's fragments here.
     // AppIntro will automatically generate the dots indicator and buttons.
-    addSlide(AppIntroFragment.newInstance("University Updates", Typeface.DEFAULT_BOLD.toString(),
-        "News/Announcements on the website directly pushed to your device",
-        Typeface.SANS_SERIF.toString(), R.drawable.srm_logo,
-        getResources().getColor(R.color.colorPrimary), 0, 0));
+    addSlide(AppIntro2Fragment.newInstance("What's Trending",
+        "Stay updates on latest announcements/events in the university", R.drawable.img_srm_logo,
+        getResources().getColor(R.color.blue_grey_primary)));
 
-    addSlide(AppIntroFragment.newInstance("Campus Buzz", Typeface.DEFAULT_BOLD.toString(),
-        "Always stay updated on Campus Events and News", Typeface.SANS_SERIF.toString(),
-        R.drawable.srm_logo, getResources().getColor(R.color.blue_grey_primary), 0, 0));
-
-    addSlide(AppIntroFragment.newInstance("ERP", Typeface.DEFAULT_BOLD.toString(),
+    addSlide(AppIntro2Fragment.newInstance("Attendance Genie",
         "View all your Marks info in this page. We provide you with statistical data that will help to make difficult choices",
-        Typeface.SANS_SERIF.toString(), R.drawable.srm_logo,
-        getResources().getColor(R.color.red_primary), 0, 0));
+        R.drawable.img_srm_logo, getResources().getColor(R.color.red_primary)));
 
-    addSlide(AppIntroFragment.newInstance("Notes Catalog", Typeface.DEFAULT_BOLD.toString(),
-        "See all your notes in one place", Typeface.SANS_SERIF.toString(), R.drawable.srm_logo,
-        getResources().getColor(R.color.orange_primary), 0, 0));
+    addSlide(AppIntro2Fragment.newInstance("Notes catalog", "See all your notes in one place",
+        R.drawable.img_srm_logo, getResources().getColor(R.color.orange_primary)));
 
-    addSlide(AppIntroFragment.newInstance("Time Table", Typeface.DEFAULT_BOLD.toString(),
-        "For the first time, TimeTable will get meaningful", Typeface.SANS_SERIF.toString(),
-        R.drawable.srm_logo, getResources().getColor(R.color.green_primary), 0, 0));
+    addSlide(AppIntro2Fragment.newInstance("Day's Schedule",
+        "Keep forgetting which hour will be next? No worries, Instify is here to help!",
+        R.drawable.img_srm_logo, getResources().getColor(R.color.green_primary)));
+
+    addSlide(AppIntro2Fragment.newInstance("University Updates",
+        "News/Announcements on the website directly pushed to your device", R.drawable.img_srm_logo,
+        getResources().getColor(R.color.colorPrimary)));
 
     // Set required animation
     setFadeAnimation();
@@ -65,15 +59,13 @@ public class IntroActivity extends AppIntro2 {
 
   @Override public void onSkipPressed(Fragment currentFragment) {
     setIsFirstRunFalse();
-    Intent i = new Intent(IntroActivity.this, LoginActivity.class);
-    startActivity(i);
+    startActivity(new Intent(this, LoginActivity.class));
     finish();
   }
 
   @Override public void onDonePressed(Fragment currentFragment) {
     setIsFirstRunFalse();
-    Intent i = new Intent(IntroActivity.this, LoginActivity.class);
-    startActivity(i);
+    startActivity(new Intent(this, LoginActivity.class));
     finish();
   }
 

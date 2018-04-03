@@ -12,18 +12,17 @@ import com.instify.android.app.Themes;
 
 public class PreferenceManager {
 
-    // Sharedpref file name
+    // Shared pref file name
     private static final String PREF_NAME = "app_data";
-    // All Shared Preferences Keys
-    private static final String KEY_NOTIFICATIONS = "notifications";
+    // All shared preferences keys
     private static final String REG_ID = "reg_id";
     private static final String IS_FIRST_RUN = "is_first_run";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
-    private static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
-    // Shared Preferences
-    SharedPreferences mPrefs;
-    // Editor for Shared preferences
-    SharedPreferences.Editor editor;
+    private static final String SENT_REG_TOKEN_TO_SERVER = "sentRegTokenToServer";
+    // Shared preferences
+    private SharedPreferences mPrefs;
+    // Editor for shared preferences
+    private SharedPreferences.Editor editor;
     // Context
     Context _context;
     // Shared pref mode
@@ -34,31 +33,6 @@ public class PreferenceManager {
         this._context = context;
         mPrefs = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = mPrefs.edit();
-    }
-
-    /**
-     * Handle multiple notifications froom the app
-     *
-     * @return void
-     */
-
-    public String getNotifications() {
-        return mPrefs.getString(KEY_NOTIFICATIONS, null);
-    }
-
-    public void addNotification(String notification) {
-
-        // get old notifications
-        String oldNotifications = getNotifications();
-
-        if (oldNotifications != null) {
-            oldNotifications += "|" + notification;
-        } else {
-            oldNotifications = notification;
-        }
-
-        editor.putString(KEY_NOTIFICATIONS, oldNotifications);
-        editor.commit();
     }
 
     /**
@@ -88,7 +62,7 @@ public class PreferenceManager {
     }
 
     public void sentRegIdToServer(Boolean value) {
-        editor.putBoolean(SENT_TOKEN_TO_SERVER, value);
+        editor.putBoolean(SENT_REG_TOKEN_TO_SERVER, value);
         // commit changes
         editor.commit();
     }

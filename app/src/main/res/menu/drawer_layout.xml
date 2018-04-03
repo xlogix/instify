@@ -49,7 +49,7 @@
         </menu>
     </item>
 
-    <item android:title="@string/nav_section_5">
+    <item android:title="@string/nav_section_4">
         <menu>
             <item
                 android:id="@+id/nav_send"
@@ -66,7 +66,7 @@
             <item
                 android:id="@+id/nav_about"
                 android:icon="@android:drawable/ic_dialog_info"
-                android:title="@string/nav_about" />
+                android:title="@string/menu_action_about" />
         </menu>
     </item>
 </menu>
