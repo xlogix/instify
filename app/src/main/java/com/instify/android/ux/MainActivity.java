@@ -61,6 +61,7 @@ import com.instify.android.listeners.OnSingleClickListener;
 import com.instify.android.models.UserDataModel;
 import com.instify.android.utils.GetScreenHeightWidthUtils;
 import com.instify.android.ux.fragments.AttendanceFragment;
+import com.instify.android.ux.fragments.ExperiencesFragment;
 import com.instify.android.ux.fragments.FeedFragment;
 import com.instify.android.ux.fragments.NotesFragment;
 import com.instify.android.ux.fragments.TimeTableFragment;
@@ -625,7 +626,7 @@ public class MainActivity extends AppCompatActivity
         case TAB_ATTENDANCE:
           return AttendanceFragment.newInstance();
         case TAB_EXPERIENCES:
-          return FeedFragment.newInstance();
+          return ExperiencesFragment.newInstance();
         case TAB_TIME_TABLE:
           return TimeTableFragment.newInstance();
         case TAB_NOTES:

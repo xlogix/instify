@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -386,6 +387,7 @@ public class LoginActivity extends AppCompatActivity
       @Override public void onFailure(Call<UserModel> call, Throwable t) {
         Timber.e(TAG, "Login Error: ", t.getMessage());
         Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+        Log.d(TAG, "onFailure: "+t.getMessage());
         // Got an error, hide the Progress bar
         hideProgressDialog();
       }
