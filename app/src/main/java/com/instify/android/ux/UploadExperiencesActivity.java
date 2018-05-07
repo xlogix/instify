@@ -1,5 +1,7 @@
 package com.instify.android.ux;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,11 +13,15 @@ import android.widget.Spinner;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.instify.android.R;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.ExperiencesModel;
+import com.theartofdev.edmodo.cropper.CropImage;
+
 import java.util.HashMap;
 import timber.log.Timber;
 
@@ -38,6 +44,8 @@ public class UploadExperiencesActivity extends AppCompatActivity {
   }
 
   @OnClick(R.id.imageUpload) public void onImageUploadClicked() {
+      CropImage.activity()
+              .start(this);
   }
 
   @OnClick(R.id.postExperience) public void onPostExperienceClicked() {
@@ -74,5 +82,22 @@ public class UploadExperiencesActivity extends AppCompatActivity {
       cancel = true;
     }
     return cancel;
+  }
+
+
+  // Getting the result after crop.
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+      CropImage.ActivityResult result = CropImage.getActivityResult(data);
+      if (resultCode == RESULT_OK) {
+        Uri resultUri = result.getUri();
+        Glide.with(this)
+                .load(resultUri)
+                .into(imageUpload);
+      } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+        Exception error = result.getError();
+      }
+    }
   }
 }

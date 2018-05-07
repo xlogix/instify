@@ -176,6 +176,8 @@
             android:name=".ux.UploadNotesActivity"
             android:parentActivityName=".ux.MainActivity" />
 
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"/>
+
         <service
             android:name=".services.MyFirebaseDownloadService"
             android:exported="false" />

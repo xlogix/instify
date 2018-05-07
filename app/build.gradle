@@ -108,6 +108,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.6.1'
     implementation 'com.android.support:support-v4:27.1.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
 
     // WEB VIEW
     implementation 'com.thefinestartist:finestwebview:1.2.7'
