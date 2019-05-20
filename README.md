@@ -3,8 +3,12 @@
 [![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=7)
 
 # Features
+[![](https://github.com/xlogix/instify/blob/master/Slides/slide_1.png)</br>
+[![](https://github.com/xlogix/instify/blob/master/Slides/slide_2.png)</br>
+[![](https://github.com/xlogix/instify/blob/master/Slides/slide_3.png)</br>
+[![](https://github.com/xlogix/instify/blob/master/Slides/slide_4.png)</br>
 
-It's also on Google Play:
+It is available on Google Play:
 <a href="https://play.google.com/store/apps/details?id=com.instify.android" target="_blank">
   <img alt="Get it on Google Play"
       src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="60"/>
@@ -13,12 +17,6 @@ It's also on Google Play:
 #### Manifest Settings
 
 ```xml
- <supports-screens
-        android:anyDensity="true"
-        android:largeScreens="true"
-        android:normalScreens="true"
-        android:smallScreens="true" />
-
     <!-- Normal permissions, access automatically granted to app -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -36,14 +34,4 @@ It's also on Google Play:
     <permission
         android:name="${applicationId}.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
-
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.camera.front"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.camera.autofocus"
-        android:required="false" />
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />```
