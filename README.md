@@ -3,10 +3,10 @@
 [![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=7)
 
 # Features
-[![](https://github.com/xlogix/instify/blob/master/Slides/slide_1.png)</br>
-[![](https://github.com/xlogix/instify/blob/master/Slides/slide_2.png)</br>
-[![](https://github.com/xlogix/instify/blob/master/Slides/slide_3.png)</br>
-[![](https://github.com/xlogix/instify/blob/master/Slides/slide_4.png)</br>
+![](https://github.com/xlogix/instify/blob/master/Slides/slide_1.png)</br>
+![](https://github.com/xlogix/instify/blob/master/Slides/slide_2.png)</br>
+![](https://github.com/xlogix/instify/blob/master/Slides/slide_3.png)</br>
+![](https://github.com/xlogix/instify/blob/master/Slides/slide_4.png)</br>
 
 It is available on Google Play:
 <a href="https://play.google.com/store/apps/details?id=com.instify.android" target="_blank">
