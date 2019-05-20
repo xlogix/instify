@@ -5,18 +5,22 @@ package com.instify.android.ux.adapters;
  */
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.instify.android.R;
 import com.instify.android.models.SubjectsModel;
 import com.instify.android.models.TestPerformanceModel;
+
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class TestPerformanceAdapterParent
     extends RecyclerView.Adapter<TestPerformanceAdapterParent.ViewHolder> {

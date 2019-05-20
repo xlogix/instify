@@ -2,9 +2,12 @@ package com.instify.android.app;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+
 import timber.log.Timber;
 
 /**

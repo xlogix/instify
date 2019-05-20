@@ -1,6 +1,7 @@
 package com.instify.android.models;
 
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;

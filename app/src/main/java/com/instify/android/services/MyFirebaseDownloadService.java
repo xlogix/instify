@@ -3,9 +3,11 @@ package com.instify.android.services;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -13,8 +15,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StreamDownloadTask;
 import com.instify.android.R;
 import com.instify.android.ux.UploadNotesActivity;
+
 import java.io.IOException;
 import java.io.InputStream;
+
 import timber.log.Timber;
 
 public class MyFirebaseDownloadService extends MyFirebaseBaseTaskService {

@@ -9,13 +9,13 @@
     android:padding="@dimen/activity_vertical_margin"
     >
 
-  <android.support.constraint.ConstraintLayout
+	<androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/constraint_login"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       >
 
-    <android.support.design.widget.TextInputLayout
+		<com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -40,9 +40,9 @@
           android:textColor="@color/white"
           />
 
-    </android.support.design.widget.TextInputLayout>
+		</com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+		<com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -67,10 +67,10 @@
           android:padding="8dp"
           android:textColor="@color/white"
           />
-    </android.support.design.widget.TextInputLayout>
+		</com.google.android.material.textfield.TextInputLayout>
 
 
-    <android.support.v7.widget.AppCompatButton
+		<androidx.appcompat.widget.AppCompatButton
         android:id="@+id/post"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -84,5 +84,5 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
         />
-  </android.support.constraint.ConstraintLayout>
+	</androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

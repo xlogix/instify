@@ -5,10 +5,12 @@ package com.instify.android.app;
  */
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.multidex.MultiDexApplication;
-import android.support.v7.app.AppCompatDelegate;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.multidex.MultiDexApplication;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -26,11 +28,12 @@ import com.instify.android.helpers.PreferenceManager;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.ux.IntroActivity;
 import com.squareup.leakcanary.LeakCanary;
-import com.thefinestartist.Base;
-import io.fabric.sdk.android.Fabric;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 public class AppController extends MultiDexApplication {
@@ -56,8 +59,6 @@ public class AppController extends MultiDexApplication {
     FirebaseApp.initializeApp(this);
     // Disk Persistence in Firebase
     FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-    // Fixes crash reported on Firebase, issue : https://github.com/TheFinestArtist/FinestWebView-Android/issues/79
-    Base.initialize(this);
     // Initialize the SQLiteHandler
     sqLiteHandler = new SQLiteHandler(this);
 

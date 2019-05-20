@@ -14,7 +14,7 @@
         android:text="@string/title_home"/>
 
 
-    <android.support.design.widget.BottomNavigationView
+	<com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +24,8 @@
         app:itemIconTint="@color/bottom_navigation_color"
         app:itemTextColor="@color/bottom_navigation_color"
         app:menu="@menu/bottom_navigation_main" />
-    <android.support.v4.view.ViewPager
+
+	<androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

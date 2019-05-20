@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatTextView
+	    <androidx.appcompat.widget.AppCompatTextView
             style="@style/TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,14 +25,14 @@
             android:padding="32dp"
             android:src="@drawable/paytm_qrcode" />
 
-        <android.support.v7.widget.AppCompatTextView
+	    <androidx.appcompat.widget.AppCompatTextView
             style="@style/TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="Or, Enter Mobile No." />
 
-        <android.support.v7.widget.AppCompatTextView
+	    <androidx.appcompat.widget.AppCompatTextView
             style="@style/TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
             android:padding="15dp"
             android:text="9962892900" />
 
-        <android.support.v7.widget.AppCompatButton
+	    <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/copy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

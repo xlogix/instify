@@ -2,10 +2,12 @@ package com.instify.android.ux;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.ads.AdRequest;
@@ -16,12 +18,15 @@ import com.instify.android.app.AppController;
 import com.instify.android.helpers.SQLiteHandler;
 import com.instify.android.models.FeePaymentHistoryModel;
 import com.instify.android.ux.adapters.FeePaymentHistoryAdapter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import timber.log.Timber;
 
 /**

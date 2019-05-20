@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipe_refresh_layout_time_table"
@@ -7,12 +7,12 @@
     android:layout_height="match_parent"
     >
 
-  <android.support.constraint.ConstraintLayout
+	<androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       >
 
-    <android.support.v4.widget.NestedScrollView
+		<androidx.core.widget.NestedScrollView
         android:id="@+id/textScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -32,7 +32,7 @@
             android:visibility="gone"
             />
 
-        <android.support.v7.widget.CardView
+	      <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                 />
           </RelativeLayout>
 
-        </android.support.v7.widget.CardView>
+	      </androidx.cardview.widget.CardView>
 
         <ExpandableListView
             android:id="@+id/expListView"
@@ -75,6 +75,6 @@
             />
 
       </RelativeLayout>
-    </android.support.v4.widget.NestedScrollView>
-  </android.support.constraint.ConstraintLayout>
-</android.support.v4.widget.SwipeRefreshLayout>
+		</androidx.core.widget.NestedScrollView>
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

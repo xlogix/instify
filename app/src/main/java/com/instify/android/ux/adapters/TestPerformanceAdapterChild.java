@@ -1,15 +1,19 @@
 package com.instify.android.ux.adapters;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.instify.android.R;
 import com.instify.android.models.SubjectsModel;
+
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by krsnv on 01-May-17.

@@ -1,7 +1,9 @@
 package com.instify.android.ux;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.instify.android.R;
 
 /**

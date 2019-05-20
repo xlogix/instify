@@ -4,14 +4,18 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.instify.android.R;
 import com.instify.android.ux.UploadNotesActivity;
+
 import timber.log.Timber;
 
 /**
@@ -74,8 +78,7 @@ public class MyFirebaseUploadService extends MyFirebaseBaseTaskService {
     // Upload file to Firebase Storage
     Timber.d("uploadFromUri:dst:" + photoRef.getPath());
     photoRef.putFile(fileUri)
-        .
-            addOnProgressListener(
+            .addOnProgressListener(
                 taskSnapshot -> showProgressNotification(getString(R.string.progress_uploading),
                     taskSnapshot.getBytesTransferred(), taskSnapshot.getTotalByteCount()))
         .addOnSuccessListener(taskSnapshot -> {
@@ -83,7 +86,11 @@ public class MyFirebaseUploadService extends MyFirebaseBaseTaskService {
           Timber.d("uploadFromUri:onSuccess");
 
           // Get the public download URL
-          Uri downloadUri = taskSnapshot.getMetadata().getDownloadUrl();
+            Task<Uri> Uri = taskSnapshot.getStorage().getDownloadUrl();
+            Uri downloadUri = null;
+            while (!Uri.isComplete()) {
+                downloadUri = Uri.getResult();
+            }
 
           // [START_EXCLUDE]
           broadcastUploadFinished(downloadUri, fileUri);

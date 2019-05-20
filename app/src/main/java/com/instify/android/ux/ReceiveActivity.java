@@ -3,9 +3,11 @@ package com.instify.android.ux;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.os.Bundle;
-import android.support.v4.app.ShareCompat;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.core.app.ShareCompat;
+
 import com.instify.android.R;
 
 /**
